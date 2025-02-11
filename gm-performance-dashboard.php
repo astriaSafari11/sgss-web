@@ -138,7 +138,7 @@
                     alt="User Image"
                   />
                   <p>
-                    Debby - Administrator
+                    Debbyy - Administrator
                     <small>Member since Nov. 2023</small>
                   </p>
                 </li>
