@@ -298,7 +298,7 @@
                       <a href="gm-performance-dashboard.php" class="dropdown-item dropdown-footer" style="font-size: 20px; font-weight: 600;">Performance Dashboard</a>
                       <div class="dropdown-divider"></div>
                       <div class="dropdown-divider"></div>
-                      <a href="#" class="dropdown-item dropdown-footer" style="font-size: 20px; font-weight: 600;">Stock Card</a>
+                      <a href="item-movement.php" class="dropdown-item dropdown-footer" style="font-size: 20px; font-weight: 600;">Stock Card</a>
                       <div class="dropdown-divider"></div>
                       <div class="dropdown-divider"></div>
                       <a href="#" class="dropdown-item dropdown-footer" style="font-size: 20px; font-weight: 600;">Transaction Card</a>
