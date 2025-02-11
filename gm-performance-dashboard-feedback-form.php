@@ -204,19 +204,19 @@
                 </a>
                 <ul class="nav nav-treeview">
                   <li class="nav-item">
-                    <a href="home.php" class="nav-link">
+                    <a href="gm-performance-dashboard.php" class="nav-link">
                       <i class="nav-icon bi bi-circle"></i>
                       <p>Performance Dashboard</p>
                     </a>
                   </li>
                   <li class="nav-item">
-                    <a href="#" class="nav-link">
+                    <a href="item-movement.php" class="nav-link">
                       <i class="nav-icon bi bi-circle"></i>
                       <p>Stock Card</p>
                     </a>
                   </li>
                   <li class="nav-item">
-                    <a href="#" class="nav-link">
+                    <a href="gm-transaction-card" class="nav-link">
                       <i class="nav-icon bi bi-circle"></i>
                       <p>Transaction Card</p>
                     </a>

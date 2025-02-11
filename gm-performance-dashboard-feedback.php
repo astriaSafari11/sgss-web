@@ -127,7 +127,7 @@
                   class="user-image rounded-circle shadow"
                   alt="User Image"
                 />
-                <span class="d-none d-md-inline" style="color: #001F82;">Alexander Pierce</span>
+                <span class="d-none d-md-inline" style="color: #001F82;">Debby</span>
               </a>
               <ul class="dropdown-menu dropdown-menu-lg dropdown-menu-end">
                 <!--begin::User Image-->
@@ -204,19 +204,19 @@
                 </a>
                 <ul class="nav nav-treeview">
                   <li class="nav-item">
-                    <a href="home.php" class="nav-link">
+                    <a href="gm-performance-dashboard.php" class="nav-link">
                       <i class="nav-icon bi bi-circle"></i>
                       <p>Performance Dashboard</p>
                     </a>
                   </li>
                   <li class="nav-item">
-                    <a href="#" class="nav-link">
+                    <a href="item-movement.php" class="nav-link">
                       <i class="nav-icon bi bi-circle"></i>
                       <p>Stock Card</p>
                     </a>
                   </li>
                   <li class="nav-item">
-                    <a href="#" class="nav-link">
+                    <a href="gm-transaction-card.php" class="nav-link">
                       <i class="nav-icon bi bi-circle"></i>
                       <p>Transaction Card</p>
                     </a>

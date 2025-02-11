@@ -214,7 +214,7 @@
                     </a>
                   </li>
                   <li class="nav-item">
-                    <a href="../index3.php" class="nav-link">
+                    <a href="gm-transaction-card.php" class="nav-link">
                       <i class="nav-icon bi bi-circle"></i>
                       <p>Transaction Card</p>
                     </a>
@@ -301,7 +301,7 @@
                       <a href="item-movement.php" class="dropdown-item dropdown-footer" style="font-size: 20px; font-weight: 600;">Stock Card</a>
                       <div class="dropdown-divider"></div>
                       <div class="dropdown-divider"></div>
-                      <a href="#" class="dropdown-item dropdown-footer" style="font-size: 20px; font-weight: 600;">Transaction Card</a>
+                      <a href="gm-transaction-card.php" class="dropdown-item dropdown-footer" style="font-size: 20px; font-weight: 600;">Transaction Card</a>
                       <div class="dropdown-divider"></div>
                       <div class="dropdown-divider"></div>
                       <a href="#" class="dropdown-item dropdown-footer" style="font-size: 20px; font-weight: 600;">Master Data</a>

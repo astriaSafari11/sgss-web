@@ -64,7 +64,7 @@
           <ul class="navbar-nav">
             <li class="nav-item">
               <a class="nav-link" data-lte-toggle="sidebar" href="#" role="button" style="color: #001F82; font-weight: 800; font-size: 24px; margin-bottom: 5px;">
-                <i class="bi bi-list"></i> PERFORMANCE DASHBOARD
+                <i class="bi bi-list"></i> TRANSACTION CARD
               </a>
             </li>
           </ul>
@@ -204,13 +204,13 @@
                 </a>
                 <ul class="nav nav-treeview">
                   <li class="nav-item">
-                    <a href="gm-performance-dashboard.php" class="nav-link">
+                    <a href="home.php" class="nav-link">
                       <i class="nav-icon bi bi-circle"></i>
                       <p>Performance Dashboard</p>
                     </a>
                   </li>
                   <li class="nav-item">
-                    <a href="item-movement.php" class="nav-link">
+                    <a href="#" class="nav-link">
                       <i class="nav-icon bi bi-circle"></i>
                       <p>Stock Card</p>
                     </a>
@@ -222,7 +222,7 @@
                     </a>
                   </li>
                   <li class="nav-item">
-                    <a href="gm-transaction-card.php" class="nav-link">
+                    <a href="#" class="nav-link">
                       <i class="nav-icon bi bi-circle"></i>
                       <p>Master Data</p>
                     </a>
@@ -257,28 +257,68 @@
             <!--begin::Row-->
             <div class="row">
               <div class="col-sm-6">
+                <!--
                 <a class="btn btn-primary position-relative" style="font-weight: 600; border-radius: 50px;">
-                  Request List
+                  Request List 
                   <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger"> 5
-                  <span class="visually-hidden">unread messages</span>
-                  </span>
-                </a>                
+                  <span class="visually-hidden">unread messages</span> 
+                  </span> 
+                </a> 
+                --> 
+                <!--          
                 <a href= "gm-performance-dashboard-feedback.php" class="btn btn-secondary position-relative" style="font-weight: 600; border-radius: 50px; color: #001F82;">
                   Feedback List
                   <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger"> 5
                   <span class="visually-hidden">unread messages</span>
                   </span>
-                </a>                  
+                </a>  
+                -->                
               </div>
               <div class="col-sm-6">
                 <ol class="breadcrumb float-sm-end">
                   <li class="breadcrumb-item"><a href="#">Home</a></li>
                   <li class="breadcrumb-item" aria-current="page">Goods Management</li>
-                  <li class="breadcrumb-item active" aria-current="page">Performance Dashboard</li>
+                  <li class="breadcrumb-item active" aria-current="page">Transaction Card</li>
                 </ol>
               </div>
             </div>
           </div>
+        </div>
+
+        <!-- disini -->
+
+        <div class="row">
+              <div class="col-md-4 col-sm-12 col-12">
+                <span class="btn btn-info mb-2" style="border-radius: 50px;width: 100%;font-weight: 600;color: #fff;">Transactions Status</span>  
+                <div class="info-box" style="border-radius: 25px;">
+                  <div class="info-box-content" style="color: #001F82;">
+                    <figure class="highcharts-figure">
+                      <div id="container"></div>
+                    </figure>
+                  </div>
+                  <!-- /.info-box-content -->
+                </div>
+                <!-- /.info-box -->
+          </div>
+
+          <div class="col-md-4 col-sm-12 col-12">
+                <span class="btn btn-info mb-2" style="border-radius: 50px;width: 100%;font-weight: 600;color: #fff;">Yoy</span>  
+                <div class="info-box" style="border-radius: 25px;">
+                  <div class="info-box-content" style="color: #001F82;">
+                    <figure class="highcharts-figure1">
+                      <div id="container1"></div>
+                    </figure>
+                  </div>
+                  <!-- /.info-box-content -->
+                </div>
+                <!-- /.info-box -->
+              </div>
+          
+        <div class="row">
+              <div class="col-12 mb-4">
+                <span class="btn btn-primary" style="border-radius: 50px;width: 100%;font-weight: 600;">Transactions</span>  
+              </div><div class="row">
+     
         </div>
         <!--end::App Content Header-->
         <!--begin::App Content-->
@@ -304,85 +344,65 @@
                     <table id="example" class="table table-striped" style="width:100%">
                       <thead>
                           <tr >
-                              <th style="color: #fff;background-color: #001F82;text-align: center;">Due Date</th>
-                              <th style="color: #fff;background-color: #001F82;text-align: center;">Until Due Date</th>
-                              <th style="color: #fff;background-color: #001F82;text-align: center;">Item Code</th>
+                              <th style="color: #fff;background-color: #001F82;text-align: center;">Transactions</th>
+                              <th style="color: #fff;background-color: #001F82;text-align: center;">Code</th>
                               <th style="color: #fff;background-color: #001F82;text-align: center;">Item</th>
-                              <th style="color: #fff;background-color: #001F82;text-align: center;">Qty</th>
+                              <th style="color: #fff;background-color: #001F82;text-align: center;">Requested qty</th>
                               <th style="color: #fff;background-color: #001F82;text-align: center;">UoM</th>
+                              <th style="color: #fff;background-color: #001F82;text-align: center;">YTD Used Qty</th>
                               <th style="color: #fff;background-color: #001F82;text-align: center;">Status</th>
-                              <th style="color: #fff;background-color: #001F82;text-align: center;">Action</th>
+                              
                           </tr>
                       </thead>
                       <tbody>
                           <tr>
-                              <td style="vertical-align: middle;text-align: center;">2011-04-25</td>
-                              <td style="vertical-align: middle;text-align: center;">2011-04-25</td>
-                              <td style="vertical-align: middle;text-align: center;">ALK001</td>
+                              <td style="vertical-align: middle;text-align: center;">REQ0001</td>
+                              <td style="vertical-align: middle;text-align: center;">ITEM1</td>
                               <td style="vertical-align: middle;text-align: center;">Alkohol</td>
                               <td style="vertical-align: middle;text-align: center;">100</td>
-                              <td style="vertical-align: middle;text-align: center;">ml</td>
-                              <td style="vertical-align: middle;text-align: center;background-color: #ed2f2f;">Urgent</td>
-                              <td style="vertical-align: middle;text-align: center;">                
-                                <a href="gm-performance-dashboard-feedback-form.php" class="btn btn-sm btn-secondary" style="border-radius: 50px; color: #001F82;">
-                                ORDER NOW
-                                </a>  
-                                <button type="button" class="btn btn-sm btn-secondary" style="border-radius: 50px; color: #001F82;">
-                                  IGNORE
-                                </button>  
-                              </td>
+                              <td style="vertical-align: middle;text-align: center;">kg</td>
+                              <td style="vertical-align: middle;text-align: center;">1000</td>
+                              <td style="vertical-align: middle;text-align: center;background-color: #00FF00;">OK</td>
+                             
                           </tr>
                           <tr>
-                            <td style="vertical-align: middle;text-align: center;">2011-04-25</td>
-                            <td style="vertical-align: middle;text-align: center;">2011-04-25</td>
-                            <td style="vertical-align: middle;text-align: center;">ALK001</td>
-                            <td style="vertical-align: middle;text-align: center;">Alkohol</td>
-                            <td style="vertical-align: middle;text-align: center;">100</td>
-                            <td style="vertical-align: middle;text-align: center;">ml</td>
-                            <td style="vertical-align: middle;text-align: center;background-color: #ed2f2f;">Urgent</td>
-                            <td style="vertical-align: middle;text-align: center;">                
-                              <a href="gm-performance-dashboard-feedback-form.php" class="btn btn-sm btn-secondary" style="border-radius: 50px; color: #001F82;">
-                                ORDER NOW
-                                </a>
-                              <button type="button" class="btn btn-sm btn-secondary" style="border-radius: 50px; color: #001F82;">
-                                IGNORE
-                              </button>  
-                            </td>
+                              <td style="vertical-align: middle;text-align: center;">REQ0002</td>
+                              <td style="vertical-align: middle;text-align: center;">ITEM2</td>
+                              <td style="vertical-align: middle;text-align: center;">Majun</td>
+                              <td style="vertical-align: middle;text-align: center;">50</td>
+                              <td style="vertical-align: middle;text-align: center;">kg</td>
+                              <td style="vertical-align: middle;text-align: center;">500</td>
+                              <td style="vertical-align: middle;text-align: center;background-color: #00FF00;">OK</td>
+                            
                         </tr>
                         <tr>
-                          <td style="vertical-align: middle;text-align: center;">2011-04-25</td>
-                          <td style="vertical-align: middle;text-align: center;">2011-04-25</td>
-                          <td style="vertical-align: middle;text-align: center;">ALK001</td>
-                          <td style="vertical-align: middle;text-align: center;">Alkohol</td>
-                          <td style="vertical-align: middle;text-align: center;">100</td>
-                          <td style="vertical-align: middle;text-align: center;">ml</td>
-                          <td style="vertical-align: middle;text-align: center;background-color: #ed2f2f;">Urgent</td>
-                          <td style="vertical-align: middle;text-align: center;">                
-                            <a href="gm-performance-dashboard-feedback-form.php" class="btn btn-sm btn-secondary" style="border-radius: 50px; color: #001F82;">
-                                ORDER NOW
-                                </a> 
-                            <button type="button" class="btn btn-sm btn-secondary" style="border-radius: 50px; color: #001F82;">
-                              IGNORE
-                            </button>  
-                          </td>
+                              <td style="vertical-align: middle;text-align: center;">REQ0003</td>
+                              <td style="vertical-align: middle;text-align: center;">ITEM3</td>
+                              <td style="vertical-align: middle;text-align: center;">Safety Shoes</td>
+                              <td style="vertical-align: middle;text-align: center;">50</td>
+                              <td style="vertical-align: middle;text-align: center;">Pcs</td>
+                              <td style="vertical-align: middle;text-align: center;">500</td>
+                              <td style="vertical-align: middle;text-align: center;background-color: #00FF00;">OK</td>
+                          
                       </tr>
                       <tr>
-                        <td style="vertical-align: middle;text-align: center;">2011-04-25</td>
-                        <td style="vertical-align: middle;text-align: center;">2011-04-25</td>
-                        <td style="vertical-align: middle;text-align: center;">ALK001</td>
-                        <td style="vertical-align: middle;text-align: center;">Alkohol</td>
-                        <td style="vertical-align: middle;text-align: center;">100</td>
-                        <td style="vertical-align: middle;text-align: center;">ml</td>
-                        <td style="vertical-align: middle;text-align: center;background-color: #fa9f1d;">Medium</td>
-                        <td style="vertical-align: middle;text-align: center;">                
-                          <button type="button" class="btn btn-sm btn-secondary" style="border-radius: 50px; color: #001F82;">
-                          ORDER NOW
-                          </button>  
-                          <button type="button" class="btn btn-sm btn-secondary" style="border-radius: 50px; color: #001F82;">
-                            IGNORE
-                          </button>  
-                        </td>
-                    </tr>  
+                              <td style="vertical-align: middle;text-align: center;">REQ0004</td>
+                              <td style="vertical-align: middle;text-align: center;">ITEM4</td>
+                              <td style="vertical-align: middle;text-align: center;">Safety Helmet</td>
+                              <td style="vertical-align: middle;text-align: center;">30</td>
+                              <td style="vertical-align: middle;text-align: center;">Pcs</td>
+                              <td style="vertical-align: middle;text-align: center;">250</td>
+                              <td style="vertical-align: middle;text-align: center;background-color: #fa9f1d;">Underutilization</td>
+                      </tr> 
+                      <tr>
+                              <td style="vertical-align: middle;text-align: center;">REQ0005</td>
+                              <td style="vertical-align: middle;text-align: center;">ITEM5</td>
+                              <td style="vertical-align: middle;text-align: center;">Mask</td>
+                              <td style="vertical-align: middle;text-align: center;">1000</td>
+                              <td style="vertical-align: middle;text-align: center;">Pcs</td>
+                              <td style="vertical-align: middle;text-align: center;">2000</td>
+                              <td style="vertical-align: middle;text-align: center;background-color: #ff0000;">Overutilization</td>
+                      </tr> 
                     <!--                                            
                       <tfoot>
                         <tr >
@@ -407,50 +427,7 @@
               </div>
             </div>
             <!--end::Row-->
-            <div class="row">
-              <div class="col-12 mb-4">
-                <span class="btn btn-primary" style="border-radius: 50px;width: 100%;font-weight: 600;">KPI RESULT</span>  
-              </div>
-            </div>
-            <div class="row">
-              <div class="col-md-4 col-sm-12 col-12">
-                <span class="btn btn-info mb-2" style="border-radius: 50px;width: 100%;font-weight: 600;color: #fff;">COST</span>  
-                <div class="info-box" style="border-radius: 25px;">
-                  <div class="info-box-content" style="color: #001F82;">
-                    <figure class="highcharts-figure">
-                      <div id="container"></div>
-                    </figure>
-                  </div>
-                  <!-- /.info-box-content -->
-                </div>
-                <!-- /.info-box -->
-              </div>
-
-              <div class="col-md-4 col-sm-12 col-12">
-                <span class="btn btn-info mb-2" style="border-radius: 50px;width: 100%;font-weight: 600;color: #fff;">SERVICE</span>  
-                <div class="info-box" style="border-radius: 25px;">
-                  <div class="info-box-content" style="color: #001F82;">
-                    <figure class="highcharts-figure1">
-                      <div id="container1"></div>
-                    </figure>
-                  </div>
-                  <!-- /.info-box-content -->
-                </div>
-                <!-- /.info-box -->
-              </div>
               
-              <div class="col-md-4 col-sm-12 col-12">
-                <span class="btn btn-info mb-2" style="border-radius: 50px;width: 100%;font-weight: 600;color: #fff;">CASH</span>  
-                <div class="info-box" style="border-radius: 25px;">
-                  <div class="info-box-content" style="color: #001F82;">
-                    <figure class="highcharts-figure2">
-                      <div id="container2"></div>
-                    </figure>
-                  </div>
-                  <!-- /.info-box-content -->
-                </div>
-                <!-- /.info-box -->
-              </div> 
               <!-- /.col -->               
             </div>
             <!--end::Row-->            

@@ -217,7 +217,7 @@
                     </a>
                   </li>
                   <li class="nav-item">
-                    <a href="../index3.php" class="nav-link">
+                    <a href="gm-transaction-card.php" class="nav-link">
                       <i class="nav-icon bi bi-circle"></i>
                       <p>Transaction Card</p>
                     </a>

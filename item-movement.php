@@ -128,7 +128,7 @@
                   class="user-image rounded-circle shadow"
                   alt="User Image"
                 />
-                <span class="d-none d-md-inline" style="color: #001F82;">Alexander Pierce</span>
+                <span class="d-none d-md-inline" style="color: #001F82;">Debby</span>
               </a>
               <ul class="dropdown-menu dropdown-menu-lg dropdown-menu-end">
                 <!--begin::User Image-->
@@ -217,7 +217,7 @@
                     </a>
                   </li>
                   <li class="nav-item">
-                    <a href="../index3.php" class="nav-link">
+                    <a href="gm-transaction-card.php" class="nav-link">
                       <i class="nav-icon bi bi-circle"></i>
                       <p>Transaction Card</p>
                     </a>
