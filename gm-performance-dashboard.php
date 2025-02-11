@@ -138,7 +138,7 @@
                     alt="User Image"
                   />
                   <p>
-                    Alexander Pierce - Administrator
+                    Debby - Administrator
                     <small>Member since Nov. 2023</small>
                   </p>
                 </li>
