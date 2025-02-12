@@ -277,132 +277,159 @@
             <div class="row">
               <div class="col-12 mb-4">
                 <!-- Default box -->
-                <div class="card">
+                <div class="card text-bg-light">
+                  <div class="card-header">
+                    <h3 class="card-title">General Information</h3>
+                  </div>                  
                   <div class="card-body">
                     <div class="row">
-                      <!--begin::Col-->
-                      <div class="col-6">
-                        <div class="form-floating mb-3">
-                          <input type="date" class="form-control" id="floatingInput" placeholder="name@example.com">
-                          <label for="floatingInput">Action Date</label>
-                        </div>
+                      <div class="col-8">
+                        <div class="row">
+                          <!--begin::Col-->
+                          <div class="col-6">
+                            <div class="form-floating mb-3">
+                              <input type="date" class="form-control" id="floatingInput" placeholder="name@example.com" value ="2025-02-02" disabled>
+                              <label for="floatingInput">Date of Request</label>
+                            </div>
+                          </div>
+                          <!--end::Col-->
+                          <!--begin::Col-->
+                          <div class="col-6">
+                            <div class="form-floating mb-3">
+                              <input type="text" class="form-control" id="floatingInput" placeholder="name@example.com" value="debby" disabled>
+                              <label for="floatingInput">Requestor</label>
+                            </div>
+                          </div>
+                          <!--end::Col-->
+                          <!--begin::Col-->
+                          <div class="col-6">
+                            <div class="form-floating mb-3">
+                              <input type="text" class="form-control" id="floatingInput" placeholder="name@example.com" value="Routine Goods" disabled>
+                              <label for="floatingInput">Purchase Reason</label>
+                            </div>
+                          </div>
+                          <!--end::Col-->
+                          <!--begin::Col-->
+                          <div class="col-6">
+                            <div class="form-floating mb-3">
+                              <input type="text" class="form-control" id="floatingInput" placeholder="name@example.com" value="Achmad" disabled>
+                              <label for="floatingInput">Requested For</label>
+                            </div>
+                          </div>
+                          <!--end::Col-->    
+                          <!--begin::Col-->
+                          <div class="col-6">
+                            <div class="form-floating mb-3">
+                              <input type="email" class="form-control" id="floatingInput" placeholder="name@example.com" value="-" disabled>
+                              <label for="floatingInput">Remarks</label>
+                            </div>
+                          </div>
+                          <!--end::Col-->
+                          <div class="col-6">
+                            <div class="form-floating mb-3">
+                              <input type="email" class="form-control" id="floatingInput" placeholder="name@example.com" value="2-4" disabled>
+                              <label for="floatingInput">Area</label>
+                            </div>
+                          </div>
+                          <!--end::Col-->                                                              
+                        </div>                    
                       </div>
-                      <!--end::Col-->
-                      <!--begin::Col-->
-                      <div class="col-6">
-                        <div class="form-floating mb-3">
-                          <input type="email" class="form-control" id="floatingInput" placeholder="name@example.com">
-                          <label for="floatingInput">Requestor</label>
-                        </div>
-                      </div>
-                      <!--end::Col-->
-                      <!--begin::Col-->
-                      <div class="col-6">
-                        <div class="form-floating mb-3">
-                          <input type="email" class="form-control" id="floatingInput" placeholder="name@example.com">
-                          <label for="floatingInput">Purchase Reason</label>
-                        </div>
-                      </div>
-                      <!--end::Col-->
-                      <!--begin::Col-->
-                      <div class="col-6">
-                        <select class="form-select" aria-label="Default select example" style="height: 56px;">
-                          <option selected>Requested For</option>
-                          <option value="1">Budi</option>
-                          <option value="2">Ahmad</option>
-                          <option value="3">Faqih</option>
-                        </select>
-                      </div>
-                      <!--end::Col-->    
-                      <!--begin::Col-->
-                      <div class="col-6">
-                        <div class="form-floating mb-3">
-                          <input type="email" class="form-control" id="floatingInput" placeholder="name@example.com">
-                          <label for="floatingInput">Remarks</label>
-                        </div>
-                      </div>
-                      <!--end::Col-->
-                      <div class="col-6">
-                        <div class="form-floating mb-3">
-                          <input type="email" class="form-control" id="floatingInput" placeholder="name@example.com">
-                          <label for="floatingInput">Area</label>
-                        </div>
-                      </div>
-                      <!--end::Col-->                                                              
-                      <!--begin::Col-->
-                      <div class="col-6">
-                        <div class="form-floating mb-3">
-                          <input type="email" class="form-control" id="floatingInput" placeholder="name@example.com">
-                          <label for="floatingInput">Attachment</label>
-                        </div>
-                      </div>
-                      <!--end::Col-->
-                    </div>                    
-                    <h3 class="mb-2 text-primary font-bold">Item Information</h3>
+                      <div class="col-4">
+                        <div class="row">                                                            
+                          <!--begin::Col-->
+                          <div class="col-12">
+                            <div class="form-floating mb-3">
+                              <input type="email" class="form-control" id="floatingInput" placeholder="name@example.com" value="Attachment.docx" disabled>
+                              <label for="floatingInput">Attachment</label>
+                            </div>
+                          </div>
+                          <!--end::Col-->
+                        </div>                    
+                      </div>           
+                    </div>                     
+                  </div>
+                  <!-- /.card-body -->
+                </div>
+                <!-- /.card -->
+              </div>
+            </div>          
+            <div class="row">
+              <div class="col-12 mb-4">
+                <!-- Default box -->
+                <div class="card text-bg-light">
+                  <div class="card-header">
+                    <h3 class="card-title">Item Information</h3>
+                  </div>                  
+                  <div class="card-body">
                     <table class="table table-bordered" style="width:100%">
                       <thead>
                           <tr >
-                              <th style="color: #fff;background-color: #001F82;text-align: center;">Item</th>
-                              <th style="color: #fff;background-color: #001F82;text-align: center;">Qty</th>
-                              <th style="color: #fff;background-color: #001F82;text-align: center;">UoM</th>
-                              <th style="color: #fff;background-color: #001F82;text-align: center;">Vendor</th>
-                              <th style="color: #fff;background-color: #001F82;text-align: center;">UoM Price</th>
-                              <th style="color: #fff;background-color: #001F82;text-align: center;">Total Price</th>
+                              <th style="color: #fff;background-color:#757474;text-align: center;">Item</th>
+                              <th style="color: #fff;background-color:#757474;text-align: center;">Qty</th>
+                              <th style="color: #fff;background-color:#757474;text-align: center;">UoM</th>
+                              <th style="color: #fff;background-color:#757474;text-align: center;">Vendor</th>
+                              <th style="color: #fff;background-color:#757474;text-align: center;">UoM Price</th>
+                              <th style="color: #fff;background-color:#757474;text-align: center;">Total Price</th>
+                              <th style="color: #fff;background-color:#757474;text-align: center;">Purchase Reason</th>
                           </tr>
                       </thead>
                       <tbody>
                           <tr>
                               <td style="vertical-align: middle;text-align: center;">Alkohol</td>
-                              <td style="vertical-align: middle;text-align: center;">
-                                20 <button type="button" class="btn btn-sm btn-outline-primary"><i class="fa-solid fa-pen"></i></button>
-                              </td>
+                              <td style="vertical-align: middle;text-align: center;">20</td>
                               <td style="vertical-align: middle;text-align: center;">Box</td>
-                              <td style="vertical-align: middle;text-align: center;">
-                                Vendor 1 <button type="button" class="btn btn-sm btn-outline-primary"><i class="fa-solid fa-pen"></i></button>
-                              </td>
+                              <td style="vertical-align: middle;text-align: center;">Vendor 1</td>
                               <td style="vertical-align: middle;text-align: center;">Rp. 5.000</td>
                               <td style="vertical-align: middle;text-align: center;">Rp. 500.000</td>
+                              <td style="vertical-align: middle;text-align: center;">Routine Buy</td>
                           </tr>
                           <tr>
-                            <td style="vertical-align: middle;text-align: center;">Alkohol</td>
-                            <td style="vertical-align: middle;text-align: center;">
-                              20 <button type="button" class="btn btn-sm btn-outline-primary"><i class="fa-solid fa-pen"></i></button>
-                            </td>
-                            <td style="vertical-align: middle;text-align: center;">Box</td>
-                            <td style="vertical-align: middle;text-align: center;">
-                              Vendor 2 <button type="button" class="btn btn-sm btn-outline-primary"><i class="fa-solid fa-pen"></i></button>
-                            </td>
-                            <td style="vertical-align: middle;text-align: center;">Rp. 5.000</td>
-                            <td style="vertical-align: middle;text-align: center;">Rp. 500.000</td>
-                        </tr>
-                        <tr>
-                          <td style="vertical-align: middle;text-align: center;">Alkohol</td>
-                          <td style="vertical-align: middle;text-align: center;">
-                            20 <button type="button" class="btn btn-sm btn-outline-primary"><i class="fa-solid fa-pen"></i></button>
-                          </td>
-                          <td style="vertical-align: middle;text-align: center;">Box</td>
-                          <td style="vertical-align: middle;text-align: center;">
-                            Vendor 3 <button type="button" class="btn btn-sm btn-outline-primary"><i class="fa-solid fa-pen"></i></button>
-                          </td>
-                          <td style="vertical-align: middle;text-align: center;">Rp. 5.000</td>
-                          <td style="vertical-align: middle;text-align: center;">Rp. 500.000</td>
-                      </tr>                                                  
+                              <td style="vertical-align: middle;text-align: center;">Alkohol</td>
+                              <td style="vertical-align: middle;text-align: center;">20</td>
+                              <td style="vertical-align: middle;text-align: center;">Box</td>
+                              <td style="vertical-align: middle;text-align: center;">Vendor 1</td>
+                              <td style="vertical-align: middle;text-align: center;">Rp. 5.000</td>
+                              <td style="vertical-align: middle;text-align: center;">Rp. 500.000</td>
+                              <td style="vertical-align: middle;text-align: center;">Routine Buy</td>
+                          </tr>
+                          <tr>
+                              <td style="vertical-align: middle;text-align: center;">Alkohol</td>
+                              <td style="vertical-align: middle;text-align: center;">20</td>
+                              <td style="vertical-align: middle;text-align: center;">Box</td>
+                              <td style="vertical-align: middle;text-align: center;">Vendor 1</td>
+                              <td style="vertical-align: middle;text-align: center;">Rp. 5.000</td>
+                              <td style="vertical-align: middle;text-align: center;">Rp. 500.000</td>
+                              <td style="vertical-align: middle;text-align: center;">Routine Buy</td>
+                          </tr>
                       </tbody>  
                       </table>              
                   </div>
-                  <!-- /.card-body -->
-                  <div class="card-footer">
-                    <div class="d-grid gap-2 d-md-flex justify-content-md-end">
-                      <a 
-                        href="gm-performance-dashboard-feedback-form-detail.php"
-                        class="btn btn-lg btn-secondary" type="button" style="font-weight: 600; border-radius: 50px;color:#001F82; width: 150px;">Submit</a>
-                    </div>                    
-                  </div>
-                  <!-- /.card-footer-->
                 </div>
                 <!-- /.card -->
               </div>
-            </div>           
+            </div>               
+            <div class="row">
+              <div class="col-12 mb-4">
+                <!-- Default box -->
+                <div class="card text-bg-light">
+                  <div class="card-header">
+                    <h3 class="card-title">Approval Needed</h3>
+                  </div>                  
+                  <div class="card-body">
+                    <h4 class="text-center" style="font-weight: 600; color:#001F82;">Do you want to approve this order?</h4>
+                    <div class="text-center">
+                    <a 
+                        href="gm-performance-dashboard-feedback-form-detail-approve.php"
+                        class="btn btn-lg btn-secondary text-center" type="button" style="font-weight: 600; border-radius: 50px;color:#001F82; width: 150px;">APPROVE</a>
+                        <a 
+                        href="gm-performance-dashboard-feedback-form-detail-reject.php"
+                        class="btn btn-lg btn-secondary text-center" type="button" style="font-weight: 600; border-radius: 50px;color:#001F82; width: 150px;">REJECT</a>
+                    </div>
+                  </div>
+                </div>
+                <!-- /.card -->
+              </div>
+            </div>             
           </div>
           <!--end::Container-->                  
         </div>
