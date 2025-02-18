@@ -167,6 +167,10 @@
     </script>
     <!--end::OverlayScrollbars Configure-->
     <!--end::Script-->
+
+    <img src="src/assets/circle_asset1.png" class="circle1" />
+    <img src="src/assets/circle_asset2.png" class="circle2" />
+    
   </body>
   <!--end::Body-->
 </html>
