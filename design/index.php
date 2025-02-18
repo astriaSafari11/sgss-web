@@ -17,14 +17,46 @@
       content="bootstrap 5, bootstrap, bootstrap 5 admin dashboard, bootstrap 5 dashboard, bootstrap 5 charts, bootstrap 5 calendar, bootstrap 5 datepicker, bootstrap 5 tables, bootstrap 5 datatable, vanilla js datatable, colorlibhq, colorlibhq dashboard, colorlibhq admin dashboard"
     />
     <!--end::Primary Meta Tags-->
-    <!--begin::Fonts-->
-    <link
-      rel="stylesheet"
-      href="https://cdn.jsdelivr.net/npm/@fontsource/source-sans-3@5.0.12/index.css"
-      integrity="sha256-tXJfXfp6Ewt1ilPzLDtQnJV4hclT9XuaZUKyUvmyr+Q="
-      crossorigin="anonymous"
-    />
-    <!--end::Fonts-->
+    <!--begin::Fonts/style-->
+    <style>
+      @import url('https://fonts.cdnfonts.com/css/garet');
+
+      body, html {
+      height: 100%;
+      margin: 0;
+      overflow: hidden; /* Nonaktifkan scroll pada halaman */
+      }
+
+      body {
+      background-color:rgb(230, 234, 255)
+      }
+
+      .login-box {
+        position: relative;
+        z-index: 1;
+        border-radius: 10px;
+      }
+
+      .circle1, .circle2 {
+      position: absolute;
+      z-index: 0;
+      }
+
+      .circle1 {
+      width: 370px;
+      height: 370px;
+      top: -80px;
+      left: -70px;
+      }
+
+      .circle2 {
+      width: 200px;
+      height: 200px;
+      bottom:-30px;
+      right:-100px;
+      }
+      </style>
+    <!--end::Fonts/Style-->
     <!--begin::Third Party Plugin(OverlayScrollbars)-->
     <link
       rel="stylesheet"
