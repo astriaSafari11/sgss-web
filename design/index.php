@@ -108,6 +108,7 @@
               </div>
               <div class="input-group-text"><span class="bi bi-lock-fill"></span></div>
             </div>
+            <a href="#" class="text-primary text-left text-decoration-none fw-bold mb-3 d-block">Forgot Password?</a>
             <!--begin::Row-->
             <div class="row">
               <div class="col-12 mt-2">
@@ -170,7 +171,7 @@
 
     <img src="src/assets/circle_asset1.png" class="circle1" />
     <img src="src/assets/circle_asset2.png" class="circle2" />
-    
+
   </body>
   <!--end::Body-->
 </html>
