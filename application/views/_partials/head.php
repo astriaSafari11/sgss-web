@@ -161,12 +161,13 @@
         <!--begin::Sidebar Brand-->
         <div class="sidebar-brand">
           <!--begin::Brand Link-->
-          <a href="home.php" class="brand-link">
+          <a href="#" class="brand-link">
             <!--begin::Brand Image-->
             <img
-              src="<?= base_url('assets/dist/assets/img/unilever-logo.png');?>"
+              src="<?= base_url('assets/dist/images/logos/unilever-logo.png');?>"
               alt="Unilever Logo"
-              class="brand-image opacity-75 shadow"
+              class="brand-image"
+              style="margin-left: 15px;"
             />
             <!--end::Brand Image-->
             <!--begin::Brand Text-->

@@ -9,6 +9,44 @@
     <meta name="title" content="UNILEVER | SGSS" />
     <meta name="author" content="astria.safari@ivs.co.id" />
     <!--end::Primary Meta Tags-->
+    <style>
+      @import url('https://fonts.cdnfonts.com/css/garet');
+
+      body, html {
+      height: 100%;
+      margin: 0;
+      overflow: hidden; /* Nonaktifkan scroll pada halaman */
+      }
+
+      body {
+      background-color:rgb(230, 234, 255)
+      }
+
+      .login-box {
+        position: relative;
+        z-index: 1;
+        border-radius: 10px;
+      }
+
+      .circle1, .circle2 {
+      position: absolute;
+      z-index: 0;
+      }
+
+      .circle1 {
+      width: 370px;
+      height: 370px;
+      top: -80px;
+      left: -70px;
+      }
+
+      .circle2 {
+      width: 200px;
+      height: 200px;
+      bottom:-30px;
+      right:-100px;
+      }
+      </style>    
     <!--  Favicon -->
     <link rel="shortcut icon" type="image/png" href="<?= base_url('assets/dist/images/logos/favicon.ico');?>" />    
     <!--begin::Third Party Plugin(OverlayScrollbars)-->
@@ -29,7 +67,7 @@
     <!--end::Third Party Plugin(Bootstrap Icons)-->
     <!--begin::Required Plugin(AdminLTE)-->
     <link rel="stylesheet" href="<?= base_url('assets/dist/css/adminlte.css');?>"/>
-    <!--end::Required Plugin(AdminLTE)-->
+    <!--end::Required Plugin(AdminLTE)-->    
   </head>
   <!--end::Head-->
   <!--begin::Body-->
@@ -38,7 +76,7 @@
       <div class="card card-outline card-primary">
         <div class="card-header text-center">
             <img
-              src="<?= base_url('assets/dist/assets/img/unilever-logo.png');?>"
+              src="<?= base_url('assets/dist/images/logos/unilever-logo.png');?>"
               alt="Unilever Logo"
               class=""
               width="35"
@@ -46,7 +84,6 @@
             <h4 class="mb-0 text-primary" style="font-weight: 600;"><b>SSGS Login</b></h4>
         </div>
         <div class="card-body login-card-body">
-          <p class="login-box-msg">Sign in to start your session</p>
           <form action="<?= site_url('auth/login');?>" method="post">
             <div class="input-group mb-2">
               <div class="form-floating">
@@ -60,6 +97,7 @@
                 <label for="loginPassword">Password</label>
               </div>
             </div>
+            <a href="#" class="text-primary text-left text-decoration-none fw-bold mb-3 d-block">Forgot Password?</a>
             <!--begin::Row-->
             <?php if($this->session->flashdata('message_login_error')): ?>
               <div class="alert alert-danger" role="alert">
@@ -126,6 +164,9 @@
     </script>
     <!--end::OverlayScrollbars Configure-->
     <!--end::Script-->
+    <img src="<?= base_url('assets/dist/images/backgrounds/circle_asset1.png');?>" class="circle1" />
+    <img src="<?= base_url('assets/dist/images/backgrounds/circle_asset2.png');?>" class="circle2" />
+
   </body>
   <!--end::Body-->
 </html>
