@@ -7,9 +7,13 @@
  */
 @font-face {
 	font-family: "GaretFont"; /* Name your font family */
-	src: url("../font/Garet-Book.woff"), url("../font/Garet-Heavy.woff"); /* Locate the .ttf file within your directory*/
+	src: url("../font/Garet-Book.woff"); /* Locate the .ttf file within your directory*/
 }
 
+@font-face {
+	font-family: GaretBold;
+	src: url("../font/Garet-Heavy.woff");
+}
 :root,
 [data-bs-theme="light"] {
 	--bs-blue: #001f82;
