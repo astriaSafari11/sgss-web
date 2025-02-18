@@ -7,10 +7,6 @@ class Goods_management extends CI_Controller
 	{
 		parent::__construct();
 		$this->load->model('auth_model');
-		// $this->load->model('proposal_model');
-		// if(!$this->auth_model->current_user()){
-		// 	redirect('auth/login');
-		// }
 	}
 
 	public function index()
@@ -18,4 +14,15 @@ class Goods_management extends CI_Controller
 		$this->session->set_flashdata('page_title', 'PERFORMANCE DASHBOARD');
 		$this->load->view('goods-management/dashboard.php');
 	}
+
+	public function feedback()
+	{
+		$this->session->set_flashdata('page_title', 'PERFORMANCE DASHBOARD');
+		$this->load->view('goods-management/feedback.php');
+	}	
+	public function order()
+	{
+		$this->session->set_flashdata('page_title', 'PERFORMANCE DASHBOARD');
+		$this->load->view('goods-management/order.php');
+	}	
 }

@@ -3412,7 +3412,7 @@ fieldset:disabled .btn {
 }
 
 .btn-outline-warning {
-	--bs-btn-color: #ffbe00;
+	--bs-btn-color: #001f82;
 	--bs-btn-bg: #f0f0f0;
 	--bs-btn-border-color: #afafaf;
 	--bs-btn-hover-color: #000;

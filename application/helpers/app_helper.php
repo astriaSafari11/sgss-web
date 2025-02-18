@@ -28,6 +28,57 @@ function myDecimal($num=0,$curr=""){
 	return number_format($num,2,",",".");
 }
 
+function showToast($type="success",$msg=""){	
+	switch($type){
+		case "success":
+			$title = 'Success!';
+			$icon = '<i class="fa-solid fa-circle-check" style="margin-right:5px;"></i>';
+			$class = "toast-success";
+			break;
+		case "error":
+			$title = 'Error!';
+			$icon = '<i class="fa-solid fa-circle-info" style="margin-right:5px;"></i>';
+			$class = "toast-danger";
+			break;
+		case "warning":
+			$title = 'Warning!';
+			$icon = '<i class="fa-solid fa-triangle-exclamation" style="margin-right:5px;"></i>';
+			$class = "toast-warning";
+			break;
+		case "info":
+			$title = 'Information!';
+			$icon = '<i class="fa-solid fa-circle-info" style="margin-right:5px;"></i>';
+			$class = "toast-primary";
+			break;
+		default:
+			$title = 'Information!';
+			$icon = '<i class="fa-solid fa-circle-info" style="margin-right:5px;"></i>';
+			$class = "toast-default";
+		break;
+	}
+	echo '
+		<div
+        	id="toastDefault"
+            class="toast '.$class.'"
+            role="alert"
+            aria-live="assertive"
+            aria-atomic="true"
+        >
+        <div class="toast-header">
+        	'.$icon.'
+            <strong class="me-auto">'.$title.'</strong>
+            <button
+            type="button"
+            class="btn-close"
+            data-bs-dismiss="toast"
+            aria-label="Close"
+        ></button>
+        </div>
+        	<div class="toast-body">'.$msg.'</div>
+        </div>  	
+	';
+}
+
 function myDate($dt,$f="d/m/Y H:i",$s=true){
 	$day = array(
 		1 => "Senin",

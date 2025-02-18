@@ -16,6 +16,14 @@
         <!--end::Copyright-->
       </footer>
       <!--end::Footer-->
+      
+      <div class="toast-container position-fixed top-0 end-0 p-3">
+        <?php 
+            if($this->session->flashdata('toast') && $this->session->flashdata('toast')['show'] == true){
+              echo showToast($this->session->flashdata('toast')['type'],$this->session->flashdata('toast')['msg']);
+            }
+          ?>    
+      </div>       
     </div>
     <!--end::App Wrapper-->
     <!--begin::Script-->
@@ -47,6 +55,18 @@
     <script src="https://code.highcharts.com/modules/accessibility.js"></script>    
     <!--end::Required Plugin(AdminLTE)--><!--begin::OverlayScrollbars Configure-->
     <script>
+      $(document).ready(function() {
+        var toastElList = [].slice.call(document.querySelectorAll('.toast'))
+        var toastList = toastElList.map(function(toastEl) {
+          return new bootstrap.Toast(toastEl)
+        })        
+
+        <?php if($this->session->flashdata('toast') && $this->session->flashdata('toast')['show'] == true): ?>
+          toastList.forEach(toast => toast.show())
+        <?php endif ?>	 
+        <?php $this->session->set_flashdata('toast', '');?>
+      });
+
       const SELECTOR_SIDEBAR_WRAPPER = '.sidebar-wrapper';
       const Default = {
         scrollbarTheme: 'os-theme-light',

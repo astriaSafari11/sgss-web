@@ -7,7 +7,7 @@
 </style>
 <div class="row mb-2">
               <div class="col-sm-6">
-                <a href="<?= site_url('master_data');?>" class="btn btn-sm btn-primary position-relative" style="font-weight: 600; border-radius: 50px; white-space:nowrap;">
+                <a href="<?= site_url('master_data');?>" class="btn btn-sm btn-outline-primary position-relative" style="font-weight: 600; border-radius: 50px; white-space:nowrap;">
                   <i class="fa-solid fa-boxes-packing" style="margin-right:5px; margin-left: 5px;"></i>
                   Material by Vendor
                 </a>   
@@ -19,16 +19,16 @@
                   <i class="fa-solid fa-address-card" style="margin-right:5px; margin-left: 5px;"></i>
                   Vendor List
                 </a>   
-                <a href="<?= site_url('master_data/material_list');?>" class="btn btn-sm btn-outline-primary position-relative" style="font-weight: 600; border-radius: 50px; white-space:nowrap;">
+                <a href="<?= site_url('master_data/material_list');?>" class="btn btn-sm btn-primary position-relative" style="font-weight: 600; border-radius: 50px; white-space:nowrap;">
                   <i class="fa-solid fa-box-archive" style="margin-right:5px; margin-left: 5px;"></i>
                   Material List
-                </a>     
+                </a> 
               </div>
               <div class="col-sm-6">
                 <ol class="breadcrumb float-sm-end">
                   <li class="breadcrumb-item"><a href="#">Home</a></li>
                   <li class="breadcrumb-item" aria-current="page">Master Data</li>
-                  <li class="breadcrumb-item active" aria-current="page">Vendor</li>
+                  <li class="breadcrumb-item active" aria-current="page">Material List</li>
                 </ol>
               </div>
             </div>
@@ -39,6 +39,10 @@
                 <div class="card">
                   <div class="card-header">
                     <div class="card-tools">
+                      <a href="<?= site_url('master_data/add_material');?>" class="btn btn-sm btn-outline-primary position-relative" style="font-weight: 600; border-radius: 50px; white-space:nowrap">
+                        <i class="fa-solid fa-circle-plus"></i>
+                        Add New Material
+                      </a>                           
                       <a type="button" class="btn btn-sm btn-outline-danger position-relative" style="font-weight: 600; border-radius: 50px; width: 150px;">
                         <i class="fa-solid fa-file-export"></i>
                         Export
@@ -46,31 +50,28 @@
                       <a type="button" class="btn btn-sm btn-outline-danger position-relative" style="font-weight: 600; border-radius: 50px;width: 150px;">
                       <i class="fa-solid fa-file-import"></i>
                         Import
-                      </a>                       
+                      </a>                      
                     </div>
                   </div>
                   <div class="card-body">
                     <div class="dt-container">
-                        <table id="table-vendor" class="table table-striped table-bordered">
+                        <table id="table-vendor" class="table table-striped table-bordered" width="100%">
                         <thead style="text-align: center;white-space:nowrap;">
                             <tr >
                                 <th style="color: #fff;background-color: #001F82;text-align: center;">No.</th>
-                                <th style="color: #fff;background-color: #001F82;text-align: center;">Vendor Code</th>
-                                <th style="color: #fff;background-color: #001F82;text-align: center;">Category</th>
-                                <th style="color: #fff;background-color: #001F82;text-align: center;">Vendor Name</th>
-                                <th style="color: #fff;background-color: #001F82;text-align: center;">Rating</th>
-                                <th style="color: #fff;background-color: #001F82;text-align: center;">Purchase History</th>
-                                <th style="color: #fff;background-color: #001F82;text-align: center;">Item</th>
+                                <th style="color: #fff;background-color: #001F82;text-align: center;">Item Code</th>
+                                <th style="color: #fff;background-color: #001F82;text-align: center;">Item Name</th>
+                                <th style="color: #fff;background-color: #001F82;text-align: center;">Factory</th>
                                 <th style="color: #fff;background-color: #001F82;text-align: center;">UoM</th>
-                                <th style="color: #fff;background-color: #001F82;text-align: center;">Est. Lead Time</th>
-                                <th style="color: #fff;background-color: #001F82;text-align: center;">Price / UoM</th>
-                                <th style="color: #fff;background-color: #001F82;text-align: center;">MoQ</th>
-                                <th style="color: #fff;background-color: #001F82;text-align: center;width:100px;">Total Price</th>
-                                <th style="color: #fff;background-color: #001F82;text-align: center;">Total Price if QTY = MOQ</th>
-                                <th style="color: #fff;background-color: #001F82;text-align: center;">Price MOQ/MOQ</th>
-                                <th style="color: #fff;background-color: #001F82;text-align: center;">Savings</th>
-                                <th style="color: #fff;background-color: #001F82;text-align: center;">Place to buy</th>
-                                <th style="color: #fff;background-color: #001F82;text-align: center;">Link</th>
+                                <th style="color: #fff;background-color: #001F82;text-align: center;">LT_PR_PO</th>
+                                <th style="color: #fff;background-color: #001F82;text-align: center;">Vendor Code</th>
+                                <th style="color: #fff;background-color: #001F82;text-align: center;">Lot Size</th>
+                                <th style="color: #fff;background-color: #001F82;text-align: center;">Initial Value Stock</th>
+                                <th style="color: #fff;background-color: #001F82;text-align: center;">Order Cycle</th>
+                                <th style="color: #fff;background-color: #001F82;text-align: center;">Initial Stock</th>
+                                <th style="color: #fff;background-color: #001F82;text-align: center;width:100px;">LT_PO_TO_DELIV</th>
+                                <th style="color: #fff;background-color: #001F82;text-align: center;">Standard Safety Stock</th>
+                                <th style="color: #fff;background-color: #001F82;text-align: center;">Initial Value (todo list)</th>
                                 <th style="color: #fff;background-color: #001F82;text-align: center;">Action</th>
                             </tr>
                         </thead>
@@ -98,7 +99,7 @@
               "serverSide": true, 
               "ordering": false,
               "ajax": {
-                "url": "<?= site_url('master_data/get_master_vendor');?>",
+                "url": "<?= site_url('master_data/get_master_material');?>",
                 "type": "POST"
               },
               "order": [],        

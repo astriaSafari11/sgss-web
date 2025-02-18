@@ -7,12 +7,22 @@
 </style>
 <div class="row mb-2">
               <div class="col-sm-6">
-                <a href="<?= site_url('master_data');?>" class="btn btn-outline-primary position-relative" style="font-weight: 600; border-radius: 50px; width: 150px;">
-                  Vendor
+                <a href="<?= site_url('master_data');?>" class="btn btn-sm btn-outline-primary position-relative" style="font-weight: 600; border-radius: 50px; white-space:nowrap;">
+                  <i class="fa-solid fa-boxes-packing" style="margin-right:5px; margin-left: 5px;"></i>
+                  Material by Vendor
                 </a>   
-                <a href="<?= site_url('master_data/material');?>" class="btn btn-primary position-relative" style="font-weight: 600; border-radius: 50px; width: 150px;">
-                  Material
+                <a href="<?= site_url('master_data/material');?>" class="btn btn-sm btn-primary position-relative" style="font-weight: 600; border-radius: 50px; white-space:nowrap;">
+                  <i class="fa-solid fa-boxes-packing" style="margin-right:5px; margin-left: 5px;"></i>
+                  Material by Factory
+                </a>                 
+                <a href="<?= site_url('master_data/vendor_list');?>" class="btn btn-sm btn-outline-primary position-relative" style="font-weight: 600; border-radius: 50px; white-space:nowrap;">
+                  <i class="fa-solid fa-address-card" style="margin-right:5px; margin-left: 5px;"></i>
+                  Vendor List
                 </a>   
+                <a href="<?= site_url('master_data/material_list');?>" class="btn btn-sm btn-outline-primary position-relative" style="font-weight: 600; border-radius: 50px; white-space:nowrap;">
+                  <i class="fa-solid fa-box-archive" style="margin-right:5px; margin-left: 5px;"></i>
+                  Material List
+                </a> 
               </div>
               <div class="col-sm-6">
                 <ol class="breadcrumb float-sm-end">
@@ -29,13 +39,10 @@
                 <div class="card">
                   <div class="card-header">
                     <div class="card-tools">
-                      <button type="button" class="btn btn-outline-primary position-relative" style="font-weight: 600; border-radius: 50px; white-space:nowrap">
-                        Add New Material
-                      </button>                           
-                      <button type="button" class="btn btn-outline-danger position-relative" style="font-weight: 600; border-radius: 50px; width: 150px;">
+                      <button type="button" class="btn btn-sm btn-outline-danger position-relative" style="font-weight: 600; border-radius: 50px; width: 150px;">
                         Export
                       </button>                       
-                      <button type="button" class="btn btn-outline-danger position-relative" style="font-weight: 600; border-radius: 50px;width: 150px;">
+                      <button type="button" class="btn btn-sm btn-outline-danger position-relative" style="font-weight: 600; border-radius: 50px;width: 150px;">
                         Import
                       </button>                       
                     </div>

@@ -38,6 +38,7 @@ class Auth_model extends CI_Model
 			$this->session->set_userdata('user_email',$user->email);
 			$this->session->set_userdata('user_role_id',$user->role_id);
 			$this->session->set_userdata('user_role',$user->role);
+			$this->session->set_userdata('user_factory',$user->factory);
 		
 			return $this->session->has_userdata(self::SESSION_KEY);
 		}else{

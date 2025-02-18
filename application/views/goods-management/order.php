@@ -1,13 +1,13 @@
 <?php $this->load->view('_partials/head.php'); ?>
 <div class="row mb-2 justify-between">
               <div class="col-sm-6">
-                <a class="btn btn-sm btn-primary position-relative" style="font-weight: 600; border-radius: 50px;">
+                <a href="<?= site_url('goods_management');?>"class="btn btn-sm btn-outline-primary position-relative" style="font-weight: 600; border-radius: 50px;">
                   Request List
                   <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger"> 5
                   <span class="visually-hidden">unread messages</span>
                   </span>
                 </a>                
-                <a href="<?= site_url('goods_management/feedback');?>" class="btn btn-sm btn-outline-primary position-relative" style="font-weight: 600; border-radius: 50px;">
+                <a href="<?= site_url('goods_management/feedback');?>" class="btn btn-sm btn-primary position-relative" style="font-weight: 600; border-radius: 50px;">
                   Feedback List
                   <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger"> 5
                   <span class="visually-hidden">unread messages</span>
@@ -68,16 +68,13 @@
                               <td style="vertical-align: middle;text-align: center;">ml</td>
                               <td style="vertical-align: middle;text-align: center;">
                                 <button class="btn btn-sm btn-danger" style="font-weight: 600; border-radius: 50px; width: 100%;">
-                                  Urgent
+                                  Rejected
                                 </button>                                
                               </td>
                               <td style="vertical-align: middle;text-align: center;">                
-                                <a href="<?= site_url('goods_management/order');?>" class="btn btn-sm btn-outline-warning" style="font-weight: 600; border-radius: 50px; width: 150px;">
-                                ORDER NOW
+                                <a href="<?= site_url('goods_management/order');?>" class="btn btn-sm btn-outline-warning" style="font-weight: 600; border-radius: 50px; width: 250px;">
+                                Feedback
                                 </a>  
-                                <button type="button" class="btn btn-sm btn-outline-danger" style="font-weight: 600; border-radius: 50px; width: 150px;">
-                                  IGNORE
-                                </button>  
                               </td>
                           </tr>
                           <tr>
@@ -89,16 +86,13 @@
                             <td style="vertical-align: middle;text-align: center;">ml</td>
                             <td style="vertical-align: middle;text-align: center;">
                                 <button class="btn btn-sm btn-danger" style="font-weight: 600; border-radius: 50px; width: 100%;">
-                                  Urgent
+                                  Rejected
                                 </button>                                
                               </td>
                               <td style="vertical-align: middle;text-align: center;">                
-                                <a href="<?= site_url('goods_management/order');?>" class="btn btn-sm btn-outline-warning" style="font-weight: 600; border-radius: 50px; width: 150px;">
-                                ORDER NOW
+                                <a href="<?= site_url('goods_management/order');?>" class="btn btn-sm btn-outline-warning" style="font-weight: 600; border-radius: 50px; width: 250px;">
+                                Feedback
                                 </a>  
-                                <button type="button" class="btn btn-sm btn-outline-danger" style="font-weight: 600; border-radius: 50px; width: 150px;">
-                                  IGNORE
-                                </button>  
                               </td>
                         </tr>
                         <tr>
@@ -110,16 +104,13 @@
                           <td style="vertical-align: middle;text-align: center;">ml</td>
                           <td style="vertical-align: middle;text-align: center;">
                                 <button class="btn btn-sm btn-danger" style="font-weight: 600; border-radius: 50px; width: 100%;">
-                                  Urgent
+                                  Rejected
                                 </button>                                
                               </td>
                               <td style="vertical-align: middle;text-align: center;">                
-                                <a href="<?= site_url('goods_management/order');?>" class="btn btn-sm btn-outline-warning" style="font-weight: 600; border-radius: 50px; width: 150px;">
-                                ORDER NOW
+                                <a href="<?= site_url('goods_management/order');?>" class="btn btn-sm btn-outline-warning" style="font-weight: 600; border-radius: 50px; width: 250px;">
+                                Feedback
                                 </a>  
-                                <button type="button" class="btn btn-sm btn-outline-danger" style="font-weight: 600; border-radius: 50px; width: 150px;">
-                                  IGNORE
-                                </button>  
                               </td>
                       </tr>
                       <tr>
@@ -130,17 +121,14 @@
                         <td style="vertical-align: middle;text-align: center;">100</td>
                         <td style="vertical-align: middle;text-align: center;">ml</td>
                         <td style="vertical-align: middle;text-align: center;">
-                                <button class="btn btn-sm btn-warning" style="font-weight: 600; border-radius: 50px; width: 100%;">
-                                  Medium
+                                <button class="btn btn-sm btn-success" style="font-weight: 600; border-radius: 50px; width: 100%;">
+                                  Approved
                                 </button>                                
                               </td>
                               <td style="vertical-align: middle;text-align: center;">                
-                                <a href="<?= site_url('goods_management/order');?>" class="btn btn-sm btn-outline-warning" style="font-weight: 600; border-radius: 50px; width: 150px;">
-                                ORDER NOW
+                                <a href="<?= site_url('goods_management/order');?>" class="btn btn-sm btn-outline-warning" style="font-weight: 600; border-radius: 50px; width: 250px;">
+                                Feedback
                                 </a>  
-                                <button type="button" class="btn btn-sm btn-outline-danger" style="font-weight: 600; border-radius: 50px; width: 150px;">
-                                  IGNORE
-                                </button>  
                               </td>
                     </tr>  
                     <tr>
@@ -151,17 +139,14 @@
                         <td style="vertical-align: middle;text-align: center;">100</td>
                         <td style="vertical-align: middle;text-align: center;">ml</td>
                         <td style="vertical-align: middle;text-align: center;">
-                                <button class="btn btn-sm btn-warning" style="font-weight: 600; border-radius: 50px; width: 100%;">
-                                  Medium
+                                <button class="btn btn-sm btn-success" style="font-weight: 600; border-radius: 50px; width: 100%;">
+                                  Approved
                                 </button>                                
                               </td>
                               <td style="vertical-align: middle;text-align: center;">                
-                                <a href="<?= site_url('goods_management/order');?>" class="btn btn-sm btn-outline-warning" style="font-weight: 600; border-radius: 50px; width: 150px;">
-                                ORDER NOW
+                                <a href="<?= site_url('goods_management/order');?>" class="btn btn-sm btn-outline-warning" style="font-weight: 600; border-radius: 50px; width: 250px;">
+                                Feedback
                                 </a>  
-                                <button type="button" class="btn btn-sm btn-outline-danger" style="font-weight: 600; border-radius: 50px; width: 150px;">
-                                  IGNORE
-                                </button>  
                               </td>
                     </tr>                     
                     <!--                                            

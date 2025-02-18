@@ -73,7 +73,7 @@
             <li class="nav-item dropdown">
               <a class="nav-link" href="#">
                 <i class="fa-solid fa-location-dot" style="color: #001F82;"></i>
-                <span class="d-none d-md-inline">Factory HCL</span>
+                <span class="d-none d-md-inline"> Factory <?php echo $this->session->userdata('user_factory');?></span>
                 <!-- <span class="navbar-badge badge text-bg-danger">3</span> -->
               </a>
             </li>
@@ -125,7 +125,7 @@
                   class="user-image rounded-circle shadow"
                   alt="User Image"
                 />
-                <span class="d-none d-md-inline" style="color: #001F82;">Alexander Pierce</span>
+                <span class="d-none d-md-inline" style="color: #001F82;"> <?php echo $this->session->userdata('user_name');?></span>
               </a>
               <ul class="dropdown-menu dropdown-menu-lg dropdown-menu-end">
                 <!--begin::User Image-->
@@ -136,15 +136,15 @@
                     alt="User Image"
                   />
                   <p>
-                    Alexander Pierce - Web Developer
-                    <small>Member since Nov. 2023</small>
+                    <?php echo $this->session->userdata('user_name');?>
+                    <small><?php echo $this->session->userdata('user_role');?>
+                    </small>
                   </p>
                 </li>
                 <!--end::User Image-->
                 <!--begin::Menu Footer-->
                 <li class="user-footer">
-                  <a href="#" class="btn btn-default btn-flat">Profile</a>
-                  <a href="#" class="btn btn-default btn-flat float-end">Sign out</a>
+                  <a href="<?= site_url('auth/logout');?>" class="btn btn-default btn-flat float-end">Sign out</a>
                 </li>
                 <!--end::Menu Footer-->
               </ul>
@@ -269,26 +269,8 @@
       <!--end::Sidebar-->
       <!--begin::App Main-->
       <main class="app-main">
-        <!--begin::App Content Header-->
-        <div class="app-content-header">
-          <!--begin::Container-->
-          <div class="container-fluid">
-            <!--begin::Row-->
-            <!-- <div class="row">
-              <div class="col-sm-6"><h3 class="mb-0">Collapsed Sidebar</h3></div>
-              <div class="col-sm-6">
-                <ol class="breadcrumb float-sm-end">
-                  <li class="breadcrumb-item"><a href="#">Home</a></li>
-                  <li class="breadcrumb-item active" aria-current="page">Collapsed Sidebar</li>
-                </ol>
-              </div>
-            </div> -->
-            <!--end::Row-->
-          </div>
-          <!--end::Container-->
-        </div>
         <!--end::App Content Header-->
         <!--begin::App Content-->
-        <div class="app-content">
+        <div class="app-content mt-3">
           <!--begin::Container-->
           <div class="container-fluid">

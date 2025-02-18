@@ -30,6 +30,8 @@ class Master_model extends CI_Model
 					initial_value_for_to_do
 				");		
 				$table = 'm_master_data_material';			
+			}elseif($type == "vendor_list"){
+				$table = 'm_master_data_vendor';					
 			}
 
 			$this->db->from($table);							
