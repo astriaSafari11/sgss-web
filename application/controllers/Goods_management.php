@@ -25,4 +25,16 @@ class Goods_management extends CI_Controller
 		$this->session->set_flashdata('page_title', 'PERFORMANCE DASHBOARD');
 		$this->load->view('goods-management/order.php');
 	}	
+
+	public function item_movement()
+	{
+		$this->session->set_flashdata('page_title', 'STOCK CARD');
+		$this->load->view('goods-management/item-movement.php');
+	}	
+	
+	public function item_movement_detail()
+	{
+		$this->session->set_flashdata('page_title', 'STOCK CARD');
+		$this->load->view('goods-management/item-movement/index.php');
+	}	
 }

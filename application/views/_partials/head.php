@@ -230,13 +230,13 @@
                     </a>
                   </li>
                   <li class="nav-item">
-                    <a href="<?= site_url('item_movement');?>" class="nav-link">
+                    <a href="<?= site_url('goods_management/item_movement');?>" class="nav-link">
                       <i class="nav-icon fa-solid fa-boxes-stacked"></i>
                       <p>Stock Card</p>
                     </a>
                   </li>
                   <li class="nav-item">
-                    <a href="<?= site_url('transactions');?>" class="nav-link">
+                    <a href="<?= site_url('goods_management/transactions');?>" class="nav-link">
                       <i class="nav-icon bi bi-circle"></i>
                       <p>Transaction Card</p>
                     </a>
