@@ -134,7 +134,7 @@ class Master_data extends CI_Controller
 			$no = $_POST['start'];
 			foreach ($list as $field) {
 					$edit 	= '
-					<a href="'.$field->vendor_code.'" class="btn btn-outline-primary">
+					<a href="'.site_url('master_data/vendor_detail/'._encrypt($field->id)).'" class="btn btn-outline-primary">
 						<i class="fa-solid fa-circle-info"></i>						
 					</a>';	
 
@@ -213,4 +213,109 @@ class Master_data extends CI_Controller
 			redirect('master_data/vendor_list');
 		}
 	}
+
+	public function vendor_detail()
+	{
+		$vendor_code = _decrypt($this->uri->segment(3));
+		$data['vendor'] = $this->db->get_where("m_master_data_vendor",array(
+			"id"	=> $vendor_code,
+		))->row();		
+		// debugCode($data);
+
+		$this->session->set_flashdata('page_title', 'FORM DETAIL VENDOR');
+		load_view('master-data/vendor/detail.php', $data);
+		// debugCode(_decrypt($vendor_code));
+	}	
+
+	function get_material_list_by_vendor()
+	{
+			$vendor_code = _decrypt($this->input->get('vendor_code'));
+			$search = array(
+				"vendor_code" => $vendor_code
+			);
+
+			$list = $this->master_model->get_datatables($search, 'vendor');
+			$data = array();
+			$no = $_POST['start'];
+			foreach ($list as $field) {
+					$edit 	= '
+					<a href="" class="btn btn-outline-primary" data-bs-toggle="tooltip" data-bs-placement="top" title="Tooltip on top">
+						<i class="fa-solid fa-circle-info"></i>						
+					</a>';	
+					$link 	= '
+					<a href="'.$field->link.'" class="btn btn-outline-primary" target="_blank" data-toggle="tooltip" data-placement="top" title="Link">
+						<i class="fa-solid fa-up-right-from-square"></i>		
+					</a>';	
+
+					$row[] = $field->item_name;
+					$row[] = $field->uom;
+					$row[] = myCurr($field->price_per_uom);
+					$row[] = myNum($field->moq);
+					$row[] = myCurr($field->total_price);
+					$row[] = myCurr($field->price_equal_moq);
+					$row[] = myCurr($field->price_moq_divide_moq);
+					$row[] = myDecimal($field->saving);
+					$row[] = $field->place_to_buy;
+					$row[] = $link;
+					$row[] = $edit;
+					$data[] = $row;
+			}
+
+			$output = array(
+					"draw" => $_POST['draw'],
+					"recordsTotal" => $this->master_model->count_all($search, 'vendor'),
+					"recordsFiltered" => $this->master_model->count_filtered($search, 'vendor'),
+					"data" => $data,
+			);
+			//output dalam format JSON
+			echo json_encode($output);
+	}	
+
+	public function edit_vendor()
+	{
+		$vendor_code = _decrypt($this->uri->segment(3));
+		$data['vendor'] = $this->db->get_where("m_master_data_vendor",array(
+			"id"	=> $vendor_code,
+		))->row();		
+		// debugCode($data);
+
+		$this->session->set_flashdata('page_title', 'FORM EDIT VENDOR');
+		load_view('master-data/vendor/edit-form', $data);
+	}
+	
+	public function update_vendor()
+	{
+		if(isset($_POST['submit'])){
+			$id = $this->input->post('id');
+			$inserted = $this->db->update(
+				"m_master_data_vendor", 
+				array(
+					"vendor_name" 		=> $this->input->post('vendor_name'),
+					"est_lead_time"		=> $this->input->post('est_lead_time'),
+					"category"			=> $this->input->post('category'),
+					"rating"			=> $this->input->post('rating'),
+					"time_update"		=> date("Y-m-d H:i:s"),
+				), array("id" => $id)
+			);
+
+			if($inserted){
+				$err = array(
+					'show' => true,
+					'type' => 'success',
+					'msg'  => 'Successfully update vendor data.'
+				);
+				$this->session->set_flashdata('toast', $err);
+			}else{
+				$err = array(
+					'show' => true,
+					'type' => 'error',
+					'msg'  => 'Update vendor failed.'
+				);
+				$this->session->set_flashdata('toast', $err);
+			}
+			redirect('master_data/vendor_detail/'._encrypt($id));
+		}else{
+			redirect('master_data/vendor_list');
+		}
+	}	
 }
