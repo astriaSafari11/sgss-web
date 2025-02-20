@@ -48,6 +48,14 @@
     <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.13.6/css/dataTables.bootstrap5.min.css">
 
     <!--end::Required Plugin(AdminLTE)-->
+
+    <style>
+    .sidebar:hover .icon {
+      filter: grayscale(100%) brightness(1000%);
+    }
+
+
+    </style>
   </head>
   <!--end::Head-->
   <!--begin::Body-->
@@ -188,8 +196,8 @@
               data-accordion="false"
             >
               <li class="nav-item">
-                <a href="<?= site_url('dashboard');?>" class="nav-link">
-                  <i class="nav-icon fa-solid fa-house fa-xl"></i>
+                <a href="<?= site_url('dashboard');?>" class="nav-link sidebar">
+                  <img src="../design/src/assets/home_icon.png" alt="Home Icon" style="width: 30px; height: 30px;" class="icon">
                   <p>Home</p>
                 </a>
               </li>          
@@ -215,8 +223,8 @@
                 </ul>
               </li>                 -->
               <li class="nav-item">
-                <a href="#" class="nav-link">
-                  <i class="nav-icon bi bi-box-seam-fill fa-xl"></i>
+                <a href="#" class="nav-link sidebar">
+                <img src="../design/src/assets/goods_icon.png" alt="Goods Icon" style="width: 30px; height: 30px;" class="icon">
                   <p>
                     Goods Management
                     <i class="nav-arrow bi bi-chevron-right"></i>
@@ -250,16 +258,16 @@
                 </ul>
               </li>
               <li class="nav-item">
-                <a href="<?= site_url('service_management');?>" class="nav-link">
-                  <i class="nav-icon fa-solid fa-hand-holding-heart fa-xl"></i>
+                <a href="<?= site_url('service_management');?>" class="nav-link sidebar">
+                <img src="../design/src/assets/service_icon.png" alt="Service Icon" style="width: 42px; height: 32px; margin-left: -3px;" class="icon">
                   <p>Service Management</p>
                 </a>
               </li>  
               <li class="nav-item">
-                <a href="<?= site_url('saving_simulator');?>" class="nav-link">
-                  <i class="nav-icon fa-solid fa-hand-holding-dollar fa-xl"></i>
-                  <p>Savings Simulator</p>
-                </a>
+                <a href="<?= site_url('saving_simulator');?>" class="nav-link sidebar">
+                <img src="../design/src/assets/saving_icon.png" alt="Saving Icon" style="width: 32px; height: 32px; margin-left: -1px" class="icon">
+                <p>Saving Simulator</p>  
+              </a>
               </li>                              
             </ul>
             <!--end::Sidebar Menu-->        

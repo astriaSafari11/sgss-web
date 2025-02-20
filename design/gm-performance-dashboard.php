@@ -190,13 +190,13 @@
             >
               <li class="nav-item">
                 <a href="#" class="nav-link">
-                  <i class="nav-icon fa-solid fa-house" style="color: #001F82;"></i>
+                <img src="src/assets/home_icon" class="nav-icon" alt="Home Icon" style="width: 24px; height: 24px;">
                   <p>Home</p>
                 </a>
               </li>            
               <li class="nav-item">
                 <a href="#" class="nav-link">
-                  <i class="nav-icon bi bi-box-seam-fill" style="color: #001F82;"></i>
+                <img src="src/assets/goods_icon" class="nav-icon" alt="Goods Icon" style="width: 24px; height: 24px;">
                   <p>
                     Goods Management
                     <i class="nav-arrow bi bi-chevron-right"></i>

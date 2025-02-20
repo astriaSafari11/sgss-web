@@ -89,7 +89,7 @@
               class=""
               width="50"
             />
-            <h1 class="mb-0 text-primary"><b>SSGS Login</b></h1>
+            <h1 class="mb-0 text-primary"><b>SSGS Loginnn</b></h1>
         </div>
         <div class="card-body login-card-body">
           <p class="login-box-msg">Sign in to start your session</p>
@@ -97,14 +97,14 @@
             <div class="input-group mb-1">
               <div class="form-floating">
                 <input id="loginEmail" type="email" class="form-control" value="" placeholder="" />
-                <label for="loginEmail">Email</label>
+                <label for="loginEmail" class="fw-bold text-primary">Email</label>
               </div>
               <div class="input-group-text"><span class="bi bi-envelope"></span></div>
             </div>
             <div class="input-group mb-1">
               <div class="form-floating">
                 <input id="loginPassword" type="password" class="form-control" placeholder="" />
-                <label for="loginPassword">Password</label>
+                <label for="loginPassword" class="fw-bold text-primary">Password</label>
               </div>
               <div class="input-group-text"><span class="bi bi-lock-fill"></span></div>
             </div>

@@ -204,7 +204,7 @@
                   <li class="nav-item">
                     <a href="gm-performance-dashboard.php" class="nav-link">
                       <i class="nav-icon bi bi-circle"></i>
-                      <p>Performance Dashboard</p>
+                      <p>Performance Dashboardd</p>
                     </a>
                   </li>
                   <li class="nav-item">
