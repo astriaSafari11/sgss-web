@@ -318,4 +318,86 @@ class Master_data extends CI_Controller
 			redirect('master_data/vendor_list');
 		}
 	}	
+
+	public function add_material()
+	{
+		$this->session->set_flashdata('page_title', 'FORM ADD NEW MATERIAL');
+		load_view('master-data/material/add-form.php', []);
+	}	
+
+	public function save_material()
+	{
+		if(isset($_POST['submit'])){
+			$material_code = $this->input->post('material_code');
+			$exist = $this->db->get_where("m_master_data_material",array(
+				"item_code"	=> $this->input->post('material_code'),
+			))->row();
+
+			if($exist){
+				$err = array(
+					'show' => true,
+					'type' => 'error',
+					'msg'  => 'Add new material failed. Material with code '.$material_code.' is already exist.'
+				);
+				$this->session->set_flashdata('toast', $err);
+				$this->load->view('master-data/material/add-form.php');		
+			}else{
+				$inserted = $this->db->insert(
+					"m_master_data_material", 
+					array(
+						"item_code" 				=> $this->input->post('item_code'),
+						"item_name" 				=> $this->input->post('item_name'),
+						"factory"					=> $this->input->post('factory'),
+						"uom"						=> $this->input->post('uom'),
+						"lt_pr_po"					=> $this->input->post('lt_pr_po'),
+						"vendor_code"				=> $this->input->post('vendor_code'),
+						"lot_size"					=> $this->input->post('lot_size'),
+						"initial_value_stock"		=> $this->input->post('initial_value_stock'),
+						"order_cycle"				=> $this->input->post('order_cycle'),
+						"initial_stock"				=> $this->input->post('initial_stock'),
+						"standart_safety_stock"		=> $this->input->post('standart_safety_stock'),
+						"initial_value_for_to_do"	=> $this->input->post('initial_value_for_to_do'),
+						"price_per_uom"		=> $this->input->post('price_per_uom'),
+						"price_equal_moq"	=> $this->input->post('price_equal_moq'),
+						"place_to_buy"		=> $this->input->post('place_to_buy'),
+						"link"				=> $this->input->post('link'),
+						"moq"				=> $this->input->post('moq'),
+						"time_add"			=> date("Y-m-d H:i:s"),
+						"time_update"		=> date("Y-m-d H:i:s"),
+					));
+
+				if($inserted){
+					$err = array(
+						'show' => true,
+						'type' => 'success',
+						'msg'  => 'Successfully added new material.'
+					);
+					$this->session->set_flashdata('toast', $err);
+				}else{
+					$err = array(
+						'show' => true,
+						'type' => 'error',
+						'msg'  => 'Add new material failed.'
+					);
+					$this->session->set_flashdata('toast', $err);
+				}
+			}
+			redirect('master_data/material_list');
+		}else{
+			redirect('master_data/material_list');
+		}
+	}
+
+	public function material_detail()
+	{
+		$vendor_code = _decrypt($this->uri->segment(3));
+		$data['vendor'] = $this->db->get_where("m_master_data_vendor",array(
+			"id"	=> $vendor_code,
+		))->row();		
+		// debugCode($data);
+
+		$this->session->set_flashdata('page_title', 'FORM DETAIL VENDOR');
+		load_view('master-data/vendor/detail.php', $data);
+		// debugCode(_decrypt($vendor_code));
+	}		
 }
