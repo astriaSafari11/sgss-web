@@ -12,9 +12,15 @@ class Master_model extends CI_Model
 				$order = array('vendor_code' => 'asc');
 
 				$this->db->select("view_master_vendor.*");		
+
+				if(isset($p['vendor_code']) && $p['vendor_code'] != null){
+					$this->db->where('vendor_code', $p['vendor_code']);
+				}
+
 				$table = 'view_master_vendor';			
 			}elseif($type == "material"){
 				$this->db->select("
+					id,
 					item_code,
 					item_name,
 					factory,
@@ -28,7 +34,7 @@ class Master_model extends CI_Model
 					lt_po_to_delivery,
 					((lt_pr_po/order_cycle)*lot_size) as standar_safety_stock,
 					initial_value_for_to_do
-				");		
+				");						
 				$table = 'm_master_data_material';			
 			}elseif($type == "vendor_list"){
 				$table = 'm_master_data_vendor';					
