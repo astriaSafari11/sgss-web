@@ -48,7 +48,7 @@
     <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.13.6/css/dataTables.bootstrap5.min.css">
     <!--end::Required Plugin(AdminLTE)-->
 
-<<<<<<< HEAD
+<!--<<<<<<< HEAD-->
     <style>
     .sidebar:hover .icon {
       filter: grayscale(100%) brightness(1000%);
@@ -56,7 +56,7 @@
 
 
     </style>
-=======
+<!--=======-->
     <!--begin::Third Party Plugin(OverlayScrollbars)-->
     <script
       src="https://cdn.jsdelivr.net/npm/overlayscrollbars@2.10.1/browser/overlayscrollbars.browser.es6.min.js"
@@ -84,7 +84,7 @@
     <script src="https://code.highcharts.com/modules/exporting.js"></script>
     <script src="https://code.highcharts.com/modules/accessibility.js"></script>    
     <!--end::Required Plugin(AdminLTE)--><!--begin::OverlayScrollbars Configure-->    
->>>>>>> 3320408445c8b77efbb9ead54682e8118ab2878f
+<!--3320408445c8b77efbb9ead54682e8118ab2878f-->
   </head>
   <!--end::Head-->
   <!--begin::Body-->
