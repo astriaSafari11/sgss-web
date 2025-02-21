@@ -2,7 +2,7 @@
 <div class="row mb-2 justify-between">
               <div class="col-sm-6">
                 <a href="<?= site_url('goods_management');?>"class="btn btn-sm btn-outline-primary position-relative" style="font-weight: 600; border-radius: 50px;">
-                  Request Listdfas
+                  Request List
                   <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger"> 5
                   <span class="visually-hidden">unread messages</span>
                   </span>
@@ -16,10 +16,10 @@
               </div>
               <div class="col-sm-6">
                 <div class="d-flex justify-content-end">
-                  <button type="button" class="btn btn-sm btn-outline-danger" style="font-weight: 600; border-radius: 50px; width: 150px;">
+                  <button type="button" class="btn btn-sm btn-outline-primary" style="font-weight: 600; border-radius: 50px; width: 150px;">
                     Export
                   </button>                       
-                  <button type="button" class="btn btn-sm btn-outline-danger" style="font-weight: 600; border-radius: 50px;width: 150px;">
+                  <button type="button" class="btn btn-sm btn-outline-primary" style="font-weight: 600; border-radius: 50px;width: 150px;">
                     Import
                   </button>    
                 </div>

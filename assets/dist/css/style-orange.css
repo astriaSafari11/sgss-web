@@ -99,10 +99,10 @@
   --bs-dark-border-subtle: #5A6A85;
   --bs-white-rgb: 255, 255, 255;
   --bs-black-rgb: 0, 0, 0;
-  --bs-font-sans-serif: "Plus Jakarta Sans", sans-serif;
+  --bs-font-Poppins: "Plus Jakarta Sans", Poppins;
   --bs-font-monospace: SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
   --bs-gradient: linear-gradient(180deg, rgba(255, 255, 255, 0.15), rgba(255, 255, 255, 0));
-  --bs-body-font-family: var(--bs-font-sans-serif);
+  --bs-body-font-family: var(--bs-font-Poppins);
   --bs-body-font-size:0.875rem;
   --bs-body-font-weight: 400;
   --bs-body-line-height: 1.5;
@@ -6812,7 +6812,7 @@ textarea.form-control-lg {
   z-index: var(--bs-tooltip-zindex);
   display: block;
   margin: var(--bs-tooltip-margin);
-  font-family: var(--bs-font-sans-serif);
+  font-family: var(--bs-font-Poppins);
   font-style: normal;
   font-weight: 400;
   line-height: 1.5;
@@ -6922,7 +6922,7 @@ textarea.form-control-lg {
   z-index: var(--bs-popover-zindex);
   display: block;
   max-width: var(--bs-popover-max-width);
-  font-family: var(--bs-font-sans-serif);
+  font-family: var(--bs-font-Poppins);
   font-style: normal;
   font-weight: 400;
   line-height: 1.5;
@@ -23489,7 +23489,7 @@ html[dir=rtl] .timeline-widget .timeline-item .timeline-time {
   padding: 10px 10px 10px 0;
   display: block;
   border: none;
-  font-family: "Plus Jakarta Sans", sans-serif;
+  font-family: "Plus Jakarta Sans", Poppins;
   border-radius: 0px;
   border-bottom: 1px solid #DFE5EF;
 }
@@ -26004,7 +26004,7 @@ body .revenue-chart .apexcharts-bar-series.apexcharts-plot-series .apexcharts-se
   border: 1px solid #ebf1f6;
   padding: 8px 16px 8px 30px;
   height: auto;
-  font-family: "Montserrat", sans-serif;
+  font-family: "Montserrat", Poppins;
   font-weight: 400;
   border-radius: 0;
 }

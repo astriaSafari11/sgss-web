@@ -10,7 +10,7 @@
     <meta name="author" content="astria.safari@ivs.co.id" />
     <!--end::Primary Meta Tags-->
     <style>
-      @import url('https://fonts.cdnfonts.com/css/garet');
+      @import url('https://fonts.cdnfonts.com/css/poppins');
 
       body, html {
       height: 100%;

@@ -81,14 +81,14 @@
 	--bs-dark-border-subtle: #adb5bd;
 	--bs-white-rgb: 255, 255, 255;
 	--bs-black-rgb: 0, 0, 0;
-	--bs-font-sans-serif: GaretFont;
+	--bs-font-Poppins: GaretFont;
 	--bs-font-monospace: GaretFont;
 	--bs-gradient: linear-gradient(
 		180deg,
 		rgba(255, 255, 255, 0.15),
 		rgba(255, 255, 255, 0)
 	);
-	--bs-body-font-family: var(--bs-font-sans-serif);
+	--bs-body-font-family: var(--bs-font-Poppins);
 	--bs-body-font-size: 1rem;
 	--bs-body-font-weight: 400;
 	--bs-body-line-height: 1.5;
@@ -6020,7 +6020,7 @@ fieldset:disabled .btn {
 	z-index: var(--bs-tooltip-zindex);
 	display: block;
 	margin: var(--bs-tooltip-margin);
-	font-family: var(--bs-font-sans-serif);
+	font-family: var(--bs-font-Poppins);
 	font-style: normal;
 	font-weight: 400;
 	line-height: 1.5;
@@ -6144,7 +6144,7 @@ fieldset:disabled .btn {
 	z-index: var(--bs-popover-zindex);
 	display: block;
 	max-width: var(--bs-popover-max-width);
-	font-family: var(--bs-font-sans-serif);
+	font-family: var(--bs-font-Poppins);
 	font-style: normal;
 	font-weight: 400;
 	line-height: 1.5;
