@@ -259,7 +259,7 @@
                     <i class="nav-arrow bi bi-chevron-right"></i>
                   </p>
                 </a>
-                <ul class="nav nav-treeview">
+                <ul class="nav nav-treeview ms-4">
                   <li class="nav-item">
                     <a href="<?= site_url('goods_management');?>" class="nav-link">
                       <i class="nav-icon fa-solid fa-chart-area"></i>
