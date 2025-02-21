@@ -260,39 +260,39 @@
                   </p>
                 </a>
                 <ul class="nav nav-treeview ms-4">
-                  <li class="nav-item">
+                  <li class="nav-item sidebar">
                     <a href="<?= site_url('goods_management');?>" class="nav-link">
-                      <i class="nav-icon fa-solid fa-chart-area"></i>
+                      <i class="nav-icon fa-solid fa-chart-area icon"></i>
                       <p>Performance Dashboard</p>
                     </a>
                   </li>
-                  <li class="nav-item">
+                  <li class="nav-item sidebar">
                     <a href="<?= site_url('goods_management/item_movement');?>" class="nav-link">
-                      <i class="nav-icon fa-solid fa-boxes-stacked"></i>
+                      <i class="nav-icon fa-solid fa-boxes-stacked icon"></i>
                       <p>Stock Card</p>
                     </a>
                   </li>
-                  <li class="nav-item">
+                  <li class="nav-item sidebar">
                     <a href="<?= site_url('goods_management/transactions');?>" class="nav-link">
-                      <i class="nav-icon bi bi-circle"></i>
+                      <i class="nav-icon bi bi-receipt icon"></i>
                       <p>Transaction Card</p>
                     </a>
                   </li>
-                  <li class="nav-item">
+                  <li class="nav-item sidebar">
                     <a href="<?= site_url('master_data');?>" class="nav-link">
-                      <i class="nav-icon fa-solid fa-dolly fa-xl"></i>
+                      <i class="nav-icon fa-solid fa-dolly fa-xl icon"></i>
                       <p>Master Data</p>
                     </a>
                   </li>
                 </ul>
               </li>
-              <li class="nav-item">
+              <li class="nav-item sidebar">
                 <a href="<?= site_url('service_management');?>" class="nav-link sidebar">
                 <img src="../design/src/assets/service_icon.png" alt="Service Icon" style="width: 42px; height: 32px; margin-left: -3px;" class="icon">
                   <p>Service Management</p>
                 </a>
               </li>  
-              <li class="nav-item">
+              <li class="nav-item sidebar">
                 <a href="<?= site_url('saving_simulator');?>" class="nav-link sidebar">
                 <img src="../design/src/assets/saving_icon.png" alt="Saving Icon" style="width: 32px; height: 32px; margin-left: -1px" class="icon">
                 <p>Saving Simulator</p>  

@@ -284,7 +284,7 @@
                       <div class="col-6">
                         <div class="form-floating mb-3">
                           <input type="date" class="form-control" id="floatingInput" placeholder="name@example.com">
-                          <label for="floatingInput">Action Date</label>
+                          <label for="floatingInput" class="fw-bold text-primary">Action Date</label>
                         </div>
                       </div>
                       <!--end::Col-->
@@ -292,7 +292,7 @@
                       <div class="col-6">
                         <div class="form-floating mb-3">
                           <input type="email" class="form-control" id="floatingInput" placeholder="name@example.com">
-                          <label for="floatingInput">Requestor</label>
+                          <label for="floatingInput" class="fw-bold text-primary">Requestor</label>
                         </div>
                       </div>
                       <!--end::Col-->
@@ -300,7 +300,7 @@
                       <div class="col-6">
                         <div class="form-floating mb-3">
                           <input type="email" class="form-control" id="floatingInput" placeholder="name@example.com">
-                          <label for="floatingInput">Purchase Reason</label>
+                          <label for="floatingInput" class="fw-bold text-primary">Purchase Reason</label>
                         </div>
                       </div>
                       <!--end::Col-->
@@ -318,14 +318,14 @@
                       <div class="col-6">
                         <div class="form-floating mb-3">
                           <input type="email" class="form-control" id="floatingInput" placeholder="name@example.com">
-                          <label for="floatingInput">Remarks</label>
+                          <label for="floatingInput" class="fw-bold text-primary">Remarks</label>
                         </div>
                       </div>
                       <!--end::Col-->
                       <div class="col-6">
                         <div class="form-floating mb-3">
                           <input type="email" class="form-control" id="floatingInput" placeholder="name@example.com">
-                          <label for="floatingInput">Area</label>
+                          <label for="floatingInput" class="fw-bold text-primary">Area</label>
                         </div>
                       </div>
                       <!--end::Col-->                                                              
@@ -333,7 +333,7 @@
                       <div class="col-6">
                         <div class="form-floating mb-3">
                           <input type="email" class="form-control" id="floatingInput" placeholder="name@example.com">
-                          <label for="floatingInput">Attachment</label>
+                          <label for="floatingInput" class="fw-bold text-primary">Attachment</label>
                         </div>
                       </div>
                       <!--end::Col-->

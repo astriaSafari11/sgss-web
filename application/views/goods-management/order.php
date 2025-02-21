@@ -10,7 +10,7 @@
                       <div class="col-6">
                         <div class="form-floating mb-3">
                           <input type="date" class="form-control" id="floatingInput" placeholder="name@example.com">
-                          <label for="floatingInput">Action Date</label>
+                          <label for="floatingInput" class="fw-bold text-primary">Action Date</label>
                         </div>
                       </div>
                       <!--end::Col-->
@@ -18,7 +18,7 @@
                       <div class="col-6">
                         <div class="form-floating mb-3">
                           <input type="email" class="form-control" id="floatingInput" placeholder="name@example.com">
-                          <label for="floatingInput">Requestor</label>
+                          <label for="floatingInput" class="fw-bold text-primary">Requestor</label>
                         </div>
                       </div>
                       <!--end::Col-->
@@ -26,32 +26,36 @@
                       <div class="col-6">
                         <div class="form-floating mb-3">
                           <input type="email" class="form-control" id="floatingInput" placeholder="name@example.com">
-                          <label for="floatingInput">Purchase Reason</label>
+                          <label for="floatingInput" class="fw-bold text-primary">Purchase Reason</label>
                         </div>
                       </div>
                       <!--end::Col-->
                       <!--begin::Col-->
                       <div class="col-6">
-                        <select class="form-select" aria-label="Default select example" style="height: 56px;">
-                          <option selected>Requested For</option>
-                          <option value="1">Budi</option>
-                          <option value="2">Ahmad</option>
-                          <option value="3">Faqih</option>
-                        </select>
-                      </div>
+  <div class="form-floating">
+    <select class="form-select" id="floatingSelect">
+      <option value="" disabled selected>--</option>
+      <option value="1">Budi</option>
+      <option value="2">Ahmad</option>
+      <option value="3">Faqih</option>
+    </select>
+    <label for="floatingSelect" class="fw-bold text-primary">Requested For</label>
+  </div>
+</div>
+
                       <!--end::Col-->    
                       <!--begin::Col-->
                       <div class="col-6">
                         <div class="form-floating mb-3">
                           <input type="email" class="form-control" id="floatingInput" placeholder="name@example.com">
-                          <label for="floatingInput">Remarks</label>
+                          <label for="floatingInput" class="fw-bold text-primary">Remarks</label>
                         </div>
                       </div>
                       <!--end::Col-->
                       <div class="col-6">
                         <div class="form-floating mb-3">
                           <input type="email" class="form-control" id="floatingInput" placeholder="name@example.com">
-                          <label for="floatingInput">Area</label>
+                          <label for="floatingInput" class="fw-bold text-primary">Area</label>
                         </div>
                       </div>
                       <!--end::Col-->                                                              
@@ -59,7 +63,7 @@
                       <div class="col-6">
                         <div class="form-floating mb-3">
                           <input type="email" class="form-control" id="floatingInput" placeholder="name@example.com">
-                          <label for="floatingInput">Attachment</label>
+                          <label for="floatingInput" class="fw-bold text-primary">Attachment</label>
                         </div>
                       </div>
                       <!--end::Col-->
@@ -80,11 +84,11 @@
                           <tr>
                               <td style="vertical-align: middle;text-align: center;">Alkohol</td>
                               <td style="vertical-align: middle;text-align: center;">
-                                20 <button type="button" class="btn btn-sm btn-outline-primary"><i class="fa-solid fa-pen"></i></button>
+                                20 <button type="button" class="btn btn-primary btn-sm rounded-circle p-2.1" style="margin-left: 3px;"><i class="fa-solid fa-pen text-white"></i></button>
                               </td>
                               <td style="vertical-align: middle;text-align: center;">Box</td>
                               <td style="vertical-align: middle;text-align: center;">
-                                Vendor 1 <button type="button" class="btn btn-sm btn-outline-primary"><i class="fa-solid fa-pen"></i></button>
+                                Vendor 1 <button type="button" class="btn btn-primary btn-sm rounded-circle p-2.1" style="margin-left: 3px;"><i class="fa-solid fa-pen text-white"></i></button>
                               </td>
                               <td style="vertical-align: middle;text-align: center;">Rp. 5.000</td>
                               <td style="vertical-align: middle;text-align: center;">Rp. 500.000</td>
@@ -92,11 +96,11 @@
                           <tr>
                             <td style="vertical-align: middle;text-align: center;">Alkohol</td>
                             <td style="vertical-align: middle;text-align: center;">
-                              20 <button type="button" class="btn btn-sm btn-outline-primary"><i class="fa-solid fa-pen"></i></button>
+                              20 <button type="button" class="btn btn-primary btn-sm rounded-circle p-2.1" style="margin-left: 3px;"><i class="fa-solid fa-pen text-white"></i></button>
                             </td>
                             <td style="vertical-align: middle;text-align: center;">Box</td>
                             <td style="vertical-align: middle;text-align: center;">
-                              Vendor 2 <button type="button" class="btn btn-sm btn-outline-primary"><i class="fa-solid fa-pen"></i></button>
+                              Vendor 2 <button type="button" class="btn btn-primary btn-sm rounded-circle p-2.1" style="margin-left: 3px;"><i class="fa-solid fa-pen text-white"></i></button>
                             </td>
                             <td style="vertical-align: middle;text-align: center;">Rp. 5.000</td>
                             <td style="vertical-align: middle;text-align: center;">Rp. 500.000</td>
@@ -104,11 +108,11 @@
                         <tr>
                           <td style="vertical-align: middle;text-align: center;">Alkohol</td>
                           <td style="vertical-align: middle;text-align: center;">
-                            20 <button type="button" class="btn btn-sm btn-outline-primary"><i class="fa-solid fa-pen"></i></button>
+                            20 <button type="button" class="btn btn-primary btn-sm rounded-circle p-2.1" style="margin-left: 3px;"><i class="fa-solid fa-pen text-white"></i></button>
                           </td>
                           <td style="vertical-align: middle;text-align: center;">Box</td>
                           <td style="vertical-align: middle;text-align: center;">
-                            Vendor 3 <button type="button" class="btn btn-sm btn-outline-primary"><i class="fa-solid fa-pen"></i></button>
+                            Vendor 3 <button type="button" class="btn btn-primary btn-sm rounded-circle p-2.1" style="margin-left: 3px;"><i class="fa-solid fa-pen text-white"></i></button>
                           </td>
                           <td style="vertical-align: middle;text-align: center;">Rp. 5.000</td>
                           <td style="vertical-align: middle;text-align: center;">Rp. 500.000</td>
