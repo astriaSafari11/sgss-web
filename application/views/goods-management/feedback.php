@@ -43,7 +43,7 @@
                   <div class="card-body">
                     <table id="example" class="table table-sm" style="width:100%" cellspacing="0">
                       <thead>
-                          <tr >
+                          <tr>
                               <th style="color: #fff;background-color: #001F82;text-align: center;">Due Date</th>
                               <th style="color: #fff;background-color: #001F82;text-align: center;">Until Due Date</th>
                               <th style="color: #fff;background-color: #001F82;text-align: center;">Item Code</th>
@@ -60,91 +60,91 @@
                       </thead>
                       <tbody>
                           <tr>
-                              <td style="vertical-align: middle;text-align: center;">2011-04-25</td>
-                              <td style="vertical-align: middle;text-align: center;">2011-04-25</td>
-                              <td style="vertical-align: middle;text-align: center;">ALK001</td>
-                              <td style="vertical-align: middle;text-align: center;">Alkohol</td>
-                              <td style="vertical-align: middle;text-align: center;">100</td>
-                              <td style="vertical-align: middle;text-align: center;">ml</td>
+                              <td style="vertical-align: middle;text-align: center; font-size: 14px;">2011-04-25</td>
+                              <td style="vertical-align: middle;text-align: center; font-size: 14px;">2011-04-25</td>
+                              <td style="vertical-align: middle;text-align: center; font-size: 14px;">ALK001</td>
+                              <td style="vertical-align: middle;text-align: center; font-size: 14px;">Alkohol</td>
+                              <td style="vertical-align: middle;text-align: center; font-size: 14px; font-size: 14px;">100</td>
+                              <td style="vertical-align: middle;text-align: center; font-size: 14px;">ml</td>
                               <td style="vertical-align: middle;text-align: center;">
                                 <button class="btn btn-sm btn-danger" style="font-weight: 600; border-radius: 50px; width: 100%;">
                                   Rejected
                                 </button>                                
                               </td>
                               <td style="vertical-align: middle;text-align: center;">                
-                                <a href="<?= site_url('goods_management/order');?>" class="btn btn-sm btn-outline-warning" style="font-weight: 600; border-radius: 50px; width: 250px;">
+                                <a href="<?= site_url('goods_management/order');?>" class="btn btn-sm btn-outline-primary" style="font-weight: 600; border-radius: 50px; width: 250px;">
                                 Feedback
                                 </a>  
                               </td>
                           </tr>
                           <tr>
-                            <td style="vertical-align: middle;text-align: center;">2011-04-25</td>
-                            <td style="vertical-align: middle;text-align: center;">2011-04-25</td>
-                            <td style="vertical-align: middle;text-align: center;">ALK001</td>
-                            <td style="vertical-align: middle;text-align: center;">Alkohol</td>
-                            <td style="vertical-align: middle;text-align: center;">100</td>
-                            <td style="vertical-align: middle;text-align: center;">ml</td>
+                            <td style="vertical-align: middle;text-align: center; font-size: 14px;">2011-04-25</td>
+                            <td style="vertical-align: middle;text-align: center; font-size: 14px;">2011-04-25</td>
+                            <td style="vertical-align: middle;text-align: center; font-size: 14px;">ALK001</td>
+                            <td style="vertical-align: middle;text-align: center; font-size: 14px;">Alkohol</td>
+                            <td style="vertical-align: middle;text-align: center; font-size: 14px;">100</td>
+                            <td style="vertical-align: middle;text-align: center; font-size: 14px;">ml</td>
                             <td style="vertical-align: middle;text-align: center;">
                                 <button class="btn btn-sm btn-danger" style="font-weight: 600; border-radius: 50px; width: 100%;">
                                   Rejected
                                 </button>                                
                               </td>
                               <td style="vertical-align: middle;text-align: center;">                
-                                <a href="<?= site_url('goods_management/order');?>" class="btn btn-sm btn-outline-warning" style="font-weight: 600; border-radius: 50px; width: 250px;">
+                                <a href="<?= site_url('goods_management/order');?>" class="btn btn-sm btn-outline-primary" style="font-weight: 600; border-radius: 50px; width: 250px;">
                                 Feedback
                                 </a>  
                               </td>
                         </tr>
                         <tr>
-                          <td style="vertical-align: middle;text-align: center;">2011-04-25</td>
-                          <td style="vertical-align: middle;text-align: center;">2011-04-25</td>
-                          <td style="vertical-align: middle;text-align: center;">ALK001</td>
-                          <td style="vertical-align: middle;text-align: center;">Alkohol</td>
-                          <td style="vertical-align: middle;text-align: center;">100</td>
-                          <td style="vertical-align: middle;text-align: center;">ml</td>
+                          <td style="vertical-align: middle;text-align: center; font-size: 14px;">2011-04-25</td>
+                          <td style="vertical-align: middle;text-align: center; font-size: 14px;">2011-04-25</td>
+                          <td style="vertical-align: middle;text-align: center; font-size: 14px;">ALK001</td>
+                          <td style="vertical-align: middle;text-align: center; font-size: 14px;">Alkohol</td>
+                          <td style="vertical-align: middle;text-align: center; font-size: 14px;">100</td>
+                          <td style="vertical-align: middle;text-align: center; font-size: 14px;">ml</td>
                           <td style="vertical-align: middle;text-align: center;">
                                 <button class="btn btn-sm btn-danger" style="font-weight: 600; border-radius: 50px; width: 100%;">
                                   Rejected
                                 </button>                                
                               </td>
                               <td style="vertical-align: middle;text-align: center;">                
-                                <a href="<?= site_url('goods_management/order');?>" class="btn btn-sm btn-outline-warning" style="font-weight: 600; border-radius: 50px; width: 250px;">
+                                <a href="<?= site_url('goods_management/order');?>" class="btn btn-sm btn-outline-primary" style="font-weight: 600; border-radius: 50px; width: 250px;">
                                 Feedback
                                 </a>  
                               </td>
                       </tr>
                       <tr>
-                        <td style="vertical-align: middle;text-align: center;">2011-04-25</td>
-                        <td style="vertical-align: middle;text-align: center;">2011-04-25</td>
-                        <td style="vertical-align: middle;text-align: center;">ALK001</td>
-                        <td style="vertical-align: middle;text-align: center;">Alkohol</td>
-                        <td style="vertical-align: middle;text-align: center;">100</td>
-                        <td style="vertical-align: middle;text-align: center;">ml</td>
+                        <td style="vertical-align: middle;text-align: center; font-size: 14px;">2011-04-25</td>
+                        <td style="vertical-align: middle;text-align: center; font-size: 14px;">2011-04-25</td>
+                        <td style="vertical-align: middle;text-align: center; font-size: 14px;">ALK001</td>
+                        <td style="vertical-align: middle;text-align: center; font-size: 14px;">Alkohol</td>
+                        <td style="vertical-align: middle;text-align: center; font-size: 14px;">100</td>
+                        <td style="vertical-align: middle;text-align: center; font-size: 14px;">ml</td>
                         <td style="vertical-align: middle;text-align: center;">
                                 <button class="btn btn-sm btn-success" style="font-weight: 600; border-radius: 50px; width: 100%;">
                                   Approved
                                 </button>                                
                               </td>
                               <td style="vertical-align: middle;text-align: center;">                
-                                <a href="<?= site_url('goods_management/order');?>" class="btn btn-sm btn-outline-warning" style="font-weight: 600; border-radius: 50px; width: 250px;">
+                                <a href="<?= site_url('goods_management/order');?>" class="btn btn-sm btn-outline-primary" style="font-weight: 600; border-radius: 50px; width: 250px;">
                                 Feedback
                                 </a>  
                               </td>
                     </tr>  
                     <tr>
-                        <td style="vertical-align: middle;text-align: center;">2011-04-25</td>
-                        <td style="vertical-align: middle;text-align: center;">2011-04-25</td>
-                        <td style="vertical-align: middle;text-align: center;">ALK001</td>
-                        <td style="vertical-align: middle;text-align: center;">Alkohol</td>
-                        <td style="vertical-align: middle;text-align: center;">100</td>
-                        <td style="vertical-align: middle;text-align: center;">ml</td>
-                        <td style="vertical-align: middle;text-align: center;">
+                        <td style="vertical-align: middle;text-align: center; font-size: 14px;">2011-04-25</td>
+                        <td style="vertical-align: middle;text-align: center; font-size: 14px;">2011-04-25</td>
+                        <td style="vertical-align: middle;text-align: center; font-size: 14px;">ALK001</td>
+                        <td style="vertical-align: middle;text-align: center; font-size: 14px;">Alkohol</td>
+                        <td style="vertical-align: middle;text-align: center; font-size: 14px;">100</td>
+                        <td style="vertical-align: middle;text-align: center; font-size: 14px;">ml</td>
+                        <td style="vertical-align: middle;text-align: center; font-size: 14px;">
                                 <button class="btn btn-sm btn-success" style="font-weight: 600; border-radius: 50px; width: 100%;">
                                   Approved
                                 </button>                                
                               </td>
                               <td style="vertical-align: middle;text-align: center;">                
-                                <a href="<?= site_url('goods_management/order');?>" class="btn btn-sm btn-outline-warning" style="font-weight: 600; border-radius: 50px; width: 250px;">
+                                <a href="<?= site_url('goods_management/order');?>" class="btn btn-sm btn-outline-primary" style="font-weight: 600; border-radius: 50px; width: 250px;">
                                 Feedback
                                 </a>  
                               </td>

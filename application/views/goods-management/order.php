@@ -34,7 +34,7 @@
                       <div class="col-6">
   <div class="form-floating">
     <select class="form-select" id="floatingSelect">
-      <option value="" disabled selected>--</option>
+      <option value="" disabled selected>Select</option>   
       <option value="1">Budi</option>
       <option value="2">Ahmad</option>
       <option value="3">Faqih</option>
