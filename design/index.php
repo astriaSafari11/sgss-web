@@ -89,7 +89,11 @@
               class=""
               width="50"
             />
+<<<<<<< HEAD
             <h1 class="mb-0 text-primary"><b>SSGS Loginnn</b></h1>
+=======
+            <h1 class="mb-0 text-primary"><b>SSGS LoginVV</b></h1>
+>>>>>>> f0a4a04d7a58ce895335321511d972bd64d03b19
         </div>
         <div class="card-body login-card-body">
           <p class="login-box-msg">Sign in to start your session</p>
