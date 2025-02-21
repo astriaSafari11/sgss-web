@@ -16,10 +16,10 @@
               </div>
               <div class="col-sm-6">
                 <div class="d-flex justify-content-end">
-                  <button type="button" class="btn btn-sm btn-outline-danger" style="font-weight: 600; border-radius: 50px; width: 150px;">
+                  <button type="button" class="btn btn-sm btn-outline-primary" style="font-weight: 600; border-radius: 50px; width: 150px;">
                     Export
                   </button>                       
-                  <button type="button" class="btn btn-sm btn-outline-danger" style="font-weight: 600; border-radius: 50px;width: 150px;">
+                  <button type="button" class="btn btn-sm btn-outline-primary" style="font-weight: 600; border-radius: 50px;width: 150px;">
                     Import
                   </button>    
                 </div>
@@ -72,10 +72,10 @@
                                 </button>                                
                               </td>
                               <td style="vertical-align: middle;text-align: center;">                
-                                <a href="<?= site_url('goods_management/order');?>" class="btn btn-sm btn-outline-warning" style="font-weight: 600; border-radius: 50px; width: 150px;">
+                                <a href="<?= site_url('goods_management/order');?>" class="btn btn-sm btn-outline-primary" style="font-weight: 600; border-radius: 50px; width: 150px;">
                                 ORDER NOW
                                 </a>  
-                                <button type="button" class="btn btn-sm btn-outline-danger" style="font-weight: 600; border-radius: 50px; width: 150px;">
+                                <button type="button" class="btn btn-sm btn-outline-primary" style="font-weight: 600; border-radius: 50px; width: 150px;">
                                   IGNORE
                                 </button>  
                               </td>
@@ -93,10 +93,10 @@
                                 </button>                                
                               </td>
                               <td style="vertical-align: middle;text-align: center;">                
-                                <a href="<?= site_url('goods_management/order');?>" class="btn btn-sm btn-outline-warning" style="font-weight: 600; border-radius: 50px; width: 150px;">
+                                <a href="<?= site_url('goods_management/order');?>" class="btn btn-sm btn-outline-primary" style="font-weight: 600; border-radius: 50px; width: 150px;">
                                 ORDER NOW
                                 </a>  
-                                <button type="button" class="btn btn-sm btn-outline-danger" style="font-weight: 600; border-radius: 50px; width: 150px;">
+                                <button type="button" class="btn btn-sm btn-outline-primary" style="font-weight: 600; border-radius: 50px; width: 150px;">
                                   IGNORE
                                 </button>  
                               </td>
@@ -114,10 +114,10 @@
                                 </button>                                
                               </td>
                               <td style="vertical-align: middle;text-align: center;">                
-                                <a href="<?= site_url('goods_management/order');?>" class="btn btn-sm btn-outline-warning" style="font-weight: 600; border-radius: 50px; width: 150px;">
+                                <a href="<?= site_url('goods_management/order');?>" class="btn btn-sm btn-outline-primary" style="font-weight: 600; border-radius: 50px; width: 150px;">
                                 ORDER NOW
                                 </a>  
-                                <button type="button" class="btn btn-sm btn-outline-danger" style="font-weight: 600; border-radius: 50px; width: 150px;">
+                                <button type="button" class="btn btn-sm btn-outline-primary" style="font-weight: 600; border-radius: 50px; width: 150px;">
                                   IGNORE
                                 </button>  
                               </td>
@@ -135,10 +135,10 @@
                                 </button>                                
                               </td>
                               <td style="vertical-align: middle;text-align: center;">                
-                                <a href="<?= site_url('goods_management/order');?>" class="btn btn-sm btn-outline-warning" style="font-weight: 600; border-radius: 50px; width: 150px;">
+                                <a href="<?= site_url('goods_management/order');?>" class="btn btn-sm btn-outline-primary" style="font-weight: 600; border-radius: 50px; width: 150px;">
                                 ORDER NOW
                                 </a>  
-                                <button type="button" class="btn btn-sm btn-outline-danger" style="font-weight: 600; border-radius: 50px; width: 150px;">
+                                <button type="button" class="btn btn-sm btn-outline-primary" style="font-weight: 600; border-radius: 50px; width: 150px;">
                                   IGNORE
                                 </button>  
                               </td>
@@ -156,10 +156,10 @@
                                 </button>                                
                               </td>
                               <td style="vertical-align: middle;text-align: center;">                
-                                <a href="<?= site_url('goods_management/order');?>" class="btn btn-sm btn-outline-warning" style="font-weight: 600; border-radius: 50px; width: 150px;">
+                                <a href="<?= site_url('goods_management/order');?>" class="btn btn-sm btn-outline-primary" style="font-weight: 600; border-radius: 50px; width: 150px;">
                                 ORDER NOW
                                 </a>  
-                                <button type="button" class="btn btn-sm btn-outline-danger" style="font-weight: 600; border-radius: 50px; width: 150px;">
+                                <button type="button" class="btn btn-sm btn-outline-primary" style="font-weight: 600; border-radius: 50px; width: 150px;">
                                   IGNORE
                                 </button>  
                               </td>

@@ -121,12 +121,25 @@
                       </table>              
                   </div>
                   <!-- /.card-body -->
-                  <div class="card-footer">
-                    <div class="d-grid gap-2 d-md-flex justify-content-md-end">
-                      <a 
-                        href="<?= site_url('goods_management/order_detail'); ?>"
-                        class="btn btn-lg btn-secondary" type="button" style="font-weight: 600; border-radius: 50px;color:#001F82; width: 150px;">Submit</a>
-                    </div>                    
+                  <div class="card-footer text-end">
+                  <button class="btn btn-lg btn-secondary custom-btn" type="button" style="font-weight: 600; border-radius: 50px; color:#001F82; width: 150px;">
+                        Submit
+                    </button>
+
+                    <style>
+                        .custom-btn {
+                            color: #001F82; 
+                            border: 2px solid #001F82; 
+                            background-color: transparent;
+                            transition: all 0.3s ease-in-out;
+                        }
+
+                        .custom-btn:hover {
+                            background-color: #001F82;
+                            color: white !important;
+                        }
+                    </style>
+                   
                   </div>
                   <!-- /.card-footer-->
                 </div>
