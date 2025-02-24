@@ -63,7 +63,10 @@ class Ajax extends CI_Controller
 	function get_material(){
 		$this->db->order_by("item_code");
 	
-		$m = $this->db->get("m_master_data_material")->result();
+		$m = $this->db->get_where("m_master_data_material",
+		array(
+			"is_active" => 1
+		))->result();
 	
 		foreach ((array)$m as $k => $v) {
 			$html .= "<option value='".$v->item_code."'>".$v->item_code." (".$v->item_name.")</option>";
@@ -77,12 +80,27 @@ class Ajax extends CI_Controller
 		$item_code = $this->input->post('item_code');
 
 		foreach($item_code as $k => $v){
-			_add(
-				"m_vendor_material",
-				[
+			$exist = $this->db->get_where("m_vendor_material",array(
+				'vendor_code' => $vendor_code,
+				'item_code' => $v
+			))->row();
+			if(!$exist){
+				_add(
+					"m_vendor_material",
+					[
+						'vendor_code' => $vendor_code,
+						'item_code' => $v
+					]);	
+
+				$get_last_id = $this->db->get_where("m_vendor_material",array(
 					'vendor_code' => $vendor_code,
 					'item_code' => $v
-				]);
+				))->row()->id;
+
+				generate_gross_requirement($get_last_id);
+				generate_var_settings($get_last_id);
+				generate_item_movement($get_last_id);
+			}
 		}
 
 		$err = array(
