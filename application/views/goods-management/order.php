@@ -123,6 +123,9 @@
                   <!-- /.card-body -->
                   <div class="card-footer text-end">
                   <button class="btn btn-lg btn-secondary custom-btn" type="button" style="font-weight: 600; border-radius: 50px; color:#001F82; width: 150px;">
+                        Reset
+                    </button>
+                  <button class="btn btn-lg btn-secondary custom-btn" type="button" style="font-weight: 600; border-radius: 50px; color:#001F82; width: 150px;">
                         Submit
                     </button>
 
