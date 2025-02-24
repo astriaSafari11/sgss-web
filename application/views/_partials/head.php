@@ -226,7 +226,13 @@
             >
               <li class="nav-item">
                 <a href="<?= site_url('dashboard');?>" class="nav-link sidebar">
-                  <img src="../design/src/assets/home_icon.png" alt="Home Icon" style="width: 30px; height: 30px;" class="icon">
+                <img
+                  src="<?= base_url('assets/dist/images/home_icon.png');?>"
+                  alt="Home Icon"
+                  class="brand-image icon"
+                  style="width:30px; height:30px"
+                />  
+                
                   <p>Home</p>
                 </a>
               </li>          
@@ -253,8 +259,13 @@
               </li>                 -->
               <li class="nav-item">
                 <a href="#" class="nav-link sidebar">
-                <img src="../design/src/assets/goods_icon.png" alt="Goods Icon" style="width: 30px; height: 30px;" class="icon">
-                  <p>
+                <img
+                  src="<?= base_url('assets/dist/images/goods_icon.png');?>"
+                  alt="Goods Icon"
+                  class="brand-image icon"
+                  style="width:30px; height:30px"
+                />  
+                <p>
                     Goods Management
                     <i class="nav-arrow bi bi-chevron-right"></i>
                   </p>
@@ -288,13 +299,23 @@
               </li>
               <li class="nav-item sidebar">
                 <a href="<?= site_url('service_management');?>" class="nav-link sidebar">
-                <img src="../design/src/assets/service_icon.png" alt="Service Icon" style="width: 42px; height: 32px; margin-left: -3px;" class="icon">
-                  <p>Service Management</p>
+                <img
+                  src="<?= base_url('assets/dist/images/service_icon.png');?>"
+                  alt="Service Icon"
+                  class="brand-image icon"
+                  style="width:40px; height:30px"
+                />
+                <p>Service Management</p>
                 </a>
               </li>  
               <li class="nav-item sidebar">
                 <a href="<?= site_url('saving_simulator');?>" class="nav-link sidebar">
-                <img src="../design/src/assets/saving_icon.png" alt="Saving Icon" style="width: 32px; height: 32px; margin-left: -1px" class="icon">
+                <img
+                  src="<?= base_url('assets/dist/images/saving_icon.png');?>"
+                  alt="Saving Icon"
+                  class="brand-image icon"
+                  style="width:33px; height:33px"
+                />
                 <p>Saving Simulator</p>  
               </a>
               </li>                              

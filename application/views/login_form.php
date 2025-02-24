@@ -10,7 +10,7 @@
     <meta name="author" content="astria.safari@ivs.co.id" />
     <!--end::Primary Meta Tags-->
     <style>
-      @import url('https://fonts.cdnfonts.com/css/garet');
+      @import url('https://fonts.cdnfonts.com/css/poppins');
 
       body, html {
       height: 100%;
@@ -88,13 +88,13 @@
             <div class="input-group mb-2">
               <div class="form-floating">
                 <input id="loginEmail" type="text" class="form-control" name="username" value="" placeholder="" />
-                <label for="loginEmail" class="fw-bold text-primary">NIP</label>
+                <label for="loginEmail" class="fw-bold text-primary fs-7">NIP</label>
               </div>
             </div>
             <div class="input-group mb-1">
               <div class="form-floating">
                 <input id="loginPassword" type="password" class="form-control" name="password" placeholder="" />
-                <label for="loginPassword" class="fw-bold text-primary">Password</label>
+                <label for="loginPassword" class="fw-bold text-primary fs-7">Password</label>
               </div>
             </div>
             <a href="#" class="text-primary text-left text-decoration-none fw-bold mb-3 d-block">Forgot Password?</a>

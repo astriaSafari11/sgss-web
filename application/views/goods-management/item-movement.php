@@ -54,10 +54,10 @@
                                 <h3 class="mb-2 text-primary font-bold">MRP - Table</h3>
                             </div>
                             <div class="col-md-6 col-sm-6 col-12" style="justify-content: flex-end;display: flex;">
-                                <button type="button" class="btn btn-danger position-relative" style="font-weight: 600; border-radius: 50px; width: 150px;margin-right:10px;">
+                                <button type="button" class="btn btn-outline-primary position-relative" style="font-weight: 600; border-radius: 50px; width: 150px;margin-right:10px;">
                                     Export
                                 </button>                       
-                                <button type="button" class="btn btn-danger position-relative" style="font-weight: 600; border-radius: 50px;width: 150px;">
+                                <button type="button" class="btn btn-outline-primary position-relative" style="font-weight: 600; border-radius: 50px;width: 150px;">
                                     Import
                                 </button>                       
                             </div>
@@ -84,7 +84,7 @@
                         </thead>
                         <tbody>
                             <tr>
-                                <td style="vertical-align: middle;text-align: center;background-color:#89cff0;">
+                                <td style="vertical-align: middle;text-align: center;">
                                   <a href="<?= site_url('goods_management/item_movement_detail');?>" style="font-weight:600;color: #001F82;">Alkohol</a>
                                 </td>
                                 <td style="vertical-align: middle;text-align: center;">100</td>
@@ -97,7 +97,7 @@
                                 <td style="vertical-align: middle;text-align: center;"></td>
                             </tr>
                             <tr>
-                                <td style="vertical-align: middle;text-align: center;background-color:#89cff0;font-weight:600;">Alkohol</td>
+                                <td style="vertical-align: middle;text-align: center;font-weight:600;">Alkohol</td>
                                 <td style="vertical-align: middle;text-align: center;">100</td>
                                 <td style="vertical-align: middle;text-align: center;"></td>
                                 <td style="vertical-align: middle;text-align: center;"></td>
@@ -108,7 +108,7 @@
                                 <td style="vertical-align: middle;text-align: center;"></td>
                              </tr>
                              <tr>
-                                <td style="vertical-align: middle;text-align: center;background-color:#89cff0;font-weight:600;">Alkohol</td>
+                                <td style="vertical-align: middle;text-align: center;font-weight:600;">Alkohol</td>
                                 <td style="vertical-align: middle;text-align: center;">100</td>
                                 <td style="vertical-align: middle;text-align: center;"></td>
                                 <td style="vertical-align: middle;text-align: center;"></td>
@@ -119,7 +119,7 @@
                                 <td style="vertical-align: middle;text-align: center;"></td>
                             </tr>
                             <tr>
-                                <td style="vertical-align: middle;text-align: center;background-color:#89cff0;font-weight:600;">Alkohol</td>
+                                <td style="vertical-align: middle;text-align: center;font-weight:600;">Alkohol</td>
                                 <td style="vertical-align: middle;text-align: center;">100</td>
                                 <td style="vertical-align: middle;text-align: center;"></td>
                                 <td style="vertical-align: middle;text-align: center;"></td>
@@ -130,7 +130,7 @@
                                 <td style="vertical-align: middle;text-align: center;"></td>
                             </tr>
                             <tr>
-                                <td style="vertical-align: middle;text-align: center;background-color:#89cff0;font-weight:600;">Alkohol</td>
+                                <td style="vertical-align: middle;text-align: center;font-weight:600;">Alkohol</td>
                                 <td style="vertical-align: middle;text-align: center;">100</td>
                                 <td style="vertical-align: middle;text-align: center;"></td>
                                 <td style="vertical-align: middle;text-align: center;"></td>
