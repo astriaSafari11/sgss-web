@@ -1,4 +1,7 @@
 <?php $this->load->view('_partials/head.php'); ?>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+<script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+
             <!--begin::Row-->
             <div class="row">
               <div class="col-12 mb-4">
@@ -7,10 +10,76 @@
                   <div class="card-body">
                     <div class="row">
                       <!--begin::Col-->
+                      
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+        <style>
+            .flatpickr-calendar {
+                background-color:rgb(255, 255, 255) !important;
+            }
+            .flatpickr-month {
+                background-color:#001F82 !important;
+                color: white !important;
+                height: 40px !important;
+            }
+            
+            .flatpickr-prev-month svg,
+            .flatpickr-next-month svg {
+                fill: white !important; 
+            }
+
+            .flatpickr-monthDropdown-months {
+                background-color: #001F82 !important; 
+                color: white !important; 
+                border: none !important; 
+            }
+
+            .flatpickr-monthDropdown-months option {
+                background-color: #001F82 !important; 
+                color: white !important; 
+            }
+
+            .flatpickr-monthDropdown-months option:hover {
+                background-color: #001F82 !important;
+            }
+
+
+        </style>
+
+        <div class="col-6">
+            <div class="form-floating mb-3">
+            <input type="date" class="form-control" id="floatingInput" placeholder="dd-mm-yyyy">
+            <label for="floatingInput" class="fw-bold text-primary" style="font-size: 14px;">Action Date</label>
+        </div>
+        </div>
+        <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+        <script>
+            flatpickr("#floatingInput", {
+                dateFormat: "d-m-Y",   
+                defaultDate: null,     
+                allowInput: true,     
+            onReady: function(selectedDates, dateStr, instance) {
+                instance._input.value = "dd-mm-yyyy"; 
+            },
+            onOpen: function(selectedDates, dateStr, instance) {
+                if (instance._input.value === "dd-mm-yyyy") {
+                    instance._input.value = "dd-mm-yyyy"; 
+                }
+            },
+            onChange: function(selectedDates, dateStr, instance) {
+                if (instance._input.value === " ") {
+                    instance._input.value = "dd-mm-yyyy"; 
+                }
+            }
+        });
+        </script>
+
+                    
+                      <!--end::Col-->
+                      <!--begin::Col-->
                       <div class="col-6">
                         <div class="form-floating mb-3">
-                          <input type="date" class="form-control" id="floatingInput" placeholder="name@example.com">
-                          <label for="floatingInput" class="fw-bold text-primary">Action Date</label>
+                          <input type="email" class="form-control" id="floatingInput" placeholder="name@example.com">
+                          <label for="floatingInput" class="fw-bold text-primary" style="font-size: 14px;">Requestor</label>
                         </div>
                       </div>
                       <!--end::Col-->
@@ -18,15 +87,7 @@
                       <div class="col-6">
                         <div class="form-floating mb-3">
                           <input type="email" class="form-control" id="floatingInput" placeholder="name@example.com">
-                          <label for="floatingInput" class="fw-bold text-primary">Requestor</label>
-                        </div>
-                      </div>
-                      <!--end::Col-->
-                      <!--begin::Col-->
-                      <div class="col-6">
-                        <div class="form-floating mb-3">
-                          <input type="email" class="form-control" id="floatingInput" placeholder="name@example.com">
-                          <label for="floatingInput" class="fw-bold text-primary">Purchase Reason</label>
+                          <label for="floatingInput" class="fw-bold text-primary" style="font-size: 14px;">Purchase Reason</label>
                         </div>
                       </div>
                       <!--end::Col-->
@@ -39,7 +100,7 @@
       <option value="2">Ahmad</option>
       <option value="3">Faqih</option>
     </select>
-    <label for="floatingSelect" class="fw-bold text-primary">Requested For</label>
+    <label for="floatingSelect" class="fw-bold text-primary" style="font-size: 14px;">Requested For</label>
   </div>
 </div>
 
@@ -48,14 +109,14 @@
                       <div class="col-6">
                         <div class="form-floating mb-3">
                           <input type="email" class="form-control" id="floatingInput" placeholder="name@example.com">
-                          <label for="floatingInput" class="fw-bold text-primary">Remarks</label>
+                          <label for="floatingInput" class="fw-bold text-primary" style="font-size: 14px;">Remarks</label>
                         </div>
                       </div>
                       <!--end::Col-->
                       <div class="col-6">
                         <div class="form-floating mb-3">
                           <input type="email" class="form-control" id="floatingInput" placeholder="name@example.com">
-                          <label for="floatingInput" class="fw-bold text-primary">Area</label>
+                          <label for="floatingInput" class="fw-bold text-primary" style="font-size: 14px;">Area</label>
                         </div>
                       </div>
                       <!--end::Col-->                                                              
@@ -63,12 +124,12 @@
                       <div class="col-6">
                         <div class="form-floating mb-3">
                           <input type="email" class="form-control" id="floatingInput" placeholder="name@example.com">
-                          <label for="floatingInput" class="fw-bold text-primary">Attachment</label>
+                          <label for="floatingInput" class="fw-bold text-primary" style="font-size: 14px;">Attachment</label>
                         </div>
                       </div>
                       <!--end::Col-->
                     </div>                    
-                    <h3 class="mb-2 text-primary font-bold">Item Information</h3>
+                    <h3 class="mb-2 text-primary fw-bold">Item Information</h3>
                     <table class="table table-bordered" style="width:100%">
                       <thead>
                           <tr >
@@ -82,47 +143,88 @@
                       </thead>
                       <tbody>
                           <tr>
-                              <td style="vertical-align: middle;text-align: center;">Alkohol</td>
-                              <td style="vertical-align: middle;text-align: center;">
-                                20 <button type="button" class="btn btn-primary btn-sm rounded-circle p-2.1" style="margin-left: 3px;"><i class="fa-solid fa-pen text-white"></i></button>
-                              </td>
-                              <td style="vertical-align: middle;text-align: center;">Box</td>
-                              <td style="vertical-align: middle;text-align: center;">
-                                Vendor 1 <button type="button" class="btn btn-primary btn-sm rounded-circle p-2.1" style="margin-left: 3px;"><i class="fa-solid fa-pen text-white"></i></button>
-                              </td>
-                              <td style="vertical-align: middle;text-align: center;">Rp. 5.000</td>
-                              <td style="vertical-align: middle;text-align: center;">Rp. 500.000</td>
+                            <td style="vertical-align: middle;text-align: center;font-size: 14px;">Alkohol</td>
+                              <td style="vertical-align: middle; font-size: 14px; padding: 8px;">
+                                <div style="display: flex; align-items: center; justify-content: space-between; width: 100%;">
+                                    <span style="flex-grow: 1; text-align: center;">20</span>
+                                <button type="button" class="btn btn-primary btn-sm rounded-circle p-2.1" style="margin-left: 3px;">
+                                    <i class="fa-solid fa-pen text-white"></i>
+                                </button>
+                                </div>
+                            </td>
+
+                              <td style="vertical-align: middle;text-align: center;font-size: 14px;">Box</td>
+                              <td style="vertical-align: middle; font-size: 14px; padding: 8px;">
+                            <div style="display: flex; align-items: center; justify-content: space-between; width: 100%;">
+                                <span style="flex-grow: 1; text-align: center;">Vendor 1</span>
+                            <button type="button" class="btn btn-primary btn-sm rounded-circle p-2.1" style="margin-left: 3px;">
+                                <i class="fa-solid fa-pen text-white"></i>
+                            </button>
+                            </div>
+                            </td>
+
+                              <td style="vertical-align: middle;text-align: center;font-size: 14px;">Rp. 5.000</td>
+                              <td style="vertical-align: middle;text-align: center;font-size: 14px;">Rp. 500.000</td>
                           </tr>
                           <tr>
-                            <td style="vertical-align: middle;text-align: center;">Alkohol</td>
-                            <td style="vertical-align: middle;text-align: center;">
-                              20 <button type="button" class="btn btn-primary btn-sm rounded-circle p-2.1" style="margin-left: 3px;"><i class="fa-solid fa-pen text-white"></i></button>
+                            <td style="vertical-align: middle;text-align: center;font-size: 14px;">Alkohol</td>
+                            <td style="vertical-align: middle; font-size: 14px; padding: 8px;">
+                                <div style="display: flex; align-items: center; justify-content: space-between; width: 100%;">
+                                    <span style="flex-grow: 1; text-align: center;">20</span>
+                                <button type="button" class="btn btn-primary btn-sm rounded-circle p-2.1" style="margin-left: 3px;">
+                                    <i class="fa-solid fa-pen text-white"></i>
+                                </button>
+                                </div>
                             </td>
-                            <td style="vertical-align: middle;text-align: center;">Box</td>
-                            <td style="vertical-align: middle;text-align: center;">
-                              Vendor 2 <button type="button" class="btn btn-primary btn-sm rounded-circle p-2.1" style="margin-left: 3px;"><i class="fa-solid fa-pen text-white"></i></button>
+
+                            <td style="vertical-align: middle;text-align: center;font-size: 14px;">Box</td>
+                            <td style="vertical-align: middle; text-align: center; font-size: 14px; padding: 8px;">
+                                <div style="display: flex; align-items: center; justify-content: space-between; width: 100%;">
+                                <span style="flex-grow: 1; text-align: center;">Vendor 2</span>
+                            <button type="button" class="btn btn-primary btn-sm rounded-circle p-2.1" style="margin-left: 3px;">
+                                <i class="fa-solid fa-pen text-white"></i>
+                            </button>
+                            </div>
                             </td>
-                            <td style="vertical-align: middle;text-align: center;">Rp. 5.000</td>
-                            <td style="vertical-align: middle;text-align: center;">Rp. 500.000</td>
+
+                            <td style="vertical-align: middle;text-align: center;font-size: 14px;">Rp. 5.000</td>
+                            <td style="vertical-align: middle;text-align: center;font-size: 14px;">Rp. 500.000</td>
                         </tr>
                         <tr>
-                          <td style="vertical-align: middle;text-align: center;">Alkohol</td>
-                          <td style="vertical-align: middle;text-align: center;">
-                            20 <button type="button" class="btn btn-primary btn-sm rounded-circle p-2.1" style="margin-left: 3px;"><i class="fa-solid fa-pen text-white"></i></button>
-                          </td>
-                          <td style="vertical-align: middle;text-align: center;">Box</td>
-                          <td style="vertical-align: middle;text-align: center;">
-                            Vendor 3 <button type="button" class="btn btn-primary btn-sm rounded-circle p-2.1" style="margin-left: 3px;"><i class="fa-solid fa-pen text-white"></i></button>
-                          </td>
-                          <td style="vertical-align: middle;text-align: center;">Rp. 5.000</td>
-                          <td style="vertical-align: middle;text-align: center;">Rp. 500.000</td>
+                          <td style="vertical-align: middle;text-align: center;font-size: 14px;">Alkohol</td>
+                          
+                        <td style="vertical-align: middle; font-size: 14px; padding: 8px;">
+                            <div style="display: flex; align-items: center; justify-content: space-between; width: 100%;">
+                                <span style="flex-grow: 1; text-align: center;">20</span>
+                            <button type="button" class="btn btn-primary btn-sm rounded-circle p-2.1" style="margin-left: 3px;">
+                                <i class="fa-solid fa-pen text-white"></i>
+                             </button>
+                            </div>
+                        </td>
+
+                          <td style="vertical-align: middle;text-align: center;font-size: 14px;">Box</td>
+                          <td style="vertical-align: middle; font-size: 14px; padding: 8px;">
+                            <div style="display: flex; align-items: center; justify-content: space-between; width: 100%;">
+                                <span style="flex-grow: 1; text-align: center;">Vendor 3</span>
+                            <button type="button" class="btn btn-primary btn-sm rounded-circle p-2.1" style="margin-left: 3px;">
+                                <i class="fa-solid fa-pen text-white"></i>
+                            </button>
+                            </div>
+                        </td>
+
+                          <td style="vertical-align: middle;text-align: center;font-size: 14px;">Rp. 5.000</td>
+                          <td style="vertical-align: middle;text-align: center;font-size: 14px;">Rp. 500.000</td>
                       </tr>                                                  
                       </tbody>  
                       </table>              
                   </div>
                   <!-- /.card-body -->
                   <div class="card-footer text-end">
-                  <button class="btn btn-lg btn-secondary custom-btn" type="button" style="font-weight: 600; border-radius: 50px; color:#001F82; width: 150px;">
+                  <button class="btn btn-sm btn-secondary custom-btn" type="button" onclick="location.reload()" style="font-weight: 600; border-radius: 50px; color:#001F82; width: 150px;">
+                        Reset
+                    </button>
+
+                  <button class="btn btn-sm btn-secondary custom-btn" type="button" style="font-weight: 600; border-radius: 50px; color:#001F82; width: 150px;">
                         Submit
                     </button>
 
