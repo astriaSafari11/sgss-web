@@ -33,6 +33,7 @@ class Auth_model extends CI_Model
 		if(!empty($user)){			
 			/*set session*/
 			$this->session->set_userdata(self::SESSION_KEY, $user->id);
+			$this->session->set_userdata('user_id',$user->nip);
 			$this->session->set_userdata('user_nip',$user->nip);
 			$this->session->set_userdata('user_name',$user->full_name);
 			$this->session->set_userdata('user_email',$user->email);

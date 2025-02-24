@@ -26,16 +26,16 @@ function debugCode($r=array(),$f=TRUE){
 function myNum($num=0,$curr=""){
 	$curr2 = strtolower($curr);
 	if($curr2=="rp"){
-		return number_format($num,0,",",".");
+		return number_format($num,0,".",",");
 	}elseif($curr2=="$" || $curr2=="e"){
 		return number_format($num,0,".",",")." ".$curr;
 	}else{
-		return number_format($num,0,",",".");
+		return number_format($num,0,".",",");
 	}
 }
 
 function myCurr($num=0,$curr=""){
-	return "Rp. ".number_format($num,2,",",".");
+	return "Rp. ".number_format($num,2,".",",");
 }
 
 function myDecimal($num=0,$curr=""){

@@ -19,21 +19,12 @@
                 <!-- Default box -->
                 <div class="card">
                   <div class="card-body">
-                    <div class="row">
-                      <!--begin::Col-->
-                      <div class="col-6">
-                        <select class="form-select" aria-label="Default select example" style="height: 56px;" name="vendor_code" required>
-                          <option value="">-- Select Vendor --</option>
-                          <option value="530859">Vendor A</option>
-                        </select>
-                        <div class="invalid-feedback">This field is required.</div>
-                      </div>
-                      <!--begin::Col-->                        
+                    <div class="row">                      
                       <!--begin::Col-->
                       <div class="col-6">
                         <div class="form-floating mb-3">
                           <input type="text" class="form-control" id="floatingInput" placeholder="material Code" name="item_code" required>
-                          <label for="floatingInput">Material Code</label>
+                          <label for="floatingInput" class="fw-bold text-primary">Material Code</label>
                           <div class="invalid-feedback">This field is required.</div>
                         </div>
                       </div>
@@ -42,7 +33,7 @@
                       <div class="col-6">
                         <div class="form-floating mb-3">
                           <input type="text" class="form-control" id="floatingInput" placeholder="name@example.com" name="item_name" required>
-                          <label for="floatingInput">Material Name</label>
+                          <label for="floatingInput" class="fw-bold text-primary">Material Name</label>
                           <div class="invalid-feedback">This field is required.</div>
                         </div>
                       </div>
@@ -50,107 +41,24 @@
                       <!--begin::Col-->
                       <div class="col-6">
                         <div class="form-floating mb-3">
-                            <select class="form-select" aria-label="Default select example" style="height: 56px;" name="uom" required>
-                            <option value="">-- Select UoM --</option>
-                            <option value="ml">ml</option>
+                            <select class="form-select" aria-label="Default select example" id="uom" style="height: 56px;" name="uom" required>
+                            <option value="" disabled>-- Select UoM --</option>
                             </select>
+                            <label for="uom" class="fw-bold text-primary">UoM</label>
                             <div class="invalid-feedback">This field is required.</div>
                         </div>
                       </div>
                       <!--end::Col-->
                       <!--begin::Col-->
                       <div class="col-6">
-                        <select class="form-select" aria-label="Default select example" style="height: 56px;" name="factory" required>
-                          <option value="">-- Select Factory --</option>
-                          <option value="liquid">Liquid</option>
-                        </select>
-                        <div class="invalid-feedback">This field is required.</div>
-                      </div>
-                      <!--begin::Col-->
-                      <div class="col-6">
                         <div class="form-floating mb-3">
-                          <input type="text" class="form-control" id="floatingInput" placeholder="name@example.com" name="lt_pr_po" required>
-                          <label for="floatingInput">Est. Lead Time PO</label>
-                          <div class="invalid-feedback">This field is required.</div>
+                            <select class="form-select" aria-label="Default select example" id="factory" style="height: 56px;" name="factory" required>
+                            <option value="" disabled>-- Select Factory --</option>
+                            </select>
+                            <label for="factory" class="fw-bold text-primary">Factory</label>
+                            <div class="invalid-feedback">This field is required.</div>
                         </div>
-                      </div>
-                      <div class="col-6">
-                        <div class="form-floating mb-3">
-                          <input type="number" class="form-control" id="floatingInput" placeholder="name@example.com" name="lot_size" required>
-                          <label for="floatingInput">Lot Size</label>
-                          <div class="invalid-feedback">This field is required.</div>
-                        </div>
-                      </div>                      
-                      <div class="col-6">
-                        <div class="form-floating mb-3">
-                          <input type="number" class="form-control" id="floatingInput" placeholder="name@example.com" name="initial_value_stock" required>
-                          <label for="floatingInput">Initial Value Stock</label>
-                          <div class="invalid-feedback">This field is required.</div>
-                        </div>
-                      </div>                      
-                      <div class="col-6">
-                        <div class="form-floating mb-3">
-                          <input type="number" class="form-control" id="floatingInput" placeholder="name@example.com" name="order_cycle" required>
-                          <label for="floatingInput">Order Cycle</label>
-                          <div class="invalid-feedback">This field is required.</div>
-                        </div>
-                      </div>            
-                      <div class="col-6">
-                        <div class="form-floating mb-3">
-                          <input type="number" class="form-control" id="floatingInput" placeholder="name@example.com" name="initial_stock" required>
-                          <label for="floatingInput">Initial Stock</label>
-                          <div class="invalid-feedback">This field is required.</div>
-                        </div>
-                      </div>                
-                      <div class="col-6">
-                        <div class="form-floating mb-3">
-                          <input type="number" class="form-control" id="floatingInput" placeholder="name@example.com" name="standart_safety_stock" required>
-                          <label for="floatingInput">Standart Safety Stock</label>
-                          <div class="invalid-feedback">This field is required.</div>
-                        </div>
-                      </div>  
-                      <div class="col-6">
-                        <div class="form-floating mb-3">
-                          <input type="number" class="form-control" id="floatingInput" placeholder="name@example.com" name="initial_value_for_to_do" required>
-                          <label for="floatingInput">Initial Value (todo list)</label>
-                          <div class="invalid-feedback">This field is required.</div>
-                        </div>
-                      </div>                                                       
-                      <div class="col-6">
-                        <div class="form-floating mb-3">
-                          <input type="number" class="form-control" id="floatingInput" placeholder="name@example.com" name="price_per_uom" required>
-                          <label for="floatingInput">Price Per UoM</label>
-                          <div class="invalid-feedback">This field is required.</div>
-                        </div>
-                      </div>                 
-                      <div class="col-6">
-                        <div class="form-floating mb-3">
-                          <input type="number" class="form-control" id="floatingInput" placeholder="name@example.com" name="price_equal_moq" required>
-                          <label for="floatingInput">Price Equal UoM</label>
-                          <div class="invalid-feedback">This field is required.</div>
-                        </div>
-                      </div>                 
-                      <div class="col-6">
-                        <div class="form-floating mb-3">
-                          <input type="number" class="form-control" id="floatingInput" placeholder="name@example.com" name="moq" required>
-                          <label for="floatingInput">MOQ</label>
-                          <div class="invalid-feedback">This field is required.</div>
-                        </div>
-                      </div>                 
-                      <div class="col-6">
-                        <div class="form-floating mb-3">
-                          <input type="text" class="form-control" id="floatingInput" placeholder="name@example.com" name="place_to_buy" required>
-                          <label for="floatingInput">Place To Buy</label>
-                          <div class="invalid-feedback">This field is required.</div>
-                        </div>
-                      </div>                 
-                      <div class="col-6">
-                        <div class="form-floating mb-3">
-                          <input type="text" class="form-control" id="floatingInput" placeholder="name@example.com" name="link" required>
-                          <label for="floatingInput">Link</label>
-                          <div class="invalid-feedback">This field is required.</div>
-                        </div>
-                      </div>                                                       
+                      </div>                                                     
                       <!--end::Col-->                      
                       <!--begin::Col-->                 
                       <!--end::Col-->    
@@ -194,3 +102,22 @@
                       });
                     })();
                   </script>
+<script>
+  var URL_AJAX = '<?php echo base_url();?>index.php/ajax';
+  $(document).ready(function(){
+    get_uom();
+    get_factory();
+  });
+
+  function get_uom(id){
+      $.post(URL_AJAX+"/get_uom",{id},function(o){
+        $('#uom').html(o);
+      });
+  }  
+
+  function get_factory(id){
+      $.post(URL_AJAX+"/get_factory",{id},function(o){
+        $('#factory').html(o);
+      });
+  }   
+</script>

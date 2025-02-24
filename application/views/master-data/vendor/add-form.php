@@ -25,7 +25,7 @@
                       <div class="col-6">
                         <div class="form-floating mb-3">
                           <input type="text" class="form-control" id="floatingInput" placeholder="Vendor Code" name="vendor_code" required>
-                          <label for="floatingInput">Vendor Code</label>
+                          <label for="floatingInput" class="fw-bold text-primary">Vendor Code</label>
                           <div class="invalid-feedback">This field is required.</div>
                         </div>
                       </div>
@@ -34,7 +34,7 @@
                       <div class="col-6">
                         <div class="form-floating mb-3">
                           <input type="text" class="form-control" id="floatingInput" placeholder="name@example.com" name="vendor_name" required>
-                          <label for="floatingInput">Vendor Name</label>
+                          <label for="floatingInput" class="fw-bold text-primary">Vendor Name</label>
                           <div class="invalid-feedback">This field is required.</div>
                         </div>
                       </div>
@@ -43,30 +43,36 @@
                       <div class="col-6">
                         <div class="form-floating mb-3">
                           <input type="text" class="form-control" id="floatingInput" placeholder="name@example.com" name="est_lead_time">
-                          <label for="floatingInput">Est. Lead Time</label>
+                          <label for="floatingInput" class="fw-bold text-primary">Est. Lead Time</label>
                           <div class="invalid-feedback">This field is required.</div>
                         </div>
                       </div>
                       <!--end::Col-->
                       <!--begin::Col-->
                       <div class="col-6">
-                        <select class="form-select" aria-label="Default select example" style="height: 56px;" name="category" required>
-                          <option value="">-- Select Category --</option>
-                          <option value="Goods">Goods</option>
-                        </select>
-                        <div class="invalid-feedback">This field is required.</div>
+                        <div class="form-floating mb-3">
+                          <select class="form-select" aria-label="Select Category" id="category" style="height: 56px;" name="category" required>
+                            <option value=""> -- Select Category --</option>
+                          </select>
+                          <label for="floatingInput" for="category" class="fw-bold text-primary">Category</label>
+                          <div class="invalid-feedback">This field is required.</div>
+                        </div>                        
                       </div>
                       <!--begin::Col-->
                       <!--begin::Col-->
                       <div class="col-6">
-                        <select class="form-select" aria-label="Default select example" style="height: 56px;" name="rating">
-                          <option value="">-- Select Rating --</option>
-                          <option value="1">1</option>
-                          <option value="2">2</option>
-                          <option value="3">3</option>
-                          <option value="4">4</option>
-                          <option value="5">5</option>
-                        </select>
+                        <div class="form-floating mb-3">
+                          <select class="form-select" aria-label="rating" id="rating" style="height: 56px;" name="rating">
+                              <option value="">-- Select Rating --</option>
+                              <option value="1">1</option>
+                              <option value="2">2</option>
+                              <option value="3">3</option>
+                              <option value="4">4</option>
+                              <option value="5">5</option>
+                            </select>
+                            <label for="floatingInput" for="rating" class="fw-bold text-primary">Rating</label>
+                            <div class="invalid-feedback">This field is required.</div>
+                          </div>                          
                       </div>
                       <!--begin::Col-->                     
                       <!--end::Col-->    
@@ -111,3 +117,15 @@
                       });
                     })();
                   </script>
+<script>
+  var URL_AJAX = '<?php echo site_url();?>/ajax';
+  $(document).ready(function(){
+    get_category();
+  });
+
+  function get_category(id){
+      $.post(URL_AJAX+"/get_category",{id},function(o){
+        $('#category').html(o);
+      });
+  }  
+</script>

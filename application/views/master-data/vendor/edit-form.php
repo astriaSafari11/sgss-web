@@ -51,9 +51,8 @@
                       <!--end::Col-->
                       <!--begin::Col-->
                       <div class="col-6">
-                        <select class="form-select" aria-label="Default select example" style="height: 56px;" name="category" required>
+                        <select class="form-select" aria-label="Select Category" id="category" style="height: 56px;" name="category" required>
                           <option value="">-- Select Category --</option>
-                          <option value="Goods" <?php echo $vendor->category=='Goods'?'selected':'';?>>Goods</option>
                         </select>
                         <div class="invalid-feedback">This field is required.</div>
                       </div>
@@ -111,3 +110,15 @@
                       });
                     })();
                   </script>
+<script>
+  var URL_AJAX = '<?php echo site_url();?>/ajax';
+  $(document).ready(function(){
+    get_category('<?php if(isset($vendor->category)){echo $vendor->category;}?>');
+  });
+
+  function get_category(id){
+      $.post(URL_AJAX+"/get_category",{id},function(o){
+        $('#category').html(o);
+      });
+  }  
+</script>

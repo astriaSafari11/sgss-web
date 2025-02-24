@@ -90,9 +90,12 @@ $query_builder = TRUE;
 
 $db['default'] = array(
 	'dsn'	=> '',
-	'hostname' => '13.67.63.151',
-	'username' => 'Zee',
-	'password' => 'Zee01',
+	// 'hostname' => '13.67.63.151',
+	// 'username' => 'Zee',
+	// 'password' => 'Zee01',
+	'hostname' => 'LAPTOP-2B53R143',
+	'username' => 'hr_safari',
+	'password' => 'Safari123',	
 	'database' => 'SGSS',
 	'dbdriver' => 'sqlsrv',
 	'dbprefix' => '',

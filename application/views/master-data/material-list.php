@@ -6,25 +6,10 @@
     }
 </style>
 <div class="row mb-2">
-              <div class="col-sm-6">
-                <a href="<?= site_url('master_data');?>" class="btn btn-sm btn-outline-primary position-relative" style="font-weight: 600; border-radius: 50px; white-space:nowrap;">
-                  <i class="fa-solid fa-boxes-packing" style="margin-right:5px; margin-left: 5px;"></i>
-                  Material by Vendor
-                </a>   
-                <a href="<?= site_url('master_data/material');?>" class="btn btn-sm btn-outline-primary position-relative" style="font-weight: 600; border-radius: 50px; white-space:nowrap;">
-                  <i class="fa-solid fa-boxes-packing" style="margin-right:5px; margin-left: 5px;"></i>
-                  Material by Factory
-                </a>                 
-                <a href="<?= site_url('master_data/vendor_list');?>" class="btn btn-sm btn-outline-primary position-relative" style="font-weight: 600; border-radius: 50px; white-space:nowrap;">
-                  <i class="fa-solid fa-address-card" style="margin-right:5px; margin-left: 5px;"></i>
-                  Vendor List
-                </a>   
-                <a href="<?= site_url('master_data/material_list');?>" class="btn btn-sm btn-primary position-relative" style="font-weight: 600; border-radius: 50px; white-space:nowrap;">
-                  <i class="fa-solid fa-box-archive" style="margin-right:5px; margin-left: 5px;"></i>
-                  Material List
-                </a> 
+<div class="col-sm-9">
+                <?php $this->load->view('master-data/_header_parts.php'); ?>     
               </div>
-              <div class="col-sm-6">
+              <div class="col-sm-3">
                 <ol class="breadcrumb float-sm-end">
                   <li class="breadcrumb-item"><a href="#">Home</a></li>
                   <li class="breadcrumb-item" aria-current="page">Master Data</li>
@@ -42,15 +27,7 @@
                       <a href="<?= site_url('master_data/add_material');?>" class="btn btn-sm btn-outline-primary position-relative" style="font-weight: 600; border-radius: 50px; white-space:nowrap">
                         <i class="fa-solid fa-circle-plus"></i>
                         Add New Material
-                      </a>                           
-                      <a type="button" class="btn btn-sm btn-outline-danger position-relative" style="font-weight: 600; border-radius: 50px; width: 150px;">
-                        <i class="fa-solid fa-file-export"></i>
-                        Export
-                      </a>                       
-                      <a type="button" class="btn btn-sm btn-outline-danger position-relative" style="font-weight: 600; border-radius: 50px;width: 150px;">
-                      <i class="fa-solid fa-file-import"></i>
-                        Import
-                      </a>                      
+                      </a>                                              
                     </div>
                   </div>
                   <div class="card-body">
@@ -63,19 +40,10 @@
                                 <th style="color: #fff;background-color: #001F82;text-align: center;">Item Name</th>
                                 <th style="color: #fff;background-color: #001F82;text-align: center;">Factory</th>
                                 <th style="color: #fff;background-color: #001F82;text-align: center;">UoM</th>
-                                <th style="color: #fff;background-color: #001F82;text-align: center;">LT_PR_PO</th>
-                                <th style="color: #fff;background-color: #001F82;text-align: center;">Vendor Code</th>
-                                <th style="color: #fff;background-color: #001F82;text-align: center;">Lot Size</th>
-                                <th style="color: #fff;background-color: #001F82;text-align: center;">Initial Value Stock</th>
-                                <th style="color: #fff;background-color: #001F82;text-align: center;">Order Cycle</th>
-                                <th style="color: #fff;background-color: #001F82;text-align: center;">Initial Stock</th>
-                                <th style="color: #fff;background-color: #001F82;text-align: center;width:100px;">LT_PO_TO_DELIV</th>
-                                <th style="color: #fff;background-color: #001F82;text-align: center;">Standard Safety Stock</th>
-                                <th style="color: #fff;background-color: #001F82;text-align: center;">Initial Value (todo list)</th>
                                 <th style="color: #fff;background-color: #001F82;text-align: center;">Action</th>
                             </tr>
                         </thead>
-                        <tbody style="text-align: center;white-space:nowrap;vertical-align:center;">
+                        <tbody style="text-align: center;vertical-align:center;">
                         </tbody>
                         </table>                         
                     </div>             
