@@ -5,7 +5,14 @@
             <div class="row">
               <div class="col-md-6 col-sm-6 col-12">
                 <div class="info-box text-bg-white">
-                  <span class="info-box-icon"> <img src="../design/src/assets/home_icon.png" alt="Home Icon" style="width: 40px; height: 40px;"> </span>
+                  <span class="info-box-icon"> 
+                  <img
+                  src="<?= base_url('assets/dist/images/home_icon.png');?>"
+                  alt="Home Icon"
+                  class="brand-image icon"
+                  style="width:50px; height:50px"
+                />
+               </span>
                   <div class="info-box-content" style="height: 150px;color: #001F82;">
                     <button type="button" class="btn btn-secondary" style="font-size: 24px; font-weight: 600; color: #001F82; border-radius: 20px;">Home</button>
                   </div>
@@ -16,7 +23,14 @@
               <!-- /.col -->
               <div class="col-md-6 col-sm-6 col-12">
                 <div class="info-box text-bg-white">
-                  <span class="info-box-icon"> <img src="../design/src/assets/goods_icon.png" alt="Goods Icon" style="width: 50px; height: 50px;"> </span>
+                  <span class="info-box-icon"> 
+                  <img
+                  src="<?= base_url('assets/dist/images/goods_icon.png');?>"
+                  alt="Goods Icon"
+                  class="brand-image icon"
+                  style="width:50px; height:50px"
+                />  
+                </span>
                   <div class="info-box-content" style="height: 150px;color: #001F82;">
                     <button type="button"data-bs-toggle="dropdown"  class="btn btn-secondary" style="font-size: 24px; font-weight: 600; color: #001F82; border-radius: 20px;">Goods Management</button>
                     <!-- <a class="nav-link" data-bs-toggle="dropdown" href="#">
@@ -43,7 +57,14 @@
               <!-- /.col -->              
               <div class="col-md-6 col-sm-6 col-12">
                 <div class="info-box text-bg-white">
-                  <span class="info-box-icon"> <img src="../design/src/assets/service_icon.png" alt="Service Icon" style="width: 60px; height: 50px; margin-left: 5px;"> </span>
+                  <span class="info-box-icon">
+                  <img
+                  src="<?= base_url('assets/dist/images/service_icon.png');?>"
+                  alt="Service Icon"
+                  class="brand-image icon"
+                  style="width:55px; height:45px"
+                />
+               </span>
                   <div class="info-box-content" style="height: 150px;color: #001F82;">
                     <button type="button" class="btn btn-secondary" style="font-size: 24px; font-weight: 600; color: #001F82; border-radius: 20px;">Service Management</button>
                   </div>
@@ -54,7 +75,14 @@
               <!-- /.col -->              
               <div class="col-md-6 col-sm-6 col-12">
                 <div class="info-box text-bg-white">
-                  <span class="info-box-icon"> <img src="../design/src/assets/saving_icon.png" alt="Saving Icon" style="width: 50px; height: 50px;"> </span>
+                  <span class="info-box-icon"> 
+                  <img
+                  src="<?= base_url('assets/dist/images/saving_icon.png');?>"
+                  alt="Saving Icon"
+                  class="brand-image icon"
+                  style="width:50px; height:50px"
+                />
+                  </span>
                   <div class="info-box-content" style="height: 150px;color: #001F82;">
                     <button type="button" class="btn btn-secondary" style="font-size: 24px; font-weight: 600; color: #001F82; border-radius: 20px;">Saving Simulator</button>
                   </div>

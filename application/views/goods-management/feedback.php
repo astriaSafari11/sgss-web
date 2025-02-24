@@ -51,6 +51,7 @@
                               <th style="color: #fff;background-color: #001F82;text-align: center;">Qty</th>
                               <th style="color: #fff;background-color: #001F82;text-align: center;">UoM</th>
                               <th style="color: #fff;background-color: #001F82;text-align: center;">Status</th>
+                              <th style="color: #fff;background-color: #001F82;text-align: center;">Download</th>
                               <th style="color: #fff;text-align: center;width: 400px;">
                                 <button class="btn btn-sm btn-primary" style="font-weight: 600; border-radius: 50px; width: 100%;">
                                 Action
@@ -71,6 +72,11 @@
                                   Rejected
                                 </button>                                
                               </td>
+                              <td style="vertical-align: middle;text-align: center;">
+                                <a href="path/to/pdf/file.pdf" class="btn btn-sm btn-outline-primary" style="border-radius: 50px;" download>
+                                <i class="fas fa-file-pdf"></i>
+                                </a>
+                              </td>
                               <td style="vertical-align: middle;text-align: center;">                
                                 <a href="<?= site_url('goods_management/order');?>" class="btn btn-sm btn-outline-primary" style="font-weight: 600; border-radius: 50px; width: 250px;">
                                 Feedback
@@ -88,6 +94,11 @@
                                 <button class="btn btn-sm btn-danger" style="font-weight: 600; border-radius: 50px; width: 100%;">
                                   Rejected
                                 </button>                                
+                              </td>
+                              <td style="vertical-align: middle;text-align: center;">
+                                <a href="path/to/pdf/file.pdf" class="btn btn-sm btn-outline-primary" style="border-radius: 50px;" download>
+                                <i class="fas fa-file-pdf"></i>
+                                </a>
                               </td>
                               <td style="vertical-align: middle;text-align: center;">                
                                 <a href="<?= site_url('goods_management/order');?>" class="btn btn-sm btn-outline-primary" style="font-weight: 600; border-radius: 50px; width: 250px;">
@@ -107,6 +118,11 @@
                                   Rejected
                                 </button>                                
                               </td>
+                              <td style="vertical-align: middle;text-align: center;">
+                                <a href="path/to/pdf/file.pdf" class="btn btn-sm btn-outline-primary" style="border-radius: 50px;" download>
+                                <i class="fas fa-file-pdf"></i>
+                                </a>
+                              </td>
                               <td style="vertical-align: middle;text-align: center;">                
                                 <a href="<?= site_url('goods_management/order');?>" class="btn btn-sm btn-outline-primary" style="font-weight: 600; border-radius: 50px; width: 250px;">
                                 Feedback
@@ -125,6 +141,11 @@
                                   Approved
                                 </button>                                
                               </td>
+                              <td style="vertical-align: middle;text-align: center;">
+                                <a href="path/to/pdf/file.pdf" class="btn btn-sm btn-outline-primary" style="border-radius: 50px;" download>
+                                <i class="fas fa-file-pdf"></i>
+                                </a>
+                              </td>
                               <td style="vertical-align: middle;text-align: center;">                
                                 <a href="<?= site_url('goods_management/order');?>" class="btn btn-sm btn-outline-primary" style="font-weight: 600; border-radius: 50px; width: 250px;">
                                 Feedback
@@ -142,6 +163,11 @@
                                 <button class="btn btn-sm btn-success" style="font-weight: 600; border-radius: 50px; width: 100%;">
                                   Approved
                                 </button>                                
+                              </td>
+                              <td style="vertical-align: middle;text-align: center;">
+                                <a href="path/to/pdf/file.pdf" class="btn btn-sm btn-outline-primary" style="border-radius: 50px;" download>
+                                <i class="fas fa-file-pdf"></i>
+                                </a>
                               </td>
                               <td style="vertical-align: middle;text-align: center;">                
                                 <a href="<?= site_url('goods_management/order');?>" class="btn btn-sm btn-outline-primary" style="font-weight: 600; border-radius: 50px; width: 250px;">
