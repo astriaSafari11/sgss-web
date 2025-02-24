@@ -220,11 +220,18 @@
                   </div>
                   <!-- /.card-body -->
                   <div class="card-footer text-end">
+<<<<<<< HEAD
+                  <button class="btn btn-lg btn-secondary custom-btn" type="button" style="font-weight: 600; border-radius: 50px; color:#001F82; width: 150px;">
+                        Reset
+                    </button>
+                  <button class="btn btn-lg btn-secondary custom-btn" type="button" style="font-weight: 600; border-radius: 50px; color:#001F82; width: 150px;">
+=======
                   <button class="btn btn-sm btn-secondary custom-btn" type="button" onclick="location.reload()" style="font-weight: 600; border-radius: 50px; color:#001F82; width: 150px;">
                         Reset
                     </button>
 
                   <button class="btn btn-sm btn-secondary custom-btn" type="button" style="font-weight: 600; border-radius: 50px; color:#001F82; width: 150px;">
+>>>>>>> 8047b4bc38b97f7f3047305d8d038102378960c1
                         Submit
                     </button>
 
