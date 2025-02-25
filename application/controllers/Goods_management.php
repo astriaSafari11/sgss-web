@@ -11,8 +11,14 @@ class Goods_management extends CI_Controller
 
 	public function index()
 	{
+		// $this->db->from("t_stock_planned_request");
+		// $this->db->limit(5);
+		$query =  $this->db->get('t_stock_planned_request', 5, 1)->result();
+
+		$data['req_list'] = $query;		
+
 		$this->session->set_flashdata('page_title', 'PERFORMANCE DASHBOARD');
-		$this->load->view('goods-management/dashboard.php');
+		$this->load->view('goods-management/dashboard.php', $data);
 	}
 
 	public function feedback()

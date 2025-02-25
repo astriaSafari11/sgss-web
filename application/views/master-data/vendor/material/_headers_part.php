@@ -1,4 +1,4 @@
-<a href="<?= site_url('master_data/vendor_detail/'._encrypt($vendor->id));?>" class="btn btn-sm btn-outline-primary position-relative" style="font-weight: 600; border-radius: 50px; white-space:nowrap;">
+<a href="<?= site_url('master_data/vendor_detail/'._encrypt($vendor_detail->id));?>" class="btn btn-sm btn-outline-primary position-relative" style="font-weight: 600; border-radius: 50px; white-space:nowrap;">
                 <i class="fa-solid fa-arrow-left" style="margin-right:5px; margin-left: 5px;"></i>
                   Back
                 </a> 

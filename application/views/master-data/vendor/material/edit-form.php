@@ -125,6 +125,41 @@
                             <!--begin::Col-->
                             <div class="col-3">
                               <div class="form-floating mb-3">
+                                <input type="text" class="form-control" id="floatingInput" placeholder="name@example.com" value ="<?php echo myNum($material->lt_po_deliv);?>" disabled>
+                                <label for="floatingInput" class="fw-bold text-primary">Total Lead Time</label>
+                              </div>
+                            </div>
+                            <!--end::Col-->      
+                            <!--begin::Col-->
+                            <div class="col-3">
+                              <div class="form-floating mb-3">
+                                <input type="text" class="form-control" id="floatingInput" placeholder="name@example.com" value ="<?php echo myNum($material->standart_safety_stock);?>" disabled>
+                                <label for="floatingInput" class="fw-bold text-primary">Standart Safety Stock</label>
+                              </div>
+                            </div>
+                            <!--end::Col-->
+                            <!--begin::Col-->
+                            <div class="col-3">
+                              <div class="form-floating mb-3">
+                                <input type="text" class="form-control" id="floatingInput" placeholder="name@example.com" value ="<?php echo myNum($material->moq*$material->price_per_uom);?>" disabled>
+                                <label for="floatingInput" class="fw-bold text-primary">Total Price</label>
+                              </div>
+                            </div>
+                            <!--end::Col-->
+                            <!--begin::Col-->
+                            <div class="col-3">
+                              <div class="form-floating mb-3">
+                                <input type="text" class="form-control" id="floatingInput" placeholder="name@example.com" value ="<?php echo myDecimal($material->price_equal_moq/($material->moq*$material->price_per_uom));?> %" disabled>
+                                <label for="floatingInput" class="fw-bold text-primary">Saving</label>
+                              </div>
+                            </div>
+                            <!--end::Col-->
+                          </div>                              
+                          <hr class="divider">      
+                          <div class="row">
+                            <!--begin::Col-->
+                            <div class="col-3">
+                              <div class="form-floating mb-3">
                                 <input type="text" class="form-control" id="floatingInput" placeholder="name@example.com" name="var_todo_list" value ="<?php echo $var_settings->var_todo_list;?>">
                                 <label for="floatingInput" class="fw-bold text-primary">Todo list variable</label>
                               </div>

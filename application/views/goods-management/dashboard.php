@@ -59,13 +59,14 @@
                           </tr>
                       </thead>
                       <tbody>
-                          <tr>
-                              <td style="vertical-align: middle;text-align: center;">2011-04-25</td>
-                              <td style="vertical-align: middle;text-align: center;">2011-04-25</td>
-                              <td style="vertical-align: middle;text-align: center;">ALK001</td>
-                              <td style="vertical-align: middle;text-align: center;">Alkohol</td>
-                              <td style="vertical-align: middle;text-align: center;">100</td>
-                              <td style="vertical-align: middle;text-align: center;">ml</td>
+                          <?php foreach($req_list as $k => $v){ ?>
+                            <tr>
+                              <td style="vertical-align: middle;text-align: center;"><?php echo mDate($v->due_date);?></td>
+                              <td style="vertical-align: middle;text-align: center;"><?php echo mDate($v->until_due_date);?></td>
+                              <td style="vertical-align: middle;text-align: center;"><?php echo $v->item_code;?></td>
+                              <td style="vertical-align: middle;text-align: center;"><?php echo $v->item_name;?></td>
+                              <td style="vertical-align: middle;text-align: center;"><?php echo $v->qty;?></td>
+                              <td style="vertical-align: middle;text-align: center;"><?php echo $v->uom;?></td>
                               <td style="vertical-align: middle;text-align: center;">
                                 <button class="btn btn-sm btn-danger" style="font-weight: 600; border-radius: 50px; width: 100%;">
                                   Urgent
@@ -80,104 +81,8 @@
                                 </button>  
                               </td>
                           </tr>
-                          <tr>
-                            <td style="vertical-align: middle;text-align: center;">2011-04-25</td>
-                            <td style="vertical-align: middle;text-align: center;">2011-04-25</td>
-                            <td style="vertical-align: middle;text-align: center;">ALK001</td>
-                            <td style="vertical-align: middle;text-align: center;">Alkohol</td>
-                            <td style="vertical-align: middle;text-align: center;">100</td>
-                            <td style="vertical-align: middle;text-align: center;">ml</td>
-                            <td style="vertical-align: middle;text-align: center;">
-                                <button class="btn btn-sm btn-danger" style="font-weight: 600; border-radius: 50px; width: 100%;">
-                                  Urgent
-                                </button>                                
-                              </td>
-                              <td style="vertical-align: middle;text-align: center;">                
-                                <a href="<?= site_url('goods_management/order');?>" class="btn btn-sm btn-outline-primary" style="font-weight: 600; border-radius: 50px; width: 150px;">
-                                ORDER NOW
-                                </a>  
-                                <button type="button" class="btn btn-sm btn-outline-primary" style="font-weight: 600; border-radius: 50px; width: 150px;">
-                                  IGNORE
-                                </button>  
-                              </td>
-                        </tr>
-                        <tr>
-                          <td style="vertical-align: middle;text-align: center;">2011-04-25</td>
-                          <td style="vertical-align: middle;text-align: center;">2011-04-25</td>
-                          <td style="vertical-align: middle;text-align: center;">ALK001</td>
-                          <td style="vertical-align: middle;text-align: center;">Alkohol</td>
-                          <td style="vertical-align: middle;text-align: center;">100</td>
-                          <td style="vertical-align: middle;text-align: center;">ml</td>
-                          <td style="vertical-align: middle;text-align: center;">
-                                <button class="btn btn-sm btn-danger" style="font-weight: 600; border-radius: 50px; width: 100%;">
-                                  Urgent
-                                </button>                                
-                              </td>
-                              <td style="vertical-align: middle;text-align: center;">                
-                                <a href="<?= site_url('goods_management/order');?>" class="btn btn-sm btn-outline-primary" style="font-weight: 600; border-radius: 50px; width: 150px;">
-                                ORDER NOW
-                                </a>  
-                                <button type="button" class="btn btn-sm btn-outline-primary" style="font-weight: 600; border-radius: 50px; width: 150px;">
-                                  IGNORE
-                                </button>  
-                              </td>
-                      </tr>
-                      <tr>
-                        <td style="vertical-align: middle;text-align: center;">2011-04-25</td>
-                        <td style="vertical-align: middle;text-align: center;">2011-04-25</td>
-                        <td style="vertical-align: middle;text-align: center;">ALK001</td>
-                        <td style="vertical-align: middle;text-align: center;">Alkohol</td>
-                        <td style="vertical-align: middle;text-align: center;">100</td>
-                        <td style="vertical-align: middle;text-align: center;">ml</td>
-                        <td style="vertical-align: middle;text-align: center;">
-                                <button class="btn btn-sm btn-warning" style="font-weight: 600; border-radius: 50px; width: 100%;">
-                                  Medium
-                                </button>                                
-                              </td>
-                              <td style="vertical-align: middle;text-align: center;">                
-                                <a href="<?= site_url('goods_management/order');?>" class="btn btn-sm btn-outline-primary" style="font-weight: 600; border-radius: 50px; width: 150px;">
-                                ORDER NOW
-                                </a>  
-                                <button type="button" class="btn btn-sm btn-outline-primary" style="font-weight: 600; border-radius: 50px; width: 150px;">
-                                  IGNORE
-                                </button>  
-                              </td>
-                    </tr>  
-                    <tr>
-                        <td style="vertical-align: middle;text-align: center;">2011-04-25</td>
-                        <td style="vertical-align: middle;text-align: center;">2011-04-25</td>
-                        <td style="vertical-align: middle;text-align: center;">ALK001</td>
-                        <td style="vertical-align: middle;text-align: center;">Alkohol</td>
-                        <td style="vertical-align: middle;text-align: center;">100</td>
-                        <td style="vertical-align: middle;text-align: center;">ml</td>
-                        <td style="vertical-align: middle;text-align: center;">
-                                <button class="btn btn-sm btn-warning" style="font-weight: 600; border-radius: 50px; width: 100%;">
-                                  Medium
-                                </button>                                
-                              </td>
-                              <td style="vertical-align: middle;text-align: center;">                
-                                <a href="<?= site_url('goods_management/order');?>" class="btn btn-sm btn-outline-primary" style="font-weight: 600; border-radius: 50px; width: 150px;">
-                                ORDER NOW
-                                </a>  
-                                <button type="button" class="btn btn-sm btn-outline-primary" style="font-weight: 600; border-radius: 50px; width: 150px;">
-                                  IGNORE
-                                </button>  
-                              </td>
-                    </tr>                     
-                    <!--                                            
-                      <tfoot>
-                        <tr >
-                          <th style="color: #fff;background-color: #001F82;text-align: center;">Due Date</th>
-                          <th style="color: #fff;background-color: #001F82;text-align: center;">Until Due Date</th>
-                          <th style="color: #fff;background-color: #001F82;text-align: center;">Item Code</th>
-                          <th style="color: #fff;background-color: #001F82;text-align: center;">Item</th>
-                          <th style="color: #fff;background-color: #001F82;text-align: center;">Qty</th>
-                          <th style="color: #fff;background-color: #001F82;text-align: center;">UoM</th>
-                          <th style="color: #fff;background-color: #001F82;text-align: center;">Status</th>
-                          <th style="color: #fff;background-color: #001F82;text-align: center;">Action</th>
-                      </tr>
-                      </tfoot>
-                    -->
+
+                          <?php } ?>
                   </table>              
                   </div>
                   <!-- /.card-body -->

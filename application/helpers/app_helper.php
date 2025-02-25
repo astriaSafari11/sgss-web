@@ -135,7 +135,7 @@ function _encrypt($key=""){
 	// );
 
 	// $encrypt = $CI->encryption->encrypt(trim($key));
-	return urlencode(base64_encode($key));
+	return $key;
 }
 
 function _decrypt($key=""){
@@ -149,7 +149,7 @@ function _decrypt($key=""){
 	// 	)
 	// );
 	// $decrypt = base64_decode($key);
-	return urlencode(base64_decode($key));
+	return $key;
 }
 
 function send_email($to, $name, $position, $subject, $body, $template) 

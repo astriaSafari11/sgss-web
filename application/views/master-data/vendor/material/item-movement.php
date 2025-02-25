@@ -86,15 +86,15 @@
                                   <tr >
                                       <th style="color: #fff;background-color:#001F82;text-align: center;vertical-align: middle;" rowspan="3">Period</th>
                                       <th style="color: #fff;background-color:#001F82;text-align: center;vertical-align: middle;" rowspan="3">Initial Value</th>
-                                      <th style="color: #fff;background-color:#001F82;text-align: center;vertical-align: middle;" colspan="<?php echo $total_gross_req;?>">Week</th>
+                                      <th style="color: #fff;background-color:#001F82;text-align: center;vertical-align: middle;" colspan="<?php echo 12;?>">Week</th>
                                   </tr>
                                   <tr >
-                                      <?php for($i=1;$i<=$total_gross_req;$i++){ ?>
+                                      <?php for($i=1;$i<=12;$i++){ ?>
                                         <th style="color: #fff;background-color:#001F82;text-align: center;"><?php echo $i;?></th>
                                       <?php } ?>
                                   </tr>
                                   <tr >
-                                      <?php for($i=1;$i<=$total_gross_req;$i++){ ?>
+                                      <?php for($i=1;$i<=12;$i++){ ?>
                                         <th style="color: #fff;background-color:#001F82;text-align: center;">
                                           <button class="btn btn-sm btn-primary" data-bs-toggle="modal" data-bs-target="#modal-edit-value-<?php echo $i;?>">
                                             <i class="fa-solid fa-pen-to-square"></i>		
@@ -107,56 +107,56 @@
                                 <tr>
                                   <td>Gross Requirements</td>
                                   <td></td>
-                                  <?php for($i=1;$i<=$total_gross_req;$i++){ ?>
+                                  <?php for($i=1;$i<=12;$i++){ ?>
                                     <td style="text-align: center;"><?php echo $item_movement[$i-1]->gross_requirement==0?'-':myNum($item_movement[$i-1]->gross_requirement);?></td>
                                   <?php } ?>                                  
                                 </tr>     
                                 <tr>
                                   <td>Schedule Receipts</td>
                                   <td></td>
-                                  <?php for($i=1;$i<=$total_gross_req;$i++){ ?>
+                                  <?php for($i=1;$i<=12;$i++){ ?>
                                     <td style="text-align: center;"><?php echo $item_movement[$i-1]->schedules_receipts==0?'-':myNum($item_movement[$i-1]->schedules_receipts);?></td>
                                   <?php } ?>                                  
                                 </tr>                                                   
                                 <tr>
                                   <td>Stock on Hand</td>
                                   <td  style="text-align: center;"><?php echo myNum($material->initial_stock);?></td>
-                                  <?php for($i=1;$i<=$total_gross_req;$i++){ ?>
+                                  <?php for($i=1;$i<=12;$i++){ ?>
                                     <td style="text-align: center;"><?php echo $item_movement[$i-1]->stock_on_hand==0?'-':myNum($item_movement[$i-1]->stock_on_hand);?></td>
                                   <?php } ?>                                  
                                 </tr> 
                                 <tr>
                                   <td>Current Safety Stock</td>
-                                  <td></td>
-                                  <?php for($i=1;$i<=$total_gross_req;$i++){ ?>
+                                  <td  style="text-align: center;"><?php echo myNum(min($material->initial_stock, $material->standart_safety_stock));?></td>
+                                  <?php for($i=1;$i<=12;$i++){ ?>
                                     <td style="text-align: center;"><?php echo $item_movement[$i-1]->current_safety_stock==0?'-':myNum($item_movement[$i-1]->current_safety_stock);?></td>
                                   <?php } ?>                                  
                                 </tr> 
                                 <tr>
                                   <td>Net On Hand</td>
-                                  <td></td>
-                                  <?php for($i=1;$i<=$total_gross_req;$i++){ ?>
+                                  <td  style="text-align: center;"><?php echo myNum($material->initial_stock-$material->standart_safety_stock);?></td>
+                                  <?php for($i=1;$i<=12;$i++){ ?>
                                     <td style="text-align: center;"><?php echo $item_movement[$i-1]->net_on_hand==0?'-':myNum($item_movement[$i-1]->net_on_hand);?></td>
                                   <?php } ?>                                  
                                 </tr>
                                 <tr>
                                   <td>Net Requirement</td>
                                   <td></td>
-                                  <?php for($i=1;$i<=$total_gross_req;$i++){ ?>
+                                  <?php for($i=1;$i<=12;$i++){ ?>
                                     <td style="text-align: center;"><?php echo $item_movement[$i-1]->net_requirement==0?'-':myNum($item_movement[$i-1]->net_requirement);?></td>
                                   <?php } ?>                                  
                                 </tr> 
                                 <tr>
                                   <td>Planned Order Receipts</td>
                                   <td></td>
-                                  <?php for($i=1;$i<=$total_gross_req;$i++){ ?>
+                                  <?php for($i=1;$i<=12;$i++){ ?>
                                     <td style="text-align: center;"><?php echo $item_movement[$i-1]->planned_order_receipt==0?'-':myNum($item_movement[$i-1]->planned_order_receipt);?></td>
                                   <?php } ?>                                  
                                 </tr>                       
                                 <tr>
                                   <td>Planned Order Release</td>
                                   <td></td>
-                                  <?php for($i=1;$i<=$total_gross_req;$i++){ ?>
+                                  <?php for($i=1;$i<=12;$i++){ ?>
                                     <td style="text-align: center;"><?php echo $item_movement[$i-1]->planned_order_release==0?'-':myNum($item_movement[$i-1]->planned_order_release);?></td>
                                   <?php } ?>                                  
                                 </tr>                                                                                                                                            
@@ -167,7 +167,7 @@
                         </div>         
                       </div>                     
                     </div>
-                    <?php for($i=1;$i<=$total_gross_req;$i++){ ?>
+                    <?php for($i=1;$i<=12;$i++){ ?>
                       <form action="<?php echo site_url('master_data/update_item_movement');?>" method="post">
                         <div class="modal fade" id="modal-edit-value-<?php echo $i;?>" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
                             <input type="hidden" name="material_movement_id" value="<?php echo $item_movement[$i-1]->id;?>">
