@@ -1,16 +1,13 @@
 <div class="row mb-2">
               <div class="col-sm-6">
-                <a href="<?= site_url('master_data/vendor_list');?>" class="btn btn-sm btn-outline-primary position-relative" style="font-weight: 600; border-radius: 50px; white-space:nowrap;">
-                <i class="fa-solid fa-arrow-left" style="margin-right:5px; margin-left: 5px;"></i>
-                  Back
-                </a> 
+                <?php $this->load->view('master-data/vendor/material/_headers_part.php'); ?>                     
               </div>
               <div class="col-sm-6">
               </div>
             </div>
             <div class="row mb-2">
               <div class="col-sm-3">
-                <a href="<?= site_url('master_data/vendor_list');?>" class="btn btn-primary position-relative" style="font-weight: 600; white-space:nowrap;">
+                <a class="btn btn-primary position-relative" style="font-weight: 600; white-space:nowrap;">
                   General Information
                 </a> 
               </div>
@@ -122,7 +119,42 @@
                               </div>
                             </div>                                                                                       
                             <!--end::Col-->                                                                                    
-                          </div>                    
+                          </div>          
+                          <hr class="divider">      
+                          <div class="row">
+                            <!--begin::Col-->
+                            <div class="col-3">
+                              <div class="form-floating mb-3">
+                                <input type="text" class="form-control" id="floatingInput" placeholder="name@example.com" name="var_todo_list" value ="<?php echo $var_settings->var_todo_list;?>">
+                                <label for="floatingInput" class="fw-bold text-primary">Todo list variable</label>
+                              </div>
+                            </div>
+                            <!--end::Col-->      
+                            <!--begin::Col-->
+                            <div class="col-3">
+                              <div class="form-floating mb-3">
+                                <input type="text" class="form-control" id="floatingInput" placeholder="name@example.com" name="var_stock_card_todo_list" value ="<?php echo $var_settings->var_stock_card_todo_list;?>">
+                                <label for="floatingInput" class="fw-bold text-primary">Stock card todo list variable</label>
+                              </div>
+                            </div>
+                            <!--end::Col-->
+                            <!--begin::Col-->
+                            <div class="col-3">
+                              <div class="form-floating mb-3">
+                                <input type="text" class="form-control" id="floatingInput" placeholder="name@example.com" name="var_stock_card_overstock" value ="<?php echo $var_settings->var_stock_card_overstock;?>">
+                                <label for="floatingInput" class="fw-bold text-primary">Stock card overstock variable</label>
+                              </div>
+                            </div>
+                            <!--end::Col-->
+                            <!--begin::Col-->
+                            <div class="col-3">
+                              <div class="form-floating mb-3">
+                                <input type="text" class="form-control" id="floatingInput" placeholder="name@example.com" name="var_stock_card_ok" value ="<?php echo $var_settings->var_stock_card_ok;?>">
+                                <label for="floatingInput" class="fw-bold text-primary">Stock card ok variable</label>
+                              </div>
+                            </div>
+                            <!--end::Col-->                            
+                          </div>                              
                         </div>         
                       </div>                     
                     </div>
@@ -141,17 +173,17 @@
             <div class="row mb-2">
               <div class="col-sm-6">
                 <a class="btn btn-primary position-relative" style="font-weight: 600; white-space:nowrap;">
-                  Stock Card Formula
+                  Gross Requirement Formula
                 </a> 
-              </div>
+              </div>             
             </div>            
             <!--begin::Row-->            
             <div class="row">
-              <div class="col-6 mb-4">
-              <table id="table-item" class="table table-bordered" width="100%">
+              <div class="col-12 mb-4">
+                    <table id="table-item" class="table table-sm table-bordered" width="100%">
                       <thead  style="text-align: center;white-space:nowrap;">
                           <tr >
-                              <th style="color: #fff;background-color:#001F82;text-align: center;">No.</th>
+                              <th style="color: #fff;background-color:#001F82;text-align: center;">Year</th>
                               <th style="color: #fff;background-color:#001F82;text-align: center;">Week</th>
                               <th style="color: #fff;background-color:#001F82;text-align: center;">Type</th>
                               <th style="color: #fff;background-color:#001F82;text-align: center;">AVG Week Start</th>
@@ -162,8 +194,8 @@
                       <tbody style="text-align: center;white-space:nowrap;vertical-align:center;">                       
                       </tbody>
                     </table> 
-              </div>
-            </div>                          
+              </div>            
+            </div>             
           </div>           
           <script>
       $(document).ready(function() {
@@ -173,7 +205,7 @@
               "serverSide": true, 
               "ordering": false,
               "ajax": {
-                "url": "<?= site_url('master_data/get_material_list_by_vendor?id='._encrypt($vendor->vendor_code));?>",
+                "url": "<?= site_url('master_data/get_gross_req?id='._encrypt($material->id));?>",
                 "type": "POST"
               },
               "order": [],        

@@ -8,6 +8,7 @@ class Master_data extends CI_Controller
 		parent::__construct();
 		$this->load->model('auth_model');
 		$this->load->model('master_model');
+		$this->load->model('gross_req_model');
 		if(!$this->auth_model->current_user()){
 			redirect('auth/login');
 		}
@@ -301,7 +302,7 @@ class Master_data extends CI_Controller
 				$row[] = myCurr($field->total_price);
 				$row[] = myCurr($field->price_equal_moq);
 				$row[] = myCurr($field->price_moq_divide_moq);
-				$row[] = myDecimal($field->saving);
+				$row[] = myDecimal($field->saving)." %";
 				$row[] = $field->place_to_buy;
 				$row[] = $link;
 				$row[] = $edit;
@@ -520,11 +521,45 @@ class Master_data extends CI_Controller
 		$data['material'] = $this->db->get_where("m_vendor_material",array(
 			"id"	=> $id,
 		))->row();		
+
+		$data['var_settings'] = $this->db->get_where("m_variable_settings",array(
+			"vendor_material_id"	=> $id,
+		))->row();		
+
 		// debugCode($data);
 
 		$this->session->set_flashdata('page_title', 'FORM EDIT VENDOR MATERIAL');
 		load_view('master-data/vendor/material/edit-form', $data);
 	}
+
+	public function item_movement()
+	{
+		$id = _decrypt($this->uri->segment(3));
+		$data['vendor'] = $this->db->get_where("view_master_vendor",array(
+			"id"	=> $id,
+		))->row();		
+
+		$data['material'] = $this->db->get_where("m_vendor_material",array(
+			"id"	=> $id,
+		))->row();		
+
+		$data['var_settings'] = $this->db->get_where("m_variable_settings",array(
+			"vendor_material_id"	=> $id,
+		))->row();		
+
+		$data['gross_req'] = $this->db->get_where("m_stock_card_formula",array(
+			"vendor_material_id"	=> $id,
+		))->result();		
+		
+		$data['item_movement'] = $this->db->get_where("t_material_movement",array(
+			"vendor_material_id"	=> $id,
+		))->result();	
+
+		$data['total_gross_req'] = count($data['gross_req']);
+
+		$this->session->set_flashdata('page_title', 'INPUT ITEM MOVEMENT MATERIAL');
+		load_view('master-data/vendor/material/item-movement', $data);
+	}	
 
 	public function update_vendor_material()
 	{
@@ -535,6 +570,9 @@ class Master_data extends CI_Controller
 			))->row();
 			$lt_po_deliv = $vendor->est_lead_time + $this->input->post('lt_pr_po');
 			$standart_safety_stock = ($this->input->post('lt_pr_po')/$this->input->post('order_cycle'))*$this->input->post('lot_size');
+			$price_per_uom = str_replace(',', '', $this->input->post('price_per_uom'));
+			$price_equal_moq = str_replace(',', '', $this->input->post('price_equal_moq'));
+
 			$inserted = _update(
 				"m_vendor_material", 
 				array(
@@ -546,12 +584,23 @@ class Master_data extends CI_Controller
 					"lt_po_deliv"					=> $lt_po_deliv,	
 					"standart_safety_stock"			=> $standart_safety_stock,	
 					// "initial_value_for_to_do"		=> $this->input->post('uom'),	
-					"price_per_uom"					=> $this->input->post('price_per_uom'),	
-					"price_equal_moq"				=> $this->input->post('price_equal_moq'),	
+					"price_per_uom"					=> $price_per_uom,	
+					"price_equal_moq"				=> $price_equal_moq,	
 					"place_to_buy"					=> $this->input->post('place_to_buy'),	
 					"link"							=> $this->input->post('link'),	
 
 				), array("id" => $id)
+			);
+
+			_update(
+				"m_variable_settings", 
+				array(
+					"var_todo_list" 					=> $this->input->post('var_todo_list'),
+					"var_stock_card_todo_list" 			=> $this->input->post('var_stock_card_todo_list'),
+					"var_stock_card_overstock"			=> $this->input->post('var_stock_card_overstock'),
+					"var_stock_card_ok"					=> $this->input->post('var_stock_card_ok'),	
+
+				), array("vendor_material_id" => $id)
 			);
 
 			if($inserted){
@@ -572,6 +621,137 @@ class Master_data extends CI_Controller
 			redirect('master_data/edit_vendor_material/'._encrypt($id));
 		}else{
 			redirect('master_data/vendor_list');
+		}
+	}	
+	
+	function get_gross_req()
+	{		
+		$search = array(
+			"vendor_material_id" => _decrypt($this->input->get('id'))
+		);
+		$list = $this->gross_req_model->get_datatables($search);
+
+		$data = array();
+		$no = $_POST['start'];
+		foreach ($list as $field) {
+				$edit 	= '
+				<a href="'.site_url('master_data/edit_vendor_material/'._encrypt($field->id)).'" class="btn btn-sm btn-outline-primary" target="_blank">
+					<i class="fa-solid fa-pen-to-square"></i>		
+				</a>';
+
+
+				$manual 	= '
+				<a class="btn btn-sm btn-primary" target="_blank">
+					manual		
+				</a>';
+
+				$formula 	= '
+				<a class="btn btn-sm btn-warning" target="_blank">
+					formula		
+				</a>';				
+
+				$row = array();
+				$row[] = $field->year;
+				$row[] = $field->week;
+				$row[] = $field->type=='manual'?$manual:$formula;
+				$row[] = $field->type=='manual'?'-':$field->week_start_average;
+				$row[] = $field->type=='manual'?'-':$field->week_end_average;
+				$row[] = $edit;
+				$data[] = $row;
+		}
+
+		$output = array(
+				"draw" => $_POST['draw'],
+				"recordsTotal" => $this->gross_req_model->count_all($search),
+				"recordsFiltered" => $this->gross_req_model->count_filtered($search),
+				"data" => $data,
+		);
+		//output dalam format JSON
+		echo json_encode($output);
+	}	
+
+	public function update_item_movement()
+	{
+		if(isset($_POST['submit'])){
+			$id = $this->input->post('material_movement_id');			
+			$get_data = $this->db->get_where("t_material_movement",array(
+				"id"	=> $id,
+			))->row();
+			$get_initial_week = $get_data->week;
+
+			$get_material = $this->db->get_where("m_vendor_material",array(
+				"id"	=> $get_data->vendor_material_id,
+			))->row();			
+
+			$gross_req = $this->input->post('gross_requirement');
+			$schedule_receipt = $this->input->post('schedule_receipt');
+			$get_last_week = date('W', strtotime('December 28th'));
+			$total_data = array();
+			for($i = $get_initial_week; $i <= $get_last_week; $i++){
+				$get_stock_card = $this->db->get_where("m_stock_card_formula",array(
+					"vendor_material_id"	=> $get_data->vendor_material_id,
+					"week" => $i
+				))->row();			
+
+				if($get_data->week == 1){
+					$stock_on_hand = ($gross_req+$schedule_receipt)-$get_material->initial_stock;
+					$current_safety_stock = $stock_on_hand;
+					$net_on_hand = $stock_on_hand-$current_safety_stock;
+					$net_requirement = min($stock_on_hand,0);					
+				}else{
+					$get_prev_week_data = $this->db->get_where("t_material_movement",array(
+						"vendor_material_id"	=> $get_data->vendor_material_id,
+						"week" => $i-1
+					))->row();				
+
+					$stock_on_hand = ($gross_req+$schedule_receipt)-$get_prev_week_data->stock_on_hand;
+					$current_safety_stock = $stock_on_hand;
+					$net_on_hand = $stock_on_hand-$current_safety_stock;
+					$net_requirement = min($stock_on_hand,0);	
+				}
+
+				if($get_stock_card->type=='manual'){
+					if($i == $get_initial_week){
+						$gross_req = $this->input->post('gross_requirement');
+					}else{
+						$gross_req = 0;
+					}					
+				}else{
+					$gross_req = get_avg_value($get_data->vendor_material_id,$i);
+				}
+
+				if($i == $get_initial_week){
+					$schedule_receipt = $this->input->post('schedule_receipt');
+				}else{
+					$schedule_receipt = 0;
+				}
+
+				$data= array(
+					'week' => $i,
+					'gross_requirement' => $gross_req,
+					'schedules_receipts' => $schedule_receipt,
+					'stock_on_hand' => $stock_on_hand,
+					'current_safety_stock' => $current_safety_stock,
+					'net_on_hand' => $net_requirement,
+					'net_requirement' => $net_requirement,
+					'planned_order_receipt' => 0,
+					'planned_order_release' => 0,					
+				);
+
+				_update('t_material_movement',$data, array(
+					"vendor_material_id"	=> $get_data->vendor_material_id,
+					"week" => $i
+				));
+			}
+
+			$err = array(
+				'show' => true,
+				'type' => 'success',
+				'msg'  => 'Successfully update material movement.'
+			);
+			$this->session->set_flashdata('toast', $err);
+
+			redirect('master_data/item_movement/'._encrypt($get_data->vendor_material_id));			
 		}
 	}		
 }
