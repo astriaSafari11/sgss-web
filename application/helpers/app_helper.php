@@ -124,32 +124,32 @@ function showToast($type="success",$msg=""){
 
 
 function _encrypt($key=""){
-	$CI =getCI();
-	$CI->load->library('encryption');
-	$CI->encryption->initialize(
-		array(
-				'cipher' => 'aes-128',
-				'mode' => 'ctr',
-				'key' => '#$6s5#2025#IDEA'
-		)
-	);
+	// $CI =getCI();
+	// $CI->load->library('encryption');
+	// $CI->encryption->initialize(
+	// 	array(
+	// 			'cipher' => 'aes-128',
+	// 			'mode' => 'ctr',
+	// 			'key' => '#$6s5#2025#IDEA'
+	// 	)
+	// );
 
-	$encrypt = $CI->encryption->encrypt(trim($key));
-	return urlencode(base64_encode($encrypt));
+	// $encrypt = $CI->encryption->encrypt(trim($key));
+	return urlencode(base64_encode($key));
 }
 
 function _decrypt($key=""){
-	$CI =getCI();
-	$CI->load->library('encryption');
-	$CI->encryption->initialize(
-		array(
-				'cipher' => 'aes-128',
-				'mode' => 'ctr',
-				'key' => '#$6s5#2025#IDEA'
-		)
-	);
-	$decrypt = base64_decode($key);
-	return urlencode($CI->encryption->decrypt($decrypt));
+	// $CI =getCI();
+	// $CI->load->library('encryption');
+	// $CI->encryption->initialize(
+	// 	array(
+	// 			'cipher' => 'aes-128',
+	// 			'mode' => 'ctr',
+	// 			'key' => '#$6s5#2025#IDEA'
+	// 	)
+	// );
+	// $decrypt = base64_decode($key);
+	return urlencode(base64_decode($key));
 }
 
 function send_email($to, $name, $position, $subject, $body, $template) 
