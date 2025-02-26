@@ -121,12 +121,39 @@
                       </div>
                       <!--end::Col-->                                                              
                       <!--begin::Col-->
-                      <div class="col-6">
+                      <!-- <div class="col-6">
                         <div class="form-floating mb-3">
                           <input type="email" class="form-control" id="floatingInput" placeholder="name@example.com">
                           <label for="floatingInput" class="fw-bold text-primary" style="font-size: 14px;">Attachment</label>
                         </div>
-                      </div>
+                      </div> -->
+                      <div class="col-6">
+                      <div class="col-6">
+    <div class="mb-3">
+        <label for="attachmentInput" class="fw-bold text-primary" style="font-size: 14px;">Attachment</label>
+        <div class="input-group">
+            <input type="file" class="form-control d-none" id="attachmentInput" accept="*/*">
+            <input type="text" class="form-control" placeholder="Choose file..." readonly>
+            <button class="btn btn-primary" type="button" id="uploadBtn">
+                <i class="bi bi-upload"></i>
+            </button>
+        </div>
+    </div>
+</div>
+
+<script>
+    document.getElementById("uploadBtn").addEventListener("click", function() {
+        document.getElementById("attachmentInput").click();
+    });
+
+    // Menampilkan nama file yang diunggah
+    document.getElementById("attachmentInput").addEventListener("change", function() {
+        let fileName = this.files.length > 0 ? this.files[0].name : "Choose file...";
+        this.nextElementSibling.value = fileName;
+    });
+</script>
+
+
                       <!--end::Col-->
                     </div>                    
                     <h3 class="mb-2 text-primary fw-bold">Item Information</h3>
@@ -220,7 +247,7 @@
                   </div>
                   <!-- /.card-body -->
                   <div class="card-footer text-end">
-                  <button class="btn btn-sm btn-secondary custom-btn" type="button" style="font-weight: 600; border-radius: 50px; color:#001F82; width: 150px;" onclick="location.reload();">
+                  <button class="btn btn-sm btn-danger custom-btn-danger" type="button" style="font-weight: 600; border-radius: 50px; color:#001F82; width: 150px;" onclick="location.reload();">
                         Reset
                     </button>
                   <button class="btn btn-sm btn-secondary custom-btn" type="button" style="font-weight: 600; border-radius: 50px; color:#001F82; width: 150px;">
@@ -237,6 +264,18 @@
 
                         .custom-btn:hover {
                             background-color: #001F82;
+                            color: white !important;
+                        }
+
+                        .custom-btn-danger {
+                            color: #DC3545; 
+                            border: 2px solid #001F82; 
+                            background-color: transparent;
+                            transition: all 0.3s ease-in-out;
+                        }
+
+                        .custom-btn-danger:hover {
+                            background-color: #DC3545;
                             color: white !important;
                         }
                     </style>

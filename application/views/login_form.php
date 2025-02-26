@@ -46,7 +46,15 @@
       bottom:-30px;
       right:-100px;
       }
-      </style>    
+
+      .form-control {
+    font-family: 'Poppins';
+      }
+
+      </style>
+      <!--tambah font poppins karena ntah kenapa nyangkut-->    
+      <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
     <!--  Favicon -->
     <link rel="shortcut icon" type="image/png" href="<?= base_url('assets/dist/images/logos/favicon.ico');?>" />    
     <!--begin::Third Party Plugin(OverlayScrollbars)-->
@@ -88,13 +96,13 @@
             <div class="input-group mb-2">
               <div class="form-floating">
                 <input id="loginEmail" type="text" class="form-control" name="username" value="" placeholder="" />
-                <label for="loginEmail" class="fw-bold text-primary fs-7">NIP</label>
+                <label for="loginEmail" class="text-primary fs-7">NIP</label>
               </div>
             </div>
             <div class="input-group mb-1">
               <div class="form-floating">
                 <input id="loginPassword" type="password" class="form-control" name="password" placeholder="" />
-                <label for="loginPassword" class="fw-bold text-primary fs-7">Password</label>
+                <label for="loginPassword" class="text-primary fs-7">Password</label>
               </div>
             </div>
             <a href="#" class="text-primary text-left text-decoration-none fw-bold mb-3 d-block">Forgot Password?</a>
