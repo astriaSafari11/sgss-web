@@ -54,25 +54,44 @@
       filter: grayscale(100%) brightness(1000%);
     }
 
+    .nav-item.sidebar a:hover i {
+      color: white !important;
+    }
+
+    .nav-item:hover > .nav-link img.icon,
+    .nav-item:focus-within > .nav-link img.icon {
+      filter: brightness(0) invert(1);
+    }
+
+    .nav-item:hover > .nav-link img.icon,
+    .nav-item.active > .nav-link img.icon {
+      filter: brightness(0) invert(1);
+    }
+
+
+    .nav-treeview:hover ~ .nav-link img.icon {
+      filter: brightness(0) invert(1);
+    }
+
+
     .user-menu {
-  display: d-flex;
-  align-items: center;
-  margin-top: 25px;
-}
+      display: d-flex;
+      align-items: center;
+      margin-top: 25px;
+    }
 
-.user-menu .text-end {
-  display: flex;
-  flex-direction: column;
-  align-items: flex-end; /* Pastikan teks rata kanan */
-  margin-right: 10px; /* Jarak antara teks dan foto */
-}
-
-.user-menu img {
-  width: 40px;
-  height: 40px;
-  object-fit: cover;
-}
-
+    .user-menu .text-end {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-end; 
+      margin-right: 10px; 
+    }
+    
+    .user-menu img {
+      width: 40px;
+      height: 40px;
+      object-fit: cover;
+    }
 
     </style>
 <!--=======-->
@@ -127,9 +146,9 @@
     <!--begin::End Navbar Links-->
     <ul class="navbar-nav ms-auto align-items-center">
       <!--begin::Notifications Dropdown Menu-->
-      <li class="nav-item dropdown me-4">
+      <li class="nav-item dropdown me-4 align-items-center">
         <a class="nav-link" data-bs-toggle="dropdown" href="#">
-          <i class="bi bi-bell-fill fs-3 align-items-center" style="color: #001F82;"></i>
+          <i class="bi bi-bell-fill fs-4 align-items-center" style="color: #001F82;"></i>
           <span class="navbar-badge badge text-bg-warning fs-8">1</span>
         </a>
         <div class="dropdown-menu dropdown-menu-lg dropdown-menu-end">
@@ -158,11 +177,11 @@
       <!--begin::User Info (Factory + Username)-->
 <li class="nav-item dropdown d-flex flex-column align-items-start me-4">
 
-    <span class="fw-bold text-primary">
+    <span class="text-primary fs-7">
         <i class="fa-solid fa-location-dot me-2" style="color: #001F82;"></i> 
         Factory <?php echo $this->session->userdata('user_factory'); ?>
     </span>
-    <a href="#" class="dropdown-toggle text-primary fw-bold d-flex align-items-center text-decoration-none" data-bs-toggle="dropdown">
+    <a href="#" class="dropdown-toggle text-primary fs-7 d-flex align-items-center text-decoration-none" data-bs-toggle="dropdown">
         <i class="fa-solid fa-user-circle me-2" style="color: #001F82;"></i>
         <?php echo $this->session->userdata('user_name'); ?>
     </a>
@@ -204,10 +223,31 @@
 </nav>
 <!--end::Header-->
 
+<script>
+  document.addEventListener("click", function (event) {
+    var sidebar = document.querySelector(".app-sidebar");
+    var dropdowns = document.querySelectorAll(".nav-treeview");
 
+    // Jika klik di luar sidebar, tutup semua submenu
+    if (!sidebar.contains(event.target)) {
+      dropdowns.forEach(function (dropdown) {
+        dropdown.style.display = "none"; 
+      });
+    }
+  });
 
-
-
+ 
+  document.querySelectorAll(".nav-item > .nav-link").forEach(function (link) {
+    link.addEventListener("click", function (event) {
+      event.stopPropagation();
+      var submenu = this.nextElementSibling;
+      if (submenu && submenu.classList.contains("nav-treeview")) {
+        submenu.style.display =
+          submenu.style.display === "block" ? "none" : "block";
+      }
+    });
+  });
+</script>
 
 
       
@@ -275,8 +315,12 @@
                   </li>
                 </ul>
               </li>                 -->
+
+
+              
+
               <li class="nav-item">
-                <a href="#" class="nav-link sidebar">
+                <a href="#" class="nav-link sidebar</a>">
                 <img
                   src="<?= base_url('assets/dist/images/goods_icon.png');?>"
                   alt="Goods Icon"
@@ -336,9 +380,24 @@
                 />
                 <p>Saving Simulator</p>  
               </a>
-              </li>                              
+              </li>
+
+              <li class="nav-item sidebar ms-1">
+                <a href="<?= site_url('auth/logout');?>" class="nav-link sidebar">
+                <i class="bi bi-box-arrow-right text-primary" style="font-size: 1.5rem;"></i>
+                <p>Log Out</p>  
+              </a>
+              </li>
+              
+              <!-- <li class="nav-item sidebar">
+                <a href="<?= site_url('logout');?>" class="nav-link sidebar text-primary">
+                  <i class="bi bi-box-arrow-right" style="font-size: 1.5rem;"></i>
+                    <p>Logout</p>  
+                </a>
+              </li> -->
+
             </ul>
-            <!--end::Sidebar Menu-->        
+            <!--end::Sidebar Menu-->
           </nav>
         </div>
         <!--end::Sidebar Wrapper-->

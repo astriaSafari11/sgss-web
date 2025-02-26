@@ -52,11 +52,13 @@
                               <th style="color: #fff;background-color: #001F82;text-align: center;">UoM</th>
                               <th style="color: #fff;background-color: #001F82;text-align: center;">Status</th>
                               <th style="color: #fff;background-color: #001F82;text-align: center;">Download</th>
-                              <th style="color: #fff;text-align: center;width: 400px;">
+                              <th style="color: #fff;background-color: #001F82;text-align: center; width: 30%;">Action</th>
+                              
+                              <!-- <th style="color: #fff;text-align: center;width: 400px;">
                                 <button class="btn btn-sm btn-primary" style="font-weight: 600; border-radius: 50px; width: 100%;">
                                 Action
                                 </button>
-                              </th>
+                              </th> -->
                           </tr>
                       </thead>
                       <tbody>

@@ -51,11 +51,13 @@
                               <th style="color: #fff;background-color: #001F82;text-align: center;">Qty</th>
                               <th style="color: #fff;background-color: #001F82;text-align: center;">UoM</th>
                               <th style="color: #fff;background-color: #001F82;text-align: center;">Status</th>
-                              <th style="color: #fff;text-align: center;width: 400px;">
-                                <button class="btn btn-sm btn-primary" style="font-weight: 600; border-radius: 50px; width: 100%;">
+                              <th style="color: #fff;background-color: #001F82;text-align: center; width: 30%;">Action</th>
+                              
+                              <!-- <th style="color: #fff;text-align: center;width: 400px;">
+                                <button class="btn btn-sm btn-primary" style="font-weight: 600; width: 100%;">
                                 Action
                                 </button>
-                              </th>
+                              </th> -->
                           </tr>
                       </thead>
                       <tbody>
@@ -76,7 +78,7 @@
                                 <a href="<?= site_url('goods_management/order');?>" class="btn btn-sm btn-outline-primary" style="font-weight: 600; border-radius: 50px; width: 150px;">
                                 ORDER NOW
                                 </a>  
-                                <button type="button" class="btn btn-sm btn-outline-primary" style="font-weight: 600; border-radius: 50px; width: 150px;">
+                                <button type="button" class="btn btn-sm btn-outline-danger" style="font-weight: 600; border-radius: 50px; width: 150px;">
                                   IGNORE
                                 </button>  
                               </td>
