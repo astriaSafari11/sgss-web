@@ -54,24 +54,41 @@
       filter: grayscale(100%) brightness(1000%);
     }
 
+    .nav-item:hover > .nav-link img.icon,
+    .nav-item:focus-within > .nav-link img.icon {
+      filter: brightness(0) invert(1);
+    }
+
+
+    .nav-item:hover > .nav-link img.icon,
+    .nav-item.active > .nav-link img.icon {
+      filter: brightness(0) invert(1);
+    }
+
+
+    .nav-treeview:hover ~ .nav-link img.icon {
+      filter: brightness(0) invert(1);
+    }
+
+
     .user-menu {
-  display: d-flex;
-  align-items: center;
-  margin-top: 25px;
-}
+      display: d-flex;
+      align-items: center;
+      margin-top: 25px;
+    }
 
-.user-menu .text-end {
-  display: flex;
-  flex-direction: column;
-  align-items: flex-end; /* Pastikan teks rata kanan */
-  margin-right: 10px; /* Jarak antara teks dan foto */
-}
-
-.user-menu img {
-  width: 40px;
-  height: 40px;
-  object-fit: cover;
-}
+    .user-menu .text-end {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-end; 
+      margin-right: 10px; 
+    }
+    
+    .user-menu img {
+      width: 40px;
+      height: 40px;
+      object-fit: cover;
+    }
 
 
     </style>
@@ -204,10 +221,31 @@
 </nav>
 <!--end::Header-->
 
+<script>
+  document.addEventListener("click", function (event) {
+    var sidebar = document.querySelector(".app-sidebar");
+    var dropdowns = document.querySelectorAll(".nav-treeview");
 
+    // Jika klik di luar sidebar, tutup semua submenu
+    if (!sidebar.contains(event.target)) {
+      dropdowns.forEach(function (dropdown) {
+        dropdown.style.display = "none"; 
+      });
+    }
+  });
 
-
-
+ 
+  document.querySelectorAll(".nav-item > .nav-link").forEach(function (link) {
+    link.addEventListener("click", function (event) {
+      event.stopPropagation();
+      var submenu = this.nextElementSibling;
+      if (submenu && submenu.classList.contains("nav-treeview")) {
+        submenu.style.display =
+          submenu.style.display === "block" ? "none" : "block";
+      }
+    });
+  });
+</script>
 
 
       
@@ -275,8 +313,12 @@
                   </li>
                 </ul>
               </li>                 -->
+
+
+              
+
               <li class="nav-item">
-                <a href="#" class="nav-link sidebar">
+                <a href="#" class="nav-link sidebar</a>">
                 <img
                   src="<?= base_url('assets/dist/images/goods_icon.png');?>"
                   alt="Goods Icon"
@@ -338,7 +380,7 @@
               </a>
               </li>                              
             </ul>
-            <!--end::Sidebar Menu-->        
+            <!--end::Sidebar Menu-->
           </nav>
         </div>
         <!--end::Sidebar Wrapper-->
