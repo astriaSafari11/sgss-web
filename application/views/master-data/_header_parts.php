@@ -10,6 +10,18 @@
                         Master Data
                       </button>
                       <ul class="dropdown-menu">
+                        <li><a class="dropdown-item" href="<?= site_url('master_data/uom');?>">
+                            <i class="fa-solid fa-box-archive" style="margin-right:5px; margin-left: 5px;"></i>
+                            UoM                           
+                        </a></li>
+                        <li><a class="dropdown-item" href="<?= site_url('master_data/category');?>">
+                            <i class="fa-solid fa-box-archive" style="margin-right:5px; margin-left: 5px;"></i>
+                            Category                    
+                        </a></li>                        
+                        <li><a class="dropdown-item" href="<?= site_url('master_data/factory');?>">
+                            <i class="fa-solid fa-box-archive" style="margin-right:5px; margin-left: 5px;"></i>
+                            Factory                   
+                        </a></li>                        
                         <li><a class="dropdown-item" href="<?= site_url('master_data/vendor_list');?>">
                             <i class="fa-solid fa-address-card" style="margin-right:5px; margin-left: 5px;"></i>
                             Vendor                           

@@ -160,7 +160,7 @@
                             <!--begin::Col-->
                             <div class="col-3">
                               <div class="form-floating mb-3">
-                                <input type="text" class="form-control" id="floatingInput" placeholder="name@example.com" name="var_todo_list" value ="<?php echo $var_settings->var_todo_list;?>">
+                                <input type="text" class="form-control" id="floatingInput" placeholder="name@example.com" name="var_todo_list" value ="<?php echo !empty($var_settings->var_todo_list)?$var_settings->var_todo_list:0;?>">
                                 <label for="floatingInput" class="fw-bold text-primary">Todo list variable</label>
                               </div>
                             </div>
@@ -168,7 +168,7 @@
                             <!--begin::Col-->
                             <div class="col-3">
                               <div class="form-floating mb-3">
-                                <input type="text" class="form-control" id="floatingInput" placeholder="name@example.com" name="var_stock_card_todo_list" value ="<?php echo $var_settings->var_stock_card_todo_list;?>">
+                                <input type="text" class="form-control" id="floatingInput" placeholder="name@example.com" name="var_stock_card_todo_list" value ="<?php echo !empty($var_settings->var_stock_card_todo_list)?$var_settings->var_stock_card_todo_list:0;?>">
                                 <label for="floatingInput" class="fw-bold text-primary">Stock card todo list variable</label>
                               </div>
                             </div>
@@ -176,7 +176,7 @@
                             <!--begin::Col-->
                             <div class="col-3">
                               <div class="form-floating mb-3">
-                                <input type="text" class="form-control" id="floatingInput" placeholder="name@example.com" name="var_stock_card_overstock" value ="<?php echo $var_settings->var_stock_card_overstock;?>">
+                                <input type="text" class="form-control" id="floatingInput" placeholder="name@example.com" name="var_stock_card_overstock" value ="<?php echo !empty($var_settings->var_stock_card_overstock)?$var_settings->var_stock_card_overstock:0;?>">
                                 <label for="floatingInput" class="fw-bold text-primary">Stock card overstock variable</label>
                               </div>
                             </div>
@@ -184,7 +184,7 @@
                             <!--begin::Col-->
                             <div class="col-3">
                               <div class="form-floating mb-3">
-                                <input type="text" class="form-control" id="floatingInput" placeholder="name@example.com" name="var_stock_card_ok" value ="<?php echo $var_settings->var_stock_card_ok;?>">
+                                <input type="text" class="form-control" id="floatingInput" placeholder="name@example.com" name="var_stock_card_ok" value ="<?php echo !empty($var_settings->var_stock_card_ok)?$var_settings->var_stock_card_ok:0;?>">
                                 <label for="floatingInput" class="fw-bold text-primary">Stock card ok variable</label>
                               </div>
                             </div>

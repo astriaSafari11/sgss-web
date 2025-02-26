@@ -35,7 +35,7 @@ function myNum($num=0,$curr=""){
 }
 
 function myCurr($num=0,$curr=""){
-	return "Rp. ".number_format($num,2,".",",");
+	return number_format($num,0,".",",");
 }
 
 function myDecimal($num=0,$curr=""){

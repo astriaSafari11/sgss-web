@@ -13,7 +13,7 @@ class Goods_management extends CI_Controller
 	{
 		// $this->db->from("t_stock_planned_request");
 		// $this->db->limit(5);
-		$query =  $this->db->get('t_stock_planned_request', 5, 1)->result();
+		$query =  $this->db->get('t_stock_planned_request')->result();
 
 		$data['req_list'] = $query;		
 

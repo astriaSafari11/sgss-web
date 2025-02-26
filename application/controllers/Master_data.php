@@ -399,9 +399,11 @@ class Master_data extends CI_Controller
 	public function save_material()
 	{
 		if(isset($_POST['submit'])){
+			$itemcode = strtolower($this->input->post('item_name').$this->input->post('uom').$this->input->post('size'));
+
 			$material_code = $this->input->post('material_code');
 			$exist = $this->db->get_where("m_master_data_material",array(
-				"item_code"	=> $this->input->post('material_code'),
+				"item_code"	=> $itemcode,
 			))->row();
 
 			if($exist){
@@ -413,11 +415,13 @@ class Master_data extends CI_Controller
 				$this->session->set_flashdata('toast', $err);
 				$this->load->view('master-data/material/add-form.php');		
 			}else{
+
 				$inserted = _add(
 					"m_master_data_material",
 					array(
-						"item_code" 				=> $this->input->post('item_code'),
+						"item_code" 				=> $itemcode,
 						"item_name" 				=> $this->input->post('item_name'),
+						"size" 						=> $this->input->post('size'),
 						"factory"					=> $this->input->post('factory'),
 						"uom"						=> $this->input->post('uom'),						
 					));				
@@ -540,6 +544,9 @@ class Master_data extends CI_Controller
 	public function item_movement()
 	{
 		$id = _decrypt($this->uri->segment(3));
+
+		generate_item_movement($id);
+
 		$data['vendor'] = $this->db->get_where("view_master_vendor",array(
 			"id"	=> $id,
 		))->row();		
@@ -607,6 +614,14 @@ class Master_data extends CI_Controller
 				), array("id" => $id)
 			);
 
+			$get_var_settings = $this->db->get_where("m_variable_settings",array(
+				"vendor_material_id" => $id
+			))->row();
+
+			if(empty($get_var_settings)){
+				generate_var_settings($id);
+			}
+
 			_update(
 				"m_variable_settings", 
 				array(
@@ -649,10 +664,73 @@ class Master_data extends CI_Controller
 		$data = array();
 		$no = $_POST['start'];
 		foreach ($list as $field) {
+				$frm = $field->type=='formula'?"selected":"";
+				$m = $field->type=='manual'?'selected':'';
 				$edit 	= '
-				<a href="'.site_url('master_data/edit_vendor_material/'._encrypt($field->id)).'" class="btn btn-sm btn-outline-primary" target="_blank">
+				<a class="btn btn-sm btn-outline-primary" data-bs-toggle="modal" data-bs-target="#modal-update-gross-req-'.$field->id.'">
 					<i class="fa-solid fa-pen-to-square"></i>		
-				</a>';
+				</a>
+                      <form action="'.site_url('master_data/update_gross_req/'._encrypt($field->id)).'" method="post">
+                        <div class="modal fade" id="modal-update-gross-req-'.$field->id.'" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                            <input type="hidden" name="material_movement_id" value="<?php echo $item_movement[$i-1]->id;?>">
+                            <div class="modal-dialog modal-lg">
+                              <div class="modal-content">
+                                <div class="modal-header">
+                                  <h5 class="modal-title" id="exampleModalLabel" class="text-primary" style="color: #001F82;font-weight:600;">Update Gross Requirement Data, Week '.$field->week.'</h5>
+                                  <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                </div>
+                                <div class="modal-body">
+                                  <div class="row">
+                                            <div class="col-12">
+                                              <div class="row">
+												<div class="col-4">
+													<div class="form-floating mb-3">
+														<select class="form-select" aria-label="Default select example" id="uom" style="height: 56px;" name="type" required>
+														<option value="">-- Select Method --</option>
+														<option value="formula" '.$frm.'>Formula</option>
+														<option value="manual" '.$m.'>Manual</option>
+														</select>
+														<label for="uom" class="fw-bold text-primary">Input Method</label>
+														<div class="invalid-feedback">This field is required.</div>
+													</div>
+												</div>										  
+                                                <!--begin::Col-->
+                                                <div class="col-4">
+                                                  <div class="form-floating mb-3">
+                                                    <input type="number" min="1" max="52" class="form-control" id="floatingInput" placeholder="name@example.com" name="week_start_average" value ="'.$field->week_start_average.'">
+                                                    <label for="floatingInput" class="fw-bold text-primary">AVG Week Start</label>
+                                                  </div>
+                                                </div>
+                                                <!--end::Col-->
+                                                <!--begin::Col-->
+                                                <div class="col-4">
+                                                  <div class="form-floating mb-3">
+                                                    <input type="number" min="1" max="52" class="form-control" id="floatingInput" placeholder="name@example.com" name="week_end_average" value ="'.$field->week_end_average.'">
+                                                    <label for="floatingInput" class="fw-bold text-primary">AVG Week End</label>
+                                                  </div>
+                                                </div>
+                                                <!--end::Col-->                              
+                                                <!--begin::Col-->
+                                                <div class="col-12">
+                                                  <div class="form-floating mb-3">
+                                                    <input type="text" class="form-control" id="floatingInput" placeholder="name@example.com" name="reason" value ="" required>
+                                                    <label for="floatingInput" class="fw-bold text-primary">Update Reason</label>
+                                                  </div>
+                                                </div>
+                                                <!--end::Col--> 												
+                                            </div>         
+                                          </div>
+                                          </div>
+                                </div>
+                                <div class="modal-footer">
+                                  <button type="button" class="btn btn-outline-warning" data-bs-dismiss="modal">Cancel</button>
+                                  <button type="submit" name="submit" class="btn btn-outline-primary">Update Data</button>
+                                </div>
+                              </div>
+                            </div>
+                        </div>  
+                      </form>				
+				';
 
 
 				$manual 	= '
@@ -684,7 +762,68 @@ class Master_data extends CI_Controller
 		//output dalam format JSON
 		echo json_encode($output);
 	}	
+	public function update_gross_req()
+	{
+		if(isset($_POST['submit'])){
 
+			if($this->input->post('week_start_average') <= $this->input->post('week_end_average')){
+				$err = array(
+					'show' => true,
+					'type' => 'error',
+					'msg'  => 'Average week start must be less than average week end.'
+				);
+				$this->session->set_flashdata('toast', $err);			
+			}
+
+			$id = _decrypt($this->uri->segment(3));			
+			$get_data = $this->db->get_where("m_stock_card_formula",array(
+				"id" => $id
+			))->row();
+
+			$inserted = _update(
+				"m_stock_card_formula", 
+				array(
+					"type" 						=> $this->input->post('type'),
+					"week_start_average" 		=> $this->input->post('week_start_average'),
+					"week_end_average"			=> $this->input->post('week_end_average'),
+				), array("id" => $id)
+			);
+
+			_add(
+				"t_stock_card_log", 
+				array(
+					"vendor_code" 				=> $get_data->vendor_code,
+					"item_code" 				=> $get_data->item_code,
+					"vendor_material_id"		=> $get_data->vendor_material_id,
+					"week"						=> $get_data->week,
+					"week_start_avg_og"			=> $get_data->week_start_average,
+					"week_end_avg_og"			=> $get_data->week_end_average,
+					"week_start_avg_up"			=> $this->input->post('week_start_average'),
+					"week_end_avg_up"			=> $this->input->post('week_end_average'),
+					"reason"					=> $this->input->post('reason'),
+				)
+			);
+
+			if($inserted){
+				$err = array(
+					'show' => true,
+					'type' => 'success',
+					'msg'  => 'Successfully update gross requirement formula.'
+				);
+				$this->session->set_flashdata('toast', $err);
+			}else{
+				$err = array(
+					'show' => true,
+					'type' => 'error',
+					'msg'  => 'Update gross requirement formula failed.'
+				);
+				$this->session->set_flashdata('toast', $err);
+			}
+			redirect('master_data/edit_vendor_material/'._encrypt($get_data->vendor_material_id));
+		}else{
+			redirect('master_data/material_list');
+		}
+	}
 	public function update_item_movement()
 	{
 		if(isset($_POST['submit'])){

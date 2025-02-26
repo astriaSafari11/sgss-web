@@ -21,13 +21,13 @@
                   <div class="card-body">
                     <div class="row">                      
                       <!--begin::Col-->
-                      <div class="col-6">
+                      <!-- <div class="col-6">
                         <div class="form-floating mb-3">
                           <input type="text" class="form-control" id="floatingInput" placeholder="material Code" name="item_code" required>
                           <label for="floatingInput" class="fw-bold text-primary">Material Code</label>
                           <div class="invalid-feedback">This field is required.</div>
                         </div>
-                      </div>
+                      </div> -->
                       <!--end::Col-->
                       <!--begin::Col-->
                       <div class="col-6">
@@ -37,6 +37,13 @@
                           <div class="invalid-feedback">This field is required.</div>
                         </div>
                       </div>
+                      <div class="col-6">
+                        <div class="form-floating mb-3">
+                          <input type="number" class="form-control" id="floatingInput" placeholder="name@example.com" name="size" required>
+                          <label for="floatingInput" class="fw-bold text-primary">Size</label>
+                          <div class="invalid-feedback">This field is required.</div>
+                        </div>
+                      </div>                      
                       <!--end::Col-->
                       <!--begin::Col-->
                       <div class="col-6">
