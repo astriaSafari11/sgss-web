@@ -149,7 +149,7 @@
                             <!--begin::Col-->
                             <div class="col-3">
                               <div class="form-floating mb-3">
-                                <input type="text" class="form-control" id="floatingInput" placeholder="name@example.com" value ="<?php echo myDecimal($material->price_equal_moq/($material->moq*$material->price_per_uom));?> %" disabled>
+                                <input type="text" class="form-control" id="floatingInput" placeholder="name@example.com" value ="<?php echo $material->moq!=0?myDecimal($material->price_equal_moq/($material->moq*$material->price_per_uom)):0;?> %" disabled>
                                 <label for="floatingInput" class="fw-bold text-primary">Saving</label>
                               </div>
                             </div>

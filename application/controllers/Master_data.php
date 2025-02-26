@@ -583,10 +583,10 @@ class Master_data extends CI_Controller
 				"vendor_code"	=> $get_data->vendor_code,
 			))->row();
 
-			$lt_po_deliv = $vendor->est_lead_time + $this->input->post('lt_pr_po');
-			$standart_safety_stock = ($lt_po_deliv/$this->input->post('order_cycle'))*$this->input->post('lot_size');
-			$price_per_uom = str_replace(',', '', $this->input->post('price_per_uom'));
-			$price_equal_moq = str_replace(',', '', $this->input->post('price_equal_moq'));
+			$lt_po_deliv = !empty($this->input->post('lt_pr_po'))?$vendor->est_lead_time + $this->input->post('lt_pr_po'):NULL;
+			$standart_safety_stock = !empty($this->input->post('order_cycle'))&&!empty($this->input->post('lot_size'))?($lt_po_deliv/$this->input->post('order_cycle'))*$this->input->post('lot_size'):NULL;
+			$price_per_uom = !empty($this->input->post('price_per_uom'))?str_replace(',', '', $this->input->post('price_per_uom')):NULL;
+			$price_equal_moq = !empty($this->input->post('price_equal_moq'))?str_replace(',', '', $this->input->post('price_equal_moq')):NULL;
 
 			$inserted = _update(
 				"m_vendor_material", 

@@ -42,6 +42,30 @@ function _add($table, $data){
     }
 }
 
+function _add_nologs($table, $data){
+    $CI = getCI();
+    if($CI->db->field_exists('user_add',$table)){			
+        $data['user_add'] = $CI->session->userdata('user_id');
+    }
+    
+    if($CI->db->field_exists('time_add',$table)){	
+        $data['time_add'] = date("Y-m-d H:i:s");
+    }
+
+    if($CI->db->field_exists('is_active',$table)){	
+        $data['is_active'] = 1;
+    }
+        
+    $exec =  $CI->db->insert(
+        $table,
+        $data
+    );
+
+    if($exec){ 
+        return $exec;
+    }
+}
+
 function _update($table, $data, $par){
     $CI = getCI();
 
@@ -153,7 +177,7 @@ function generate_gross_requirement($vendor_material_id){
                     'week_start_average' => $start_avg,
                     'week_end_average' => $end_avg,                
                 );
-                _add('m_stock_card_formula', $data);
+                _add_nologs('m_stock_card_formula', $data);
             }
         }
     }
@@ -181,7 +205,7 @@ function generate_var_settings($vendor_material_id){
             "var_stock_card_overstock"  => 10,
             'var_stock_card_ok'         => 10,
         );
-        _add('m_variable_settings', $data);
+        _add_nologs('m_variable_settings', $data);
     }
 }
 
@@ -222,7 +246,7 @@ function generate_item_movement($vendor_material_id){
                 'planned_order_receipt' => 0,
                 'planned_order_release' => 0,
             );
-            _add('t_material_movement', $data);
+            _add_nologs('t_material_movement', $data);
         }
     }
 }

@@ -173,7 +173,7 @@
                 </div>
                 <div class="modal-footer">
                   <button type="button" class="btn btn-outline-primary" data-bs-dismiss="modal">Cancel</button>
-                  <a type="button" class="btn btn-outline-primary" onclick="submit_material()">Add Material</a>
+                  <button type="button" class="btn btn-outline-primary" id="submitMat" onclick="submit_material()">Add Material</button>
                 </div>
               </div>
             </div>
@@ -231,6 +231,9 @@
   }
 
   function submit_material(){
+    $('#submitMat').attr('disabled', true);
+    $('#submitMat').text('Processing...');
+
     var values = {
       "item_code" : selectedItem,
       "vendor_code" : <?php echo $vendor->vendor_code;?>
