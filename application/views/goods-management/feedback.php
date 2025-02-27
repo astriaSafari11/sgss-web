@@ -1,4 +1,65 @@
 <?php $this->load->view('_partials/head.php'); ?>
+
+<style>
+.btn-custom-download:hover {
+    background-color: #001F82;
+    color: white;
+}
+
+.btn-custom-download:hover .file-icon {
+    color: white !important;
+}
+
+.dataTables_length label,
+.dataTables_filter label,
+.dataTables_info,
+.dataTables_paginate {
+    font-size: 12px !important;
+}
+
+.dataTables_length select {
+    font-size: 12px !important;
+}
+
+.dataTables_wrapper .dataTables_paginate .paginate_button {
+    font-size: 12px !important;
+}
+
+.dataTables_wrapper .dataTables_paginate .paginate_button a {
+    font-size: 12px !important;
+}
+</style>
+
+<!--script khusus buat perubahan ikon saat download, nanti baru dipindah-->
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+    document.querySelectorAll(".download-btn").forEach(function (btn) {
+        let fileName = btn.getAttribute("data-file");
+        let icon = btn.querySelector(".file-icon");
+
+        if (localStorage.getItem(fileName) === "downloaded") {
+            icon.className = "fas fa-file-circle-check text-success";
+        }
+
+        btn.addEventListener("click", function () {
+            setTimeout(() => {
+                icon.className = "fas fa-file-circle-check text-success";
+                localStorage.setItem(fileName, "downloaded");
+            }, 500);
+        });
+    });
+});
+
+function resetIcons() {
+    localStorage.clear(); // Hapus semua status download
+    document.querySelectorAll(".download-btn .file-icon").forEach(function (icon) {
+        icon.className = "fas fa-file-pdf text-primary"; // Kembalikan ikon ke PDF biasa
+    });
+    alert("Status download telah di-reset!");
+    location.reload();
+}
+</script>
+
 <div class="row mb-2 justify-between">
               <div class="col-sm-6">
                 <a href="<?= site_url('goods_management');?>"class="btn btn-sm btn-outline-primary position-relative" style="font-weight: 600; border-radius: 50px;">
@@ -16,6 +77,11 @@
               </div>
               <div class="col-sm-6">
                 <div class="d-flex justify-content-end">
+                  
+                <!--sementara untuk testing download icon logic-->
+                <button onclick="resetIcons()" class="btn btn-sm btn-outline-danger" style="font-weight: 600; border-radius: 50px; width: 150px;">Reset Download</button>
+
+
                   <button type="button" class="btn btn-sm btn-outline-primary" style="font-weight: 600; border-radius: 50px; width: 150px;">
                     Export
                   </button>                       
@@ -41,6 +107,58 @@
                     </div>
                   </div> -->
                   <div class="card-body">
+
+    <!-- Start Dropdown Show X Entries -->
+<div class="d-flex justify-content-between align-items-center flex-wrap">
+    <div class="d-flex align-items-center">
+        <label for="entriesSelect" class="me-2 fs-7">Show</label>
+        <select id="entriesSelect" class="form-select form-select-sm w-auto fs-7">
+            <option value="10">10</option>
+            <option value="25">25</option>
+            <option value="50">50</option>
+            <option value="100">100</option>
+        </select>
+        <span class="ms-2 fs-7">entries</span>
+    </div>
+    <!-- End Dropdown Show X Entries -->
+
+    <!-- Start Search + Filter -->
+    <div class="d-flex align-items-center gap-2 flex-wrap">
+        <!-- Filter 1 -->
+        <label for="filterBy1" class="small">Filter 1:</label>
+        <select id="filterBy1" class="form-select form-select-sm w-auto">
+            <option value="all">All</option>
+            <option value="0">Column 1</option>
+            <option value="1">Column 2</option>
+            <option value="2">Column 3</option>
+        </select>
+
+        <!-- Filter 2 -->
+        <label for="filterBy2" class="small">Filter 2:</label>
+        <select id="filterBy2" class="form-select form-select-sm w-auto">
+            <option value="all">All</option>
+            <option value="A">Category A</option>
+            <option value="B">Category B</option>
+            <option value="C">Category C</option>
+        </select>
+
+        <!-- Filter 3 -->
+        <label for="filterBy3" class="small">Filter 3:</label>
+        <select id="filterBy3" class="form-select form-select-sm w-auto">
+            <option value="all">All</option>
+            <option value="active">Active</option>
+            <option value="inactive">Inactive</option>
+        </select>
+
+        <!-- Search Button -->
+        <button class="btn btn-outline-primary btn-sm" type="button" id="searchBtn">
+            <i class="fas fa-search"></i>
+        </button>
+
+    </div>
+</div>
+  <!-- End Search + filter -->
+
                     <table id="example" class="table table-sm" style="width:100%" cellspacing="0">
                       <thead>
                           <tr>
@@ -74,11 +192,22 @@
                                   Rejected
                                 </button>                                
                               </td>
-                              <td style="vertical-align: middle;text-align: center;">
+                              <!-- <td style="vertical-align: middle;text-align: center;">
                                 <a href="path/to/pdf/file.pdf" class="btn btn-sm btn-outline-primary" style="border-radius: 50px;" download>
                                 <i class="fas fa-file-pdf"></i>
                                 </a>
+                              </td> -->
+
+                              <td style="vertical-align: middle; text-align: center;">
+                                <a href="path/to/pdf/file1.pdf"
+                                  class="btn btn-sm btn-outline-primary download-btn btn-custom-download"
+                                  style="border-radius: 50px;"
+                                  data-file="file1.pdf"
+                                download>
+                                <i class="fas fa-file-pdf text-primary file-icon"></i>
+                              </a>
                               </td>
+
                               <td style="vertical-align: middle;text-align: center;">                
                                 <a href="<?= site_url('goods_management/order');?>" class="btn btn-sm btn-outline-primary" style="font-weight: 600; border-radius: 50px; width: 250px;">
                                 Feedback
@@ -97,10 +226,21 @@
                                   Rejected
                                 </button>                                
                               </td>
-                              <td style="vertical-align: middle;text-align: center;">
+                              
+                              <td style="vertical-align: middle; text-align: center;">
+                                <a href="path/to/pdf/file2.pdf"
+                                  class="btn btn-sm btn-outline-primary download-btn btn-custom-download"
+                                  style="border-radius: 50px;"
+                                  data-file="file2.pdf"
+                                download>
+                                <i class="fas fa-file-pdf text-primary file-icon"></i>
+                              </a>
+                              </td>
+
+                              <!-- <td style="vertical-align: middle;text-align: center;">
                                 <a href="path/to/pdf/file.pdf" class="btn btn-sm btn-outline-primary" style="border-radius: 50px;" download>
                                 <i class="fas fa-file-pdf"></i>
-                                </a>
+                                </a> -->
                               </td>
                               <td style="vertical-align: middle;text-align: center;">                
                                 <a href="<?= site_url('goods_management/order');?>" class="btn btn-sm btn-outline-primary" style="font-weight: 600; border-radius: 50px; width: 250px;">
@@ -120,11 +260,22 @@
                                   Rejected
                                 </button>                                
                               </td>
-                              <td style="vertical-align: middle;text-align: center;">
+                              <!-- <td style="vertical-align: middle;text-align: center;">
                                 <a href="path/to/pdf/file.pdf" class="btn btn-sm btn-outline-primary" style="border-radius: 50px;" download>
                                 <i class="fas fa-file-pdf"></i>
                                 </a>
+                              </td> -->
+
+                              <td style="vertical-align: middle; text-align: center;">
+                                <a href="path/to/pdf/file3.pdf"
+                                  class="btn btn-sm btn-outline-primary download-btn btn-custom-download"
+                                  style="border-radius: 50px;"
+                                  data-file="file3.pdf"
+                                download>
+                                <i class="fas fa-file-pdf text-primary file-icon"></i>
+                              </a>
                               </td>
+
                               <td style="vertical-align: middle;text-align: center;">                
                                 <a href="<?= site_url('goods_management/order');?>" class="btn btn-sm btn-outline-primary" style="font-weight: 600; border-radius: 50px; width: 250px;">
                                 Feedback
@@ -143,11 +294,22 @@
                                   Approved
                                 </button>                                
                               </td>
-                              <td style="vertical-align: middle;text-align: center;">
+                              <!-- <td style="vertical-align: middle;text-align: center;">
                                 <a href="path/to/pdf/file.pdf" class="btn btn-sm btn-outline-primary" style="border-radius: 50px;" download>
                                 <i class="fas fa-file-pdf"></i>
                                 </a>
+                              </td> -->
+
+                              <td style="vertical-align: middle; text-align: center;">
+                                <a href="path/to/pdf/file4.pdf"
+                                  class="btn btn-sm btn-outline-primary download-btn btn-custom-download"
+                                  style="border-radius: 50px;"
+                                  data-file="file4.pdf"
+                                download>
+                                <i class="fas fa-file-pdf text-primary file-icon"></i>
+                              </a>
                               </td>
+
                               <td style="vertical-align: middle;text-align: center;">                
                                 <a href="<?= site_url('goods_management/order');?>" class="btn btn-sm btn-outline-primary" style="font-weight: 600; border-radius: 50px; width: 250px;">
                                 Feedback
@@ -166,11 +328,22 @@
                                   Approved
                                 </button>                                
                               </td>
-                              <td style="vertical-align: middle;text-align: center;">
+                              <!-- <td style="vertical-align: middle;text-align: center;">
                                 <a href="path/to/pdf/file.pdf" class="btn btn-sm btn-outline-primary" style="border-radius: 50px;" download>
                                 <i class="fas fa-file-pdf"></i>
                                 </a>
+                              </td> -->
+
+                              <td style="vertical-align: middle; text-align: center;">
+                                <a href="path/to/pdf/file5.pdf"
+                                  class="btn btn-sm btn-outline-primary download-btn btn-custom-download"
+                                  style="border-radius: 50px;"
+                                  data-file="file5.pdf"
+                                download>
+                                <i class="fas fa-file-pdf text-primary file-icon"></i>
+                              </a>
                               </td>
+
                               <td style="vertical-align: middle;text-align: center;">                
                                 <a href="<?= site_url('goods_management/order');?>" class="btn btn-sm btn-outline-primary" style="font-weight: 600; border-radius: 50px; width: 250px;">
                                 Feedback
@@ -252,8 +425,19 @@
 <?php $this->load->view('_partials/footer.php'); ?>
 
 <script>
-      $(document).ready(function() {
-          $('#example').DataTable();
+    $(document).ready(function() {
+        var table = $('#example').DataTable({
+          dom: "t<'row'<'col-sm-6'i><'col-sm-6'p>>",
+          lengthMenu: [[10, 25, 50, 100], [10, 25, 50, 100]]
+        });
+
+    $('#example_filter').remove();
+    $('#example_length').remove();
+
+    $('#entriesSelect').on('change', function () {
+        var length = $(this).val();
+        table.page.len(length).draw();
+    });
 
           Highcharts.setOptions({
             colors: ['#C0CDD9', '#8EAACF', '#DAEAFF', '#7E99B1', '#64E572', '#D8DFE7', '#7E9AB2']

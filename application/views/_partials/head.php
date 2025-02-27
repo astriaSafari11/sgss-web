@@ -291,7 +291,7 @@
                   style="width:30px; height:30px"
                 />  
                 
-                  <p>Home</p>
+                  <p class="ms-1">Home</p>
                 </a>
               </li>          
               <!-- <li class="nav-item">
@@ -327,7 +327,7 @@
                   class="brand-image icon"
                   style="width:30px; height:30px"
                 />  
-                <p>
+                <p class="ms-1">
                     Goods Management
                     <i class="nav-arrow bi bi-chevron-right"></i>
                   </p>
@@ -378,14 +378,14 @@
                   class="brand-image icon"
                   style="width:33px; height:33px"
                 />
-                <p>Saving Simulator</p>  
+                <p class="ms-1">Saving Simulator</p>  
               </a>
               </li>
 
-              <li class="nav-item sidebar ms-1">
+              <li class="nav-item sidebar">
                 <a href="<?= site_url('auth/logout');?>" class="nav-link sidebar">
-                <i class="bi bi-box-arrow-right text-primary" style="font-size: 1.5rem;"></i>
-                <p>Log Out</p>  
+                <i class="bi bi-box-arrow-left text-primary" style="font-size: 1.5rem;"></i>
+                <p class="ms-3">Log Out</p>  
               </a>
               </li>
               

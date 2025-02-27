@@ -41,11 +41,11 @@
                         </a></li>
                       </ul>
 </div >         
-<a type="button" class="btn btn-sm btn-outline-danger position-relative" style="font-weight: 600; border-radius: 50px; width: 150px;">
+<a type="button" class="btn btn-sm btn-outline-primary position-relative" style="font-weight: 600; border-radius: 50px; width: 150px;">
                         <i class="fa-solid fa-file-export"></i>
                         Export
                       </a>                       
-                      <a type="button" class="btn btn-sm btn-outline-danger position-relative" style="font-weight: 600; border-radius: 50px;width: 150px;">
+                      <a type="button" class="btn btn-sm btn-outline-primary position-relative" style="font-weight: 600; border-radius: 50px;width: 150px;">
                       <i class="fa-solid fa-file-import"></i>
                         Import
                       </a>     

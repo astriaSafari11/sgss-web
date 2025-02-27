@@ -1,4 +1,26 @@
 <?php $this->load->view('_partials/head.php'); ?>
+
+<style>
+.dataTables_length label,
+.dataTables_filter label,
+.dataTables_info,
+.dataTables_paginate {
+    font-size: 12px !important;
+}
+
+.dataTables_length select {
+    font-size: 12px !important;
+}
+
+.dataTables_wrapper .dataTables_paginate .paginate_button {
+    font-size: 12px !important;
+}
+
+.dataTables_wrapper .dataTables_paginate .paginate_button a {
+    font-size: 12px !important;
+}
+</style>
+
 <div class="row mb-2 justify-between">
               <div class="col-sm-6">
                 <a class="btn btn-sm btn-primary position-relative" style="font-weight: 600; border-radius: 50px;">
@@ -41,6 +63,59 @@
                     </div>
                   </div> -->
                   <div class="card-body">
+
+
+    <div class="d-flex justify-content-between align-items-center mb-2">
+
+    <!-- Start Dropdown Show X Entries -->
+    <div class="d-flex align-items-center">
+        <label for="entriesSelect" class="me-2 fs-7">Show</label>
+        <select id="entriesSelect" class="form-select form-select-sm w-auto fs-7">
+            <option value="10">10</option>
+            <option value="25">25</option>
+            <option value="50">50</option>
+            <option value="100">100</option>
+        </select>
+        <span class="ms-2 fs-7">entries</span>
+    </div>
+    <!-- End Dropdown Show X Entries -->
+
+    <!-- Start Search + Filter -->
+    <div class="d-flex align-items-center gap-2">
+    <!-- Filter 1 -->
+    <label for="filterBy1" class="small">Filter 1:</label>
+    <select id="filterBy1" class="form-select form-select-sm w-auto">
+        <option value="all">All</option>
+        <option value="0">Column 1</option>
+        <option value="1">Column 2</option>
+        <option value="2">Column 3</option>
+    </select>
+
+    <!-- Filter 2 -->
+    <label for="filterBy2" class="small">Filter 2:</label>
+    <select id="filterBy2" class="form-select form-select-sm w-auto">
+        <option value="all">All</option>
+        <option value="A">Category A</option>
+        <option value="B">Category B</option>
+        <option value="C">Category C</option>
+    </select>
+
+    <!-- Filter 3 -->
+    <label for="filterBy3" class="small">Filter 3:</label>
+    <select id="filterBy3" class="form-select form-select-sm w-auto">
+        <option value="all">All</option>
+        <option value="active">Active</option>
+        <option value="inactive">Inactive</option>
+    </select>
+
+    <!-- Search Button -->
+    <button class="btn btn-outline-primary btn-sm" type="button" id="searchBtn">
+        <i class="fas fa-search"></i>
+    </button>
+</div>
+  <!--End Search Bar-->
+
+  </div>
                     <table id="example" class="table table-sm" style="width:100%" cellspacing="0">
                       <thead>
                           <tr >
@@ -146,8 +221,20 @@
 <?php $this->load->view('_partials/footer.php'); ?>
 
 <script>
-      $(document).ready(function() {
-          $('#example').DataTable();
+
+    $(document).ready(function() {
+        var table = $('#example').DataTable({
+          dom: "t<'row'<'col-sm-6'i><'col-sm-6'p>>",
+          lengthMenu: [[10, 25, 50, 100], [10, 25, 50, 100]]
+        });
+
+    $('#example_filter').remove();
+    $('#example_length').remove();
+
+    $('#entriesSelect').on('change', function () {
+        var length = $(this).val();
+        table.page.len(length).draw();
+    });
 
           Highcharts.setOptions({
             colors: ['#C0CDD9', '#8EAACF', '#DAEAFF', '#7E99B1', '#64E572', '#D8DFE7', '#7E9AB2']

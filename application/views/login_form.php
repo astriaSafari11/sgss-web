@@ -89,7 +89,7 @@
               class=""
               width="35"
             />
-            <h4 class="mb-0 text-primary" style="font-family: Poppins;">SGSS Login</h4>
+            <h4 class="mb-0 text-primary fw-bold" style="font-family: Poppins;">SGSS Login</h4>
         </div>
         <div class="card-body login-card-body">
           <form action="<?= site_url('auth/login');?>" method="post">

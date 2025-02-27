@@ -14860,6 +14860,7 @@ body:not(.app-loaded) .app-footer {
 	.nav-link {
 	width: 2.1rem !important;
 }
+
 .compact-mode .logo-xs,
 .compact-mode .logo-xl {
 	max-height: 2.75rem;
