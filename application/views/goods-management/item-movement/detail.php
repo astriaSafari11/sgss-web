@@ -98,7 +98,7 @@
                                             <tr>
                                             <td>Stock on Hand</td>
                                             <td  style="text-align: center;"><?php echo myNum($material->initial_stock);?></td>
-                                            <?php for($i=1;$i<=12;$i++){ ?>
+                                             xxxx       <?php for($i=1;$i<=12;$i++){ ?>
                                                 <td style="text-align: center;"><?php echo $item_movement[$i-1]->stock_on_hand==0?'-':myNum($item_movement[$i-1]->stock_on_hand);?></td>
                                             <?php } ?>                                  
                                             </tr> 
