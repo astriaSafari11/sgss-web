@@ -35,12 +35,10 @@
                                 <th style="color: #fff;background-color: #001F82;text-align: center;">LT_PR_PO</th>
                                 <th style="color: #fff;background-color: #001F82;text-align: center;">Vendor Code</th>
                                 <th style="color: #fff;background-color: #001F82;text-align: center;">Lot Size</th>
-                                <th style="color: #fff;background-color: #001F82;text-align: center;">Initial Value Stock</th>
                                 <th style="color: #fff;background-color: #001F82;text-align: center;">Order Cycle</th>
                                 <th style="color: #fff;background-color: #001F82;text-align: center;">Initial Stock</th>
                                 <th style="color: #fff;background-color: #001F82;text-align: center;width:100px;">LT_PO_TO_DELIV</th>
                                 <th style="color: #fff;background-color: #001F82;text-align: center;">Standard Safety Stock</th>
-                                <th style="color: #fff;background-color: #001F82;text-align: center;">Initial Value (todo list)</th>
                             </tr>
                         </thead>
                         <tbody style="text-align: center;white-space:nowrap;vertical-align:center;">

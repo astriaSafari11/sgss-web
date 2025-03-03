@@ -52,8 +52,58 @@ class Goods_management extends CI_Controller
 
 	public function item_movement()
 	{
+		$week	=	date("W");
+		$data['item'] = $this->db->query("
+		select *,
+		(standart_safety_stock + ((standart_safety_stock /100)* var_stock_card_ok)) as ok,
+		(standart_safety_stock + ((standart_safety_stock /100)* var_stock_card_overstock)) as overstock,
+		(CASE
+		WHEN net_on_hand >= (standart_safety_stock + ((standart_safety_stock /100)* var_stock_card_overstock)) THEN 'overstock'
+		WHEN net_on_hand >= (standart_safety_stock + ((standart_safety_stock /100)* var_stock_card_ok)) 	   THEN 'OK'
+		WHEN net_on_hand = 0 THEN 'understock'
+		WHEN net_on_hand <= standart_safety_stock THEN 'understock'
+		WHEN current_safety_stock <= standart_safety_stock THEN 'understock'
+		END) AS status 
+		from view_stock_card
+		WHERE week = '$week'
+		")->result();		
+		
 		$this->session->set_flashdata('page_title', 'STOCK CARD');
-		$this->load->view('goods-management/item-movement.php');
+		load_view('goods-management/item-movement.php', $data);
+	}	
+
+	public function stock_card_detail()
+	{
+		$id = _decrypt($this->uri->segment(3));
+
+		$data['vendor'] = $this->db->get_where("view_master_vendor",array(
+			"id"	=> $id,
+		))->row();		
+
+		$data['vendor_detail'] = $this->db->get_where("m_master_data_vendor",array(
+			"vendor_code"	=> $data['vendor']->vendor_code,
+		))->row();		
+
+		$data['material'] = $this->db->get_where("m_vendor_material",array(
+			"id"	=> $id,
+		))->row();		
+
+		$data['var_settings'] = $this->db->get_where("m_variable_settings",array(
+			"vendor_material_id"	=> $id,
+		))->row();		
+
+		$data['gross_req'] = $this->db->get_where("m_stock_card_formula",array(
+			"vendor_material_id"	=> $id,
+		))->result();		
+		
+		$data['item_movement'] = $this->db->get_where("t_material_movement",array(
+			"vendor_material_id"	=> $id,
+		))->result();	
+
+		$data['total_gross_req'] = count($data['gross_req']);
+
+		$this->session->set_flashdata('page_title', 'STOCK CARD');
+		load_view('goods-management/item-movement/detail.php', $data);
 	}	
 	
 	public function item_movement_detail()

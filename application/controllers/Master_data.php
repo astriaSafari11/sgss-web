@@ -101,12 +101,10 @@ class Master_data extends CI_Controller
 					$row[] = $field->moq;
 					$row[] = $field->lt_pr_po;
 					$row[] = $field->lot_size;
-					$row[] = $field->initial_value_stock;
 					$row[] = $field->order_cycle;
-					$row[] = $field->initial_stock;
-					$row[] = $field->lt_po_deliv;
-					$row[] = $field->standart_safety_stock;
-					$row[] = $field->initial_value_for_to_do;
+					$row[] = myNum($field->initial_stock);
+					$row[] = myNum($field->lt_po_deliv);
+					$row[] = myNum($field->standart_safety_stock);
 					$data[] = $row;
 			}
 

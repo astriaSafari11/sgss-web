@@ -87,12 +87,12 @@
                                 <th style="color: #fff;background-color: #001F82;text-align: center;">Item</th>
                                 <th style="color: #fff;background-color: #001F82;text-align: center;">UoM</th>
                                 <th style="color: #fff;background-color: #001F82;text-align: center;">Est. Lead Time</th>
-                                <th style="color: #fff;background-color: #001F82;text-align: center;">Price / UoM</th>
+                                <th style="color: #fff;background-color: #001F82;text-align: center;">Price / UoM (Rp.)</th>
                                 <th style="color: #fff;background-color: #001F82;text-align: center;">MoQ</th>
-                                <th style="color: #fff;background-color: #001F82;text-align: center;width:100px;">Total Price</th>
-                                <th style="color: #fff;background-color: #001F82;text-align: center;">Total Price if QTY = MOQ</th>
-                                <th style="color: #fff;background-color: #001F82;text-align: center;">Price MOQ/MOQ</th>
-                                <th style="color: #fff;background-color: #001F82;text-align: center;">Savings</th>
+                                <th style="color: #fff;background-color: #001F82;text-align: center;width:100px;">Total Price (Rp.)</th>
+                                <th style="color: #fff;background-color: #001F82;text-align: center;">Total Price if QTY = MOQ (Rp.)</th>
+                                <th style="color: #fff;background-color: #001F82;text-align: center;">Price MOQ/MOQ (Rp.)</th>
+                                <th style="color: #fff;background-color: #001F82;text-align: center;">Savings (%)</th>
                                 <th style="color: #fff;background-color: #001F82;text-align: center;">Place to buy</th>
                                 <th style="color: #fff;background-color: #001F82;text-align: center;">Link</th>
                             </tr>
