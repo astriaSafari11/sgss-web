@@ -32,6 +32,7 @@
                                 <th style="color: #fff;background-color: #001F82;text-align: center;">Item Name</th>
                                 <th style="color: #fff;background-color: #001F82;text-align: center;">Factory</th>
                                 <th style="color: #fff;background-color: #001F82;text-align: center;">UoM</th>
+                                <th style="color: #fff;background-color: #001F82;text-align: center;">MoQ</th>
                                 <th style="color: #fff;background-color: #001F82;text-align: center;">LT_PR_PO</th>
                                 <th style="color: #fff;background-color: #001F82;text-align: center;">Vendor Code</th>
                                 <th style="color: #fff;background-color: #001F82;text-align: center;">Lot Size</th>
