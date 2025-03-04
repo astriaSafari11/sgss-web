@@ -84,26 +84,93 @@
                       </div>
                       <!--end::Col-->
                       <!--begin::Col-->
+                      <!-- <div class="col-6">
+                      <div class="form-outline mb-2" style="position: relative; top: -10px;">
+                      <label for="dropdownSearch" class="fw-bold text-primary" style="font-size: 14px;">Purchase Reason</label>
+                        <select class="form-select" id="dropdownSearch" aria-label="Floating label select" data-bs-display="static">
+                            <option value="" disabled selected>Select</option>
+                            <option value="1">Opsi 1</option>
+                            <option value="2">Opsi 2</option>
+                            <option value="3">Opsi 3</option>
+                        </select>
+                        </div> -->
                       <div class="col-6">
                         <div class="form-floating mb-3">
                           <input type="email" class="form-control" id="floatingInput" placeholder="name@example.com">
                           <label for="floatingInput" class="fw-bold text-primary" style="font-size: 14px;">Purchase Reason</label>
                         </div>
                       </div>
+
                       <!--end::Col-->
                       <!--begin::Col-->
                       <div class="col-6">
-  <div class="form-floating">
-    <select class="form-select" id="floatingSelect">
-      <option value="" disabled selected>Select</option>   
-      <option value="1">Budi</option>
-      <option value="2">Ahmad</option>
-      <option value="3">Faqih</option>
-    </select>
-    <label for="floatingSelect" class="fw-bold text-primary" style="font-size: 14px;">Requested For</label>
-  </div>
-</div>
+                      <div class="form-outline mb-2" style="position: relative; top: -10px;">
+                      <label for="dropdownSearch" class="fw-bold text-primary" style="font-size: 14px;">Requested For</label>
+                        <select class="form-select" id="dropdownSearch" aria-label="Floating label select" data-bs-display="static">
+                            <option value="" disabled selected>Select</option>
+                            <option value="1">Budi</option>
+                            <option value="2">Ahmad</option>
+                            <option value="3">Faqih</option>
+                        </select>
+                        </div>
 
+                        <!-- Script khusus buat dropdownSearch -->
+                        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/choices.js/public/assets/styles/choices.min.css">
+                        <script src="https://cdn.jsdelivr.net/npm/choices.js/public/assets/scripts/choices.min.js"></script>
+                        <script>
+                            document.addEventListener('DOMContentLoaded', function () {
+                                new Choices('#dropdownSearch', {
+                                    searchEnabled: true, // Aktifkan fitur search
+                                    removeItemButton: true
+                                });
+                            });
+                        </script>
+
+                        <!-- Style khusus buat dropdownSearch -->
+                        <style>
+                        .choices__inner {
+                            border: 1px solid #ced4da !important;
+                            padding: 0.5rem;
+                            border-radius: 0.375rem;
+                            background-color: #fff;
+                            min-height: auto;
+                        }
+
+                        .choices__list--dropdown {
+                            border: 1px solidrgb(255, 255, 255) !important;
+                            border-radius: 0.375rem;
+                            position: absolute !important;
+                            z-index: 1050 !important; 
+                            width: 100%;
+                        }
+
+                        .choices.is-focused .choices__inner {
+                            border-color: #001F82 !important;
+                            box-shadow: 0 0 0 0.25rem rgba(13, 110, 253, 0.25);
+                        }
+
+                        .choices__list--dropdown .choices__item {
+                            padding: 0.5rem;
+                            font-size: 14px;
+                        }
+
+                        .choices__item--selectable {
+                            background-color:rgb(255, 255, 255);
+                            border-radius: 0.375rem;
+                        }
+                        </style>
+                        
+                        <!-- <div class="form-floating">
+                            <select class="form-select" id="floatingSelect">
+                            <option value="" disabled selected>Select</option>   
+                            <option value="1">Budi</option>
+                            <option value="2">Ahmad</option>
+                            <option value="3">Faqih</option>
+                            </select>
+                            <label for="floatingSelect" class="fw-bold text-primary" style="font-size: 14px;">Requested For</label>
+                        </div> -->
+
+                        </div>
                       <!--end::Col-->    
                       <!--begin::Col-->
                       <div class="col-6">
@@ -129,29 +196,29 @@
                       </div> -->
                       <div class="col-6">
                       <div class="col-6">
-    <div class="mb-3">
-        <label for="attachmentInput" class="fw-bold text-primary" style="font-size: 14px;">Attachment</label>
-        <div class="input-group">
-            <input type="file" class="form-control d-none" id="attachmentInput" accept="*/*">
-            <input type="text" class="form-control" placeholder="Choose file..." readonly>
-            <button class="btn btn-primary" type="button" id="uploadBtn">
-                <i class="bi bi-upload"></i>
-            </button>
-        </div>
-    </div>
-</div>
+                        <div class="mb-3">
+                            <label for="attachmentInput" class="fw-bold text-primary" style="font-size: 14px;">Attachment</label>
+                            <div class="input-group">
+                                <input type="file" class="form-control d-none" id="attachmentInput" accept="*/*">
+                                <input type="text" class="form-control" placeholder="Choose file..." readonly>
+                                <button class="btn btn-primary" type="button" id="uploadBtn">
+                                    <i class="bi bi-upload"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
 
-<script>
-    document.getElementById("uploadBtn").addEventListener("click", function() {
-        document.getElementById("attachmentInput").click();
-    });
+                    <script>
+                        document.getElementById("uploadBtn").addEventListener("click", function() {
+                            document.getElementById("attachmentInput").click();
+                        });
 
-    // Menampilkan nama file yang diunggah
-    document.getElementById("attachmentInput").addEventListener("change", function() {
-        let fileName = this.files.length > 0 ? this.files[0].name : "Choose file...";
-        this.nextElementSibling.value = fileName;
-    });
-</script>
+                        // Menampilkan nama file yang diunggah
+                        document.getElementById("attachmentInput").addEventListener("change", function() {
+                            let fileName = this.files.length > 0 ? this.files[0].name : "Choose file...";
+                            this.nextElementSibling.value = fileName;
+                        });
+                    </script>
 
 
                       <!--end::Col-->
