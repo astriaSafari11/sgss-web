@@ -1,4 +1,9 @@
 <?php
+require 'vendor/autoload.php';
+
+use PhpOffice\PhpSpreadsheet\Spreadsheet;
+use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
+use PhpOffice\PhpSpreadsheet\IOFactory;
 
 class Master_data extends CI_Controller
 {
@@ -100,6 +105,7 @@ class Master_data extends CI_Controller
 					$row[] = $field->uom;
 					$row[] = $field->moq;
 					$row[] = $field->lt_pr_po;
+					$row[] = $field->vendor_code;
 					$row[] = $field->lot_size;
 					$row[] = $field->order_cycle;
 					$row[] = myNum($field->initial_stock);
@@ -342,6 +348,19 @@ class Master_data extends CI_Controller
 					"rating"			=> $this->input->post('rating'),
 				), array("id" => $id)
 			);
+
+			$vendor = $this->db->get_where("m_master_data_vendor",array(
+				"id"	=> $id,
+			))->row();	
+			
+			$material = $this->db->get_where("m_vendor_material",array(
+				"vendor_code"	=> $vendor->vendor_code,
+			))->result();	
+
+			foreach($material as $item){
+				$lt_po_deliv = $vendor->est_lead_time+$item->lt_pr_po;
+				_update('m_vendor_material', array('lt_po_deliv' => $lt_po_deliv), array('id' => $item->id));
+			}
 
 			if($inserted){
 				$err = array(
@@ -943,5 +962,398 @@ class Master_data extends CI_Controller
 
 			redirect('master_data/item_movement/'._encrypt($get_data->vendor_material_id));			
 		}
-	}		
+	}
+	
+	public function generate() {
+		ini_set("max_execution_time", 0);
+
+		$reader = IOFactory::createReader('Xlsx');
+		$spreadsheet = $reader->load('assets/format/template_master.xlsx');
+		$spreadsheet->setActiveSheetIndexByName('uom');
+		$sheet = $spreadsheet->getActiveSheet();
+		$index = 2;
+		$getData = $this->db->query("SELECT * FROM m_uom")->result();
+
+		foreach ((array)$getData as $datas => $list) {
+			// $sheet->insertNewRowBefore($index + 1, 1);
+			$sheet->setCellValue("A{$index}", trim($list->uom_code));
+			$sheet->setCellValue("B{$index}", trim($list->uom_name));
+
+			$styleArray = [
+					'font' => [
+						'name' => 'Calibri',
+						'size' => 10
+					],
+					'alignment' => [
+						'horizontal' => \PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER,
+						'vertical' => \PhpOffice\PhpSpreadsheet\Style\Alignment::VERTICAL_CENTER
+					]
+				];
+	
+			$sheet->getStyle("A{$index}:B{$index}")->applyFromArray($styleArray);
+			$index++;				
+		}			
+
+		$spreadsheet->setActiveSheetIndexByName('category');
+		$sheet = $spreadsheet->getActiveSheet();
+		$index = 2;
+		$getData = $this->db->query("SELECT * FROM m_category")->result();
+
+		foreach ((array)$getData as $datas => $list) {
+			// $sheet->insertNewRowBefore($index + 1, 1);
+			$sheet->setCellValue("A{$index}", trim($list->category_name));
+
+			$styleArray = [
+					'font' => [
+						'name' => 'Calibri',
+						'size' => 10
+					],
+					'alignment' => [
+						'horizontal' => \PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER,
+						'vertical' => \PhpOffice\PhpSpreadsheet\Style\Alignment::VERTICAL_CENTER
+					]
+				];
+	
+			$sheet->getStyle("A{$index}:B{$index}")->applyFromArray($styleArray);
+			$index++;				
+		}		
+
+		$spreadsheet->setActiveSheetIndexByName('factory');
+		$sheet = $spreadsheet->getActiveSheet();
+		$index = 2;
+		$getData = $this->db->query("SELECT * FROM m_factory")->result();
+
+		foreach ((array)$getData as $datas => $list) {
+			// $sheet->insertNewRowBefore($index + 1, 1);
+			$sheet->setCellValue("A{$index}", trim($list->factory_name));
+
+			$styleArray = [
+					'font' => [
+						'name' => 'Calibri',
+						'size' => 10
+					],
+					'alignment' => [
+						'horizontal' => \PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER,
+						'vertical' => \PhpOffice\PhpSpreadsheet\Style\Alignment::VERTICAL_CENTER
+					]
+				];
+	
+			$sheet->getStyle("A{$index}:B{$index}")->applyFromArray($styleArray);
+			$index++;				
+		}		
+		
+		$spreadsheet->setActiveSheetIndexByName('vendor');
+		$sheet = $spreadsheet->getActiveSheet();
+		$index = 2;
+		$getData = $this->db->query("SELECT * FROM m_master_data_vendor WHERE is_active = 1")->result();
+
+		foreach ((array)$getData as $datas => $list) {
+			// $sheet->insertNewRowBefore($index + 1, 1);
+			$sheet->setCellValue("A{$index}", trim($list->vendor_code));
+			$sheet->setCellValue("B{$index}", trim($list->category));
+			$sheet->setCellValue("C{$index}", trim($list->rating));
+			$sheet->setCellValue("D{$index}", trim($list->vendor_name));
+			$sheet->setCellValue("E{$index}", trim($list->est_lead_time));
+
+			$styleArray = [
+					'font' => [
+						'name' => 'Calibri',
+						'size' => 10
+					],
+					'alignment' => [
+						'horizontal' => \PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER,
+						'vertical' => \PhpOffice\PhpSpreadsheet\Style\Alignment::VERTICAL_CENTER
+					]
+				];
+	
+			$sheet->getStyle("A{$index}:B{$index}")->applyFromArray($styleArray);
+			$index++;				
+		}	
+		
+		$spreadsheet->setActiveSheetIndexByName('material');
+		$sheet = $spreadsheet->getActiveSheet();
+		$index = 2;
+		$getData = $this->db->query("SELECT * FROM m_master_data_material WHERE is_active = 1")->result();
+
+		foreach ((array)$getData as $datas => $list) {
+			// $sheet->insertNewRowBefore($index + 1, 1);
+			$sheet->setCellValue("A{$index}", trim($list->item_code));
+			$sheet->setCellValue("B{$index}", trim($list->item_name));
+			$sheet->setCellValue("C{$index}", trim($list->factory));
+			$sheet->setCellValue("D{$index}", trim($list->uom));
+			$sheet->setCellValue("E{$index}", trim($list->size));
+
+			$styleArray = [
+					'font' => [
+						'name' => 'Calibri',
+						'size' => 10
+					],
+					'alignment' => [
+						'horizontal' => \PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER,
+						'vertical' => \PhpOffice\PhpSpreadsheet\Style\Alignment::VERTICAL_CENTER
+					]
+				];
+	
+			$sheet->getStyle("A{$index}:B{$index}")->applyFromArray($styleArray);
+			$index++;				
+		}		
+
+		$spreadsheet->setActiveSheetIndexByName('vendor_material');
+		$sheet = $spreadsheet->getActiveSheet();
+		$index = 2;
+		$getData = $this->db->query("SELECT * FROM m_vendor_material WHERE is_active = 1")->result();
+
+		foreach ((array)$getData as $datas => $list) {
+			// $sheet->insertNewRowBefore($index + 1, 1);
+			$sheet->setCellValue("A{$index}", trim($list->vendor_code));
+			$sheet->setCellValue("B{$index}", trim($list->item_code));
+			$sheet->setCellValue("C{$index}", trim($list->moq?$list->moq:0));
+			$sheet->setCellValue("D{$index}", trim($list->lt_pr_po?$list->lt_pr_po:0));
+			$sheet->setCellValue("E{$index}", trim($list->lot_size?$list->lot_size:0));
+			$sheet->setCellValue("F{$index}", trim($list->order_cycle?$list->order_cycle:0));
+			$sheet->setCellValue("G{$index}", trim($list->initial_stock?$list->initial_stock:0));
+			$sheet->setCellValue("H{$index}", trim($list->price_per_uom?$list->price_per_uom:0));
+			$sheet->setCellValue("I{$index}", $list->price_per_uom*$list->moq);
+			$sheet->setCellValue("J{$index}", trim($list->price_equal_moq?$list->price_equal_moq:0));
+			$sheet->setCellValue("K{$index}", trim($list->place_to_buy));
+			$sheet->setCellValue("L{$index}", trim($list->link));
+
+			$styleArray = [
+					'font' => [
+						'name' => 'Calibri',
+						'size' => 10
+					],
+					'alignment' => [
+						'horizontal' => \PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER,
+						'vertical' => \PhpOffice\PhpSpreadsheet\Style\Alignment::VERTICAL_CENTER
+					]
+				];
+	
+			$sheet->getStyle("A{$index}:B{$index}")->applyFromArray($styleArray);
+			$index++;				
+		}		
+
+		ob_end_clean();
+        $writer = new Xlsx($spreadsheet); // instantiate Xlsx
+        header('Content-type: application/vnd.ms-excel');
+        // It will be called file.xls
+        header('Content-Disposition: attachment; filename="template_master_data.xlsx"');
+        // Write file to the browser
+        $writer->save('php://output');
+	}	
+	
+	public function upload() {
+		ini_set("max_execution_time", 0);
+		$path 		= 'assets/upload/';
+		$json 		= [];
+		$this->upload_config($path);
+		if (!$this->upload->do_upload('file')) {
+			$json = [
+				'error_message' => $this->upload->display_errors(),
+			];
+		} else {
+			$file_data 	= $this->upload->data();
+			$file_name 	= $path.$file_data['file_name'];
+			$arr_file 	= explode('.', $file_name);
+			$extension 	= end($arr_file);
+			if('csv' == $extension) {
+				$reader 	= new \PhpOffice\PhpSpreadsheet\Reader\Csv();
+			} else {
+				$reader 	= new \PhpOffice\PhpSpreadsheet\Reader\Xlsx();
+			}
+			$spreadsheet 	= $reader->load($file_name);
+			$count_success  = 0;
+			$count_failed   = 0;
+			$list 			= [];
+
+			//check uom
+			$sheetData 		= $spreadsheet->getSheetbyName('uom');
+			$cellRow 		= $spreadsheet->getSheetbyName('uom')->getHighestRow();
+			for($i=2;$i<=$cellRow;$i++){
+				$uom = $sheetData->getCell('A'.$i)->getValue();
+				$name = $sheetData->getCell('B'.$i)->getValue();
+				if(!empty($uom)){
+					$check = $this->db->query("SELECT * FROM m_uom WHERE uom_code = ? AND uom_name = ?", array($uom, $name))->row();
+					if(empty($check)){
+						_add("m_uom", array("uom_code" => $uom, "uom_name" => $name));
+					}
+				}
+			}
+
+			//check category
+			$sheetData 		= $spreadsheet->getSheetbyName('category');
+			$cellRow 		= $spreadsheet->getSheetbyName('category')->getHighestRow();
+			for($i=2;$i<=$cellRow;$i++){
+				$name = $sheetData->getCell('A'.$i)->getValue();
+				if(!empty($name)){
+					$check = $this->db->query("SELECT * FROM m_category WHERE category_name = ?", array($name))->row();
+					if(empty($check)){
+						_add("m_category", array("category_name" => $name));
+					}
+				}
+			}		
+			
+			//check factory
+			$sheetData 		= $spreadsheet->getSheetbyName('factory');
+			$cellRow 		= $spreadsheet->getSheetbyName('factory')->getHighestRow();
+			for($i=2;$i<=$cellRow;$i++){
+				$name = $sheetData->getCell('A'.$i)->getValue();
+				if(!empty($name)){
+					$check = $this->db->query("SELECT * FROM m_factory WHERE factory_name = ?", array($name))->row();
+					if(empty($check)){
+						_add("m_factory", array("factory_name" => $name));
+					}
+				}
+			}				
+
+			//check material
+			$sheetData 		= $spreadsheet->getSheetbyName('material');
+			$cellRow 		= $spreadsheet->getSheetbyName('material')->getHighestRow();
+			for($i=2;$i<=$cellRow;$i++){
+				$item_code = $sheetData->getCell('A'.$i)->getValue();
+				$item_name = $sheetData->getCell('B'.$i)->getValue();
+				$factory = $sheetData->getCell('C'.$i)->getValue();
+				$uom = $sheetData->getCell('D'.$i)->getValue();
+				$size = $sheetData->getCell('E'.$i)->getValue();
+
+				if(!empty($item_name) && !empty($uom) && !empty($size)){
+					$check = $this->db->query("SELECT * FROM m_master_data_material WHERE item_code = ? ", array($item_code))->row();
+					if(empty($check)){
+						$genItemcode = strtolower(str_replace(' ', '', $item_name).$uom.$size);
+						_add("m_master_data_material", array("item_code" => $genItemcode, "item_name" => $item_name, "uom" => $uom, "size" => $size, "factory" => $factory));
+
+						$list [] = [
+							"item_code" => $genItemcode,
+							"item_name" => $item_name,
+							"uom" => $uom,
+							"size" => $size
+						];						
+					}
+				}
+			}
+
+			//check vendor
+			$sheetData 		= $spreadsheet->getSheetbyName('vendor');
+			$cellRow 		= $spreadsheet->getSheetbyName('vendor')->getHighestRow();
+			for($i=2;$i<=$cellRow;$i++){
+				$vendor_code = $sheetData->getCell('A'.$i)->getValue();
+				$category = $sheetData->getCell('B'.$i)->getValue();
+				$rating = $sheetData->getCell('C'.$i)->getValue();
+				$vendor_name = $sheetData->getCell('D'.$i)->getValue();
+				$est_lead_time = $sheetData->getCell('E'.$i)->getValue();
+
+				if(!empty($vendor_code) && !empty($vendor_name) && !empty($est_lead_time) && !empty($category)){
+					$check = $this->db->query("SELECT * FROM m_master_data_vendor WHERE vendor_code = ? ", array($vendor_code))->row();
+					if(empty($check)){
+						$genItemcode = strtolower($item_name.$uom.$size);
+						_add("m_master_data_vendor", array("vendor_code" => $vendor_code, "category" => $category, "rating" => $rating, "vendor_name" => $vendor_name, "est_lead_time" => $est_lead_time));
+
+						$list [] = [
+							"vendor_code" => $vendor_code,
+							"category" => $category,
+							"rating" => $rating,
+							"vendor_name" => $vendor_name,
+							"est_lead_time" => $est_lead_time
+						];						
+
+					}
+				}
+			}	
+			
+			//check vendor material
+			$sheetData 		= $spreadsheet->getSheetbyName('vendor_material');
+			$cellRow 		= $spreadsheet->getSheetbyName('vendor_material')->getHighestRow();
+			for($i=2;$i<=$cellRow;$i++){
+				$vendor_code = $sheetData->getCell('A'.$i)->getValue();
+				$item_code = $sheetData->getCell('B'.$i)->getValue();
+				$moq = $sheetData->getCell('C'.$i)->getValue();
+				$lt_pr_po = $sheetData->getCell('D'.$i)->getValue();
+				$lot_size = $sheetData->getCell('E'.$i)->getValue();
+				$order_cycle = $sheetData->getCell('F'.$i)->getValue();
+				$initial_stock = $sheetData->getCell('G'.$i)->getValue();
+				$price_per_uom = $sheetData->getCell('H'.$i)->getValue();
+				$price_equal_uom = $sheetData->getCell('J'.$i)->getValue();
+				$place_to_buy = $sheetData->getCell('K'.$i)->getValue();
+				$link = $sheetData->getCell('L'.$i)->getValue();
+
+				if(!empty($vendor_code) && !empty($item_code)){
+					$check = $this->db->query("SELECT * FROM m_vendor_material WHERE vendor_code = ? AND item_code = ? ", array($vendor_code, $item_code))->row();
+					if(empty($check)){
+						$vendor = $this->db->get_where("m_master_data_vendor",array(
+							"vendor_code"	=> $vendor_code,
+						))->row();
+
+						$lt_po_deliv = !empty($lt_pr_po)?$vendor->est_lead_time + $lt_pr_po:NULL;
+						$standart_safety_stock = !empty($order_cycle)&&!empty($lot_size)?($lt_po_deliv/$order_cycle)*$lot_size:NULL;
+
+
+						_add(
+							"m_vendor_material",
+							[
+								'vendor_code' 					=> $vendor_code,
+								'item_code' 					=> $item_code,
+								"moq" 							=> $moq,
+								"lt_pr_po" 						=> $lt_pr_po,
+								"lot_size"						=> $lot_size,
+								"initial_stock"					=> $initial_stock,	
+								"order_cycle"					=> $order_cycle,	
+								"lt_po_deliv"					=> $lt_po_deliv,	
+								"standart_safety_stock"			=> $standart_safety_stock,	
+								"price_per_uom"					=> $price_per_uom,	
+								"price_equal_moq"				=> $price_equal_uom,	
+								"place_to_buy"					=> $place_to_buy,	
+								"link"							=> $link,									
+							]);	
+		
+						$get_last_id = $this->db->get_where("m_vendor_material",array(
+							'vendor_code' => $vendor_code,
+							'item_code' => $item_code,
+						))->row()->id;
+		
+						generate_gross_requirement($get_last_id);
+						generate_var_settings($get_last_id);
+						generate_item_movement($get_last_id);
+						
+						$list [] = [
+							"vendor_code" => $vendor_code,
+							"item_code" => $item_code
+						];												
+					}
+				}
+			}			
+
+			$msg = 'File imported successfully. New record inserted.';
+			if(file_exists($file_name))
+				unlink($file_name);
+				if(count($list) > 0) {
+					$result 	= true;
+					if($result) {
+						$json = [
+							'success_message' 	=> $msg,
+							'list'				=> $list,
+						];
+					} else {
+						$json = [
+							'error_message' 	=> "Something went wrong while importing the data. Please check your excel file and try again.",
+						];
+					}
+				} else {
+					$json = [
+						'success_message' => "Import completed. No new record is found on uploaded file.",
+				];
+				}
+		}
+		echo json_encode($json);
+	}
+
+	public function upload_config($path) {
+		if (!is_dir($path)) 
+			mkdir($path, 0777, TRUE);		
+		$config['upload_path'] 		= './'.$path;		
+		$config['allowed_types'] 	= 'csv|CSV|xlsx|XLSX|xls|XLS';
+		$config['max_filename']	 	= '255';
+		$config['encrypt_name'] 	= TRUE;
+		$config['max_size'] 		= 4096; 
+		$this->load->library('upload', $config);
+	}	
 }
