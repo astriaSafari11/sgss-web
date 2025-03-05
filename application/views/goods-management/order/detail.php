@@ -14,7 +14,7 @@
                           <!--begin::Col-->
                           <div class="col-6">
                             <div class="form-floating mb-3">
-                              <input type="date" class="form-control" id="floatingInput" placeholder="name@example.com" value ="2025-02-02" disabled>
+                              <input type="text" class="form-control" id="floatingInput" placeholder="name@example.com" value ="<?php echo mDate($order->date); ?>" disabled>
                               <label for="floatingInput">Date of Request</label>
                             </div>
                           </div>
@@ -22,7 +22,7 @@
                           <!--begin::Col-->
                           <div class="col-6">
                             <div class="form-floating mb-3">
-                              <input type="text" class="form-control" id="floatingInput" placeholder="name@example.com" value="debby" disabled>
+                              <input type="text" class="form-control" id="floatingInput" placeholder="name@example.com" value="<?php echo $order->requestor; ?>" disabled>
                               <label for="floatingInput">Requestor</label>
                             </div>
                           </div>
@@ -30,7 +30,7 @@
                           <!--begin::Col-->
                           <div class="col-6">
                             <div class="form-floating mb-3">
-                              <input type="text" class="form-control" id="floatingInput" placeholder="name@example.com" value="Routine Goods" disabled>
+                              <input type="text" class="form-control" id="floatingInput" placeholder="name@example.com" value="<?php echo $order->purchase_reason; ?>" disabled>
                               <label for="floatingInput">Purchase Reason</label>
                             </div>
                           </div>
@@ -38,7 +38,7 @@
                           <!--begin::Col-->
                           <div class="col-6">
                             <div class="form-floating mb-3">
-                              <input type="text" class="form-control" id="floatingInput" placeholder="name@example.com" value="Achmad" disabled>
+                              <input type="text" class="form-control" id="floatingInput" placeholder="name@example.com" value="<?php echo $order->requested_for; ?>" disabled>
                               <label for="floatingInput">Requested For</label>
                             </div>
                           </div>
@@ -46,14 +46,14 @@
                           <!--begin::Col-->
                           <div class="col-6">
                             <div class="form-floating mb-3">
-                              <input type="email" class="form-control" id="floatingInput" placeholder="name@example.com" value="-" disabled>
+                              <input type="email" class="form-control" id="floatingInput" placeholder="name@example.com" value="<?php echo $order->remarks; ?>" disabled>
                               <label for="floatingInput">Remarks</label>
                             </div>
                           </div>
                           <!--end::Col-->
                           <div class="col-6">
                             <div class="form-floating mb-3">
-                              <input type="email" class="form-control" id="floatingInput" placeholder="name@example.com" value="2-4" disabled>
+                              <input type="email" class="form-control" id="floatingInput" placeholder="name@example.com" value="<?php echo $order->area; ?>" disabled>
                               <label for="floatingInput">Area</label>
                             </div>
                           </div>
@@ -65,7 +65,7 @@
                           <!--begin::Col-->
                           <div class="col-12">
                             <div class="form-floating mb-3">
-                              <input type="email" class="form-control" id="floatingInput" placeholder="name@example.com" value="Attachment.docx" disabled>
+                              <input type="email" class="form-control" id="floatingInput" placeholder="name@example.com" value="<?php echo $order->attachment_file; ?>" disabled>
                               <label for="floatingInput">Attachment</label>
                             </div>
                           </div>
@@ -100,43 +100,152 @@
                           </tr>
                       </thead>
                       <tbody>
-                          <tr>
-                              <td style="vertical-align: middle;text-align: center;">Alkohol</td>
-                              <td style="vertical-align: middle;text-align: center;">20</td>
-                              <td style="vertical-align: middle;text-align: center;">Box</td>
-                              <td style="vertical-align: middle;text-align: center;">Vendor 1</td>
-                              <td style="vertical-align: middle;text-align: center;">Rp. 5.000</td>
-                              <td style="vertical-align: middle;text-align: center;">Rp. 500.000</td>
-                              <td style="vertical-align: middle;text-align: center;">Routine Buy</td>
-                          </tr>
-                          <tr>
-                              <td style="vertical-align: middle;text-align: center;">Alkohol</td>
-                              <td style="vertical-align: middle;text-align: center;">20</td>
-                              <td style="vertical-align: middle;text-align: center;">Box</td>
-                              <td style="vertical-align: middle;text-align: center;">Vendor 1</td>
-                              <td style="vertical-align: middle;text-align: center;">Rp. 5.000</td>
-                              <td style="vertical-align: middle;text-align: center;">Rp. 500.000</td>
-                              <td style="vertical-align: middle;text-align: center;">Routine Buy</td>
-                          </tr>
-                          <tr>
-                              <td style="vertical-align: middle;text-align: center;">Alkohol</td>
-                              <td style="vertical-align: middle;text-align: center;">20</td>
-                              <td style="vertical-align: middle;text-align: center;">Box</td>
-                              <td style="vertical-align: middle;text-align: center;">Vendor 1</td>
-                              <td style="vertical-align: middle;text-align: center;">Rp. 5.000</td>
-                              <td style="vertical-align: middle;text-align: center;">Rp. 500.000</td>
-                              <td style="vertical-align: middle;text-align: center;">Routine Buy</td>
-                          </tr>
+                          <?php foreach($order_detail as $row) { ?>
+                            <tr>
+                                <td style="vertical-align: middle;text-align: center;"><?php echo $row->item_name; ?></td>
+                                <td style="vertical-align: middle;text-align: center;"><?php echo $row->qty; ?></td>
+                                <td style="vertical-align: middle;text-align: center;"><?php echo $row->uom; ?></td>
+                                <td style="vertical-align: middle;text-align: center;"><?php echo $row->vendor_code; ?> - <?php echo $row->vendor_name; ?></td>
+                                <td style="vertical-align: middle;text-align: right;"><?php echo myNum($row->uom_price); ?></td>
+                                <td style="vertical-align: middle;text-align: right;"><?php echo myNum($row->total_price); ?></td>
+                                <td style="vertical-align: middle;text-align: center;"><?php echo $order->purchase_reason; ?></td>
+                            </tr>                            
+                          <?php } ?>
                       </tbody>  
                       </table>              
                   </div>
                 </div>
                 <!-- /.card -->
               </div>
-            </div>               
-            <div class="row">
+            </div>
+            <?php if($order->status == "auto_approved"){ ?>
+              <div class="row">
+                <div class="col-12 mb-4">
+                  <!-- Default box -->
+                  <div class="card text-bg-light">
+                    <div class="card-header">
+                      <h3 class="card-title">Approval</h3>
+                    </div>                  
+                    <div class="card-body">
+                      <div class="row">
+                        <div class="col-8">
+                          <div class="row">
+                            <!--begin::Col-->
+                            <div class="col-6">
+                              <div class="form-floating mb-3">
+                                <input type="text" class="form-control" id="floatingInput" placeholder="name@example.com" value ="<?php echo myDate($order->approved_date); ?>" disabled>
+                                <label for="floatingInput">Date of Approval</label>
+                              </div>
+                            </div>
+                            <!--end::Col-->
+                            <!--begin::Col-->
+                            <div class="col-6">
+                              <div class="form-floating mb-3">
+                                <input type="text" class="form-control" id="floatingInput" placeholder="name@example.com" value="(auto-approved)" disabled>
+                                <label for="floatingInput">Approved By</label>
+                              </div>
+                            </div>
+                            <!--end::Col-->
+                            <!--begin::Col-->
+                            <div class="col-6 text-center">
+                              <span class="text-center" style="color: #001F82;font-weight:600;font-size:32px;">AUTO-APPROVED</span>
+                            </div>
+                            <!--end::Col-->
+                            <!--hin::Col-->
+                            <div class="col-6">
+                              <div class="form-floating mb-3">
+                                <input type="text" class="form-control" id="floatingInput" placeholder="name@example.com" value="(auto-approved)" disabled>
+                                <label for="floatingInput">As</label>
+                              </div>
+                            </div>
+                            <!--end::Col-->                                                                 
+                          </div>                    
+                        </div>
+                        <div class="col-4">
+                          <div class="row">                                                            
+                            <!--begin::Col-->
+                            <div class="col-12">
+                              <div class="form-floating mb-3">
+                                <textarea class="form-control" placeholder="Leave a comment here" id="floatingTextarea2" style="height: 100px" disabled><?php echo $order->approved_remark; ?></textarea>
+                                <label for="floatingInput">Remarks</label>
+                              </div>
+                            </div>
+                            <!--end::Col-->
+                          </div>                    
+                        </div>           
+                      </div>                     
+                    </div>
+                    <!-- /.card-body -->
+                  </div>
+                  <!-- /.card -->
+                </div>
+              </div>                      
+            <?php } ?>
+            <?php if($order->status == "waiting_approval"){ ?>
+              <div class="row">
+                <div class="col-12 mb-4">
+                  <!-- Default box -->
+                  <div class="card text-bg-light">
+                    <div class="card-header">
+                      <h3 class="card-title">Approval</h3>
+                    </div>                  
+                    <div class="card-body">
+                      <div class="row">
+                        <div class="col-8">
+                          <div class="row">
+                            <!--begin::Col-->
+                            <div class="col-6">
+                              <div class="form-floating mb-3">
+                                <input type="text" class="form-control" id="floatingInput" placeholder="name@example.com" value ="-" disabled>
+                                <label for="floatingInput">Date of Approval</label>
+                              </div>
+                            </div>
+                            <!--end::Col-->
+                            <!--begin::Col-->
+                            <div class="col-6">
+                              <div class="form-floating mb-3">
+                                <input type="text" class="form-control" id="floatingInput" placeholder="name@example.com" value="-" disabled>
+                                <label for="floatingInput">Approved By</label>
+                              </div>
+                            </div>
+                            <!--end::Col-->
+                            <!--begin::Col-->
+                            <div class="col-6 text-center">
+                              <span class="text-center" style="color: #001F82;font-weight:600;font-size:32px;">WAITING FOR APPROVAL</span>
+                            </div>
+                            <!--end::Col-->
+                            <!--hin::Col-->
+                            <div class="col-6">
+                              <div class="form-floating mb-3">
+                                <input type="text" class="form-control" id="floatingInput" placeholder="name@example.com" value="-" disabled>
+                                <label for="floatingInput">As</label>
+                              </div>
+                            </div>
+                            <!--end::Col-->                                                                 
+                          </div>                    
+                        </div>
+                        <div class="col-4">
+                          <div class="row">                                                            
+                            <!--begin::Col-->
+                            <div class="col-12">
+                              <div class="form-floating mb-3">
+                                <textarea class="form-control" placeholder="Leave a comment here" id="floatingTextarea2" style="height: 100px" disabled>Waiting for Line Manager Approval</textarea>
+                                <label for="floatingInput">Remarks</label>
+                              </div>
+                            </div>
+                            <!--end::Col-->
+                          </div>                    
+                        </div>           
+                      </div>                     
+                    </div>
+                    <!-- /.card-body -->
+                  </div>
+                  <!-- /.card -->
+                </div>
+              </div>                      
+            <?php } ?>            
+            <!-- <div class="row">
               <div class="col-12 mb-4">
-                <!-- Default box -->
                 <div class="card text-bg-light">
                   <div class="card-header">
                     <h3 class="card-title">Approval Needed</h3>
@@ -153,9 +262,8 @@
                     </div>
                   </div>
                 </div>
-                <!-- /.card -->
               </div>
-            </div>            
+            </div>             -->
           </div>
 <?php $this->load->view('_partials/footer.php'); ?>
 

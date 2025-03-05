@@ -1,18 +1,40 @@
 <?php $this->load->view('_partials/head.php'); ?>
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
-<script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
-
-            <!--begin::Row-->
-            <div class="row">
-              <div class="col-12 mb-4">
-                <!-- Default box -->
-                <div class="card">
-                  <div class="card-body">
-                    <div class="row">
-                      <!--begin::Col-->
-                      
-        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
-        <style>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/select2-bootstrap-5-theme@1.3.0/dist/select2-bootstrap-5-theme.min.css" />
+    <!-- Scripts -->
+    <script src="https://cdn.jsdelivr.net/npm/jquery@3.5.0/dist/jquery.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+    <style>
+    .select2-container--bootstrap-5 .select2-selection {
+      width: 100%;
+      min-height: calc(1.5em + .75rem + 2px);
+      padding: .375rem .75rem;
+      font-family: inherit;
+      font-size: 1rem;
+      font-weight: 400;
+      line-height: 1.5;
+      color: #212529;
+      background-color: #fff;
+      border: 1px solid #ced4da;
+      border-radius: .25rem;
+      transition: border-color .15sease-in-out, box-shadow .15sease-in-out;
+      -webkit-appearance: none;
+      -moz-appearance: none;
+      appearance: none;
+      height: 58px;
+    }                            
+    .select2-container .select2-selection--single .select2-selection__rendered {
+      display: block;
+      /* padding-left: 8px;
+      padding-right: 20px; */
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+      margin-top: 18px;
+    }
             .flatpickr-calendar {
                 background-color:rgb(255, 255, 255) !important;
             }
@@ -41,187 +63,77 @@
             .flatpickr-monthDropdown-months option:hover {
                 background-color: #001F82 !important;
             }
-
-
         </style>
-
-        <div class="col-6">
-            <div class="form-floating mb-3">
-            <input type="date" class="form-control" id="floatingInput" placeholder="dd-mm-yyyy">
-            <label for="floatingInput" class="fw-bold text-primary" style="font-size: 14px;">Action Date</label>
-        </div>
-        </div>
-        <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
-        <script>
-            flatpickr("#floatingInput", {
-                dateFormat: "d-m-Y",   
-                defaultDate: null,     
-                allowInput: true,     
-            onReady: function(selectedDates, dateStr, instance) {
-                instance._input.value = "dd-mm-yyyy"; 
-            },
-            onOpen: function(selectedDates, dateStr, instance) {
-                if (instance._input.value === "dd-mm-yyyy") {
-                    instance._input.value = "dd-mm-yyyy"; 
-                }
-            },
-            onChange: function(selectedDates, dateStr, instance) {
-                if (instance._input.value === " ") {
-                    instance._input.value = "dd-mm-yyyy"; 
-                }
-            }
-        });
-        </script>
-
-                    
-                      <!--end::Col-->
+            <form action="<?php echo site_url('goods_management/submit_order'); ?>" method="post" enctype="multipart/form-data" class="needs-validation" novalidate>
+            <input type="hidden" name="planned_id" value="<?php echo $order_detail->planned_id; ?>">
+            <input type="hidden" name="order_id" value="<?php echo $order_detail->id; ?>">
+            <!--begin::Row-->
+            <div class="row">
+              <div class="col-12 mb-4">
+                <!-- Default box -->
+                <div class="card">
+                  <div class="card-body">
+                    <div class="row">
                       <!--begin::Col-->
+                        <div class="col-6">
+                            <div class="form-floating mb-3">
+                            <input type="text" class="form-control" id="floatingInputDate" placeholder="dd-mm-yyyy" name="date" required>
+                            <label for="floatingInput" class="fw-bold text-primary" style="font-size: 14px;">Action Date</label>
+                        </div>
+                        </div>
                       <div class="col-6">
                         <div class="form-floating mb-3">
-                          <input type="email" class="form-control" id="floatingInput" placeholder="name@example.com">
-                          <label for="floatingInput" class="fw-bold text-primary" style="font-size: 14px;">Requestor</label>
+                          <input type="name" class="form-control" id="floatingInput" placeholder="Requestor Name" value="<?php echo $this->session->userdata('user_name'); ?>" readonly>
+                          <label for="floatingInput" class="fw-bold text-primary" name="requestor" style="font-size: 14px;">Requestor</label>
                         </div>
                       </div>
-                      <!--end::Col-->
-                      <!--begin::Col-->
-                      <!-- <div class="col-6">
-                      <div class="form-outline mb-2" style="position: relative; top: -10px;">
-                      <label for="dropdownSearch" class="fw-bold text-primary" style="font-size: 14px;">Purchase Reason</label>
-                        <select class="form-select" id="dropdownSearch" aria-label="Floating label select" data-bs-display="static">
-                            <option value="" disabled selected>Select</option>
-                            <option value="1">Opsi 1</option>
-                            <option value="2">Opsi 2</option>
-                            <option value="3">Opsi 3</option>
-                        </select>
-                        </div> -->
                       <div class="col-6">
                         <div class="form-floating mb-3">
-                          <input type="email" class="form-control" id="floatingInput" placeholder="name@example.com">
-                          <label for="floatingInput" class="fw-bold text-primary" style="font-size: 14px;">Purchase Reason</label>
+                            <select class="form-select" id="purchase-reason" data-placeholder="Choose Purchase Reason" name="purchase_reason" required>
+                                <option></option>
+                                <?php foreach ($purchase_reason as $row) { ?>
+                                    <option value="<?php echo $row->purchase_reason; ?>"><?php echo $row->purchase_reason; ?></option>
+                                <?php } ?>
+                            </select>
+                            <label for="floatingSelect" class="fw-bold text-primary" style="font-size: 14px;">Purchase Reason</label>
                         </div>
                       </div>
-
-                      <!--end::Col-->
-                      <!--begin::Col-->
                       <div class="col-6">
-                      <div class="form-outline mb-2" style="position: relative; top: -10px;">
-                      <label for="dropdownSearch" class="fw-bold text-primary" style="font-size: 14px;">Requested For</label>
-                        <select class="form-select" id="dropdownSearch" aria-label="Floating label select" data-bs-display="static">
-                            <option value="" disabled selected>Select</option>
-                            <option value="1">Budi</option>
-                            <option value="2">Ahmad</option>
-                            <option value="3">Faqih</option>
-                        </select>
-                        </div>
+                        <div class="form-floating mb-3">
+                            <select class="form-select" id="requested-for" data-placeholder="Choose Requested For" name="requested_for" required>
+                                <option></option>
+                                <?php foreach ($user_list as $row) { ?>
+                                    <option value="<?php echo $row->nip; ?>"><?php echo $row->nama; ?> - <?php echo $row->email; ?></option>
+                                <?php } ?>
 
-                        <!-- Script khusus buat dropdownSearch -->
-                        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/choices.js/public/assets/styles/choices.min.css">
-                        <script src="https://cdn.jsdelivr.net/npm/choices.js/public/assets/scripts/choices.min.js"></script>
-                        <script>
-                            document.addEventListener('DOMContentLoaded', function () {
-                                new Choices('#dropdownSearch', {
-                                    searchEnabled: true, // Aktifkan fitur search
-                                    removeItemButton: true
-                                });
-                            });
-                        </script>
-
-                        <!-- Style khusus buat dropdownSearch -->
-                        <style>
-                        .choices__inner {
-                            border: 1px solid #ced4da !important;
-                            padding: 0.5rem;
-                            border-radius: 0.375rem;
-                            background-color: #fff;
-                            min-height: auto;
-                        }
-
-                        .choices__list--dropdown {
-                            border: 1px solidrgb(255, 255, 255) !important;
-                            border-radius: 0.375rem;
-                            position: absolute !important;
-                            z-index: 1050 !important; 
-                            width: 100%;
-                        }
-
-                        .choices.is-focused .choices__inner {
-                            border-color: #001F82 !important;
-                            box-shadow: 0 0 0 0.25rem rgba(13, 110, 253, 0.25);
-                        }
-
-                        .choices__list--dropdown .choices__item {
-                            padding: 0.5rem;
-                            font-size: 14px;
-                        }
-
-                        .choices__item--selectable {
-                            background-color:rgb(255, 255, 255);
-                            border-radius: 0.375rem;
-                        }
-                        </style>
-                        
-                        <!-- <div class="form-floating">
-                            <select class="form-select" id="floatingSelect">
-                            <option value="" disabled selected>Select</option>   
-                            <option value="1">Budi</option>
-                            <option value="2">Ahmad</option>
-                            <option value="3">Faqih</option>
                             </select>
                             <label for="floatingSelect" class="fw-bold text-primary" style="font-size: 14px;">Requested For</label>
-                        </div> -->
-
                         </div>
-                      <!--end::Col-->    
-                      <!--begin::Col-->
+                        </div>
                       <div class="col-6">
                         <div class="form-floating mb-3">
-                          <input type="email" class="form-control" id="floatingInput" placeholder="name@example.com">
+                          <input type="name" class="form-control" id="floatingInput" placeholder="name@example.com" name="remarks">
                           <label for="floatingInput" class="fw-bold text-primary" style="font-size: 14px;">Remarks</label>
                         </div>
                       </div>
                       <!--end::Col-->
                       <div class="col-6">
                         <div class="form-floating mb-3">
-                          <input type="email" class="form-control" id="floatingInput" placeholder="name@example.com">
+                          <input type="name" class="form-control" id="floatingInput" placeholder="name@example.com" name="area" value="<?php echo $area->area_code; ?>" readonly>
                           <label for="floatingInput" class="fw-bold text-primary" style="font-size: 14px;">Area</label>
                         </div>
                       </div>
-                      <!--end::Col-->                                                              
-                      <!--begin::Col-->
-                      <!-- <div class="col-6">
-                        <div class="form-floating mb-3">
-                          <input type="email" class="form-control" id="floatingInput" placeholder="name@example.com">
-                          <label for="floatingInput" class="fw-bold text-primary" style="font-size: 14px;">Attachment</label>
-                        </div>
-                      </div> -->
-                      <div class="col-6">
                       <div class="col-6">
                         <div class="mb-3">
                             <label for="attachmentInput" class="fw-bold text-primary" style="font-size: 14px;">Attachment</label>
-                            <div class="input-group">
-                                <input type="file" class="form-control d-none" id="attachmentInput" accept="*/*">
+                            <div class="input-group" >
+                                <input type="file" name="attachment" class="form-control d-none" id="attachmentInput" accept="*/*" style="width: 100%;">
                                 <input type="text" class="form-control" placeholder="Choose file..." readonly>
                                 <button class="btn btn-primary" type="button" id="uploadBtn">
                                     <i class="bi bi-upload"></i>
                                 </button>
                             </div>
-                        </div>
                     </div>
-
-                    <script>
-                        document.getElementById("uploadBtn").addEventListener("click", function() {
-                            document.getElementById("attachmentInput").click();
-                        });
-
-                        // Menampilkan nama file yang diunggah
-                        document.getElementById("attachmentInput").addEventListener("change", function() {
-                            let fileName = this.files.length > 0 ? this.files[0].name : "Choose file...";
-                            this.nextElementSibling.value = fileName;
-                        });
-                    </script>
-
-
-                      <!--end::Col-->
                     </div>                    
                     <h3 class="mb-2 text-primary fw-bold">Item Information</h3>
                     <table class="table table-bordered" style="width:100%">
@@ -231,84 +143,37 @@
                               <th style="color: #fff;background-color: #001F82;text-align: center;">Qty</th>
                               <th style="color: #fff;background-color: #001F82;text-align: center;">UoM</th>
                               <th style="color: #fff;background-color: #001F82;text-align: center;">Vendor</th>
-                              <th style="color: #fff;background-color: #001F82;text-align: center;">UoM Price</th>
-                              <th style="color: #fff;background-color: #001F82;text-align: center;">Total Price</th>
+                              <th style="color: #fff;background-color: #001F82;text-align: center;">UoM Price (Rp.)</th>
+                              <th style="color: #fff;background-color: #001F82;text-align: center;">Total Price (Rp.)</th>
                           </tr>
                       </thead>
                       <tbody>
-                          <tr>
-                            <td style="vertical-align: middle;text-align: center;font-size: 14px;">Alkohol</td>
+                        <?php foreach($order as $row) { ?>
+                            <tr>
+                            <td style="vertical-align: middle;text-align: center;font-size: 14px;"><?php echo $row->item_name; ?></td>
                               <td style="vertical-align: middle; font-size: 14px; padding: 8px;">
                                 <div style="display: flex; align-items: center; justify-content: space-between; width: 100%;">
-                                    <span style="flex-grow: 1; text-align: center;">20</span>
+                                    <span style="flex-grow: 1; text-align: center;"><?php echo $row->qty; ?></span>
                                 <button type="button" class="btn btn-primary btn-sm rounded-circle p-2.1" style="margin-left: 3px;">
                                     <i class="fa-solid fa-pen text-white"></i>
                                 </button>
                                 </div>
                             </td>
 
-                              <td style="vertical-align: middle;text-align: center;font-size: 14px;">Box</td>
+                              <td style="vertical-align: middle;text-align: center;font-size: 14px;"><?php echo $row->uom; ?></td>
                               <td style="vertical-align: middle; font-size: 14px; padding: 8px;">
                             <div style="display: flex; align-items: center; justify-content: space-between; width: 100%;">
-                                <span style="flex-grow: 1; text-align: center;">Vendor 1</span>
+                                <span style="flex-grow: 1; text-align: center;"><?php echo $row->vendor_code; ?></span>
                             <button type="button" class="btn btn-primary btn-sm rounded-circle p-2.1" style="margin-left: 3px;">
                                 <i class="fa-solid fa-pen text-white"></i>
                             </button>
                             </div>
                             </td>
 
-                              <td style="vertical-align: middle;text-align: center;font-size: 14px;">Rp. 5.000</td>
-                              <td style="vertical-align: middle;text-align: center;font-size: 14px;">Rp. 500.000</td>
+                              <td style="vertical-align: middle;text-align: right;font-size: 14px;"><?php echo myNum($row->price_per_uom); ?></td>
+                              <td style="vertical-align: middle;text-align: right;font-size: 14px;"><?php echo myNum($row->moq*$row->price_per_uom); ?></td>
                           </tr>
-                          <tr>
-                            <td style="vertical-align: middle;text-align: center;font-size: 14px;">Alkohol</td>
-                            <td style="vertical-align: middle; font-size: 14px; padding: 8px;">
-                                <div style="display: flex; align-items: center; justify-content: space-between; width: 100%;">
-                                    <span style="flex-grow: 1; text-align: center;">20</span>
-                                <button type="button" class="btn btn-primary btn-sm rounded-circle p-2.1" style="margin-left: 3px;">
-                                    <i class="fa-solid fa-pen text-white"></i>
-                                </button>
-                                </div>
-                            </td>
-
-                            <td style="vertical-align: middle;text-align: center;font-size: 14px;">Box</td>
-                            <td style="vertical-align: middle; text-align: center; font-size: 14px; padding: 8px;">
-                                <div style="display: flex; align-items: center; justify-content: space-between; width: 100%;">
-                                <span style="flex-grow: 1; text-align: center;">Vendor 2</span>
-                            <button type="button" class="btn btn-primary btn-sm rounded-circle p-2.1" style="margin-left: 3px;">
-                                <i class="fa-solid fa-pen text-white"></i>
-                            </button>
-                            </div>
-                            </td>
-
-                            <td style="vertical-align: middle;text-align: center;font-size: 14px;">Rp. 5.000</td>
-                            <td style="vertical-align: middle;text-align: center;font-size: 14px;">Rp. 500.000</td>
-                        </tr>
-                        <tr>
-                          <td style="vertical-align: middle;text-align: center;font-size: 14px;">Alkohol</td>
-                          
-                        <td style="vertical-align: middle; font-size: 14px; padding: 8px;">
-                            <div style="display: flex; align-items: center; justify-content: space-between; width: 100%;">
-                                <span style="flex-grow: 1; text-align: center;">20</span>
-                            <button type="button" class="btn btn-primary btn-sm rounded-circle p-2.1" style="margin-left: 3px;">
-                                <i class="fa-solid fa-pen text-white"></i>
-                             </button>
-                            </div>
-                        </td>
-
-                          <td style="vertical-align: middle;text-align: center;font-size: 14px;">Box</td>
-                          <td style="vertical-align: middle; font-size: 14px; padding: 8px;">
-                            <div style="display: flex; align-items: center; justify-content: space-between; width: 100%;">
-                                <span style="flex-grow: 1; text-align: center;">Vendor 3</span>
-                            <button type="button" class="btn btn-primary btn-sm rounded-circle p-2.1" style="margin-left: 3px;">
-                                <i class="fa-solid fa-pen text-white"></i>
-                            </button>
-                            </div>
-                        </td>
-
-                          <td style="vertical-align: middle;text-align: center;font-size: 14px;">Rp. 5.000</td>
-                          <td style="vertical-align: middle;text-align: center;font-size: 14px;">Rp. 500.000</td>
-                      </tr>                                                  
+                        <?php } ?>                                                
                       </tbody>  
                       </table>              
                   </div>
@@ -317,7 +182,7 @@
                   <button class="btn btn-sm btn-danger custom-btn-danger" type="button" style="font-weight: 600; border-radius: 50px; color:#001F82; width: 150px;" onclick="location.reload();">
                         Reset
                     </button>
-                  <button class="btn btn-sm btn-secondary custom-btn" type="button" style="font-weight: 600; border-radius: 50px; color:#001F82; width: 150px;">
+                  <button class="btn btn-sm btn-secondary custom-btn" type="submit" style="font-weight: 600; border-radius: 50px; color:#001F82; width: 150px;">
                         Submit
                     </button>
 
@@ -353,275 +218,78 @@
                 <!-- /.card -->
               </div>
             </div>   
-
+            </form> 
 <?php $this->load->view('_partials/footer.php'); ?>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+        <script>
+            flatpickr("#floatingInputDate", {
+                dateFormat: "d-m-Y",   
+                defaultDate: null,     
+                allowInput: true,     
+            onReady: function(selectedDates, dateStr, instance) {
+                instance._input.value = "dd-mm-yyyy"; 
+            },
+            onOpen: function(selectedDates, dateStr, instance) {
+                if (instance._input.value === "dd-mm-yyyy") {
+                    instance._input.value = "dd-mm-yyyy"; 
+                }
+            },
+            onChange: function(selectedDates, dateStr, instance) {
+                if (instance._input.value === " ") {
+                    instance._input.value = "dd-mm-yyyy"; 
+                }
+            }
+        });
+        </script>
+                    <script>
+                        document.getElementById("uploadBtn").addEventListener("click", function() {
+                            document.getElementById("attachmentInput").click();
+                        });
 
-<script>
+                        // Menampilkan nama file yang diunggah
+                        document.getElementById("attachmentInput").addEventListener("change", function() {
+                            let fileName = this.files.length > 0 ? this.files[0].name : "Choose file...";
+                            this.nextElementSibling.value = fileName;
+                        });
+                    </script>        
+<script>    
       $(document).ready(function() {
-          $('#example').DataTable();
+        $( '#purchase-reason' ).select2( {
+            theme: "bootstrap-5",
+            width: $( this ).data( 'width' ) ? $( this ).data( 'width' ) : $( this ).hasClass( 'w-100' ) ? '100%' : 'style',
+            placeholder: $( this ).data( 'placeholder' ),
+        });
 
-          Highcharts.setOptions({
-            colors: ['#C0CDD9', '#8EAACF', '#DAEAFF', '#7E99B1', '#64E572', '#D8DFE7', '#7E9AB2']
-          });
-
-          Highcharts.chart('container', {
-            chart: {
-                type: 'pie',
-                custom: {},
-                events: {
-                    render() {
-                        const chart = this,
-                            series = chart.series[0];
-                        let customLabel = chart.options.chart.custom.label;
-                    }
-                }
-            },
-            accessibility: {
-                point: {
-                    valueSuffix: '%'
-                }
-            },
-            title: {
-                text: ''
-            },
-            subtitle: {
-                text: ''
-            },
-            tooltip: {
-                pointFormat: '{series.name}: <b>{point.percentage:.0f}%</b>'
-            },
-            legend: {
-                enabled: false
-            },
-            plotOptions: {
-                series: {
-                    allowPointSelect: true,
-                    cursor: 'pointer',
-                    borderRadius: 8,
-                    dataLabels: [{
-                        enabled: true,
-                        distance: 20,
-                        format: '{point.name}'
-                    }, {
-                        enabled: true,
-                        distance: -15,
-                        format: '{point.percentage:.0f}%',
-                        style: {
-                            fontSize: '0.9em'
-                        }
-                    }],
-                    showInLegend: true
-                }
-            },
-            series: [{
-                name: 'Item',
-                colorByPoint: true,
-                innerSize: '50%',
-                data: [{
-                    name: 'Item 1',
-                    y: 23.9
-                }, {
-                    name: 'Item 2',
-                    y: 12.6
-                }, {
-                    name: 'Item 3',
-                    y: 37.0
-                }, {
-                    name: 'Item 4',
-                    y: 26.4
-                }]
-              }]
-           });     
-           
-           Highcharts.chart('container1', {
-            chart: {
-                type: 'pie',
-                custom: {},
-                events: {
-                    render() {
-                        const chart = this,
-                            series = chart.series[0];
-                        let customLabel = chart.options.chart.custom.label;
-
-                        // if (!customLabel) {
-                        //     customLabel = chart.options.chart.custom.label =
-                        //         chart.renderer.label(
-                        //             'Total<br/>' +
-                        //             '<strong>2 877 820</strong>'
-                        //         )
-                        //             .css({
-                        //                 color: '#000',
-                        //                 textAnchor: 'middle'
-                        //             })
-                        //             .add();
-                        // }
-
-                        // const x = series.center[0] + chart.plotLeft,
-                        //     y = series.center[1] + chart.plotTop -
-                        //     (customLabel.attr('height') / 2);
-
-                        // customLabel.attr({
-                        //     x,
-                        //     y
-                        // });
-                        // // Set font size based on chart diameter
-                        // customLabel.css({
-                        //     fontSize: `${series.center[2] / 12}px`
-                        // });
-                    }
-                }
-            },
-            accessibility: {
-                point: {
-                    valueSuffix: '%'
-                }
-            },
-            title: {
-                text: ''
-            },
-            subtitle: {
-                text: ''
-            },
-            tooltip: {
-                pointFormat: '{series.name}: <b>{point.percentage:.0f}%</b>'
-            },
-            legend: {
-                enabled: false
-            },
-            plotOptions: {
-                innerSize: '20%',            
-                series: {
-                    allowPointSelect: true,
-                    cursor: 'pointer',
-                    borderRadius: 8,
-                    dataLabels: [{
-                        enabled: true,
-                        distance: 20,
-                        format: '{point.name}'
-                    }, {
-                        enabled: true,
-                        distance: -15,
-                        format: '{point.percentage:.0f}%',
-                        style: {
-                            fontSize: '0.9em'
-                        }
-                    }],
-                    showInLegend: true
-                }
-            },
-            series: [{
-                name: 'Item',
-                colorByPoint: true,
-                innerSize: '50%',
-                data: [{
-                    name: 'Item 1',
-                    y: 23.9
-                }, {
-                    name: 'Item 2',
-                    y: 12.6
-                }, {
-                    name: 'Item 3',
-                    y: 37.0
-                }, {
-                    name: 'Item 4',
-                    y: 26.4
-                }]
-              }]
-           });      
-           
-           Highcharts.chart('container2', {
-            chart: {
-                type: 'bar',
-                custom: {},
-                events: {
-                    render() {
-                        const chart = this,
-                            series = chart.series[0];
-                        let customLabel = chart.options.chart.custom.label;
-
-                        // if (!customLabel) {
-                        //     customLabel = chart.options.chart.custom.label =
-                        //         chart.renderer.label(
-                        //             'Total<br/>' +
-                        //             '<strong>2 877 820</strong>'
-                        //         )
-                        //             .css({
-                        //                 color: '#000',
-                        //                 textAnchor: 'middle'
-                        //             })
-                        //             .add();
-                        // }
-
-                        const x = series.center[0] + chart.plotLeft,
-                            y = series.center[1] + chart.plotTop -
-                            (customLabel.attr('height') / 2);
-
-                        customLabel.attr({
-                            x,
-                            y
-                        });
-                        // Set font size based on chart diameter
-                        customLabel.css({
-                            fontSize: `${series.center[2] / 12}px`
-                        });
-                    }
-                }
-            },
-            accessibility: {
-                point: {
-                    valueSuffix: '%'
-                }
-            },
-            title: {
-                text: ''
-            },
-            subtitle: {
-                text: ''
-            },
-            tooltip: {
-                pointFormat: '{series.name}: <b>{point.percentage:.0f}%</b>'
-            },
-            legend: {
-                enabled: false
-            },
-            plotOptions: {
-                series: {
-                    allowPointSelect: true,
-                    cursor: 'pointer',
-                    borderRadius: 8,
-                    dataLabels: [{
-                        enabled: true,
-                        distance: 20,
-                        format: '{point.name}'
-                    }, {
-                        enabled: true,
-                        distance: -15,
-                        format: '{point.percentage:.0f}%',
-                        style: {
-                            fontSize: '0.9em'
-                        }
-                    }],
-                    showInLegend: true
-                }
-            },
-            series: [{
-                name: 'Item',
-                colorByPoint: true,
-                innerSize: '50%',
-                data: [{
-                    name: 'Item 1',
-                    y: 23.9
-                }, {
-                    name: 'Item 2',
-                    y: 12.6
-                }, {
-                    name: 'Item 3',
-                    y: 37.0
-                }, {
-                    name: 'Item 4',
-                    y: 26.4
-                }]
-              }]
-           });            
+        $( '#requested-for' ).select2( {
+            theme: "bootstrap-5",
+            width: $( this ).data( 'width' ) ? $( this ).data( 'width' ) : $( this ).hasClass( 'w-100' ) ? '100%' : 'style',
+            placeholder: $( this ).data( 'placeholder' ),
+        });
       });
   </script>
+  <script>
+                    // Example starter JavaScript for disabling form submissions if there are invalid fields
+                    (() => {
+                      'use strict';
+
+                      // Fetch all the forms we want to apply custom Bootstrap validation styles to
+                      const forms = document.querySelectorAll('.needs-validation');
+
+                      // Loop over them and prevent submission
+                      Array.from(forms).forEach((form) => {
+                        form.addEventListener(
+                          'submit',
+                          (event) => {
+                            if (!form.checkValidity()) {
+                              event.preventDefault();
+                              event.stopPropagation();
+                            }
+
+                            form.classList.add('was-validated');
+                          },
+                          false,
+                        );
+                      });
+                    })();
+                  </script>
