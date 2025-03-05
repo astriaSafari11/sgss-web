@@ -69,8 +69,8 @@ class Master_data extends CI_Controller
 					$row[] = $field->item_name;
 					$row[] = $field->uom;
 					$row[] = $field->est_lead_time;
-					$row[] = myCurr($field->price_per_uom);
 					$row[] = myNum($field->moq);
+					$row[] = myCurr($field->price_per_uom);
 					$row[] = myCurr($field->total_price);
 					$row[] = myCurr($field->price_equal_moq);
 					$row[] = myCurr($field->price_moq_divide_moq);
@@ -101,15 +101,16 @@ class Master_data extends CI_Controller
 					$row[] = ++$no;
 					$row[] = $field->item_code;
 					$row[] = $field->item_name;
+					$row[] = $field->vendor_code;
 					$row[] = $field->factory;
 					$row[] = $field->uom;
 					$row[] = $field->moq;
+					$row[] = $field->est_lead_time;
 					$row[] = $field->lt_pr_po;
-					$row[] = $field->vendor_code;
+					$row[] = myNum($field->lt_po_deliv);
 					$row[] = $field->lot_size;
 					$row[] = $field->order_cycle;
 					$row[] = myNum($field->initial_stock);
-					$row[] = myNum($field->lt_po_deliv);
 					$row[] = myNum($field->standart_safety_stock);
 					$data[] = $row;
 			}

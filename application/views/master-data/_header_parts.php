@@ -10,15 +10,15 @@
                         Master Data
                       </button>
                       <ul class="dropdown-menu">
-                        <li><a class="dropdown-item" href="<?= site_url('master_data/uom');?>">
+                        <li><a class="dropdown-item" href="#">
                             <i class="fa-solid fa-box-archive" style="margin-right:5px; margin-left: 5px;"></i>
                             UoM                           
                         </a></li>
-                        <li><a class="dropdown-item" href="<?= site_url('master_data/category');?>">
+                        <li><a class="dropdown-item" href="#">
                             <i class="fa-solid fa-box-archive" style="margin-right:5px; margin-left: 5px;"></i>
                             Category                    
                         </a></li>                        
-                        <li><a class="dropdown-item" href="<?= site_url('master_data/factory');?>">
+                        <li><a class="dropdown-item" href="#">
                             <i class="fa-solid fa-box-archive" style="margin-right:5px; margin-left: 5px;"></i>
                             Factory                   
                         </a></li>                        

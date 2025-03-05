@@ -25,24 +25,25 @@
                   <div class="card-body">
                     <div class="dt-container">
                         <table id="table-vendor" class="table table-striped table-bordered" width="100%">
-                        <thead style="text-align: center;white-space:nowrap;">
+                        <thead style="text-align: center;">
                             <tr >
                                 <th style="color: #fff;background-color: #001F82;text-align: center;">No.</th>
                                 <th style="color: #fff;background-color: #001F82;text-align: center;">Item Code</th>
                                 <th style="color: #fff;background-color: #001F82;text-align: center;">Item Name</th>
+                                <th style="color: #fff;background-color: #001F82;text-align: center;">Vendor Code</th>
                                 <th style="color: #fff;background-color: #001F82;text-align: center;">Factory</th>
                                 <th style="color: #fff;background-color: #001F82;text-align: center;">UoM</th>
                                 <th style="color: #fff;background-color: #001F82;text-align: center;">MoQ</th>
                                 <th style="color: #fff;background-color: #001F82;text-align: center;">LT_PR_PO</th>
-                                <th style="color: #fff;background-color: #001F82;text-align: center;">Vendor Code</th>
+                                <th style="color: #fff;background-color: #001F82;text-align: center;">LT_PO_TO_DELIV</th>
+                                <th style="color: #fff;background-color: #001F82;text-align: center;">Total Lead Time</th>
                                 <th style="color: #fff;background-color: #001F82;text-align: center;">Lot Size</th>
                                 <th style="color: #fff;background-color: #001F82;text-align: center;">Order Cycle</th>
                                 <th style="color: #fff;background-color: #001F82;text-align: center;">Initial Stock</th>
-                                <th style="color: #fff;background-color: #001F82;text-align: center;width:100px;">LT_PO_TO_DELIV</th>
                                 <th style="color: #fff;background-color: #001F82;text-align: center;">Standard Safety Stock</th>
                             </tr>
                         </thead>
-                        <tbody style="text-align: center;white-space:nowrap;vertical-align:center;">
+                        <tbody style="text-align: center;vertical-align:center;">
                         </tbody>
                         </table>                         
                     </div>             

@@ -125,16 +125,16 @@
                               <th style="color: #fff;background-color:#001F82;text-align: center;">UoM</th>
                               <th style="color: #fff;background-color:#001F82;text-align: center;">Price / UoM</th>
                               <th style="color: #fff;background-color:#001F82;text-align: center;">MoQ</th>
-                              <th style="color: #fff;background-color:#001F82;text-align: center;">Total Price</th>
-                              <th style="color: #fff;background-color:#001F82;text-align: center;">Total Price If Qty = MoQ</th>
-                              <th style="color: #fff;background-color:#001F82;text-align: center;">Price MoQ/MoQ</th>
+                              <th style="color: #fff;background-color:#001F82;text-align: center;">Total Price (Rp.)</th>
+                              <th style="color: #fff;background-color:#001F82;text-align: center;">Total Price If Qty = MoQ (Rp.)</th>
+                              <th style="color: #fff;background-color:#001F82;text-align: center;">Price MoQ/MoQ (Rp.)</th>
                               <th style="color: #fff;background-color:#001F82;text-align: center;">Saving</th>
                               <th style="color: #fff;background-color:#001F82;text-align: center;">Place To Buy</th>
                               <th style="color: #fff;background-color:#001F82;text-align: center;">Link</th>
                               <th style="color: #fff;background-color:#001F82;text-align: center;">Action</th>
                           </tr>
                       </thead>
-                      <tbody style="text-align: center;white-space:nowrap;vertical-align:center;">                       
+                      <tbody>                       
                       </tbody>
                     </table> 
               </div>
@@ -191,6 +191,20 @@
               },
               "order": [],        
               "columnDefs": [
+                { targets: [5,7,8,9],
+                    createdCell: function(cell) {
+                        $(cell).css('text-align', 'right');
+                        $(cell).css('vertical-align', 'middle');
+                        $(cell).css('white-space', 'nowrap');
+                    }
+                },
+                { targets: [1,2,3,4,6,10,11,12,13],
+                    createdCell: function(cell) {
+                        $(cell).css('text-align', 'center');
+                        $(cell).css('vertical-align', 'middle');
+                        $(cell).css('white-space', 'nowrap');
+                    }                    
+                },                 
                 {
                     targets: '_all',
                     createdCell: function(cell) {

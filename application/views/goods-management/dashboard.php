@@ -150,7 +150,7 @@
                                 </button>                                
                               </td>
                               <td style="vertical-align: middle;text-align: center;">                
-                                <a href="<?= site_url('goods_management/order');?>" class="btn btn-sm btn-outline-primary" style="font-weight: 600; border-radius: 50px; width: 150px;">
+                                <a href="<?= site_url('goods_management/order/'._encrypt($v->id));?>" class="btn btn-sm btn-outline-primary" style="font-weight: 600; border-radius: 50px; width: 150px;">
                                 ORDER NOW
                                 </a>  
                                 <button type="button" class="btn btn-sm btn-outline-danger" style="font-weight: 600; border-radius: 50px; width: 150px;">

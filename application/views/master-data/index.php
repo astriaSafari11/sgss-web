@@ -76,7 +76,7 @@
   <!-- End Search + filter -->
 
                         <table id="table-vendor" class="table table-striped table-bordered">
-                        <thead style="text-align: center;white-space:nowrap;">
+                        <thead style="text-align: center;vertical-align: middle;">
                             <tr >
                                 <th style="color: #fff;background-color: #001F82;text-align: center;">No.</th>
                                 <th style="color: #fff;background-color: #001F82;text-align: center;">Vendor Code</th>
@@ -87,9 +87,9 @@
                                 <th style="color: #fff;background-color: #001F82;text-align: center;">Item</th>
                                 <th style="color: #fff;background-color: #001F82;text-align: center;">UoM</th>
                                 <th style="color: #fff;background-color: #001F82;text-align: center;">Est. Lead Time</th>
-                                <th style="color: #fff;background-color: #001F82;text-align: center;">Price / UoM (Rp.)</th>
                                 <th style="color: #fff;background-color: #001F82;text-align: center;">MoQ</th>
-                                <th style="color: #fff;background-color: #001F82;text-align: center;width:100px;">Total Price (Rp.)</th>
+                                <th style="color: #fff;background-color: #001F82;text-align: center;">Price / UoM (Rp.)</th>
+                                <th style="color: #fff;background-color: #001F82;text-align: center;">Total Price (Rp.)</th>
                                 <th style="color: #fff;background-color: #001F82;text-align: center;">Total Price if QTY = MOQ (Rp.)</th>
                                 <th style="color: #fff;background-color: #001F82;text-align: center;">Price MOQ/MOQ (Rp.)</th>
                                 <th style="color: #fff;background-color: #001F82;text-align: center;">Savings (%)</th>
@@ -97,7 +97,7 @@
                                 <th style="color: #fff;background-color: #001F82;text-align: center;">Link</th>
                             </tr>
                         </thead>
-                        <tbody style="text-align: center;white-space:nowrap;vertical-align:center;">
+                        <tbody>
                         </tbody>
                         </table>                         
                     </div>             
@@ -127,10 +127,25 @@
             },
             "order": [],        
             "columnDefs": [
+                { targets: [10,11,12,13],
+                    createdCell: function(cell) {
+                        $(cell).css('text-align', 'right');
+                        $(cell).css('vertical-align', 'middle');
+                        $(cell).css('white-space', 'nowrap');
+                    }
+                },
+                { targets: [1,2,3,4,5,6,7,8,9,14,15,16],
+                    createdCell: function(cell) {
+                        $(cell).css('text-align', 'center');
+                        $(cell).css('vertical-align', 'middle');
+                        $(cell).css('white-space', 'nowrap');
+                    }                    
+                },         
                 {
                     targets: '_all',
                     createdCell: function(cell) {
                         $(cell).css('vertical-align', 'middle');
+                        $(cell).css('white-space', 'nowrap');
                     }
                 }
             ],
