@@ -10,12 +10,14 @@ abstract class CellsFactory
     /**
      * Initialise the cache storage.
      *
-     * @param Worksheet $worksheet Enable cell caching for this worksheet
+     * @param Worksheet $parent Enable cell caching for this worksheet
      *
      * @return Cells
      * */
-    public static function getInstance(Worksheet $worksheet)
+    public static function getInstance(Worksheet $parent)
     {
-        return new Cells($worksheet, Settings::getCache());
+        $instance = new Cells($parent, Settings::getCache());
+
+        return $instance;
     }
 }
