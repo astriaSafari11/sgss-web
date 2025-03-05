@@ -172,8 +172,8 @@ class Master_data extends CI_Controller
 
 			$output = array(
 					"draw" => $_POST['draw'],
-					"recordsTotal" => $this->master_model->count_all($search, 'vendor'),
-					"recordsFiltered" => $this->master_model->count_filtered($search, 'vendor'),
+					"recordsTotal" => $this->master_model->count_all($search, 'material'),
+					"recordsFiltered" => $this->master_model->count_filtered($search, 'material'),
 					"data" => $data,
 			);
 			//output dalam format JSON
