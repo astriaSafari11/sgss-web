@@ -59,7 +59,7 @@
                 <div class="d-flex justify-content-end">
                   
                 <!-- btn download all -->
-                <button onclick="DownloadAll()" class="btn btn-sm btn-outline-danger" style="font-weight: 600; border-radius: 50px; width: 150px;">Download All</button>
+                <button onclick="DownloadAll()" class="btn btn-sm btn-outline-primary" style="font-weight: 600; border-radius: 50px; width: 150px;">Download All</button>
 
                 <!-- Logic Download All (sementara) -->
                 <script>
