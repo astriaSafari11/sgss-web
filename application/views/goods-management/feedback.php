@@ -28,37 +28,16 @@
 .dataTables_wrapper .dataTables_paginate .paginate_button a {
     font-size: 12px !important;
 }
-</style>
 
-<!--script khusus buat perubahan ikon saat download, nanti baru dipindah-->
-<script>
-    document.addEventListener("DOMContentLoaded", function () {
-    document.querySelectorAll(".download-btn").forEach(function (btn) {
-        let fileName = btn.getAttribute("data-file");
-        let icon = btn.querySelector(".file-icon");
-
-        if (localStorage.getItem(fileName) === "downloaded") {
-            icon.className = "fas fa-file-circle-check text-success";
-        }
-
-        btn.addEventListener("click", function () {
-            setTimeout(() => {
-                icon.className = "fas fa-file-circle-check text-success";
-                localStorage.setItem(fileName, "downloaded");
-            }, 500);
-        });
-    });
-});
-
-function resetIcons() {
-    localStorage.clear(); // Hapus semua status download
-    document.querySelectorAll(".download-btn .file-icon").forEach(function (icon) {
-        icon.className = "fas fa-file-pdf text-primary"; // Kembalikan ikon ke PDF biasa
-    });
-    alert("Status download telah di-reset!");
-    location.reload();
+.resetDownload {
+    font-size: 12px;
+    padding: 5px 10px;
+    margin-left: 60%; 
+    margin-bottom: 10px; 
+    position: relative;
+    top: -50px;
 }
-</script>
+</style>
 
 <div class="row mb-2 justify-between">
               <div class="col-sm-6">
@@ -75,12 +54,82 @@ function resetIcons() {
                   </span>
                 </a>                  
               </div>
+
               <div class="col-sm-6">
                 <div class="d-flex justify-content-end">
                   
-                <!--sementara untuk testing download icon logic-->
-                <button onclick="resetIcons()" class="btn btn-sm btn-outline-danger" style="font-weight: 600; border-radius: 50px; width: 150px;">Reset Download</button>
+                <!-- btn download all -->
+                <button onclick="DownloadAll()" class="btn btn-sm btn-outline-danger" style="font-weight: 600; border-radius: 50px; width: 150px;">Download All</button>
 
+                <!-- Logic Download All (sementara) -->
+                <script>
+                  document.addEventListener("DOMContentLoaded", function () {
+                      document.querySelectorAll(".download-btn").forEach(function (btn) {
+                          let fileName = btn.getAttribute("data-file");
+                          let icon = btn.querySelector(".file-icon");
+
+                          if (localStorage.getItem(fileName) === "downloaded") {
+                              icon.className = "fas fa-file-circle-check text-success";
+                          }
+
+                          btn.addEventListener("click", function () {
+                              setTimeout(() => {
+                                  icon.className = "fas fa-file-circle-check text-success";
+                                  localStorage.setItem(fileName, "downloaded");
+                              }, 500);
+                          });
+                      });
+                  });
+
+                  function DownloadAll() {
+                      let downloadLinks = document.querySelectorAll('.download-btn');
+
+                      downloadLinks.forEach((link, index) => {
+                          setTimeout(() => {
+                              let url = link.getAttribute('href');
+                              let fileName = link.getAttribute('data-file');
+
+                              let a = document.createElement('a');
+                              a.href = url;
+                              a.download = fileName;
+                              document.body.appendChild(a);
+                              a.click();
+                              document.body.removeChild(a);
+
+                              // Ubah ikon setelah download
+                              let icon = link.querySelector(".file-icon");
+                              icon.className = "fas fa-file-circle-check text-success";
+                              localStorage.setItem(fileName, "downloaded");
+                          }, index * 200);
+                      });
+                  }
+
+                  // Fungsi untuk mereset status download dan ikon
+                  function resetIcons() {
+                      localStorage.clear();
+                      document.querySelectorAll(".download-btn .file-icon").forEach(function (icon) {
+                          icon.className = "fas fa-file-pdf text-primary";
+                      });
+                      alert("Status download telah di-reset!");
+                      location.reload();
+                  }
+
+                  // supaya card tidak kepanjangan
+                  function adjustCardHeight() {
+                      document.querySelectorAll(".adjusted-card-body").forEach(cardBody => {
+                          let parentCard = cardBody.closest(".card");
+                          
+                          if (parentCard) {
+                              let newHeight = parentCard.scrollHeight - 60;
+                              cardBody.style.height = newHeight + "px";
+                          }
+                      });
+                  }
+
+                  window.addEventListener("load", adjustCardHeight);
+                  window.addEventListener("resize", adjustCardHeight);
+
+              </script>
 
                   <button type="button" class="btn btn-sm btn-outline-primary" style="font-weight: 600; border-radius: 50px; width: 150px;">
                     Export
@@ -106,7 +155,7 @@ function resetIcons() {
                       </button>                       
                     </div>
                   </div> -->
-                  <div class="card-body">
+                  <div class="card-body adjusted-card-body">
 
     <!-- Start Dropdown Show X Entries -->
 <div class="d-flex justify-content-between align-items-center flex-wrap">
@@ -349,7 +398,9 @@ function resetIcons() {
                                 Feedback
                                 </a>  
                               </td>
-                    </tr>                     
+                    </tr>
+                    
+                    
                     <!--                                            
                       <tfoot>
                         <tr >
@@ -364,7 +415,12 @@ function resetIcons() {
                       </tr>
                       </tfoot>
                     -->
-                  </table>              
+                  </table>
+                  <!-- Tombol Reset Download -->
+                  
+                  <button class="btn btn-outline-danger mt-3 resetDownload" onclick="resetIcons()">
+                      Reset Download
+                  </button>              
                   </div>
                   <!-- /.card-body -->
                   <!-- <div class="card-footer">Footer</div> -->

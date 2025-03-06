@@ -173,11 +173,11 @@
       <!--begin::User Info (Factory + Username)-->
 <li class="nav-item dropdown d-flex flex-column align-items-start me-4">
 
-    <span class="text-primary fs-7">
+    <span class="text-body fs-7">
         <i class="fa-solid fa-location-dot me-2" style="color: #001F82;"></i> 
         Factory <?php echo $this->session->userdata('user_factory'); ?>
     </span>
-    <a href="#" class="dropdown-toggle text-primary fs-7 d-flex align-items-center text-decoration-none" data-bs-toggle="dropdown">
+    <a href="#" class="dropdown-toggle text-body fs-7 d-flex align-items-center text-decoration-none" data-bs-toggle="dropdown">
         <i class="fa-solid fa-user-circle me-2" style="color: #001F82;"></i>
         <?php echo $this->session->userdata('user_name'); ?>
     </a>
