@@ -115,8 +115,8 @@
             <div class="row">
               <div class="col-12 mt-2">
                 <div class="d-grid gap-2">
-                    <button type="submit" class="btn btn-primary w-100 py-8 mb-4 rounded-2">
-                        Sign In
+                    <button type="submit" class="btn btn-primary w-100 py-8 mb-4 rounded-2 fw-bold">
+                        SIGN IN
                     </button>
                 </div>
               </div>

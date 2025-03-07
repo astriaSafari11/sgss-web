@@ -109,6 +109,20 @@
                 </div>
                   <!--End Search Bar-->
                   </div>
+
+                  <style>
+                    a.underline-custom {
+                        color: #001F82;
+                        text-decoration: none;
+                    }
+
+                    a.underline-custom:hover {
+                        text-decoration: underline;
+                        font-weight: 600;
+                    }
+
+                  </style>
+
                     <table id="example" class="table table-sm" style="width:100%" cellspacing="0">
                       <thead>
                           <tr >
@@ -126,7 +140,7 @@
                       <?php foreach($item as $k => $v){ ?>
                             <tr>
                               <td style="vertical-align: middle;text-align: center;">
-                                <a href="<?= site_url('goods_management/stock_card_detail/'._encrypt($v->vendor_material_id));?>" style="font-weight: 600;">
+                                <a href="<?= site_url('goods_management/stock_card_detail/'._encrypt($v->vendor_material_id));?>" class="underline-custom">
                                   <?php echo $v->item_code;?></td>
                                 </a> 
                               <td style="vertical-align: middle;text-align: center;"><?php echo $v->item_name;?></td>
