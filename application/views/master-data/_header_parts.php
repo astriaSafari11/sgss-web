@@ -55,7 +55,7 @@
                         <div class="modal-dialog modal-lg">
                           <div class="modal-content">
                             <div class="modal-header">
-                              <h5 class="modal-title" id="exampleModalLabel" class="text-primary" style="color: #001F82;font-weight:600;">Import Material</h5>
+                              <h5 class="modal-title" id="exampleModalLabel" class="text-primary" style="color: #001F82;font-weight:600;">Import Master Data</h5>
                               <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                             </div>
                             <div class="modal-body">
@@ -70,8 +70,8 @@
                                   data-toggle="custom-file-input"
                                   accept=".csv, application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel"
                                 >
-                                <div class="text-center" style="margin-top: 10px;">
-                                <div class="user-loader" style="display: none;">
+                                <div class="" style="margin-top: 10px;">
+                                <div class="user-loader text-center" style="display: none;">
                                     <i class="fa fa-spinner fa-spin"></i> <small>Please wait ...</small>
                                 </div>
                                 <div class="alert alert-success alert-dismissable" role="alert" id="success-result" style="display: none;">

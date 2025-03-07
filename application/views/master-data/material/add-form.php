@@ -21,23 +21,23 @@
                   <div class="card-body">
                     <div class="row">                      
                       <!--begin::Col-->
-                      <!-- <div class="col-6">
+                      <div class="col-3">
                         <div class="form-floating mb-3">
-                          <input type="text" class="form-control" id="floatingInput" placeholder="material Code" name="item_code" required>
+                          <input type="text" class="form-control" id="floatingInput" placeholder="material Code" name="item_code" value ="auto filled" disabled>
                           <label for="floatingInput" class="fw-bold text-primary">Material Code</label>
                           <div class="invalid-feedback">This field is required.</div>
                         </div>
-                      </div> -->
+                      </div>
                       <!--end::Col-->
                       <!--begin::Col-->
-                      <div class="col-6">
+                      <div class="col-3">
                         <div class="form-floating mb-3">
                           <input type="text" class="form-control" id="floatingInput" placeholder="name@example.com" name="item_name" required>
                           <label for="floatingInput" class="fw-bold text-primary">Material Name</label>
                           <div class="invalid-feedback">This field is required.</div>
                         </div>
                       </div>
-                      <div class="col-6">
+                      <div class="col-3">
                         <div class="form-floating mb-3">
                           <input type="number" class="form-control" id="floatingInput" placeholder="name@example.com" name="size" required>
                           <label for="floatingInput" class="fw-bold text-primary">Size</label>
@@ -46,7 +46,7 @@
                       </div>                      
                       <!--end::Col-->
                       <!--begin::Col-->
-                      <div class="col-6">
+                      <div class="col-3">
                         <div class="form-floating mb-3">
                             <select class="form-select" aria-label="Default select example" id="uom" style="height: 56px;" name="uom" required>
                             <option value="" disabled>-- Select UoM --</option>
@@ -57,7 +57,7 @@
                       </div>
                       <!--end::Col-->
                       <!--begin::Col-->
-                      <div class="col-6">
+                      <div class="col-3">
                         <div class="form-floating mb-3">
                             <select class="form-select" aria-label="Default select example" id="factory" style="height: 56px;" name="factory" required>
                             <option value="" disabled>-- Select Factory --</option>
@@ -65,11 +65,67 @@
                             <label for="factory" class="fw-bold text-primary">Factory</label>
                             <div class="invalid-feedback">This field is required.</div>
                         </div>
-                      </div>                                                     
+                      </div>  
+                            <!--begin::Col-->
+                            <div class="col-3">
+                              <div class="form-floating mb-3">
+                                <input type="number" class="form-control" id="floatingInput" placeholder="name@example.com" name="lot_size" value ="0">
+                                <label for="floatingInput" class="fw-bold text-primary">Lot Size</label>
+                              </div>
+                            </div>
+                            <!--end::Col-->
+                            <!--begin::Col-->
+                            <div class="col-3">
+                              <div class="form-floating mb-3">
+                                <input type="number" class="form-control" id="floatingInput" placeholder="name@example.com" name="order_cycle" value ="0">
+                                <label for="floatingInput" class="fw-bold text-primary">Order Cycle</label>
+                              </div>
+                            </div>
+                            <div class="col-3">
+                              <div class="form-floating mb-3">
+                                <input type="number" class="form-control" id="floatingInput" placeholder="name@example.com" name="initial_stock" value ="0">
+                                <label for="floatingInput" class="fw-bold text-primary">Initial Stock</label>
+                              </div>
+                            </div>                                                                                                       
                       <!--end::Col-->                      
                       <!--begin::Col-->                 
                       <!--end::Col-->    
-                    </div>                              
+                    </div>
+                    <hr class="divider">      
+                          <div class="row">
+                            <!--begin::Col-->
+                            <div class="col-3">
+                              <div class="form-floating mb-3">
+                                <input type="text" class="form-control" id="floatingInput" placeholder="name@example.com" name="var_todo_list" value ="10">
+                                <label for="floatingInput" class="fw-bold text-primary">Todo list variable</label>
+                              </div>
+                            </div>
+                            <!--end::Col-->      
+                            <!--begin::Col-->
+                            <div class="col-3">
+                              <div class="form-floating mb-3">
+                                <input type="text" class="form-control" id="floatingInput" placeholder="name@example.com" name="var_stock_card_todo_list" value ="10">
+                                <label for="floatingInput" class="fw-bold text-primary">Stock card todo list variable</label>
+                              </div>
+                            </div>
+                            <!--end::Col-->
+                            <!--begin::Col-->
+                            <div class="col-3">
+                              <div class="form-floating mb-3">
+                                <input type="text" class="form-control" id="floatingInput" placeholder="name@example.com" name="var_stock_card_overstock" value ="50">
+                                <label for="floatingInput" class="fw-bold text-primary">Stock card overstock variable</label>
+                              </div>
+                            </div>
+                            <!--end::Col-->
+                            <!--begin::Col-->
+                            <div class="col-3">
+                              <div class="form-floating mb-3">
+                                <input type="text" class="form-control" id="floatingInput" placeholder="name@example.com" name="var_stock_card_ok" value ="10">
+                                <label for="floatingInput" class="fw-bold text-primary">Stock card ok variable</label>
+                              </div>
+                            </div>
+                            <!--end::Col-->                            
+                          </div>                                                   
                   </div>
                   <!-- /.card-body -->
                   <div class="card-footer">

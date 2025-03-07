@@ -97,8 +97,6 @@ class Ajax extends CI_Controller
 					'item_code' => $v
 				))->row()->id;
 
-				generate_gross_requirement($get_last_id);
-				generate_var_settings($get_last_id);
 				generate_item_movement($get_last_id);
 			}
 		}

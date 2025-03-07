@@ -165,7 +165,11 @@ class Master_data extends CI_Controller
 					$row[] = $field->item_code;
 					$row[] = $field->item_name;
 					$row[] = $field->factory;
+					$row[] = $field->size;
 					$row[] = $field->uom;
+					$row[] = $field->lot_size;
+					$row[] = $field->order_cycle;
+					$row[] = $field->initial_stock;
 					$row[] = $edit;
 					$data[] = $row;
 			}
@@ -442,8 +446,27 @@ class Master_data extends CI_Controller
 						"size" 						=> $this->input->post('size'),
 						"factory"					=> $this->input->post('factory'),
 						"uom"						=> $this->input->post('uom'),						
+						"lot_size"					=> $this->input->post('lot_size'),						
+						"order_cycle"				=> $this->input->post('order_cycle'),						
+						"initial_stock"				=> $this->input->post('initial_stock'),						
 					));				
 				if($inserted){
+
+					$get_last_id = $this->db->get_where("m_master_data_material",array(
+						"item_code" => $itemcode
+					));
+
+					if($get_last_id->num_rows() > 0){
+						$last_id = $get_last_id->row();
+						$last_id = $last_id->id;
+
+						generate_gross_requirement($last_id);
+						generate_var_settings($last_id,
+							$this->input->post('var_todo_list'),
+							$this->input->post('var_stock_card_todo_list'),
+							$this->input->post('var_stock_card_overstock'),
+							$this->input->post('var_stock_card_ok'));
+					}
 					$err = array(
 						'show' => true,
 						'type' => 'success',
@@ -470,6 +493,10 @@ class Master_data extends CI_Controller
 		$data['material'] = $this->db->get_where("m_master_data_material",array(
 			"id" => $item_code
 		))->row();		
+
+		$data['settings'] = $this->db->get_where("m_variable_settings",array(
+			"item_id" => $item_code
+		))->row();		
 		// debugCode($data);
 
 		$this->session->set_flashdata('page_title', 'FORM EDIT MATERIAL');
@@ -487,8 +514,20 @@ class Master_data extends CI_Controller
 					"item_name" 				=> $this->input->post('item_name'),
 					"factory"					=> $this->input->post('factory'),
 					"uom"						=> $this->input->post('uom'),	
+					"lot_size"					=> $this->input->post('lot_size'),						
+					"order_cycle"				=> $this->input->post('order_cycle'),						
+					"initial_stock"				=> $this->input->post('initial_stock'),						
 				), array("id" => $id)
 			);
+
+			_update(
+				"m_variable_settings", 
+				array(
+					"var_todo_list"             => $this->input->post('var_todo_list'),
+					"var_stock_card_todo_list"  => $this->input->post('var_stock_card_todo_list'),
+					"var_stock_card_overstock"  => $this->input->post('var_stock_card_overstock'),
+					'var_stock_card_ok'         => $this->input->post('var_stock_card_ok'),
+				), array("item_id" => $id));
 
 			if($inserted){
 				$err = array(
@@ -550,7 +589,7 @@ class Master_data extends CI_Controller
 		))->row();		
 
 		$data['var_settings'] = $this->db->get_where("m_variable_settings",array(
-			"vendor_material_id"	=> $id,
+			"item_id"	=> $data['material']->id,
 		))->row();		
 
 		// debugCode($data);
@@ -578,11 +617,11 @@ class Master_data extends CI_Controller
 		))->row();		
 
 		$data['var_settings'] = $this->db->get_where("m_variable_settings",array(
-			"vendor_material_id"	=> $id,
+			"item_id"	=> $data['material']->id,
 		))->row();		
 
 		$data['gross_req'] = $this->db->get_where("m_stock_card_formula",array(
-			"vendor_material_id"	=> $id,
+			"item_id"	=> $data['material']->id,
 		))->result();		
 		
 		$data['item_movement'] = $this->db->get_where("t_material_movement",array(
@@ -608,8 +647,12 @@ class Master_data extends CI_Controller
 				"vendor_code"	=> $get_data->vendor_code,
 			))->row();
 
+			$material = $this->db->get_where("m_master_data_material",array(
+				"item_code"	=> $get_data->item_code,
+			))->row();
+
 			$lt_po_deliv = !empty($this->input->post('lt_pr_po'))?$vendor->est_lead_time + $this->input->post('lt_pr_po'):NULL;
-			$standart_safety_stock = !empty($this->input->post('order_cycle'))&&!empty($this->input->post('lot_size'))?($lt_po_deliv/$this->input->post('order_cycle'))*$this->input->post('lot_size'):NULL;
+			$standart_safety_stock = !empty($material->order_cycle)&&!empty($material->lot_size)?($lt_po_deliv/$material->order_cycle)*$material->lot_size:NULL;
 			$price_per_uom = !empty($this->input->post('price_per_uom'))?str_replace(',', '', $this->input->post('price_per_uom')):NULL;
 			$price_equal_moq = !empty($this->input->post('price_equal_moq'))?str_replace(',', '', $this->input->post('price_equal_moq')):NULL;
 
@@ -618,37 +661,17 @@ class Master_data extends CI_Controller
 				array(
 					"moq" 							=> $this->input->post('moq'),
 					"lt_pr_po" 						=> $this->input->post('lt_pr_po'),
-					"lot_size"						=> $this->input->post('lot_size'),
-					"initial_stock"					=> $this->input->post('initial_stock'),	
-					"order_cycle"					=> $this->input->post('order_cycle'),	
+					"lot_size"						=> $material->lot_size,
+					"initial_stock"					=> $material->initial_stock,	
+					"order_cycle"					=> $material->order_cycle,	
 					"lt_po_deliv"					=> $lt_po_deliv,	
 					"standart_safety_stock"			=> $standart_safety_stock,	
-					// "initial_value_for_to_do"		=> $this->input->post('uom'),	
 					"price_per_uom"					=> $price_per_uom,	
 					"price_equal_moq"				=> $price_equal_moq,	
 					"place_to_buy"					=> $this->input->post('place_to_buy'),	
 					"link"							=> $this->input->post('link'),	
 
 				), array("id" => $id)
-			);
-
-			$get_var_settings = $this->db->get_where("m_variable_settings",array(
-				"vendor_material_id" => $id
-			))->row();
-
-			if(empty($get_var_settings)){
-				generate_var_settings($id);
-			}
-
-			_update(
-				"m_variable_settings", 
-				array(
-					"var_todo_list" 					=> $this->input->post('var_todo_list'),
-					"var_stock_card_todo_list" 			=> $this->input->post('var_stock_card_todo_list'),
-					"var_stock_card_overstock"			=> $this->input->post('var_stock_card_overstock'),
-					"var_stock_card_ok"					=> $this->input->post('var_stock_card_ok'),	
-
-				), array("vendor_material_id" => $id)
 			);
 
 			if($inserted){
@@ -675,7 +698,7 @@ class Master_data extends CI_Controller
 	function get_gross_req()
 	{		
 		$search = array(
-			"vendor_material_id" => _decrypt($this->input->get('id'))
+			"item_id" => _decrypt($this->input->get('id'))
 		);
 		$list = $this->gross_req_model->get_datatables($search);
 
@@ -837,7 +860,7 @@ class Master_data extends CI_Controller
 				);
 				$this->session->set_flashdata('toast', $err);
 			}
-			redirect('master_data/edit_vendor_material/'._encrypt($get_data->vendor_material_id));
+			redirect('master_data/edit_material/'._encrypt($get_data->item_id));
 		}else{
 			redirect('master_data/material_list');
 		}
@@ -1083,6 +1106,9 @@ class Master_data extends CI_Controller
 			$sheet->setCellValue("C{$index}", trim($list->factory));
 			$sheet->setCellValue("D{$index}", trim($list->uom));
 			$sheet->setCellValue("E{$index}", trim($list->size));
+			$sheet->setCellValue("F{$index}", trim($list->lot_size));
+			$sheet->setCellValue("G{$index}", trim($list->order_cycle));
+			$sheet->setCellValue("H{$index}", trim($list->initial_stock));
 
 			$styleArray = [
 					'font' => [
@@ -1110,14 +1136,14 @@ class Master_data extends CI_Controller
 			$sheet->setCellValue("B{$index}", trim($list->item_code));
 			$sheet->setCellValue("C{$index}", trim($list->moq?$list->moq:0));
 			$sheet->setCellValue("D{$index}", trim($list->lt_pr_po?$list->lt_pr_po:0));
-			$sheet->setCellValue("E{$index}", trim($list->lot_size?$list->lot_size:0));
-			$sheet->setCellValue("F{$index}", trim($list->order_cycle?$list->order_cycle:0));
-			$sheet->setCellValue("G{$index}", trim($list->initial_stock?$list->initial_stock:0));
-			$sheet->setCellValue("H{$index}", trim($list->price_per_uom?$list->price_per_uom:0));
-			$sheet->setCellValue("I{$index}", $list->price_per_uom*$list->moq);
-			$sheet->setCellValue("J{$index}", trim($list->price_equal_moq?$list->price_equal_moq:0));
-			$sheet->setCellValue("K{$index}", trim($list->place_to_buy));
-			$sheet->setCellValue("L{$index}", trim($list->link));
+			// $sheet->setCellValue("E{$index}", trim($list->lot_size?$list->lot_size:0));
+			// $sheet->setCellValue("F{$index}", trim($list->order_cycle?$list->order_cycle:0));
+			// $sheet->setCellValue("G{$index}", trim($list->initial_stock?$list->initial_stock:0));
+			$sheet->setCellValue("E{$index}", trim($list->price_per_uom?$list->price_per_uom:0));
+			$sheet->setCellValue("F{$index}", $list->price_per_uom*$list->moq);
+			$sheet->setCellValue("G{$index}", trim($list->price_equal_moq?$list->price_equal_moq:0));
+			$sheet->setCellValue("H{$index}", trim($list->place_to_buy));
+			$sheet->setCellValue("I{$index}", trim($list->link));
 
 			$styleArray = [
 					'font' => [
@@ -1177,6 +1203,10 @@ class Master_data extends CI_Controller
 					$check = $this->db->query("SELECT * FROM m_uom WHERE uom_code = ? AND uom_name = ?", array($uom, $name))->row();
 					if(empty($check)){
 						_add("m_uom", array("uom_code" => $uom, "uom_name" => $name));
+						$list [] = [
+							"status" => "success",
+							"data" => "New UoM ".$name." added",
+						];							
 					}
 				}
 			}
@@ -1190,6 +1220,11 @@ class Master_data extends CI_Controller
 					$check = $this->db->query("SELECT * FROM m_category WHERE category_name = ?", array($name))->row();
 					if(empty($check)){
 						_add("m_category", array("category_name" => $name));
+
+						$list [] = [
+							"status" => "success",
+							"data" => "New Category ".$name." added",
+						];							
 					}
 				}
 			}		
@@ -1203,6 +1238,11 @@ class Master_data extends CI_Controller
 					$check = $this->db->query("SELECT * FROM m_factory WHERE factory_name = ?", array($name))->row();
 					if(empty($check)){
 						_add("m_factory", array("factory_name" => $name));
+
+						$list [] = [
+							"status" => "success",
+							"data" => "New Factory ".$name." added",
+						];								
 					}
 				}
 			}				
@@ -1216,20 +1256,44 @@ class Master_data extends CI_Controller
 				$factory = $sheetData->getCell('C'.$i)->getValue();
 				$uom = $sheetData->getCell('D'.$i)->getValue();
 				$size = $sheetData->getCell('E'.$i)->getValue();
+				$lot_size = $sheetData->getCell('F'.$i)->getValue();
+				$order_cycle = $sheetData->getCell('G'.$i)->getValue();
+				$initial_stock = $sheetData->getCell('H'.$i)->getValue();
 
-				if(!empty($item_name) && !empty($uom) && !empty($size)){
+				if(!empty($item_name) && !empty($uom) && !empty($size) && !empty($lot_size) && !empty($order_cycle) && !empty($initial_stock)){
 					$check = $this->db->query("SELECT * FROM m_master_data_material WHERE item_code = ? ", array($item_code))->row();
-					if(empty($check)){
-						$genItemcode = strtolower(str_replace(' ', '', $item_name).$uom.$size);
-						_add("m_master_data_material", array("item_code" => $genItemcode, "item_name" => $item_name, "uom" => $uom, "size" => $size, "factory" => $factory));
+					$checkUoM = $this->db->query("SELECT * FROM m_uom WHERE uom_code = ? ", array($uom))->row();
 
+					if(!is_numeric($size) || !is_numeric($lot_size) || !is_numeric($order_cycle) || !is_numeric($initial_stock)){
 						$list [] = [
-							"item_code" => $genItemcode,
-							"item_name" => $item_name,
-							"uom" => $uom,
-							"size" => $size
-						];						
-					}
+							"status" 	=> "failed",
+							"data" 		=> "Incorrect data format on material row $i, please check and try again.",
+						];									
+					}else{
+						if(empty($checkUoM)){
+							$list [] = [
+								"status" 	=> "failed",
+								"data" 		=> "Incorrect data format on material row $i, please check and try again.",
+							];																
+						}else{
+							if(empty($check)){
+								$genItemcode = strtolower(str_replace(' ', '', $item_name).$uom.$size);
+								_add("m_master_data_material", array("item_code" => $genItemcode, "item_name" => $item_name, "uom" => $uom, "size" => $size, "factory" => $factory, "lot_size" => $lot_size, "order_cycle" => $order_cycle, "initial_stock" => $initial_stock));	
+		
+								$get_last_id = $this->db->get_where("m_master_data_material",array(
+									'item_code' => $genItemcode,
+								))->row()->id;
+				
+								generate_gross_requirement($get_last_id);
+								generate_var_settings($get_last_id,10,10,50,10);
+		
+								$list [] = [
+									"status" => "success",
+									"data" => "New material ".$genItemcode." - ".$item_name." added. ",
+								];						
+							}
+						}	
+					}				
 				}
 			}
 
@@ -1245,18 +1309,28 @@ class Master_data extends CI_Controller
 
 				if(!empty($vendor_code) && !empty($vendor_name) && !empty($est_lead_time) && !empty($category)){
 					$check = $this->db->query("SELECT * FROM m_master_data_vendor WHERE vendor_code = ? ", array($vendor_code))->row();
-					if(empty($check)){
-						$genItemcode = strtolower($item_name.$uom.$size);
-						_add("m_master_data_vendor", array("vendor_code" => $vendor_code, "category" => $category, "rating" => $rating, "vendor_name" => $vendor_name, "est_lead_time" => $est_lead_time));
+					$checkCategory = $this->db->query("SELECT * FROM m_category WHERE category_name = ? ", array($category))->row();
 
+					if(!is_numeric(($est_lead_time))){
 						$list [] = [
-							"vendor_code" => $vendor_code,
-							"category" => $category,
-							"rating" => $rating,
-							"vendor_name" => $vendor_name,
-							"est_lead_time" => $est_lead_time
-						];						
-
+							"status" 	=> "failed",
+							"data" 		=> "Incorrect data format on vendor row $i, please check and try again.",
+						];							
+					}else{
+						if(empty($checkCategory)){
+							$list [] = [
+								"status" 	=> "failed",
+								"data" 		=> "Incorrect category on vendor row $i, please check and try again.",
+							];							
+						}else{
+							if(empty($check)){
+								_add("m_master_data_vendor", array("vendor_code" => $vendor_code, "category" => $category, "rating" => $rating, "vendor_name" => $vendor_name, "est_lead_time" => $est_lead_time));	
+								$list [] = [
+									"status" => "success",
+									"data" => "New Vendor ".$vendor_code." - ".$vendor_name." added",
+								];							
+							}	
+						}
 					}
 				}
 			}	
@@ -1269,61 +1343,88 @@ class Master_data extends CI_Controller
 				$item_code = $sheetData->getCell('B'.$i)->getValue();
 				$moq = $sheetData->getCell('C'.$i)->getValue();
 				$lt_pr_po = $sheetData->getCell('D'.$i)->getValue();
-				$lot_size = $sheetData->getCell('E'.$i)->getValue();
-				$order_cycle = $sheetData->getCell('F'.$i)->getValue();
-				$initial_stock = $sheetData->getCell('G'.$i)->getValue();
-				$price_per_uom = $sheetData->getCell('H'.$i)->getValue();
-				$price_equal_uom = $sheetData->getCell('J'.$i)->getValue();
-				$place_to_buy = $sheetData->getCell('K'.$i)->getValue();
-				$link = $sheetData->getCell('L'.$i)->getValue();
+				// $lot_size = $sheetData->getCell('E'.$i)->getValue();
+				// $order_cycle = $sheetData->getCell('F'.$i)->getValue();
+				// $initial_stock = $sheetData->getCell('G'.$i)->getValue();
+				$price_per_uom = $sheetData->getCell('E'.$i)->getValue();
+				$price_equal_uom = $sheetData->getCell('G'.$i)->getValue();
+				$place_to_buy = $sheetData->getCell('H'.$i)->getValue();
+				$link = $sheetData->getCell('I'.$i)->getValue();
 
 				if(!empty($vendor_code) && !empty($item_code)){
 					$check = $this->db->query("SELECT * FROM m_vendor_material WHERE vendor_code = ? AND item_code = ? ", array($vendor_code, $item_code))->row();
-					if(empty($check)){
-						$vendor = $this->db->get_where("m_master_data_vendor",array(
-							"vendor_code"	=> $vendor_code,
-						))->row();
+					$checkVendor = $this->db->query("SELECT * FROM m_master_data_vendor WHERE vendor_code = ? ", array($vendor_code))->row();
+					$checkMaterial = $this->db->query("SELECT * FROM m_master_data_material WHERE item_code = ? ", array($item_code))->row();
 
-						$lt_po_deliv = !empty($lt_pr_po)?$vendor->est_lead_time + $lt_pr_po:NULL;
-						$standart_safety_stock = !empty($order_cycle)&&!empty($lot_size)?($lt_po_deliv/$order_cycle)*$lot_size:NULL;
-
-
-						_add(
-							"m_vendor_material",
-							[
-								'vendor_code' 					=> $vendor_code,
-								'item_code' 					=> $item_code,
-								"moq" 							=> $moq,
-								"lt_pr_po" 						=> $lt_pr_po,
-								"lot_size"						=> $lot_size,
-								"initial_stock"					=> $initial_stock,	
-								"order_cycle"					=> $order_cycle,	
-								"lt_po_deliv"					=> $lt_po_deliv,	
-								"standart_safety_stock"			=> $standart_safety_stock,	
-								"price_per_uom"					=> $price_per_uom,	
-								"price_equal_moq"				=> $price_equal_uom,	
-								"place_to_buy"					=> $place_to_buy,	
-								"link"							=> $link,									
-							]);	
-		
-						$get_last_id = $this->db->get_where("m_vendor_material",array(
-							'vendor_code' => $vendor_code,
-							'item_code' => $item_code,
-						))->row()->id;
-		
-						generate_gross_requirement($get_last_id);
-						generate_var_settings($get_last_id);
-						generate_item_movement($get_last_id);
-						
+					if(empty($checkVendor) || empty($checkMaterial)){
 						$list [] = [
-							"vendor_code" => $vendor_code,
-							"item_code" => $item_code
-						];												
+							"status" 	=> "failed",
+							"data" 		=> "Incorrect vendor material data on vendor material row $i, please check and try again.",
+						];	
+					}else{
+						if(!is_numeric(($moq)) || !is_numeric(($lt_pr_po))){
+							$list [] = [
+								"status" 	=> "failed",
+								"data" 		=> "Incorrect vendor material data on vendor material row $i, please check and try again.",
+							];	
+						}else{
+							if(empty($check)){
+								$vendor = $this->db->get_where("m_master_data_vendor",array(
+									"vendor_code"	=> $vendor_code,
+								))->row();
+		
+								$material = $this->db->get_where("m_master_data_material",array(
+									"item_code"	=> $item_code,
+								))->row();
+		
+								$lt_po_deliv = !empty($lt_pr_po)?$vendor->est_lead_time + $lt_pr_po:NULL;
+								$standart_safety_stock = !empty($material->order_cycle)&&!empty($material->lot_size)?($lt_po_deliv/$material->order_cycle)*$material->lot_size:NULL;
+		
+								_add("m_vendor_material", array(
+									'vendor_code' 					=> $vendor_code,
+									'item_code' 					=> $item_code,
+									"moq" 							=> $moq,
+									"lt_pr_po" 						=> $lt_pr_po,
+									"lot_size"						=> $material->lot_size,
+									"initial_stock"					=> $material->initial_stock,	
+									"order_cycle"					=> $material->order_cycle,	
+									"lt_po_deliv"					=> $lt_po_deliv,	
+									"standart_safety_stock"			=> $standart_safety_stock,	
+									"price_per_uom"					=> $price_per_uom,	
+									"price_equal_moq"				=> $price_equal_uom,	
+									"place_to_buy"					=> $place_to_buy,	
+									"link"							=> $link,	
+								));	
+
+								$get_last_id = $this->db->get_where("m_vendor_material",array(
+									'vendor_code' => $vendor_code,
+									'item_code' => $item_code,
+								))->row()->id;
+				
+								generate_item_movement($get_last_id);
+
+								$list [] = [
+									"status" => "success",
+									"data" => "New Vendor Material ".$vendor_code." - ".$item_code." added",
+								];							
+							}
+						}
 					}
 				}
 			}			
 
-			$msg = 'File imported successfully. New record inserted.';
+			$html = 'File imported successfully. New record inserted.<br>';
+			$html .= '<ul>';
+			foreach($list as $k => $v){
+				if($v['status'] == "failed"){
+					$html .= '<li><span style="color:red;">'.$v['status'].' - '.$v['data'].'</span></li>';
+				}else{
+					$html .= '<li><span>'.$v['status'].' - '.$v['data'].'</span></li>';
+				}
+			}
+			$html .= '</ul>';
+			$msg = $html;
+
 			if(file_exists($file_name))
 				unlink($file_name);
 				if(count($list) > 0) {

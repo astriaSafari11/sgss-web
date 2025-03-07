@@ -79,21 +79,6 @@
                               </div>
                             </div>
                             <!--end::Col-->                          
-                            <!--begin::Col-->
-                            <div class="col-3">
-                              <div class="form-floating mb-3">
-                                <input type="number" class="form-control" id="floatingInput" placeholder="name@example.com" name="lot_size" value ="<?php echo $material->lot_size;?>">
-                                <label for="floatingInput" class="fw-bold text-primary">Lot Size</label>
-                              </div>
-                            </div>
-                            <!--end::Col-->
-                            <!--begin::Col-->
-                            <div class="col-3">
-                              <div class="form-floating mb-3">
-                                <input type="number" class="form-control" id="floatingInput" placeholder="name@example.com" name="order_cycle" value ="<?php echo $material->order_cycle;?>">
-                                <label for="floatingInput" class="fw-bold text-primary">Order Cycle</label>
-                              </div>
-                            </div>
                             <div class="col-3">
                               <div class="form-floating mb-3">
                                 <input type="number" class="form-control" id="floatingInput" placeholder="name@example.com" name="lt_pr_po" value ="<?php echo $material->lt_pr_po;?>">
@@ -102,17 +87,11 @@
                             </div>                          
                             <div class="col-3">
                               <div class="form-floating mb-3">
-                                <input type="number" class="form-control" id="floatingInput" placeholder="name@example.com" name="initial_stock" value ="<?php echo myNum($material->initial_stock);?>">
-                                <label for="floatingInput" class="fw-bold text-primary">Initial Stock</label>
-                              </div>
-                            </div>  
-                            <div class="col-3">
-                              <div class="form-floating mb-3">
                                 <input type="text" class="form-control" id="floatingInput" placeholder="name@example.com" name="place_to_buy" value ="<?php echo $material->place_to_buy;?>">
                                 <label for="floatingInput" class="fw-bold text-primary">Place To Buy</label>
                               </div>
                             </div>   
-                            <div class="col-6">
+                            <div class="col-9">
                               <div class="form-floating mb-3">
                                 <input type="text" class="form-control" id="floatingInput" placeholder="name@example.com" name="link" value ="<?php echo $material->link;?>">
                                 <label for="floatingInput" class="fw-bold text-primary">Link</label>
@@ -134,7 +113,7 @@
                             <div class="col-3">
                               <div class="form-floating mb-3">
                                 <input type="text" class="form-control" id="floatingInput" placeholder="name@example.com" value ="<?php echo myNum($material->standart_safety_stock);?>" disabled>
-                                <label for="floatingInput" class="fw-bold text-primary">Standart Safety Stock</label>
+                                <label for="floatingInput" class="fw-bold text-primary">Standard Safety Stock</label>
                               </div>
                             </div>
                             <!--end::Col-->
@@ -154,42 +133,7 @@
                               </div>
                             </div>
                             <!--end::Col-->
-                          </div>                              
-                          <hr class="divider">      
-                          <div class="row">
-                            <!--begin::Col-->
-                            <div class="col-3">
-                              <div class="form-floating mb-3">
-                                <input type="text" class="form-control" id="floatingInput" placeholder="name@example.com" name="var_todo_list" value ="<?php echo !empty($var_settings->var_todo_list)?$var_settings->var_todo_list:0;?>">
-                                <label for="floatingInput" class="fw-bold text-primary">Todo list variable</label>
-                              </div>
-                            </div>
-                            <!--end::Col-->      
-                            <!--begin::Col-->
-                            <div class="col-3">
-                              <div class="form-floating mb-3">
-                                <input type="text" class="form-control" id="floatingInput" placeholder="name@example.com" name="var_stock_card_todo_list" value ="<?php echo !empty($var_settings->var_stock_card_todo_list)?$var_settings->var_stock_card_todo_list:0;?>">
-                                <label for="floatingInput" class="fw-bold text-primary">Stock card todo list variable</label>
-                              </div>
-                            </div>
-                            <!--end::Col-->
-                            <!--begin::Col-->
-                            <div class="col-3">
-                              <div class="form-floating mb-3">
-                                <input type="text" class="form-control" id="floatingInput" placeholder="name@example.com" name="var_stock_card_overstock" value ="<?php echo !empty($var_settings->var_stock_card_overstock)?$var_settings->var_stock_card_overstock:0;?>">
-                                <label for="floatingInput" class="fw-bold text-primary">Stock card overstock variable</label>
-                              </div>
-                            </div>
-                            <!--end::Col-->
-                            <!--begin::Col-->
-                            <div class="col-3">
-                              <div class="form-floating mb-3">
-                                <input type="text" class="form-control" id="floatingInput" placeholder="name@example.com" name="var_stock_card_ok" value ="<?php echo !empty($var_settings->var_stock_card_ok)?$var_settings->var_stock_card_ok:0;?>">
-                                <label for="floatingInput" class="fw-bold text-primary">Stock card ok variable</label>
-                              </div>
-                            </div>
-                            <!--end::Col-->                            
-                          </div>                              
+                          </div>                                                           
                         </div>         
                       </div>                     
                     </div>
@@ -204,56 +148,10 @@
                 </form>
                 <!-- /.card -->
               </div>
-            </div>          
-            <div class="row mb-2">
-              <div class="col-sm-6">
-                <a class="btn btn-primary position-relative" style="font-weight: 600; white-space:nowrap;">
-                  Gross Requirement Formula
-                </a> 
-              </div>             
-            </div>            
-            <!--begin::Row-->            
-            <div class="row">
-              <div class="col-12 mb-4">
-                    <table id="table-item" class="table table-sm table-bordered" width="100%">
-                      <thead  style="text-align: center;white-space:nowrap;">
-                          <tr >
-                              <th style="color: #fff;background-color:#001F82;text-align: center;">Year</th>
-                              <th style="color: #fff;background-color:#001F82;text-align: center;">Week</th>
-                              <th style="color: #fff;background-color:#001F82;text-align: center;">Type</th>
-                              <th style="color: #fff;background-color:#001F82;text-align: center;">AVG Week Start</th>
-                              <th style="color: #fff;background-color:#001F82;text-align: center;">AVG Week End</th>
-                              <th style="color: #fff;background-color:#001F82;text-align: center;">Action</th>
-                          </tr>
-                      </thead>
-                      <tbody style="text-align: center;white-space:nowrap;vertical-align:center;">                       
-                      </tbody>
-                    </table> 
-              </div>            
-            </div>             
+            </div>                      
           </div>           
           <script>
-      $(document).ready(function() {
-          $('#table-item').DataTable({
-              scrollX: true,
-              "processing": true, 
-              "serverSide": true, 
-              "ordering": false,
-              "ajax": {
-                "url": "<?= site_url('master_data/get_gross_req?id='._encrypt($material->id));?>",
-                "type": "POST"
-              },
-              "order": [],        
-              "columnDefs": [
-                {
-                    targets: '_all',
-                    createdCell: function(cell) {
-                      $(cell).css('vertical-align', 'middle');
-                    }
-                }
-            ],
-          });      
-
+      $(document).ready(function() {   
           $(".pricePerUom").on('keyup', function(){
             var val = this.value;
             val = val.replace(/[^0-9\.]/g,'');

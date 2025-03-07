@@ -130,7 +130,15 @@ function _hard_delete($table, $par){
     }
 }
 
-function generate_gross_requirement($vendor_material_id){
+/*************  ✨ Codeium Command ⭐  *************/
+/**
+ * Generate gross requirement for given material id
+ *
+ * @param int $material_id material id
+ *
+ * @return void
+ */
+function generate_gross_requirement($material_id){
     $CI = getCI();
     $data = array();
 
@@ -138,15 +146,14 @@ function generate_gross_requirement($vendor_material_id){
     $get_last_week = date('W', strtotime('December 28th'));
     $get_max_manual_input = 6;
 
-    $get_data = $CI->db->get_where('m_vendor_material', array(
-        "id" => $vendor_material_id
+    $get_data = $CI->db->get_where('m_master_data_material', array(
+        "id" => $material_id
     ))->row();
 
     for($w = 1; $w <= $get_last_week; $w++){
         $exist = $CI->db->get_where('m_stock_card_formula', array(
-            "vendor_code"   => $get_data->vendor_code,
+            "item_id"        => $get_data->id,
             "item_code"     => $get_data->item_code,
-            "vendor_material_id" => $vendor_material_id,            
             "year" => $year,
             "week" => $w
         ))->row();
@@ -154,9 +161,8 @@ function generate_gross_requirement($vendor_material_id){
         if(!$exist){
             if($w <= $get_max_manual_input){
                 $data = array(
-                    "vendor_code"   => $get_data->vendor_code,
+                    "item_id"        => $get_data->id,
                     "item_code"     => $get_data->item_code,
-                    "vendor_material_id" => $vendor_material_id,
                     "year" => $year,
                     "week" => $w,
                     "type" => 'manual',
@@ -168,9 +174,8 @@ function generate_gross_requirement($vendor_material_id){
                 $start_avg = $w - 5;
                 $end_avg = $w - 1;
                 $data = array(
-                    "vendor_code"   => $get_data->vendor_code,
+                    "item_id"        => $get_data->id,
                     "item_code"     => $get_data->item_code,
-                    "vendor_material_id" => $vendor_material_id,
                     "year" => $year,
                     "week" => $w,
                     "type" => 'formula',
@@ -183,27 +188,25 @@ function generate_gross_requirement($vendor_material_id){
     }
 }
 
-function generate_var_settings($vendor_material_id){
+function generate_var_settings($material_id, $var1, $var2, $var3, $var4){
     $CI = getCI();
-    $get_data = $CI->db->get_where('m_vendor_material', array(
-        "id" => $vendor_material_id
+    $get_data = $CI->db->get_where('m_master_data_material', array(
+        "id" => $material_id
     ))->row();
 
     $exist = $CI->db->get_where('m_variable_settings', array(
-        "vendor_code"   => $get_data->vendor_code,
         "item_code"     => $get_data->item_code,
-        "vendor_material_id" => $vendor_material_id,            
+        "item_id"       => $get_data->id,            
     ))->row();
 
     if(!$exist){
         $data = array(
-            "vendor_code"   => $get_data->vendor_code,
             "item_code"     => $get_data->item_code,
-            "vendor_material_id" => $vendor_material_id,
-            "var_todo_list"             => 10,
-            "var_stock_card_todo_list"  => 10,
-            "var_stock_card_overstock"  => 10,
-            'var_stock_card_ok'         => 10,
+            "item_id"       => $get_data->id,            
+            "var_todo_list"             => $var1,
+            "var_stock_card_todo_list"  => $var2,
+            "var_stock_card_overstock"  => $var3,
+            'var_stock_card_ok'         => $var4,
         );
         _add_nologs('m_variable_settings', $data);
     }
