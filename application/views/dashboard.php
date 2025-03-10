@@ -84,7 +84,9 @@
                 />
                   </span>
                   <div class="info-box-content" style="height: 150px;color: #001F82;">
-                    <button type="button" class="btn btn-secondary" style="font-size: 24px; font-weight: 600; color: #001F82; border-radius: 20px;">Saving Simulator</button>
+                  <a href="<?= base_url('saving-simulator.php'); ?>" class="btn btn-secondary" style="font-size: 24px; font-weight: 600; color: #001F82; border-radius: 20px;">
+                      Saving Simulator
+                  </a>
                   </div>
                   <!-- /.info-box-content -->
                 </div>

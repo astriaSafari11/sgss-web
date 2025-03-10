@@ -367,16 +367,17 @@
                 </a>
               </li>  
               <li class="nav-item sidebar">
-                <a href="<?= site_url('saving_simulator');?>" class="nav-link sidebar">
-                <img
-                  src="<?= base_url('assets/dist/images/saving_icon.png');?>"
-                  alt="Saving Icon"
-                  class="brand-image icon"
-                  style="width:33px; height:33px"
-                />
-                <p class="ms-1">Saving Simulator</p>  
-              </a>
+                  <a href="<?= site_url('saving_simulator'); ?>" class="nav-link d-flex align-items-center">
+                      <img 
+                          src="<?= base_url('assets/dist/images/saving_icon.png'); ?>" 
+                          alt="Saving Icon" 
+                          class="brand-image icon me-2" 
+                          style="width: 33px; height: 33px;"
+                      />
+                      <p class="mb-0">Saving Simulator</p>  
+                  </a>
               </li>
+
 
               <li class="nav-item sidebar">
                 <a href="<?= site_url('auth/logout');?>" class="nav-link sidebar">
