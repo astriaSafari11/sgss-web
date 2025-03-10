@@ -22,14 +22,15 @@
                             <i class="fa-solid fa-box-archive" style="margin-right:5px; margin-left: 5px;"></i>
                             Factory                   
                         </a></li>                        
-                        <li><a class="dropdown-item" href="<?= site_url('master_data/vendor_list');?>">
-                            <i class="fa-solid fa-address-card" style="margin-right:5px; margin-left: 5px;"></i>
-                            Vendor                           
-                        </a></li>
+                        <li><hr class="dropdown-divider" /></li>
                         <li><a class="dropdown-item" href="<?= site_url('master_data/material_list');?>">
                             <i class="fa-solid fa-box-archive" style="margin-right:5px; margin-left: 5px;"></i>
                             Material                    
                         </a></li>                        
+                        <li><a class="dropdown-item" href="<?= site_url('master_data/vendor_list');?>">
+                            <i class="fa-solid fa-address-card" style="margin-right:5px; margin-left: 5px;"></i>
+                            Vendor                           
+                        </a></li>
                         <li><hr class="dropdown-divider" /></li>
                         <li><a class="dropdown-item" href="<?= site_url('master_data');?>">
                             <i class="fa-solid fa-boxes-packing" style="margin-right:5px; margin-left: 5px;"></i>
@@ -72,7 +73,7 @@
                                 >
                                 <div class="" style="margin-top: 10px;">
                                 <div class="user-loader text-center" style="display: none;">
-                                    <i class="fa fa-spinner fa-spin"></i> <small>Please wait ...</small>
+                                    <i class="fa fa-spinner fa-spin"></i> <small>Please wait system is processing your data...</small>
                                 </div>
                                 <div class="alert alert-success alert-dismissable" role="alert" id="success-result" style="display: none;">
                                     <div class="success-text"></div>
@@ -107,7 +108,9 @@
                                   beforeSend: function() {
                                       $("#btnUpload").prop('disabled', true);
                                       $(".user-loader").show();
-                                  }, 
+                                      $("#success-result").hide();
+                                      $("#failed-result").hide();
+                                    }, 
                                   success: function(result) {
                                       $("#btnUpload").prop('disabled', false);
                                       if($.isEmptyObject(result.error_message)) {

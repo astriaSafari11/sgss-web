@@ -41,17 +41,21 @@
 
 <div class="row mb-2 justify-between">
               <div class="col-sm-6">
-                <a href="<?= site_url('goods_management');?>"class="btn btn-sm btn-outline-primary position-relative" style="font-weight: 600; border-radius: 50px;">
+                <a href="<?= site_url('goods_management');?>" class="btn btn-sm btn-outline-primary position-relative" style="font-weight: 600; border-radius: 50px;">
                   Request List
-                  <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger"> 5
-                  <span class="visually-hidden">unread messages</span>
-                  </span>
+                  <?php if($req_count > 0) { ?>
+                    <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger"> <?php echo $req_count; ?>
+                      <span class="visually-hidden">unread messages</span>
+                    </span>
+                  <?php } ?>
                 </a>                
-                <a href="<?= site_url('goods_management/feedback');?>" class="btn btn-sm btn-primary position-relative" style="font-weight: 600; border-radius: 50px;">
+                <a href="#" class="btn btn-sm btn-primary position-relative" style="font-weight: 600; border-radius: 50px;">
                   Feedback List
-                  <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger"> 5
-                  <span class="visually-hidden">unread messages</span>
-                  </span>
+                  <?php if($feedback_count > 0) { ?>
+                    <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger"> <?php echo $feedback_count; ?>
+                      <span class="visually-hidden">unread messages</span>
+                    </span>
+                  <?php } ?>
                 </a>                  
               </div>
 
@@ -229,17 +233,25 @@
                           </tr>
                       </thead>
                       <tbody>
-                          <tr>
-                              <td style="vertical-align: middle;text-align: center; font-size: 14px;">2011-04-25</td>
-                              <td style="vertical-align: middle;text-align: center; font-size: 14px;">2011-04-25</td>
-                              <td style="vertical-align: middle;text-align: center; font-size: 14px;">ALK001</td>
-                              <td style="vertical-align: middle;text-align: center; font-size: 14px;">Alkohol</td>
-                              <td style="vertical-align: middle;text-align: center; font-size: 14px; font-size: 14px;">100</td>
-                              <td style="vertical-align: middle;text-align: center; font-size: 14px;">ml</td>
-                              <td style="vertical-align: middle;text-align: center;">
-                                <button class="btn btn-sm btn-danger" style="font-weight: 600; border-radius: 50px; width: 100%;">
-                                  Rejected
-                                </button>                                
+                          <?php foreach($feedback_list as $k => $v){ ?>
+                            <tr>
+                              <td style="vertical-align: middle;text-align: center;font-size: 14px;"><?php echo mDate($v->due_date);?></td>
+                              <td style="vertical-align: middle;text-align: center;font-size: 14px;"><?php echo mDate($v->until_due_date);?></td>
+                              <td style="vertical-align: middle;text-align: center;font-size: 14px;"><?php echo $v->item_code;?></td>
+                              <td style="vertical-align: middle;text-align: center;font-size: 14px;"><?php echo $v->item_name;?></td>
+                              <td style="vertical-align: middle;text-align: center;font-size: 14px;"><?php echo $v->qty;?></td>
+                              <td style="vertical-align: middle;text-align: center;font-size: 14px;"><?php echo $v->uom;?></td>
+                              <td style="vertical-align: middle;text-align: center;font-size: 14px;">
+                                <?php if($v->order_statuses == 'rejected'){ ?>
+                                  <button class="btn btn-sm btn-danger" style="font-weight: 600; border-radius: 50px; width: 100%;">
+                                    Rejected
+                                  </button>                                
+                                <?php } ?>
+                                <?php if($v->order_statuses == 'auto_approved' || $v->order_statuses == 'approved'){ ?>
+                                  <button class="btn btn-sm btn-success" style="font-weight: 600; border-radius: 50px; width: 100%;">
+                                    Approved
+                                  </button>                                
+                                <?php } ?>
                               </td>
                               <!-- <td style="vertical-align: middle;text-align: center;">
                                 <a href="path/to/pdf/file.pdf" class="btn btn-sm btn-outline-primary" style="border-radius: 50px;" download>
@@ -248,7 +260,7 @@
                               </td> -->
 
                               <td style="vertical-align: middle; text-align: center;">
-                                <a href="path/to/pdf/file1.pdf"
+                                <a href="<?php echo base_url('assets/upload/order/'.$v->attachment_file); ?>"
                                   class="btn btn-sm btn-outline-primary download-btn btn-custom-download"
                                   style="border-radius: 50px;"
                                   data-file="file1.pdf"
@@ -258,163 +270,13 @@
                               </td>
 
                               <td style="vertical-align: middle;text-align: center;">                
-                                <a href="<?= site_url('goods_management/order');?>" class="btn btn-sm btn-outline-primary" style="font-weight: 600; border-radius: 50px; width: 250px;">
+                                <a href="<?= site_url('goods_management/feedback_form/'._encrypt($v->order_id));?>" class="btn btn-sm btn-outline-primary" style="font-weight: 600; border-radius: 50px; width: 250px;">
                                 Feedback
                                 </a>  
                               </td>
-                          </tr>
-                          <tr>
-                            <td style="vertical-align: middle;text-align: center; font-size: 14px;">2011-04-25</td>
-                            <td style="vertical-align: middle;text-align: center; font-size: 14px;">2011-04-25</td>
-                            <td style="vertical-align: middle;text-align: center; font-size: 14px;">ALK001</td>
-                            <td style="vertical-align: middle;text-align: center; font-size: 14px;">Alkohol</td>
-                            <td style="vertical-align: middle;text-align: center; font-size: 14px;">100</td>
-                            <td style="vertical-align: middle;text-align: center; font-size: 14px;">ml</td>
-                            <td style="vertical-align: middle;text-align: center;">
-                                <button class="btn btn-sm btn-danger" style="font-weight: 600; border-radius: 50px; width: 100%;">
-                                  Rejected
-                                </button>                                
-                              </td>
-                              
-                              <td style="vertical-align: middle; text-align: center;">
-                                <a href="path/to/pdf/file2.pdf"
-                                  class="btn btn-sm btn-outline-primary download-btn btn-custom-download"
-                                  style="border-radius: 50px;"
-                                  data-file="file2.pdf"
-                                download>
-                                <i class="fas fa-file-pdf text-primary file-icon"></i>
-                              </a>
-                              </td>
-
-                              <!-- <td style="vertical-align: middle;text-align: center;">
-                                <a href="path/to/pdf/file.pdf" class="btn btn-sm btn-outline-primary" style="border-radius: 50px;" download>
-                                <i class="fas fa-file-pdf"></i>
-                                </a> -->
-                              </td>
-                              <td style="vertical-align: middle;text-align: center;">                
-                                <a href="<?= site_url('goods_management/order');?>" class="btn btn-sm btn-outline-primary" style="font-weight: 600; border-radius: 50px; width: 250px;">
-                                Feedback
-                                </a>  
-                              </td>
-                        </tr>
-                        <tr>
-                          <td style="vertical-align: middle;text-align: center; font-size: 14px;">2011-04-25</td>
-                          <td style="vertical-align: middle;text-align: center; font-size: 14px;">2011-04-25</td>
-                          <td style="vertical-align: middle;text-align: center; font-size: 14px;">ALK001</td>
-                          <td style="vertical-align: middle;text-align: center; font-size: 14px;">Alkohol</td>
-                          <td style="vertical-align: middle;text-align: center; font-size: 14px;">100</td>
-                          <td style="vertical-align: middle;text-align: center; font-size: 14px;">ml</td>
-                          <td style="vertical-align: middle;text-align: center;">
-                                <button class="btn btn-sm btn-danger" style="font-weight: 600; border-radius: 50px; width: 100%;">
-                                  Rejected
-                                </button>                                
-                              </td>
-                              <!-- <td style="vertical-align: middle;text-align: center;">
-                                <a href="path/to/pdf/file.pdf" class="btn btn-sm btn-outline-primary" style="border-radius: 50px;" download>
-                                <i class="fas fa-file-pdf"></i>
-                                </a>
-                              </td> -->
-
-                              <td style="vertical-align: middle; text-align: center;">
-                                <a href="path/to/pdf/file3.pdf"
-                                  class="btn btn-sm btn-outline-primary download-btn btn-custom-download"
-                                  style="border-radius: 50px;"
-                                  data-file="file3.pdf"
-                                download>
-                                <i class="fas fa-file-pdf text-primary file-icon"></i>
-                              </a>
-                              </td>
-
-                              <td style="vertical-align: middle;text-align: center;">                
-                                <a href="<?= site_url('goods_management/order');?>" class="btn btn-sm btn-outline-primary" style="font-weight: 600; border-radius: 50px; width: 250px;">
-                                Feedback
-                                </a>  
-                              </td>
-                      </tr>
-                      <tr>
-                        <td style="vertical-align: middle;text-align: center; font-size: 14px;">2011-04-25</td>
-                        <td style="vertical-align: middle;text-align: center; font-size: 14px;">2011-04-25</td>
-                        <td style="vertical-align: middle;text-align: center; font-size: 14px;">ALK001</td>
-                        <td style="vertical-align: middle;text-align: center; font-size: 14px;">Alkohol</td>
-                        <td style="vertical-align: middle;text-align: center; font-size: 14px;">100</td>
-                        <td style="vertical-align: middle;text-align: center; font-size: 14px;">ml</td>
-                        <td style="vertical-align: middle;text-align: center;">
-                                <button class="btn btn-sm btn-success" style="font-weight: 600; border-radius: 50px; width: 100%;">
-                                  Approved
-                                </button>                                
-                              </td>
-                              <!-- <td style="vertical-align: middle;text-align: center;">
-                                <a href="path/to/pdf/file.pdf" class="btn btn-sm btn-outline-primary" style="border-radius: 50px;" download>
-                                <i class="fas fa-file-pdf"></i>
-                                </a>
-                              </td> -->
-
-                              <td style="vertical-align: middle; text-align: center;">
-                                <a href="path/to/pdf/file4.pdf"
-                                  class="btn btn-sm btn-outline-primary download-btn btn-custom-download"
-                                  style="border-radius: 50px;"
-                                  data-file="file4.pdf"
-                                download>
-                                <i class="fas fa-file-pdf text-primary file-icon"></i>
-                              </a>
-                              </td>
-
-                              <td style="vertical-align: middle;text-align: center;">                
-                                <a href="<?= site_url('goods_management/order');?>" class="btn btn-sm btn-outline-primary" style="font-weight: 600; border-radius: 50px; width: 250px;">
-                                Feedback
-                                </a>  
-                              </td>
-                    </tr>  
-                    <tr>
-                        <td style="vertical-align: middle;text-align: center; font-size: 14px;">2011-04-25</td>
-                        <td style="vertical-align: middle;text-align: center; font-size: 14px;">2011-04-25</td>
-                        <td style="vertical-align: middle;text-align: center; font-size: 14px;">ALK001</td>
-                        <td style="vertical-align: middle;text-align: center; font-size: 14px;">Alkohol</td>
-                        <td style="vertical-align: middle;text-align: center; font-size: 14px;">100</td>
-                        <td style="vertical-align: middle;text-align: center; font-size: 14px;">ml</td>
-                        <td style="vertical-align: middle;text-align: center; font-size: 14px;">
-                                <button class="btn btn-sm btn-success" style="font-weight: 600; border-radius: 50px; width: 100%;">
-                                  Approved
-                                </button>                                
-                              </td>
-                              <!-- <td style="vertical-align: middle;text-align: center;">
-                                <a href="path/to/pdf/file.pdf" class="btn btn-sm btn-outline-primary" style="border-radius: 50px;" download>
-                                <i class="fas fa-file-pdf"></i>
-                                </a>
-                              </td> -->
-
-                              <td style="vertical-align: middle; text-align: center;">
-                                <a href="path/to/pdf/file5.pdf"
-                                  class="btn btn-sm btn-outline-primary download-btn btn-custom-download"
-                                  style="border-radius: 50px;"
-                                  data-file="file5.pdf"
-                                download>
-                                <i class="fas fa-file-pdf text-primary file-icon"></i>
-                              </a>
-                              </td>
-
-                              <td style="vertical-align: middle;text-align: center;">                
-                                <a href="<?= site_url('goods_management/order');?>" class="btn btn-sm btn-outline-primary" style="font-weight: 600; border-radius: 50px; width: 250px;">
-                                Feedback
-                                </a>  
-                              </td>
-                    </tr>
-                    
-                    
-                    <!--                                            
-                      <tfoot>
-                        <tr >
-                          <th style="color: #fff;background-color: #001F82;text-align: center;">Due Date</th>
-                          <th style="color: #fff;background-color: #001F82;text-align: center;">Until Due Date</th>
-                          <th style="color: #fff;background-color: #001F82;text-align: center;">Item Code</th>
-                          <th style="color: #fff;background-color: #001F82;text-align: center;">Item</th>
-                          <th style="color: #fff;background-color: #001F82;text-align: center;">Qty</th>
-                          <th style="color: #fff;background-color: #001F82;text-align: center;">UoM</th>
-                          <th style="color: #fff;background-color: #001F82;text-align: center;">Status</th>
-                          <th style="color: #fff;background-color: #001F82;text-align: center;">Action</th>
-                      </tr>
-                      </tfoot>
-                    -->
+                          </tr>                            
+                          <?php } ?>
+                      </tbody>
                   </table>
                   <!-- Tombol Reset Download -->
                   

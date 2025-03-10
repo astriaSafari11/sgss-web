@@ -254,10 +254,10 @@ function generate_item_movement($vendor_material_id){
     }
 }
 
-function get_avg_value($vendor_material_id, $week){
+function get_avg_value($vendor_material_id, $item_id, $week){
     $CI = getCI();
     $get_data = $CI->db->get_where('m_stock_card_formula', array(
-        "vendor_material_id" => $vendor_material_id,
+        "item_id" => $item_id,
         "week" => $week
     ))->row();
 
@@ -272,5 +272,117 @@ function get_avg_value($vendor_material_id, $week){
     ')->row();
 
     return $get_avg->avg_gross;
+}
+
+function calc_sched_receipt($mat_mov_id, $schedule_receipt)
+{
+        $CI = getCI();
+        $id = $mat_mov_id;			
+        $get_data = $CI->db->get_where("t_material_movement",array(
+            "id"	=> $id,
+        ))->row();
+        $get_initial_week = $get_data->week;
+
+        $get_material = $CI->db->get_where("m_vendor_material",array(
+            "id"	=> $get_data->vendor_material_id,
+        ))->row();			
+
+        $get_mat_detail = $CI->db->get_where("m_master_data_material",array(
+            "item_code"	=> $get_data->item_code,
+        ))->row();
+
+        $gross_req = $get_data->gross_requirement;
+        $get_last_week = date('W', strtotime('December 28th'));
+        $get_last_week = 12;
+        $total_data = array();
+        
+        for($i = $get_initial_week; $i <= $get_last_week; $i++){
+            $get_stock_card = $CI->db->get_where("m_stock_card_formula",array(
+                "item_code"				=> $get_data->item_code,
+                "week" 					=> $i
+            ))->row();			
+
+            $get_prev_week_data = $CI->db->get_where("t_material_movement",array(
+                "vendor_material_id"	=> $get_data->vendor_material_id,
+                "week" 					=> $i-1
+            ))->row();		
+
+            $get_curr_week_data = $CI->db->get_where("t_material_movement",array(
+                "vendor_material_id"	=> $get_data->vendor_material_id,
+                "week" 					=> $i
+            ))->row();		
+
+            $stock_on_hand = $get_data->week==1?($get_material->initial_stock+$schedule_receipt)-$gross_req:($get_prev_week_data->stock_on_hand+$schedule_receipt)-$gross_req;
+            $current_safety_stock = min($stock_on_hand,$get_material->standart_safety_stock);
+            $net_on_hand = $stock_on_hand-$current_safety_stock;
+            $net_requirement = min($stock_on_hand,0);					
+
+            if($get_stock_card->type=='formula'){
+                $gross_req = get_avg_value($get_data->vendor_material_id, $get_mat_detail->id,$i);
+            }
+
+            if($i != $get_initial_week){
+                $schedule_receipt = $get_curr_week_data->schedules_receipts;
+            }
+
+            $data= array(
+                'week' => $i,
+                'gross_requirement' => $gross_req,
+                'schedules_receipts' => $schedule_receipt,
+                'stock_on_hand' => myNum($stock_on_hand),
+                'current_safety_stock' => myNum($current_safety_stock),
+                'net_on_hand' => myNum($net_on_hand),
+                'net_requirement' => myNum($net_requirement),
+                'planned_order_receipt' => 0,
+                'planned_order_release' => 0,					
+            );
+
+            _update('t_material_movement',$data, array(
+                "vendor_material_id"	=> $get_data->vendor_material_id,
+                "week" => $i
+            ));
+
+            if($net_on_hand >= 1){
+                _hard_delete('t_stock_planned_request',array(
+                    "vendor_material_id"	=> $get_data->vendor_material_id,
+                    "week" => $i,
+                    "order_status" => 0
+                ));
+            }
+
+            // if($net_on_hand <= 0){
+            //     $planned_order_receipt = MAX($get_material->moq,$get_material->lot_size);
+            //     _update('t_material_movement',array(
+            //         'planned_order_receipt' => $planned_order_receipt,
+            //     ), array(
+            //         "vendor_material_id"	=> $get_data->vendor_material_id,
+            //         "week" => $i
+            //     ));
+                
+            //     $planned_release = array(
+            //         'vendor_code' => $get_data->vendor_code,
+            //         'item_code' => $get_mat_detail->item_code,
+            //         'vendor_material_id' => $get_data->vendor_material_id,
+            //         'item_name' => $get_mat_detail->item_name,
+            //         'qty' => $planned_order_receipt,
+            //         'uom' => $get_mat_detail->uom,
+            //         'year' => date('Y'),
+            //         'week' => $i,
+            //         'status' => 'urgent',
+            //         'due_date' => date("Y-m-d H:i:s"),
+            //         'until_due_date' => date("Y-m-d H:i:s"),
+            //     );
+
+            //     _add('t_stock_planned_request', $planned_release);
+            // }
+
+            // _update('t_material_movement',array(
+            //     'planned_order_release' => $planned_order_receipt,						
+            // ), array(
+            //     "vendor_material_id"	=> $get_data->vendor_material_id,
+            //     "week" => $i-1
+            // ));
+
+        }
 }
 ?>

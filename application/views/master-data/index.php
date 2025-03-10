@@ -25,55 +25,61 @@
                   <div class="card-body">
                     <div class="dt-container">
                     <div class="d-flex justify-content-between align-items-center flex-wrap">
-    
-<div class="d-flex align-items-center">
-        <label for="entriesSelect" class="me-2 fs-7">Show</label>
-        <select id="entriesSelect" class="form-select form-select-sm w-auto fs-7">
-            <option value="10">10</option>
-            <option value="25">25</option>
-            <option value="50">50</option>
-            <option value="100">100</option>
-        </select>
-        <span class="ms-2 fs-7">entries</span>
-    </div>
-    <!-- End Dropdown Show X Entries -->
+                        <div class="d-flex align-items-center">
+                                <label for="entriesSelect" class="me-2 fs-7">Show</label>
+                                <select id="entriesSelect" class="form-select form-select-sm w-auto fs-7">
+                                    <option value="10">10</option>
+                                    <option value="25">25</option>
+                                    <option value="50">50</option>
+                                    <option value="100">100</option>
+                                </select>
+                                <span class="ms-2 fs-7">entries</span>
+                            </div>
+                            <!-- End Dropdown Show X Entries -->
 
-    <!-- Start Search + Filter -->
-    <div class="d-flex align-items-center gap-2 flex-wrap">
-        <!-- Filter 1 -->
-        <label for="filterBy1" class="small">Filter 1:</label>
-        <select id="filterBy1" class="form-select form-select-sm w-auto">
-            <option value="all">All</option>
-            <option value="0">Column 1</option>
-            <option value="1">Column 2</option>
-            <option value="2">Column 3</option>
-        </select>
+                            <!-- Start Search + Filter -->
+                            <div class="d-flex align-items-center gap-2 flex-wrap">
+                                <!-- Filter 1 -->
+                                <label for="filterBy1" class="small">Column:</label>
+                                <select id="filterBy1" class="form-select form-select-sm w-auto">
+                                    <option value="all">All</option>
+                                    <option value="0">Vendor Code</option>
+                                    <option value="1">Vendor Name</option>
+                                    <option value="2">Vendor Category</option>
+                                    <option value="2">Item Code</option>
+                                    <option value="2">Item Name</option>
+                                    <option value="2">Est. Lead Time</option>
+                                    <option value="2">MoQ</option>
+                                    <option value="2">Price per Uom</option>
+                                    <option value="2">Saving</option>
+                                    <option value="2">Price Equal MoQ</option>
+                                </select>
 
-        <!-- Filter 2 -->
-        <label for="filterBy2" class="small">Filter 2:</label>
-        <select id="filterBy2" class="form-select form-select-sm w-auto">
-            <option value="all">All</option>
-            <option value="A">Category A</option>
-            <option value="B">Category B</option>
-            <option value="C">Category C</option>
-        </select>
+                                <!-- Filter 2 -->
+                                <label for="filterBy2" class="small">Filter:</label>
+                                <select id="filterBy2" class="form-select form-select-sm w-auto">
+                                    <option value="all">Is</option>
+                                    <option value="A">Not</option>
+                                    <option value="B">Greater Than</option>
+                                    <option value="C">Less Than</option>
+                                    <option value="C">Equal</option>
+                                    <option value="B">Greater Than Equal</option>
+                                    <option value="C">Less Than Equal</option>
+                                    <option value="C">Like</option>
+                                </select>
 
-        <!-- Filter 3 -->
-        <label for="filterBy3" class="small">Filter 3:</label>
-        <select id="filterBy3" class="form-select form-select-sm w-auto">
-            <option value="all">All</option>
-            <option value="active">Active</option>
-            <option value="inactive">Inactive</option>
-        </select>
+                                <!-- Filter 3 -->
+                                <label for="filterBy3" class="small">Search:</label>
+                                <input type="text" id="searchInput" class="form-control form-control-sm w-auto" placeholder="Search">
 
-        <!-- Search Button -->
-        <button class="btn btn-outline-primary btn-sm" type="button" id="searchBtn">
-            <i class="fas fa-search"></i>
-        </button>
+                                <!-- Search Button -->
+                                <button class="btn btn-outline-primary btn-sm" type="button" id="searchBtn">
+                                    <i class="fas fa-search"></i>
+                                </button>
 
-    </div>
-</div>
-  <!-- End Search + filter -->
+                            </div>
+                        </div>
+                        <!-- End Search + filter -->
 
                         <table id="table-vendor" class="table table-striped table-bordered">
                         <thead style="text-align: center;vertical-align: middle;">

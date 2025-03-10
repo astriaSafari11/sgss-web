@@ -40,6 +40,7 @@ class Auth_model extends CI_Model
 			$this->session->set_userdata('user_role_id',$user->role_id);
 			$this->session->set_userdata('user_role',$user->role);
 			$this->session->set_userdata('user_factory',$user->factory);
+			$this->session->set_userdata('session_created',time());
 		
 			return $this->session->has_userdata(self::SESSION_KEY);
 		}else{
@@ -57,6 +58,12 @@ class Auth_model extends CI_Model
 		$query = $this->db->get_where($this->_table, ['id' => $user_id]);
 		return $query->row();
 	}
+
+	public function session_timeout()
+	{
+		if(time() - $this->session->userdata('session_created') > 1800) return false;
+		return true;
+	}	
 
 	public function logout()
 	{

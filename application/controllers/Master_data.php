@@ -880,17 +880,17 @@ class Master_data extends CI_Controller
 
 			$get_mat_detail = $this->db->get_where("m_master_data_material",array(
 				"item_code"	=> $get_data->item_code,
-			))->row();			
+			))->row();
 
 			$gross_req = $this->input->post('gross_requirement');
 			$schedule_receipt = $this->input->post('schedule_receipt');
 			$get_last_week = date('W', strtotime('December 28th'));
-			$get_last_week = $get_initial_week+12;
+			$get_last_week = 12;
 			$total_data = array();
 			
 			for($i = $get_initial_week; $i <= $get_last_week; $i++){
 				$get_stock_card = $this->db->get_where("m_stock_card_formula",array(
-					"vendor_material_id"	=> $get_data->vendor_material_id,
+					"item_code"				=> $get_data->item_code,
 					"week" 					=> $i
 				))->row();			
 
@@ -916,7 +916,7 @@ class Master_data extends CI_Controller
 						$gross_req = $get_curr_week_data->gross_requirement;
 					}					
 				}else{
-					$gross_req = get_avg_value($get_data->vendor_material_id,$i);
+					$gross_req = get_avg_value($get_data->vendor_material_id, $get_mat_detail->id,$i);
 				}
 
 				if($i == $get_initial_week){
@@ -943,6 +943,12 @@ class Master_data extends CI_Controller
 				));
 
 				if($net_on_hand <= 0){
+
+					$exist = $this->db->get_where("t_stock_planned_request",array(
+						"vendor_material_id"	=> $get_data->vendor_material_id,
+						"week" => $i
+					))->row();
+
 					$planned_order_receipt = MAX($get_material->moq,$get_material->lot_size);
 					_update('t_material_movement',array(
 						'planned_order_receipt' => $planned_order_receipt,
@@ -963,10 +969,24 @@ class Master_data extends CI_Controller
 						'status' => 'urgent',
 						'due_date' => date("Y-m-d H:i:s"),
 						'until_due_date' => date("Y-m-d H:i:s"),
+						'order_status' => 0
 					);
 
-					_add('t_stock_planned_request', $planned_release);
-				}
+					if(!$exist){
+						_add('t_stock_planned_request', $planned_release);
+					}else{
+						_update('t_stock_planned_request',$planned_release, array(
+							"id"	=> $exist->id,
+						));
+					}
+				}else{
+					_hard_delete('t_stock_planned_request',array(
+						"vendor_material_id"	=> $get_data->vendor_material_id,
+						"week" => $i,
+						"order_status" => 0
+					));
+
+				}	
 
 				_update('t_material_movement',array(
 					'planned_order_release' => $planned_order_receipt,						
@@ -1261,10 +1281,10 @@ class Master_data extends CI_Controller
 				$initial_stock = $sheetData->getCell('H'.$i)->getValue();
 
 				if(!empty($item_name) && !empty($uom) && !empty($size) && !empty($lot_size) && !empty($order_cycle) && !empty($initial_stock)){
-					$check = $this->db->query("SELECT * FROM m_master_data_material WHERE item_code = ? ", array($item_code))->row();
+					$check = $this->db->query("SELECT * FROM m_master_data_material WHERE item_name = ? AND size = ? AND uom = ? ", array($item_name, $size, $uom))->row();
 					$checkUoM = $this->db->query("SELECT * FROM m_uom WHERE uom_code = ? ", array($uom))->row();
 
-					if(!is_numeric($size) || !is_numeric($lot_size) || !is_numeric($order_cycle) || !is_numeric($initial_stock)){
+					if(!is_numeric($lot_size) || !is_numeric($order_cycle) || !is_numeric($initial_stock)){
 						$list [] = [
 							"status" 	=> "failed",
 							"data" 		=> "Incorrect data format on material row $i, please check and try again.",
@@ -1413,13 +1433,13 @@ class Master_data extends CI_Controller
 				}
 			}			
 
-			$html = 'File imported successfully. New record inserted.<br>';
+			$html = 'Processing file finished.<br>';
 			$html .= '<ul>';
 			foreach($list as $k => $v){
 				if($v['status'] == "failed"){
-					$html .= '<li><span style="color:red;">'.$v['status'].' - '.$v['data'].'</span></li>';
+					$html .= '<li><span style="color:red;font-size:12px;">'.$v['status'].' - '.$v['data'].'</span></li>';
 				}else{
-					$html .= '<li><span>'.$v['status'].' - '.$v['data'].'</span></li>';
+					$html .= '<li><span  style="font-size:12px;">'.$v['status'].' - '.$v['data'].'</span></li>';
 				}
 			}
 			$html .= '</ul>';
