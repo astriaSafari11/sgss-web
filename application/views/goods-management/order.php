@@ -228,7 +228,7 @@
                 defaultDate: null,     
                 allowInput: true,     
             onReady: function(selectedDates, dateStr, instance) {
-                instance._input.value = "dd-mm-yyyy"; 
+                instance._input.value = ""; 
             },
             onOpen: function(selectedDates, dateStr, instance) {
                 if (instance._input.value === "dd-mm-yyyy") {

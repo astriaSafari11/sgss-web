@@ -39,7 +39,11 @@
                                 <th style="color: #fff;background-color: #001F82;text-align: center;">Item Code</th>
                                 <th style="color: #fff;background-color: #001F82;text-align: center;">Item Name</th>
                                 <th style="color: #fff;background-color: #001F82;text-align: center;">Factory</th>
+                                <th style="color: #fff;background-color: #001F82;text-align: center;">Size</th>
                                 <th style="color: #fff;background-color: #001F82;text-align: center;">UoM</th>
+                                <th style="color: #fff;background-color: #001F82;text-align: center;">Lot Size</th>
+                                <th style="color: #fff;background-color: #001F82;text-align: center;">Order Cycle</th>
+                                <th style="color: #fff;background-color: #001F82;text-align: center;">Initial Stock</th>
                                 <th style="color: #fff;background-color: #001F82;text-align: center;">Action</th>
                             </tr>
                         </thead>

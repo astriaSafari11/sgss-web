@@ -19,13 +19,6 @@ class Master_model extends CI_Model
 
 				$table = 'view_master_vendor';			
 			}elseif($type == "material"){
-				$this->db->select("
-					id,
-					item_code,
-					item_name,
-					factory,
-					uom
-				");						
 				$table = 'm_master_data_material';	
 				$this->db->where('is_active', 1);		
 			}elseif($type == "material_by_factory"){					

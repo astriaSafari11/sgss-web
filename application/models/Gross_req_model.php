@@ -10,8 +10,8 @@ class Gross_req_model extends CI_Model
 			$table = 'm_stock_card_formula';	
 			$this->db->where('year', $year);		
 
-			if(isset($p['vendor_material_id']) && $p['vendor_material_id'] != null){
-				$this->db->where('vendor_material_id', $p['vendor_material_id']);
+			if(isset($p['item_id']) && $p['item_id'] != null){
+				$this->db->where('item_id', $p['item_id']);
 			}
 			
 			$this->db->from($table);							

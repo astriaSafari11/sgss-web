@@ -25,15 +25,19 @@
               <div class="col-sm-6">
                 <a class="btn btn-sm btn-primary position-relative" style="font-weight: 600; border-radius: 50px;">
                   Request List
-                  <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger"> 5
-                  <span class="visually-hidden">unread messages</span>
-                  </span>
+                  <?php if($req_count > 0) { ?>
+                    <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger"> <?php echo $req_count; ?>
+                      <span class="visually-hidden">unread messages</span>
+                    </span>
+                  <?php } ?>
                 </a>                
                 <a href="<?= site_url('goods_management/feedback');?>" class="btn btn-sm btn-outline-primary position-relative" style="font-weight: 600; border-radius: 50px;">
                   Feedback List
-                  <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger"> 5
-                  <span class="visually-hidden">unread messages</span>
-                  </span>
+                  <?php if($feedback_count > 0) { ?>
+                    <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger"> <?php echo $feedback_count; ?>
+                      <span class="visually-hidden">unread messages</span>
+                    </span>
+                  <?php } ?>
                 </a>                  
               </div>
               <div class="col-sm-6">
@@ -63,59 +67,9 @@
                     </div>
                   </div> -->
                   <div class="card-body">
-
-
-    <div class="d-flex justify-content-between align-items-center mb-2">
-
-    <!-- Start Dropdown Show X Entries -->
-    <div class="d-flex align-items-center">
-        <label for="entriesSelect" class="me-2 fs-7">Show</label>
-        <select id="entriesSelect" class="form-select form-select-sm w-auto fs-7">
-            <option value="10">10</option>
-            <option value="25">25</option>
-            <option value="50">50</option>
-            <option value="100">100</option>
-        </select>
-        <span class="ms-2 fs-7">entries</span>
-    </div>
-    <!-- End Dropdown Show X Entries -->
-
-    <!-- Start Search + Filter -->
-    <div class="d-flex align-items-center gap-2">
-    <!-- Filter 1 -->
-    <label for="filterBy1" class="small">Filter 1:</label>
-    <select id="filterBy1" class="form-select form-select-sm w-auto">
-        <option value="all">All</option>
-        <option value="0">Column 1</option>
-        <option value="1">Column 2</option>
-        <option value="2">Column 3</option>
-    </select>
-
-    <!-- Filter 2 -->
-    <label for="filterBy2" class="small">Filter 2:</label>
-    <select id="filterBy2" class="form-select form-select-sm w-auto">
-        <option value="all">All</option>
-        <option value="A">Category A</option>
-        <option value="B">Category B</option>
-        <option value="C">Category C</option>
-    </select>
-
-    <!-- Filter 3 -->
-    <label for="filterBy3" class="small">Filter 3:</label>
-    <select id="filterBy3" class="form-select form-select-sm w-auto">
-        <option value="all">All</option>
-        <option value="active">Active</option>
-        <option value="inactive">Inactive</option>
-    </select>
-
-    <!-- Search Button -->
-    <button class="btn btn-outline-primary btn-sm" type="button" id="searchBtn">
-        <i class="fas fa-search"></i>
-    </button>
-</div>
-  <!--End Search Bar-->
-
-  </div>
+                    <form action="<?php echo site_url('goods_management'); ?>" method="post">
+                      <?php $this->load->view('_partials/search_bar.php', $data); ?>
+                    </form>
                     <table id="example" class="table table-sm" style="width:100%" cellspacing="0">
                       <thead>
                           <tr >

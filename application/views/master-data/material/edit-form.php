@@ -22,7 +22,7 @@
                   <div class="card-body">
                     <div class="row">                      
                       <!--begin::Col-->
-                      <div class="col-6">
+                      <div class="col-3">
                         <div class="form-floating mb-3">
                           <input type="text" class="form-control" id="floatingInput" placeholder="material Code" name="item_code" value="<?php echo $material->item_code;?>" required readonly>
                           <label for="floatingInput" class="fw-bold text-primary">Material Code</label>
@@ -31,16 +31,23 @@
                       </div>
                       <!--end::Col-->
                       <!--begin::Col-->
-                      <div class="col-6">
+                      <div class="col-3">
                         <div class="form-floating mb-3">
                           <input type="text" class="form-control" id="floatingInput" placeholder="name@example.com" name="item_name" value="<?php echo $material->item_name;?>" required>
                           <label for="floatingInput" class="fw-bold text-primary">Material Name</label>
                           <div class="invalid-feedback">This field is required.</div>
                         </div>
                       </div>
+                      <div class="col-3">
+                        <div class="form-floating mb-3">
+                          <input type="text" class="form-control" id="floatingInput" placeholder="name@example.com" name="size" value="<?php echo $material->size;?>" required>
+                          <label for="floatingInput" class="fw-bold text-primary">Size</label>
+                          <div class="invalid-feedback">This field is required.</div>
+                        </div>
+                      </div>                      
                       <!--end::Col-->
                       <!--begin::Col-->
-                      <div class="col-6">
+                      <div class="col-3">
                         <div class="form-floating mb-3">
                             <select class="form-select" aria-label="Default select example" id="uom" style="height: 56px;" name="uom" required>
                             <option value="" disabled>-- Select UoM --</option>
@@ -51,7 +58,7 @@
                       </div>
                       <!--end::Col-->
                       <!--begin::Col-->
-                      <div class="col-6">
+                      <div class="col-3">
                         <div class="form-floating mb-3">
                             <select class="form-select" aria-label="Default select example" id="factory" style="height: 56px;" name="factory" required>
                             <option value="" disabled>-- Select Factory --</option>
@@ -59,11 +66,67 @@
                             <label for="factory" class="fw-bold text-primary">Factory</label>
                             <div class="invalid-feedback">This field is required.</div>
                         </div>
-                      </div>                                                     
+                      </div>        
+                            <!--begin::Col-->
+                            <div class="col-3">
+                              <div class="form-floating mb-3">
+                                <input type="number" class="form-control" id="floatingInput" placeholder="name@example.com" name="lot_size" value="<?php echo $material->lot_size;?>">
+                                <label for="floatingInput" class="fw-bold text-primary">Lot Size</label>
+                              </div>
+                            </div>
+                            <!--end::Col-->
+                            <!--begin::Col-->
+                            <div class="col-3">
+                              <div class="form-floating mb-3">
+                                <input type="number" class="form-control" id="floatingInput" placeholder="name@example.com" name="order_cycle" value="<?php echo $material->order_cycle;?>">
+                                <label for="floatingInput" class="fw-bold text-primary">Order Cycle</label>
+                              </div>
+                            </div>
+                            <div class="col-3">
+                              <div class="form-floating mb-3">
+                                <input type="number" class="form-control" id="floatingInput" placeholder="name@example.com" name="initial_stock" value="<?php echo $material->initial_stock;?>">
+                                <label for="floatingInput" class="fw-bold text-primary">Initial Stock</label>
+                              </div>
+                            </div>                                                                      
                       <!--end::Col-->                      
                       <!--begin::Col-->                 
                       <!--end::Col-->    
-                    </div>                              
+                    </div>    
+                    <hr class="divider">      
+                          <div class="row">
+                            <!--begin::Col-->
+                            <div class="col-3">
+                              <div class="form-floating mb-3">
+                                <input type="text" class="form-control" id="floatingInput" placeholder="name@example.com" name="var_todo_list" value="<?php echo !empty($settings->var_todo_list) ? $settings->var_todo_list : 0;?>">
+                                <label for="floatingInput" class="fw-bold text-primary">Todo list variable</label>
+                              </div>
+                            </div>
+                            <!--end::Col-->      
+                            <!--begin::Col-->
+                            <div class="col-3">
+                              <div class="form-floating mb-3">
+                                <input type="text" class="form-control" id="floatingInput" placeholder="name@example.com" name="var_stock_card_todo_list" value="<?php echo !empty($settings->var_stock_card_todo_list) ? $settings->var_stock_card_todo_list : 0;?>">
+                                <label for="floatingInput" class="fw-bold text-primary">Stock card todo list variable</label>
+                              </div>
+                            </div>
+                            <!--end::Col-->
+                            <!--begin::Col-->
+                            <div class="col-3">
+                              <div class="form-floating mb-3">
+                                <input type="text" class="form-control" id="floatingInput" placeholder="name@example.com" name="var_stock_card_overstock" value="<?php echo !empty($settings->var_stock_card_overstock)?$settings->var_stock_card_overstock:0;?>">
+                                <label for="floatingInput" class="fw-bold text-primary">Stock card overstock variable</label>
+                              </div>
+                            </div>
+                            <!--end::Col-->
+                            <!--begin::Col-->
+                            <div class="col-3">
+                              <div class="form-floating mb-3">
+                                <input type="text" class="form-control" id="floatingInput" placeholder="name@example.com" name="var_stock_card_ok" value="<?php echo !empty($settings->var_stock_card_ok)?$settings->var_stock_card_ok:0;?>">
+                                <label for="floatingInput" class="fw-bold text-primary">Stock card ok variable</label>
+                              </div>
+                            </div>
+                            <!--end::Col-->                            
+                          </div>                                                
                   </div>
                   <!-- /.card-body -->
                   <div class="card-footer">
@@ -76,7 +139,34 @@
                 </div>
                 <!-- /.card -->
               </div>
-            </div>          
+            </div>    
+            
+            <div class="row mb-2">
+              <div class="col-sm-6">
+                <a class="btn btn-primary position-relative" style="font-weight: 600; white-space:nowrap;">
+                  Gross Requirement Formula
+                </a> 
+              </div>             
+            </div>            
+            <!--begin::Row-->            
+            <div class="row">
+              <div class="col-12 mb-4">
+                    <table id="table-item" class="table table-sm table-bordered" width="100%">
+                      <thead  style="text-align: center;white-space:nowrap;">
+                          <tr >
+                              <th style="color: #fff;background-color:#001F82;text-align: center;">Year</th>
+                              <th style="color: #fff;background-color:#001F82;text-align: center;">Week</th>
+                              <th style="color: #fff;background-color:#001F82;text-align: center;">Type</th>
+                              <th style="color: #fff;background-color:#001F82;text-align: center;">AVG Week Start</th>
+                              <th style="color: #fff;background-color:#001F82;text-align: center;">AVG Week End</th>
+                              <th style="color: #fff;background-color:#001F82;text-align: center;">Action</th>
+                          </tr>
+                      </thead>
+                      <tbody style="text-align: center;white-space:nowrap;vertical-align:center;">                       
+                      </tbody>
+                    </table> 
+              </div>            
+            </div>              
 </form> 
 <script>
                     // Example starter JavaScript for disabling form submissions if there are invalid fields
@@ -108,6 +198,26 @@
   $(document).ready(function(){
     get_uom('<?php if(isset($material->uom)){echo $material->uom;}?>');
     get_factory('<?php if(isset($material->factory)){echo $material->factory;}?>');
+
+    $('#table-item').DataTable({
+              scrollX: true,
+              "processing": true, 
+              "serverSide": true, 
+              "ordering": false,
+              "ajax": {
+                "url": "<?= site_url('master_data/get_gross_req?id='._encrypt($material->id));?>",
+                "type": "POST"
+              },
+              "order": [],        
+              "columnDefs": [
+                {
+                    targets: '_all',
+                    createdCell: function(cell) {
+                      $(cell).css('vertical-align', 'middle');
+                    }
+                }
+            ],
+          });     
   });
 
   function get_uom(id){
