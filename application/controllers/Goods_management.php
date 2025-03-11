@@ -1,4 +1,9 @@
 <?php
+require 'vendor/autoload.php';
+
+use PhpOffice\PhpSpreadsheet\Spreadsheet;
+use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
+use PhpOffice\PhpSpreadsheet\IOFactory;
 
 class Goods_management extends CI_Controller
 {
@@ -292,14 +297,16 @@ class Goods_management extends CI_Controller
 
 	public function order_reject()
 	{
-		$id = _decrypt($this->uri->segment(3));
+		$id = $this->input->post('order_id');
+		$remarks = $this->input->post('ignore_remarks');
 
 		_update("t_order", array(
 			"is_approved" 	=> 1,
 			"is_feedback"	=> 0,
 			"status" 		=> "ignored",
 			"rejected_date" => date("Y-m-d"),
-			"rejected_by" 	=> $this->session->userdata('user_name')
+			"rejected_by" 	=> $this->session->userdata('user_name'),
+			"rejected_remark" => $remarks,
 		), array("id" => $id));
 
 		$this->session->set_flashdata('page_title', 'FORM INPUT ORDER REJECTED');
@@ -372,5 +379,306 @@ class Goods_management extends CI_Controller
 	{
 		$this->session->set_flashdata('page_title', 'TRANSACTIONS CARD');
 		$this->load->view('goods-management/transactions.php');
+	}	
+
+	public function export_goods_order_request() {
+		ini_set("max_execution_time", 0);
+
+		$reader = IOFactory::createReader('Xlsx');
+		$spreadsheet = $reader->load('assets/format/template_export_goods_order_request.xlsx');
+		$spreadsheet->setActiveSheetIndexByName('request_list');
+		$sheet = $spreadsheet->getActiveSheet();
+		$index = 2;
+		$getData = $this->db->query("
+		SELECT * FROM t_stock_planned_request 
+		INNER JOIN m_vendor_material ON m_vendor_material.item_code = t_stock_planned_request.item_code
+		INNER JOIN m_master_data_vendor ON m_master_data_vendor.vendor_code = t_stock_planned_request.vendor_code
+		WHERE order_status = 0 and type = 'goods'
+		")->result();
+		$userlist = $this->db->get("m_employee")->result();	
+
+		$area = $this->db->get_where("m_employee_area",array(
+			"nip"	=> $this->session->userdata('user_nip'),
+		))->row();	
+
+		foreach ((array)$getData as $datas => $list) {
+			// $sheet->insertNewRowBefore($index + 1, 1);
+			$sheet->setCellValue("A{$index}", trim(date("Y-m-d", strtotime($list->due_date))));
+			$sheet->setCellValue("B{$index}", trim($list->status));
+			// $sheet->setCellValue("C{$index}", trim($list->item_code));
+			$sheet->setCellValue("D{$index}", trim($list->item_name));
+			$sheet->setCellValue("E{$index}", trim($list->qty));
+			$sheet->setCellValue("F{$index}", trim($list->uom));
+			$sheet->setCellValue("G{$index}", trim($list->vendor_name));
+			$sheet->setCellValue("H{$index}", trim($list->price_per_uom));
+			$sheet->setCellValue("I{$index}", trim($list->price_per_uom * $list->moq));
+			$sheet->setCellValue("J{$index}", trim($this->session->userdata('user_email')));
+			$sheet->setCellValue("L{$index}", trim($area->area_code));
+
+			$styleArray = [
+					'font' => [
+						'name' => 'Calibri',
+						'size' => 10
+					],
+					'alignment' => [
+						'horizontal' => \PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER,
+						'vertical' => \PhpOffice\PhpSpreadsheet\Style\Alignment::VERTICAL_CENTER
+					]
+				];
+	
+			$sheet->getStyle("A{$index}:L{$index}")->applyFromArray($styleArray);
+			$index++;				
+		}	
+		
+		$spreadsheet->setActiveSheetIndexByName('user_list');
+		$sheet = $spreadsheet->getActiveSheet();
+		$index = 2;
+		$userlist = $this->db->query("
+			select nama, email, m_employee_area.area_code from m_employee
+			INNER JOIN m_employee_area ON m_employee_area.nip = m_employee.nip
+		")->result();	
+
+		foreach ((array)$userlist as $datas => $list) {
+			// $sheet->insertNewRowBefore($index + 1, 1);
+			$sheet->setCellValue("A{$index}", trim($list->nama));
+			$sheet->setCellValue("B{$index}", trim($list->email));
+			$sheet->setCellValue("C{$index}", trim($list->area_code));
+
+			$styleArray = [
+					'font' => [
+						'name' => 'Calibri',
+						'size' => 10
+					],
+					'alignment' => [
+						'horizontal' => \PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER,
+						'vertical' => \PhpOffice\PhpSpreadsheet\Style\Alignment::VERTICAL_CENTER
+					]
+				];
+	
+			$sheet->getStyle("A{$index}:C{$index}")->applyFromArray($styleArray);
+			$index++;				
+		}				
+		
+
+		ob_end_clean();
+        $writer = new Xlsx($spreadsheet); // instantiate Xlsx
+        header('Content-type: application/vnd.ms-excel');
+        // It will be called file.xls
+		$filename = 'order_request_list'.date('YmdHis');
+        header('Content-Disposition: attachment; filename="'.$filename.'.xlsx"');
+        // Write file to the browser
+        $writer->save('php://output');
+	}	
+
+	public function upload() {
+		ini_set("max_execution_time", 0);
+		$path 		= 'assets/upload/order/';
+		$json 		= [];
+		$this->upload_config($path);
+		if (!$this->upload->do_upload('file')) {
+			$json = [
+				'error_message' => $this->upload->display_errors(),
+			];
+		} else {
+			$file_data 	= $this->upload->data();
+			$file_name 	= $path.$file_data['file_name'];
+			$arr_file 	= explode('.', $file_name);
+			$extension 	= end($arr_file);
+			if('csv' == $extension) {
+				$reader 	= new \PhpOffice\PhpSpreadsheet\Reader\Csv();
+			} else {
+				$reader 	= new \PhpOffice\PhpSpreadsheet\Reader\Xlsx();
+			}
+			$spreadsheet 	= $reader->load($file_name);
+			$count_success  = 0;
+			$count_failed   = 0;
+			$list 			= [];
+
+			//check uom
+			$sheetData 		= $spreadsheet->getSheetbyName('request_list');
+			$cellRow 		= $spreadsheet->getSheetbyName('request_list')->getHighestRow();
+			for($i=2;$i<=$cellRow;$i++){
+				$due_date = $sheetData->getCell('A'.$i)->getValue();
+				$category = $sheetData->getCell('B'.$i)->getValue();
+				$action_date = $sheetData->getCell('C'.$i)->getValue();
+				$item = $sheetData->getCell('D'.$i)->getValue();
+				$qty = $sheetData->getCell('E'.$i)->getValue();
+				$uom = $sheetData->getCell('F'.$i)->getValue();
+				$vendor_name = $sheetData->getCell('G'.$i)->getValue();
+				$uom_price = $sheetData->getCell('H'.$i)->getValue();
+				$total_price = $sheetData->getCell('I'.$i)->getValue();
+				$requestor = $sheetData->getCell('J'.$i)->getValue();
+				$requested_for = $sheetData->getCell('K'.$i)->getValue();
+				$area = $sheetData->getCell('L'.$i)->getValue();
+				$purchase_reason = trim($sheetData->getCell('M'.$i)->getValue());
+				$remarks = $sheetData->getCell('N'.$i)->getValue();
+
+				if(!empty($action_date) && !empty($requestor) && !empty($purchase_reason) && !empty($requested_for) && !empty($area)){
+					$getVendor = $this->db->query("SELECT * FROM m_master_data_vendor WHERE vendor_name LIKE '%$vendor_name%'")->row();
+					$check = $this->db->query("SELECT * FROM t_stock_planned_request WHERE due_date >= ? AND vendor_code = ? AND item_name = ? AND qty = ? AND uom = ? AND order_status = 0 and type= 'goods'", array($due_date, $getVendor->vendor_code, $item, $qty, $uom))->row();
+
+					if(!empty($check)){
+						$planned_id = $check->id;
+						$is_approved = 0;
+						$is_feedback = 0;
+						if($purchase_reason == "Routine Buy"){
+							$is_approval_required = 0;
+				
+							$order_status = "auto_approved";
+							$is_approved=1;
+						}else{
+							$is_approval_required = 1;
+							$order_status = "waiting_approval";
+						}
+						
+						$reqId = 'REQ'.date("dmY");
+						$getMax = $this->db->query("SELECT MAX(id) as max FROM t_order")->row()->max + 1;
+						
+						$request_id = $reqId.$getMax;
+
+						$data = array(
+							"date"					=> $action_date,
+							"request_id"			=> $request_id,
+							"requestor"				=> $requestor,
+							"requested_for"			=> $requested_for,
+							"area"					=> $area,
+							"remarks"				=> $remarks,
+							"status"				=> $order_status,
+							"purchase_reason"		=> $purchase_reason,
+							"is_approval_required"	=> $is_approval_required,
+							"approved_by"			=> "auto_approved",
+							"is_approved"			=> $is_approved,
+							"is_feedback"			=> $is_feedback,
+							"is_download"			=> 0,
+							"planned_id"			=> $planned_id,
+							// "rejected_by"			=> $this->input->post('rejected_by'),
+							"approved_date"			=> date("Y-m-d"),
+							// "rejected_date"			=> $this->input->post('rejected_date'),
+							"approved_remark"		=> 'Auto Approved by SGSS System - as per application recommendation',
+							// "rejected_remark"		=> $this->input->post('rejected_remark'),
+						);
+						
+						_add("t_order", $data);
+						
+						_update("t_stock_planned_request", array(
+							"order_status" =>1
+						), array("id" => $planned_id));		
+
+						$order = $this->db->get_where("t_order",array(
+							"planned_id"	=> $planned_id
+						))->row();
+
+
+
+						_add("t_order_detail",array(	
+							"order_id"	=> $order->id,
+							"item"		=> $check->item_code,
+							"qty"		=> $qty,
+							"uom"		=> $uom,
+							"vendor_code" => $getVendor->vendor_code,
+							"uom_price"	  => $uom_price,
+							"total_price" => $total_price,
+							"status"	  => 0
+						));				
+
+						$list[] = [
+							"due_date" => $due_date,
+							"category" => $category,
+							"action_date" => $action_date,
+							"item" => $item,
+							"qty" => $qty,
+							"uom" => $uom,
+							"vendor" => $vendor_name,
+							"uom_price" => $uom_price,
+							"total_price" => $total_price,
+							"requestor" => $requestor,
+							"requested_for" => $requested_for,							
+							"area" => $area,
+							"purchase_reason" => $purchase_reason,
+							"remarks" => $remarks
+						];
+					}
+				}
+			}	
+
+			$html = 'Processing file finished.<br>';
+			$html .= '
+			<table id="example" class="table table-sm" cellspacing="0">
+                      <thead>
+                          <tr >
+                              <th style="color: #fff;background-color: #001F82;text-align: center;font-size:12px;">Due Date</th>
+                              <th style="color: #fff;background-color: #001F82;text-align: center;font-size:12px;">Category</th>
+                              <th style="color: #fff;background-color: #001F82;text-align: center;font-size:12px;">Action Date</th>
+                              <th style="color: #fff;background-color: #001F82;text-align: center;font-size:12px;">Item</th>
+                              <th style="color: #fff;background-color: #001F82;text-align: center;font-size:12px;">Qty</th>
+                              <th style="color: #fff;background-color: #001F82;text-align: center;font-size:12px;">UoM</th>
+                              <th style="color: #fff;background-color: #001F82;text-align: center;font-size:12px;">Vendor</th>
+                              <th style="color: #fff;background-color: #001F82;text-align: center;font-size:12px;">UoM Price</th>
+                              <th style="color: #fff;background-color: #001F82;text-align: center;font-size:12px;">Total Price</th>
+                              <th style="color: #fff;background-color: #001F82;text-align: center;font-size:12px;">Requestor</th>
+                              <th style="color: #fff;background-color: #001F82;text-align: center;font-size:12px;">Requested For</th>
+                              <th style="color: #fff;background-color: #001F82;text-align: center;font-size:12px;">Area</th>
+                              <th style="color: #fff;background-color: #001F82;text-align: center;font-size:12px;">Purchase Reason</th>
+                              <th style="color: #fff;background-color: #001F82;text-align: center;font-size:12px;">Remarks</th>                              
+                          </tr>
+                      </thead>
+					  <tbody>			
+			';
+			foreach($list as $k => $v){
+					$html .= '
+					<tr>
+						<td style="text-align: center;font-size:12px;">'.$v['due_date'].'</td>
+						<td style="text-align: center;font-size:12px;">'.$v['category'].'</td>
+						<td style="text-align: center;font-size:12px;">'.$v['action_date'].'</td>
+						<td style="text-align: center;font-size:12px;">'.$v['item'].'</td>
+						<td style="text-align: center;font-size:12px;">'.$v['qty'].'</td>
+						<td style="text-align: center;font-size:12px;">'.$v['uom'].'</td>
+						<td style="text-align: center;font-size:12px;">'.$v['vendor'].'</td>
+						<td style="text-align: center;font-size:12px;">'.$v['uom_price'].'</td>
+						<td style="text-align: center;font-size:12px;">'.$v['total_price'].'</td>
+						<td style="text-align: center;font-size:12px;">'.$v['requestor'].'</td>
+						<td style="text-align: center;font-size:12px;">'.$v['requested_for'].'</td>
+						<td style="text-align: center;font-size:12px;">'.$v['area'].'</td>
+						<td style="text-align: center;font-size:12px;">'.$v['purchase_reason'].'</td>
+						<td style="text-align: center;font-size:12px;">'.$v['remarks'].'</td>
+					</tr>
+					';
+			}
+			$html .= '<tbody></table>';
+			
+			$msg = $html;
+
+			if(file_exists($file_name))
+				unlink($file_name);
+				if(count($list) > 0) {
+					$result 	= true;
+					if($result) {
+						$json = [
+							'success_message' 	=> $msg,
+							'list'				=> $list,
+						];
+					} else {
+						$json = [
+							'error_message' 	=> "Something went wrong while importing the data. Please check your excel file and try again.",
+						];
+					}
+				} else {
+					$json = [
+						'success_message' => "Import completed. No new record is found on uploaded file.",
+				];
+				}
+		}
+		echo json_encode($json);
+	}
+
+	public function upload_config($path) {
+		if (!is_dir($path)) 
+			mkdir($path, 0777, TRUE);		
+		$config['upload_path'] 		= './'.$path;		
+		$config['allowed_types'] 	= 'csv|CSV|xlsx|XLSX|xls|XLS';
+		$config['max_filename']	 	= '255';
+		$config['encrypt_name'] 	= TRUE;
+		$config['max_size'] 		= 4096; 
+		$this->load->library('upload', $config);
 	}	
 }
