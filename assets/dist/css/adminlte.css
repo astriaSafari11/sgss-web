@@ -13554,7 +13554,7 @@ fieldset:disabled .btn {
 }
 :root,
 [data-bs-theme="light"] {
-	--lte-sidebar-width: 250px;
+	--lte-sidebar-width: 350px;
 }
 
 .app-wrapper {
