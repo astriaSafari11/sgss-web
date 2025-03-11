@@ -258,7 +258,7 @@
               src="<?= base_url('assets/dist/images/logos/unilever-logo.png');?>"
               alt="Unilever Logo"
               class="brand-image"
-              style="margin-left: 15px;"
+              style="margin-left: 5px;"
             />
             <!--end::Brand Image-->
             <!--begin::Brand Text-->
@@ -328,7 +328,7 @@
                     <i class="nav-arrow bi bi-chevron-right"></i>
                   </p>
                 </a>
-                <ul class="nav nav-treeview ms-4">
+                <ul class="nav nav-treeview">
                   <li class="nav-item sidebar">
                     <a href="<?= site_url('goods_management');?>" class="nav-link">
                       <i class="nav-icon fa-solid fa-chart-area icon"></i>
@@ -368,7 +368,7 @@
                     <i class="nav-arrow bi bi-chevron-right"></i>
                   </p>
                 </a>
-                <ul class="nav nav-treeview ms-4">
+                <ul class="nav nav-treeview">
                   <li class="nav-item sidebar">
                     <a href="<?= site_url('service_management');?>" class="nav-link">
                       <i class="nav-icon fa-solid fa-chart-area icon"></i>
