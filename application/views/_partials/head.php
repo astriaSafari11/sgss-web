@@ -355,17 +355,46 @@
                   </li>
                 </ul>
               </li>
-              <li class="nav-item sidebar">
-                <a href="<?= site_url('service_management');?>" class="nav-link sidebar">
+              <li class="nav-item">
+                <a href="#" class="nav-link sidebar</a>">
                 <img
                   src="<?= base_url('assets/dist/images/service_icon.png');?>"
                   alt="Service Icon"
                   class="brand-image icon"
-                  style="width:40px; height:30px"
-                />
-                <p>Service Management</p>
+                  style="width:30px; height:30px"
+                />  
+                <p class="ms-1">
+                    Service Management
+                    <i class="nav-arrow bi bi-chevron-right"></i>
+                  </p>
                 </a>
-              </li>  
+                <ul class="nav nav-treeview ms-4">
+                  <li class="nav-item sidebar">
+                    <a href="<?= site_url('service_management');?>" class="nav-link">
+                      <i class="nav-icon fa-solid fa-chart-area icon"></i>
+                      <p>Performance Dashboard</p>
+                    </a>
+                  </li>
+                  <li class="nav-item sidebar">
+                    <a href="<?= site_url('service_management/requirement_calculation');?>" class="nav-link">
+                      <i class="nav-icon fa-solid fa-boxes-stacked icon"></i>
+                      <p>Requirement Calculation</p>
+                    </a>
+                  </li>
+                  <li class="nav-item sidebar">
+                    <a href="<?= site_url('service_management/absenteeism');?>" class="nav-link">
+                      <i class="nav-icon bi bi-receipt icon"></i>
+                      <p>Absenteeism</p>
+                    </a>
+                  </li>
+                  <li class="nav-item sidebar">
+                    <a href="<?= site_url('service_management/master_data');?>" class="nav-link">
+                      <i class="nav-icon fa-solid fa-dolly fa-xl icon"></i>
+                      <p>Master Data</p>
+                    </a>
+                  </li>
+                </ul>
+              </li>              
               <li class="nav-item sidebar">
                   <a href="<?= site_url('saving_simulator'); ?>" class="nav-link d-flex align-items-center">
                       <img 

@@ -67,7 +67,7 @@
                     </div>
                   </div> -->
                   <div class="card-body">
-                    <form action="<?php echo site_url('goods_management'); ?>" method="post">
+                    <form action="<?php echo site_url('service_management'); ?>" method="post">
                       <?php $this->load->view('_partials/search_bar.php', $data); ?>
                     </form>
                     <table id="example" class="table table-sm" style="width:100%" cellspacing="0">
@@ -93,15 +93,24 @@
                           <?php foreach($req_list as $k => $v){ ?>
                             <tr>
                               <td style="vertical-align: middle;text-align: center;"><?php echo mDate($v->due_date);?></td>
-                              <td style="vertical-align: middle;text-align: center;"><?php echo mDate($v->until_due_date);?></td>
+                              <td style="vertical-align: middle;text-align: center;"><?php echo $v->service_urgent_if;?> days</td>
                               <td style="vertical-align: middle;text-align: center;"><?php echo $v->item_code;?></td>
                               <td style="vertical-align: middle;text-align: center;"><?php echo $v->item_name;?></td>
                               <td style="vertical-align: middle;text-align: center;"><?php echo $v->qty;?></td>
                               <td style="vertical-align: middle;text-align: center;"><?php echo $v->uom;?></td>
                               <td style="vertical-align: middle;text-align: center;">
-                                <button class="btn btn-sm btn-danger" style="font-weight: 600; border-radius: 50px; width: 100%;">
-                                  Urgent
-                                </button>                                
+                                <?php 
+                                $currDate = date('Y-m-d');
+                                $dueDate = date('Y-m-d', strtotime($v->due_date));
+
+                                $datediff = date_diff(date_create($currDate), date_create($dueDate));
+                                
+                                if($datediff->format('%R%a') < $v->service_urgent_if){
+                                  echo '<button class="btn btn-sm btn-danger" style="font-weight: 600; border-radius: 50px; width: 100%;">Urgent</button>';
+                                }else{
+                                  echo '<button class="btn btn-sm btn-warning" style="font-weight: 600; border-radius: 50px; width: 100%;">Medium</button>';
+                                }
+                                ?>                              
                               </td>
                               <td style="vertical-align: middle;text-align: center;">                
                                 <a href="<?= site_url('goods_management/order/'._encrypt($v->id));?>" class="btn btn-sm btn-outline-primary" style="font-weight: 600; border-radius: 50px; width: 150px;">

@@ -443,6 +443,7 @@ class Master_data extends CI_Controller
 					array(
 						"item_code" 				=> $itemcode,
 						"item_name" 				=> $this->input->post('item_name'),
+						"type" 						=> 'goods',
 						"size" 						=> $this->input->post('size'),
 						"factory"					=> $this->input->post('factory'),
 						"uom"						=> $this->input->post('uom'),						
@@ -1477,5 +1478,215 @@ class Master_data extends CI_Controller
 		$config['encrypt_name'] 	= TRUE;
 		$config['max_size'] 		= 4096; 
 		$this->load->library('upload', $config);
+	}
+	
+	function get_master_service()
+	{
+			$search = $this->session->userdata('search');
+			$list = $this->master_model->get_datatables($search, 'service');
+			$data = array();
+			$no = $_POST['start'];
+			foreach ($list as $field) {
+					$edit 	= '
+					<a href="'.site_url('master_data/edit_service/'._encrypt($field->id)).'" class="btn btn-sm btn-outline-primary" style="font-weight: 600; border-radius: 50px;margin-right:5px;">
+						<i class="fa-solid fa-pen-to-square"></i>
+						Edit
+					</a>
+					<a href="'.site_url('master_data/delete_service/'._encrypt($field->id)).'" class="btn btn-sm btn-outline-danger" style="font-weight: 600; border-radius: 50px;margin-right:5px;" data-bs-toggle="modal" data-bs-target="#modal-delete-'.$field->id.'">
+						<i class="fa-solid fa-trash"></i>
+						Delete
+					</a>
+					<div class="modal fade" id="modal-delete-'.$field->id.'" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+						<div class="modal-dialog">
+							<div class="modal-content">
+								<div class="modal-header">
+									<h5 class="modal-title" id="exampleModalLabel" class="text-primary" style="color: #001F82;font-weight:600;">Delete Material</h5>
+									<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+								</div>
+								<div class="modal-body" style="text-align: left;">
+									<p>You are going to delete material '.$field->item_code.' - '.$field->item_name.', all data related with this material will be deleted. Are you sure?</p>
+								</div>
+								<div class="modal-footer">
+									<button type="button" class="btn btn-outline-primary" data-bs-dismiss="modal">No, Cancel Delete.</button>
+									<a href="'.site_url('master_data/delete_material?id='._encrypt($field->id)).'" type="button" class="btn btn-outline-danger">Yes, Delete Data.</a>
+								</div>
+							</div>
+						</div>
+					</div>					
+				  ';	
+
+					$row = array();
+					$row[] = ++$no;
+					$row[] = $field->item_code;
+					$row[] = $field->item_name;
+					$row[] = $field->service_type;
+					$row[] = $field->service_recurring;
+					$row[] = $field->service_due_date;
+					$row[] = $field->service_urgent_if;
+					$row[] = $edit;
+					$data[] = $row;
+			}
+
+			$output = array(
+					"draw" => $_POST['draw'],
+					"recordsTotal" => $this->master_model->count_all($search, 'service'),
+					"recordsFiltered" => $this->master_model->count_filtered($search, 'service'),
+					"data" => $data,
+			);
+			//output dalam format JSON
+			echo json_encode($output);
+	}		
+
+	public function add_service()
+	{
+		$this->session->set_flashdata('page_title', 'FORM ADD NEW SERVICE');
+		load_view('master-data/service/add-form.php', []);
+	}	
+
+	public function save_service()
+	{
+		if(isset($_POST['submit'])){
+			$itemcode = strtolower(str_replace(' ', '', $this->input->post('item_name')).$this->input->post('uom').$this->input->post('size'));
+
+			$material_code = $this->input->post('material_code');
+			$exist = $this->db->get_where("m_master_data_material",array(
+				"item_code"	=> $itemcode,
+			))->row();
+
+			if($exist){
+				$err = array(
+					'show' => true,
+					'type' => 'error',
+					'msg'  => 'Add new service failed. Service with code '.$material_code.' is already exist.'
+				);
+				$this->session->set_flashdata('toast', $err);
+				$this->load->view('master-data/service/add-form.php');		
+			}else{
+
+				$inserted = _add(
+					"m_master_data_material",
+					array(
+						"item_code" 				=> $itemcode,
+						"item_name" 				=> $this->input->post('item_name'),
+						"type" 						=> 'service',
+						"service_type" 				=> $this->input->post('service_type'),
+						"service_recurring"			=> $this->input->post('service_recurring'),
+						"service_due_date"			=> $this->input->post('service_due_date'),						
+						"service_urgent_if"			=> $this->input->post('service_urgent_if'),						
+					));				
+				if($inserted){
+					$err = array(
+						'show' => true,
+						'type' => 'success',
+						'msg'  => 'Successfully added new service.'
+					);
+					$this->session->set_flashdata('toast', $err);
+				}else{
+					$err = array(
+						'show' => true,
+						'type' => 'error',
+						'msg'  => 'Add new service failed.'
+					);
+					$this->session->set_flashdata('toast', $err);
+				}
+			}
+			redirect('service_management/master_data');
+		}else{
+			redirect('service_management/master_data');
+		}
+	}
+	public function edit_service()
+	{
+		$item_code = _decrypt($this->uri->segment(3));
+		$data['material'] = $this->db->get_where("m_master_data_material",array(
+			"id" => $item_code
+		))->row();		
+
+		$this->session->set_flashdata('page_title', 'FORM EDIT SERVICE');
+		load_view('master-data/service/edit-form', $data);
+	}
+	
+	public function update_service()
+	{
+		if(isset($_POST['submit'])){
+			$itemcode = strtolower(str_replace(' ', '', $this->input->post('item_name')).$this->input->post('uom').$this->input->post('size'));
+			$id = $this->input->post('id');		
+
+			$get_data = $this->db->get_where("m_master_data_material",array(
+				"id"	=> $id,
+			))->row();
+
+			$material_code = $this->input->post('item_code');
+
+			$exist = $this->db->get_where("m_master_data_material",array(
+				"item_code"	=> $itemcode,
+			))->row();
+			
+			if(($itemcode != $get_data->item_code) && $exist){
+				$err = array(
+					'show' => true,
+					'type' => 'error',
+					'msg'  => 'Add new service failed. Service with code '.$material_code.' is already exist.'
+				);
+				$this->session->set_flashdata('toast', $err);
+				$this->load->view('service_management/master_data.php');		
+			}else{
+				$inserted = _update(
+					"m_master_data_material", 
+					array(
+						"item_code" 				=> $itemcode,
+						"item_name" 				=> $this->input->post('item_name'),
+						"type" 						=> 'service',
+						"service_type" 				=> $this->input->post('service_type'),
+						"service_recurring"			=> $this->input->post('service_recurring'),
+						"service_due_date"			=> $this->input->post('service_due_date'),						
+						"service_urgent_if"			=> $this->input->post('service_urgent_if'),						
+					), array("id" => $id)
+				);
+	
+	
+				if($inserted){
+					$err = array(
+						'show' => true,
+						'type' => 'success',
+						'msg'  => 'Successfully update material data.'
+					);
+					$this->session->set_flashdata('toast', $err);
+				}else{
+					$err = array(
+						'show' => true,
+						'type' => 'error',
+						'msg'  => 'Update material failed.'
+					);
+					$this->session->set_flashdata('toast', $err);
+				}
+				redirect('service_management/master_data');
+			}
+		}else{
+			redirect('service_management/master_data');
+		}
+	}		
+
+	public function delete_service()
+	{
+		$id = _decrypt($this->input->get('id'));		
+		$deleted = _soft_delete("m_master_data_material", array("id" => $id));
+
+		if($deleted){
+			$err = array(
+				'show' => true,
+				'type' => 'error',
+				'msg'  => 'Successfully delete material data.'
+			);
+			$this->session->set_flashdata('toast', $err);
+		}else{
+			$err = array(
+				'show' => true,
+				'type' => 'error',
+				'msg'  => 'Delete material failed.'
+			);
+			$this->session->set_flashdata('toast', $err);
+		}
+		redirect('master_data/material_list');
 	}	
 }

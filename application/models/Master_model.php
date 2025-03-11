@@ -20,6 +20,11 @@ class Master_model extends CI_Model
 				$table = 'view_master_vendor';			
 			}elseif($type == "material"){
 				$table = 'm_master_data_material';	
+				$this->db->where('type', 'goods');		
+				$this->db->where('is_active', 1);		
+			}elseif($type == "service"){
+				$table = 'm_master_data_material';	
+				$this->db->where('type', 'service');		
 				$this->db->where('is_active', 1);		
 			}elseif($type == "material_by_factory"){					
 				$table = 'view_material_by_factory';	

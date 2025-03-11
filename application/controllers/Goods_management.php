@@ -42,10 +42,10 @@ class Goods_management extends CI_Controller
 			}
 		}
 
-		$fSearch = !empty($search)?$search.' AND order_status = 0':'WHERE order_status = 0';
+		$fSearch = !empty($search)?$search." AND order_status = 0 AND type = 'goods'":"WHERE order_status = 0 AND type = 'goods'";
 		
 		$query =  $this->db->query("SELECT * FROM t_stock_planned_request $fSearch")->result();
-		$count =  $this->db->get_where('t_stock_planned_request',array("order_status" => 0))->num_rows();
+		$count =  $this->db->get_where('t_stock_planned_request',array("order_status" => 0, "type" => 'goods'))->num_rows();
 		$feedback =  $this->db->get_where('t_order',array("is_approved" => 1, "is_feedback" => 0))->num_rows();
 
 		$data['req_list'] = $query;		
@@ -75,7 +75,7 @@ class Goods_management extends CI_Controller
 
 		// $query =  $this->db->get_where('t_stock_planned_request',array("order_status" => NULL))->result();
 
-		$count =  $this->db->get_where('t_stock_planned_request',array("order_status" => 0))->num_rows();
+		$count =  $this->db->get_where('t_stock_planned_request',array("order_status" => 0, "type" => 'goods'))->num_rows();
 		$feedback =  $this->db->get_where('t_order',array("is_approved" => 1, "is_feedback" => 0))->num_rows();
 
 		$data['feedback_list'] = $query;		
@@ -292,8 +292,18 @@ class Goods_management extends CI_Controller
 
 	public function order_reject()
 	{
+		$id = _decrypt($this->uri->segment(3));
+
+		_update("t_order", array(
+			"is_approved" 	=> 1,
+			"is_feedback"	=> 0,
+			"status" 		=> "ignored",
+			"rejected_date" => date("Y-m-d"),
+			"rejected_by" 	=> $this->session->userdata('user_name')
+		), array("id" => $id));
+
 		$this->session->set_flashdata('page_title', 'FORM INPUT ORDER REJECTED');
-		$this->load->view('goods-management/order/rejected.php');
+		redirect('goods_management');
 	}		
 
 	public function item_movement()
