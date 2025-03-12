@@ -1,4 +1,9 @@
 <?php
+require 'vendor/autoload.php';
+
+use PhpOffice\PhpSpreadsheet\Spreadsheet;
+use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
+use PhpOffice\PhpSpreadsheet\IOFactory;
 
 class Ajax extends CI_Controller
 {
@@ -109,5 +114,52 @@ class Ajax extends CI_Controller
 		$this->session->set_flashdata('toast', $err);
 
 		echo 1;
-	}		
+	}
+	
+	public function export_goods_order_request() {
+		ini_set("max_execution_time", 0);
+
+		$reader = IOFactory::createReader('Xlsx');
+		$spreadsheet = $reader->load('assets/format/template_export_goods_order_request.xlsx');
+		$spreadsheet->setActiveSheetIndexByName('request_list');
+		$sheet = $spreadsheet->getActiveSheet();
+		$index = 2;
+		$getData = $this->db->query("SELECT * FROM t_stock_planned_request WHERE order_status = 0 and type = 'goods'")->result();
+
+		foreach ((array)$getData as $datas => $list) {
+			// $sheet->insertNewRowBefore($index + 1, 1);
+			$sheet->setCellValue("A{$index}", trim($list->due_date));
+			$sheet->setCellValue("B{$index}", trim($list->until_due_date));
+			$sheet->setCellValue("C{$index}", trim($list->item_code));
+			$sheet->setCellValue("D{$index}", trim($list->item_name));
+			$sheet->setCellValue("E{$index}", trim($list->qty));
+			$sheet->setCellValue("F{$index}", trim($list->uom));
+			$sheet->setCellValue("G{$index}", trim($list->status));
+
+			$styleArray = [
+					'font' => [
+						'name' => 'Calibri',
+						'size' => 10
+					],
+					'alignment' => [
+						'horizontal' => \PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER,
+						'vertical' => \PhpOffice\PhpSpreadsheet\Style\Alignment::VERTICAL_CENTER
+					]
+				];
+	
+			$sheet->getStyle("M{$index}:B{$index}")->applyFromArray($styleArray);
+			$index++;				
+		}				
+
+		ob_end_clean();
+        $writer = new Xlsx($spreadsheet); // instantiate Xlsx
+        header('Content-type: application/vnd.ms-excel');
+        // It will be called file.xls
+		$filename = 'order_request_list'.date('YmdHis');
+        header('Content-Disposition: attachment; filename="'.$filename.'.xlsx"');
+        // Write file to the browser
+        $writer->save('php://output');
+
+		echo 1;
+	}	
 }

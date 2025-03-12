@@ -42,14 +42,12 @@
               </div>
               <div class="col-sm-6">
                 <div class="d-flex justify-content-end">
-                  <a href="<?= site_url('goods_management/export_goods_order_request');?>" class="btn btn-sm btn-outline-primary" style="font-weight: 600; border-radius: 50px; width: 150px;margin-right:10px;" id="btnExport" onclick="btnExportClick()">
-                  <i class="fa-solid fa-file-export"></i>
+                  <button type="button" class="btn btn-sm btn-outline-primary" style="font-weight: 600; border-radius: 50px; width: 150px;">
                     Export
-                  </a>                       
-                  <a class="btn btn-sm btn-outline-primary" style="font-weight: 600; border-radius: 50px;width: 150px;" data-bs-toggle="modal" data-bs-target="#modal-import">
-                  <i class="fa-solid fa-file-import"></i>
+                  </button>                       
+                  <button type="button" class="btn btn-sm btn-outline-primary" style="font-weight: 600; border-radius: 50px;width: 150px;">
                     Import
-                  </a>    
+                  </button>    
                 </div>
               </div>
             </div>
@@ -69,7 +67,7 @@
                     </div>
                   </div> -->
                   <div class="card-body">
-                    <form action="<?php echo site_url('goods_management'); ?>" method="post">
+                    <form action="<?php echo site_url('service_management'); ?>" method="post">
                       <?php $this->load->view('_partials/search_bar.php', $data); ?>
                     </form>
                     <table id="example" class="table table-sm" style="width:100%" cellspacing="0">
@@ -95,15 +93,24 @@
                           <?php foreach($req_list as $k => $v){ ?>
                             <tr>
                               <td style="vertical-align: middle;text-align: center;"><?php echo mDate($v->due_date);?></td>
-                              <td style="vertical-align: middle;text-align: center;"><?php echo mDate($v->until_due_date);?></td>
+                              <td style="vertical-align: middle;text-align: center;"><?php echo $v->service_urgent_if;?> days</td>
                               <td style="vertical-align: middle;text-align: center;"><?php echo $v->item_code;?></td>
                               <td style="vertical-align: middle;text-align: center;"><?php echo $v->item_name;?></td>
                               <td style="vertical-align: middle;text-align: center;"><?php echo $v->qty;?></td>
                               <td style="vertical-align: middle;text-align: center;"><?php echo $v->uom;?></td>
                               <td style="vertical-align: middle;text-align: center;">
-                                <button class="btn btn-sm btn-danger" style="font-weight: 600; border-radius: 50px; width: 100%;">
-                                  Urgent
-                                </button>                                
+                                <?php 
+                                $currDate = date('Y-m-d');
+                                $dueDate = date('Y-m-d', strtotime($v->due_date));
+
+                                $datediff = date_diff(date_create($currDate), date_create($dueDate));
+                                
+                                if($datediff->format('%R%a') < $v->service_urgent_if){
+                                  echo '<button class="btn btn-sm btn-danger" style="font-weight: 600; border-radius: 50px; width: 100%;">Urgent</button>';
+                                }else{
+                                  echo '<button class="btn btn-sm btn-warning" style="font-weight: 600; border-radius: 50px; width: 100%;">Medium</button>';
+                                }
+                                ?>                              
                               </td>
                               <td style="vertical-align: middle;text-align: center;">                
                                 <a href="<?= site_url('goods_management/order/'._encrypt($v->id));?>" class="btn btn-sm btn-outline-primary" style="font-weight: 600; border-radius: 50px; width: 150px;">
@@ -114,7 +121,7 @@
                                 </button>  
                               </td>
                           </tr>
-                          <form action="<?php echo site_url('master_data/order_reject');?>" method="post" id="modal-ignore-value-<?php echo $v->id;?>">
+                          <form action="<?php echo site_url('master_data/order_reject');?>" method="post">
                             <div class="modal fade" id="modal-ignore-value-<?php echo $v->id;?>" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
                                 <input type="hidden" name="order_id" value="<?php echo _encrypt($v->id);?>">
                                 <div class="modal-dialog modal-lg">
@@ -206,78 +213,11 @@
               <!-- /.col -->               
             </div>
             <!--end::Row-->  
-            <form id="form-upload-user" method="post" autocomplete="off" enctype="multipart/form-data">
-                      <div class="modal fade" id="modal-import" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-                        <div class="modal-dialog modal-xl">
-                          <div class="modal-content">
-                            <div class="modal-header">
-                              <h5 class="modal-title" id="exampleModalLabel" class="text-primary" style="color: #001F82;font-weight:600;">Import Order Request</h5>
-                              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                            </div>
-                            <div class="modal-body">
-                                <p class="text-danger"><small>Maximum size of each file = 3000000 bytes (3 mb). Allowed File types which can be uploaded = .xlsx</small></p>
-                                <input  type="file" 
-                                  class="custom-file-input" 
-                                  id="file" 
-                                  name="file" 
-                                  data-toggle="custom-file-input"
-                                  accept=".csv, application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel"
-                                >
-                                <div class="" style="margin-top: 10px;">
-                                <div class="user-loader text-center" style="display: none;">
-                                    <i class="fa fa-spinner fa-spin"></i> <small>Please wait system is processing your data...</small>
-                                </div>
-                                <div class="alert alert-success alert-dismissable" role="alert" id="success-result" style="display: none;">
-                                    <div class="success-text"></div>
-                                </div>                                
-                                <div class="alert alert-danger alert-dismissable" role="alert" id="failed-result" style="display: none;">
-                                    <div class="failed-text"></div>
-                                </div>                                                                
-                            </div>                                
-                            </div>
-                            <div class="modal-footer">
-                              <button type="button" class="btn btn-outline-primary" data-bs-dismiss="modal">Cancel</button>
-                              <button type="submit" class="btn btn-outline-primary" id="btnUpload">Import Request Order</button>
-                            </div>
-                          </div>
-                        </div>
-                      </div>      
-                      </form>
+
 <?php $this->load->view('_partials/footer.php'); ?>
+
 <script>
-                      $(document).ready(function() {
-                          $("body").on("submit", "#form-upload-user", function(e) {
-                              e.preventDefault();
-                              var data = new FormData(this);
-                              $.ajax({
-                                  type: 'POST',
-                                  url: "<?php echo site_url('goods_management/upload') ?>",
-                                  data: data,
-                                  dataType: 'json',
-                                  contentType: false,
-                                  cache: false,
-                                  processData:false,
-                                  beforeSend: function() {
-                                      $("#btnUpload").prop('disabled', true);
-                                      $(".user-loader").show();
-                                      $("#success-result").hide();
-                                      $("#failed-result").hide();
-                                    }, 
-                                  success: function(result) {
-                                      $("#btnUpload").prop('disabled', false);
-                                      if($.isEmptyObject(result.error_message)) {
-                                          $("#success-result").show();
-                                          $(".success-text").html(result.success_message);
-                                      } else {
-                                          $("#failed-result").show();
-                                          $(".failed-text").html(result.error_message);
-                                      }
-                                      $(".user-loader").hide();
-                                  }
-                              });
-                          });
-                      });
-  var URL_AJAX = '<?php echo site_url();?>/ajax';
+
     $(document).ready(function() {
         var table = $('#example').DataTable({
           dom: "t<'row'<'col-sm-6'i><'col-sm-6'p>>",

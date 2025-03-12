@@ -13554,7 +13554,7 @@ fieldset:disabled .btn {
 }
 :root,
 [data-bs-theme="light"] {
-	--lte-sidebar-width: 250px;
+	--lte-sidebar-width: 350px;
 }
 
 .app-wrapper {
@@ -13765,6 +13765,7 @@ fieldset:disabled .btn {
 }
 .sidebar-wrapper .nav-treeview > .nav-item > .nav-link {
 	color: var(--lte-sidebar-submenu-color);
+	margin-left: 1.5rem !important;
 }
 .sidebar-wrapper .nav-treeview > .nav-item > .nav-link:hover,
 .sidebar-wrapper .nav-treeview > .nav-item > .nav-link:focus {
@@ -13824,7 +13825,8 @@ fieldset:disabled .btn {
 }
 @media (prefers-reduced-motion: reduce) {
 	.sidebar-menu .nav-link {
-		transition: none;
+		transition: smooth;
+		margin-left: 0;
 	}
 }
 .sidebar-menu .nav-link p {
@@ -13856,6 +13858,7 @@ fieldset:disabled .btn {
 }
 .nav-compact.nav-indent .nav-treeview .nav-item {
 	padding-left: 0.5rem;
+	margin-left: 0;
 }
 
 .sidebar-mini.sidebar-collapse.nav-indent .app-sidebar:hover .nav-treeview {
@@ -13870,6 +13873,7 @@ fieldset:disabled .btn {
 
 .sidebar-collapse.nav-compact.nav-indent .nav-treeview .nav-item {
 	padding-left: 0;
+	margin-left: 0;
 }
 
 .nav-compact .nav-link {
@@ -13914,8 +13918,8 @@ fieldset:disabled .btn {
 }
 
 .sidebar-mini.sidebar-collapse .app-sidebar {
-	min-width: 4.6rem;
-	max-width: 4.6rem;
+	min-width: 5rem;
+	max-width: 6rem;
 }
 .sidebar-mini.sidebar-collapse .sidebar-menu .nav-header {
 	display: none;
