@@ -96,7 +96,7 @@ class Goods_management extends CI_Controller
 
 		$data['order'] = $this->db->query("
 		select * from t_stock_planned_request 
-		INNER JOIN m_vendor_material ON t_stock_planned_request.vendor_material_id = m_vendor_material.id 
+		INNER JOIN m_master_data_material ON t_stock_planned_request.item_id = m_master_data_material.id 
 		where t_stock_planned_request.id = '$id'
 		")->result();	
 
@@ -128,21 +128,29 @@ class Goods_management extends CI_Controller
 		if(!$check_exist){
 			$order = $this->db->query("
 			select * from t_stock_planned_request 
-			INNER JOIN m_vendor_material ON t_stock_planned_request.vendor_material_id = m_vendor_material.id 
+			INNER JOIN m_master_data_material ON t_stock_planned_request.item_code = m_master_data_material.item_code
 			where t_stock_planned_request.id = '$id'
 			")->row();		
 
+			$get_price = $this->db->get_where("m_vendor_material",array(
+				"vendor_code" => $order->vendor_code,
+				"item_code" => $order->item_code
+			))->row();
+
 			_add("t_order_detail",array(	
 				"order_id"	=> $data['order_detail']->id,
-				"item"	=> $order->item_code,
-				"qty"	=> $order->qty,
-				"uom"	=> $order->uom,
+				"item"		=> $order->item_code,
+				"qty"		=> $order->qty,
+				"uom"		=> $order->uom,
 				"vendor_code" => $order->vendor_code,
-				"uom_price"	  => $order->price_per_uom,
-				"total_price" => $order->moq*$order->price_per_uom,
+				"uom_price"	  => $get_price->price_per_uom,
+				"total_price" => $get_price->moq*$get_price->price_per_uom,
 				"status"	  => 0
 			));			
 		}
+		$data['detail'] = $this->db->get_where("t_order_detail",array(
+			"order_id"	=> $data['order_detail']->id
+		))->result();
 
 		$this->session->set_flashdata('page_title', 'FORM INPUT ORDER');
 		$this->load->view('goods-management/order.php', $data);
@@ -318,14 +326,14 @@ class Goods_management extends CI_Controller
 		$week	=	date("W");
 		$data['item'] = $this->db->query("
 		select *,
-		(standart_safety_stock + ((standart_safety_stock /100)* var_stock_card_ok)) as ok,
-		(standart_safety_stock + ((standart_safety_stock /100)* var_stock_card_overstock)) as overstock,
+		(standard_safety_stock + ((standard_safety_stock /100)* var_stock_card_ok)) as ok,
+		(standard_safety_stock + ((standard_safety_stock /100)* var_stock_card_overstock)) as overstock,
 		(CASE
-		WHEN net_on_hand >= (standart_safety_stock + ((standart_safety_stock /100)* var_stock_card_overstock)) THEN 'overstock'
-		WHEN net_on_hand >= (standart_safety_stock + ((standart_safety_stock /100)* var_stock_card_ok)) 	   THEN 'OK'
+		WHEN net_on_hand >= (standard_safety_stock + ((standard_safety_stock /100)* var_stock_card_overstock)) THEN 'overstock'
+		WHEN net_on_hand >= (standard_safety_stock + ((standard_safety_stock /100)* var_stock_card_ok)) 	   THEN 'OK'
 		WHEN net_on_hand = 0 THEN 'understock'
-		WHEN net_on_hand <= standart_safety_stock THEN 'understock'
-		WHEN current_safety_stock <= standart_safety_stock THEN 'understock'
+		WHEN net_on_hand <= standard_safety_stock THEN 'understock'
+		WHEN current_safety_stock <= standard_safety_stock THEN 'understock'
 		END) AS status 
 		from view_stock_card
 		WHERE week = '$week'
@@ -339,28 +347,28 @@ class Goods_management extends CI_Controller
 	{
 		$id = _decrypt($this->uri->segment(3));
 
-		$data['vendor'] = $this->db->get_where("view_master_vendor",array(
-			"id"	=> $id,
-		))->row();		
+		// $data['vendor'] = $this->db->get_where("view_master_vendor",array(
+		// 	"id"	=> $id,
+		// ))->row();		
 
-		$data['vendor_detail'] = $this->db->get_where("m_master_data_vendor",array(
-			"vendor_code"	=> $data['vendor']->vendor_code,
-		))->row();		
+		// $data['vendor_detail'] = $this->db->get_where("m_master_data_vendor",array(
+		// 	"vendor_code"	=> $data['vendor']->vendor_code,
+		// ))->row();		
 
-		$data['material'] = $this->db->get_where("m_vendor_material",array(
+		$data['material'] = $this->db->get_where("m_master_data_material",array(
 			"id"	=> $id,
 		))->row();		
 
 		$data['var_settings'] = $this->db->get_where("m_variable_settings",array(
-			"item_id"	=> $data['material']->id,
+			"item_id"	=> $id,
 		))->row();		
 
 		$data['gross_req'] = $this->db->get_where("m_stock_card_formula",array(
-			"item_id"	=> $data['material']->id,
+			"item_id"	=> $id,
 		))->result();		
 		
 		$data['item_movement'] = $this->db->get_where("t_material_movement",array(
-			"vendor_material_id"	=> $id,
+			"item_id"	=> $id,
 		))->result();	
 
 		$data['total_gross_req'] = count($data['gross_req']);
@@ -368,7 +376,178 @@ class Goods_management extends CI_Controller
 		$this->session->set_flashdata('page_title', 'STOCK CARD');
 		load_view('goods-management/item-movement/detail.php', $data);
 	}	
-	
+
+	public function update_item_movement()
+	{
+		if(isset($_POST['submit'])){
+			$id = $this->input->post('material_movement_id');			
+			$get_data = $this->db->get_where("t_material_movement",array(
+				"id"	=> $id,
+			))->row();
+			$get_initial_week = $get_data->week;
+
+			$get_mat_detail = $this->db->get_where("m_master_data_material",array(
+				"item_code"	=> $get_data->item_code,
+			))->row();
+
+			$gross_req = $this->input->post('gross_requirement');
+			
+			$get_last_week = date('W', strtotime('December 28th'));
+			$get_last_week = 12;
+			$total_data = array();
+
+			for($i = $get_initial_week; $i <= $get_last_week; $i++){
+				$get_stock_card = $this->db->get_where("m_stock_card_formula",array(
+					"item_id"				=> $get_data->item_id,
+					"year" 					=> date('Y'),
+					"week" 					=> $i
+				))->row();			
+
+				$get_prev_week_data = $this->db->get_where("t_material_movement",array(
+					"item_id"				=> $get_data->item_id,
+					"year" 					=> date('Y'),
+					"week" 					=> $i-1
+				))->row();		
+
+				$get_curr_week_data = $this->db->get_where("t_material_movement",array(
+					"item_id"				=> $get_data->item_id,
+					"year" 					=> date('Y'),
+					"week" 					=> $i
+				))->row();		
+
+				$schedule_receipt = $get_curr_week_data->schedules_receipts?$get_curr_week_data->schedules_receipts:0;
+
+				if($this->input->post('stock_on_hand') == 0){
+					$stock_on_hand = $get_initial_week==1?($get_mat_detail->initial_stock+$schedule_receipt)-$gross_req:($get_prev_week_data->stock_on_hand+$get_prev_week_data->schedules_receipts)-$gross_req;
+				}else{
+					$stock_on_hand = $this->input->post('stock_on_hand');
+				}
+				
+				// debugCode(array(
+				// 	$get_mat_detail,
+				// 	$schedule_receipt,
+				// 	$gross_req
+				// ));
+
+				$current_safety_stock = min($stock_on_hand,$get_mat_detail->standard_safety_stock);
+				$net_on_hand = $stock_on_hand-$current_safety_stock;
+				$net_requirement = min($stock_on_hand,0);					
+
+				if($get_stock_card->type=='manual'){
+					if($i == $get_initial_week){
+						$gross_req = $this->input->post('gross_requirement');
+					}else{
+						$gross_req = $get_curr_week_data->gross_requirement;
+					}					
+				}else{
+					$gross_req = get_avg_value($get_mat_detail->id,$i);
+				}
+
+				if($i == $get_initial_week){
+					$schedule_receipt = $this->input->post('schedule_receipt');
+				}else{
+					$schedule_receipt = $get_curr_week_data->schedules_receipts;
+				}
+
+				$data= array(
+					'week' => $i,
+					'gross_requirement' => $gross_req,
+					'schedules_receipts' => $schedule_receipt,
+					'stock_on_hand' => myNum($stock_on_hand),
+					'current_safety_stock' => myNum($current_safety_stock),
+					'net_on_hand' => myNum($net_on_hand),
+					'net_requirement' => myNum($net_requirement),
+					'planned_order_receipt' => 0,
+					'planned_order_release' => 0,					
+				);
+				// debugCode(array($get_mat_detail, $get_curr_week_data, $get_stock_card, $i, $get_initial_week, $data));
+
+				_update('t_material_movement',$data, array(
+					"item_id"				=> $get_data->item_id,
+					"year" 					=> date('Y'),
+					"week" 					=> $i
+				));
+
+				if($net_on_hand <= 0){
+					$exist = $this->db->get_where("t_stock_planned_request",array(
+						"item_id"				=> $get_data->item_id,
+						"year" 					=> date('Y'),
+						"week" => $i
+					))->row();
+
+					$get_rec_material = $this->db->query("
+						SELECT TOP 1 * from m_vendor_material WHERE item_code = '".$get_mat_detail->item_code."' ORDER BY price_per_uom ASC
+					")->row();
+
+					$planned_order_receipt = MAX($get_rec_material->moq,$get_mat_detail->lot_size);
+
+					_update('t_material_movement',array(
+						'planned_order_receipt' => $planned_order_receipt,
+					), array(
+						"item_id"				=> $get_data->item_id,
+						"year" 					=> date('Y'),
+						"week" 					=> $i
+					));
+					
+					$due_date = week_start_date($i, date('Y'));
+					$lt_po_deliv = $get_mat_detail->gen_lead_time;
+
+					$until_due_date = date('Y-m-d', strtotime($due_date . "+ $lt_po_deliv day"));
+
+					$planned_release = array(
+						'vendor_code' 			=> $get_rec_material->vendor_code,
+						'item_code'			 	=> $get_mat_detail->item_code,
+						'vendor_material_id' 	=> $get_rec_material->vendor_material_id,
+						'item_name' 			=> $get_mat_detail->item_name,
+						'qty' 					=> $planned_order_receipt,
+						'uom' 					=> $get_mat_detail->uom,
+						'year' 					=> date('Y'),
+						'week'					=> $i,
+						'status' 				=> 'urgent',
+						'due_date' 				=> $due_date,
+						'until_due_date' 		=> $until_due_date,
+						'order_status' 			=> 0,
+						'type' 					=> 'goods'
+					);
+
+					if(!$exist){
+						_add('t_stock_planned_request', $planned_release);
+					}else{
+						_update('t_stock_planned_request',$planned_release, array(
+							"id"	=> $exist->id,
+						));
+					}
+				}else{
+					_hard_delete('t_stock_planned_request',array(
+						"item_id"				=> $get_data->item_id,
+						"year" 					=> date('Y'),
+						"week" 					=> $i,
+						"order_status" => 0
+					));
+
+				}	
+
+				_update('t_material_movement',array(
+					'planned_order_release' => $planned_order_receipt,						
+				), array(
+					"item_id"				=> $get_data->item_id,
+					"year" 					=> date('Y'),
+					"week" => $i-1
+				));
+
+			}
+
+			$err = array(
+				'show' => true,
+				'type' => 'success',
+				'msg'  => 'Successfully update material movement.'
+			);
+			$this->session->set_flashdata('toast', $err);
+
+			redirect('goods_management/stock_card_detail/'._encrypt($get_mat_detail->id));			
+		}
+	}
+
 	public function item_movement_detail()
 	{
 		$this->session->set_flashdata('page_title', 'STOCK CARD');

@@ -12,6 +12,6 @@ class Dashboard extends CI_Controller
 	public function index()
 	{
 		$this->session->set_flashdata('page_title', 'DASHBOARD');
-		$this->load->view('dashboard.php');
+		$this->load->view('landing_page.php');
 	}
 }

@@ -100,9 +100,7 @@ class Ajax extends CI_Controller
 				$get_last_id = $this->db->get_where("m_vendor_material",array(
 					'vendor_code' => $vendor_code,
 					'item_code' => $v
-				))->row()->id;
-
-				generate_item_movement($get_last_id);
+				))->row()->id;			
 			}
 		}
 

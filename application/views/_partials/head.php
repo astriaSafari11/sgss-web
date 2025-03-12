@@ -92,6 +92,7 @@
     }
 
     </style>
+
     <!--begin::Third Party Plugin(OverlayScrollbars)-->
     <script
       src="https://cdn.jsdelivr.net/npm/overlayscrollbars@2.10.1/browser/overlayscrollbars.browser.es6.min.js"
@@ -118,7 +119,33 @@
     <script src="https://code.highcharts.com/highcharts.js"></script>
     <script src="https://code.highcharts.com/modules/exporting.js"></script>
     <script src="https://code.highcharts.com/modules/accessibility.js"></script>    
-    <!--end::Required Plugin(AdminLTE)--><!--begin::OverlayScrollbars Configure-->    
+    <!--end::Required Plugin(AdminLTE)--><!--begin::OverlayScrollbars Configure-->  
+    
+    <style>
+      .dataTables_length label,
+      .dataTables_filter label,
+      .dataTables_info,
+      .dataTables_paginate {
+          font-size: 12px !important;          
+      }
+
+      .dataTables_length select {
+          font-size: 12px !important;
+      }
+
+      .dataTables_wrapper .dataTables_paginate .paginate_button {
+          font-size: 12px !important;          
+      }
+
+      .dataTables_wrapper .dataTables_paginate .paginate_button .active {
+          font-size: 12px !important;        
+      }
+
+      .dataTables_wrapper .dataTables_paginate .paginate_button a {
+          font-size: 12px !important;
+          color: #001F82 !important;
+      }
+    </style>    
   </head>
   <!--end::Head-->
   <!--begin::Body-->
@@ -258,17 +285,19 @@
               src="<?= base_url('assets/dist/images/logos/unilever-logo.png');?>"
               alt="Unilever Logo"
               class="brand-image"
-              style="margin-left: 5px;"
+              style="margin-left: 20px;"
             />
             <!--end::Brand Image-->
             <!--begin::Brand Text-->
-            <img src="<?= base_url('assets/dist/logo_sgss.png'); ?>"  
-              alt="SGSS Icon"  
-              class="img-fluid brand-image"
-              style="display: inline-block;
-              vertical-align: middle;
-              height: 24px;
-              margin-left:21px;">
+            <span class="brand-text">
+              <img src="<?= base_url('assets/dist/logo_sgss.png'); ?>"  
+                alt="SGSS Icon"  
+                class="img-fluid brand-image"
+                style="display: inline-block;
+                vertical-align: middle;
+                height: 24px;
+                margin-left:21px;">
+            </span>
 
             <!--end::Brand Text-->
           </a>

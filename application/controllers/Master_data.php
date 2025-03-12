@@ -133,13 +133,9 @@ class Master_data extends CI_Controller
 			$no = $_POST['start'];
 			foreach ($list as $field) {
 					$edit 	= '
-					<a href="'.site_url('master_data/edit_material/'._encrypt($field->id)).'" class="btn btn-sm btn-outline-primary" style="font-weight: 600; border-radius: 50px;margin-right:5px;">
-						<i class="fa-solid fa-pen-to-square"></i>
-						Edit
-					</a>
-					<a href="'.site_url('master_data/delete_material/'._encrypt($field->id)).'" class="btn btn-sm btn-outline-danger" style="font-weight: 600; border-radius: 50px;margin-right:5px;" data-bs-toggle="modal" data-bs-target="#modal-delete-'.$field->id.'">
-						<i class="fa-solid fa-trash"></i>
-						Delete
+					<a href="'.site_url('master_data/detail_material/'._encrypt($field->id)).'" class="btn btn-sm btn-outline-primary" style="font-weight: 600; border-radius: 50px;margin-right:5px;">
+						<i class="fa-solid fa-info-circle"></i>
+						Detail
 					</a>
 					<div class="modal fade" id="modal-delete-'.$field->id.'" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
 						<div class="modal-dialog">
@@ -170,6 +166,8 @@ class Master_data extends CI_Controller
 					$row[] = $field->lot_size;
 					$row[] = $field->order_cycle;
 					$row[] = $field->initial_stock;
+					$row[] = myNum($field->gen_lead_time);
+					$row[] = myNum($field->standard_safety_stock);
 					$row[] = $edit;
 					$data[] = $row;
 			}
@@ -421,7 +419,7 @@ class Master_data extends CI_Controller
 	public function save_material()
 	{
 		if(isset($_POST['submit'])){
-			$itemcode = strtolower($this->input->post('item_name').$this->input->post('uom').$this->input->post('size'));
+			$itemcode = strtolower(str_replace(' ','',$this->input->post('item_name')).$this->input->post('uom').$this->input->post('size'));
 
 			$material_code = $this->input->post('material_code');
 			$exist = $this->db->get_where("m_master_data_material",array(
@@ -437,6 +435,7 @@ class Master_data extends CI_Controller
 				$this->session->set_flashdata('toast', $err);
 				$this->load->view('master-data/material/add-form.php');		
 			}else{
+				$standart_safety_stock = !empty($this->input->post('order_cycle'))&&!empty($this->input->post('lot_size'))?($this->input->post('gen_lead_time')/$this->input->post('order_cycle'))*$this->input->post('lot_size'):NULL;
 
 				$inserted = _add(
 					"m_master_data_material",
@@ -450,6 +449,8 @@ class Master_data extends CI_Controller
 						"lot_size"					=> $this->input->post('lot_size'),						
 						"order_cycle"				=> $this->input->post('order_cycle'),						
 						"initial_stock"				=> $this->input->post('initial_stock'),						
+						"gen_lead_time"				=> $this->input->post('gen_lead_time'),						
+						"standard_safety_stock"		=> round($standart_safety_stock),						
 					));				
 				if($inserted){
 
@@ -467,6 +468,17 @@ class Master_data extends CI_Controller
 							$this->input->post('var_stock_card_todo_list'),
 							$this->input->post('var_stock_card_overstock'),
 							$this->input->post('var_stock_card_ok'));
+
+						generate_budget_baseline($last_id,str_replace(',','',$this->input->post('budget_price')),str_replace(',','',$this->input->post('budget_target')));
+						generate_item_movement($last_id);
+
+						_add('m_material_budget', array(
+							"item_id" => $last_id,
+							"item_code" => $itemcode,
+							"annual_budget" => 0,
+							"annual_usage" => 0,
+							"year" => date('Y')
+						));
 					}
 					$err = array(
 						'show' => true,
@@ -483,11 +495,156 @@ class Master_data extends CI_Controller
 					$this->session->set_flashdata('toast', $err);
 				}
 			}
-			redirect('master_data/material_list');
+			redirect('master_data/detail_material/'._encrypt($last_id));
 		}else{
 			redirect('master_data/material_list');
 		}
 	}
+
+	public function detail_material()
+	{
+		$item_code = _decrypt($this->uri->segment(3));
+		$data['material'] = $this->db->get_where("m_master_data_material",array(
+			"id" => $item_code
+		))->row();		
+
+		$data['settings'] = $this->db->get_where("m_variable_settings",array(
+			"item_id" => $item_code
+		))->row();		
+
+		$data['baseline_budget'] = $this->db->get_where("m_material_baseline_price",array(
+			"item_id" => $item_code
+		))->result();		
+
+		$data['annual_budget'] = $this->db->get_where("m_material_budget",array(
+			"item_id" => $item_code
+		))->result();		
+
+		$this->session->set_flashdata('page_title', 'GOODS MATERIAL DETAIL');
+		load_view('master-data/material/detail', $data);
+	}	
+
+	public function add_annual_budget()
+	{
+		if(isset($_POST['submit'])){
+			$id = $this->input->post('item_id');
+			$year = $this->input->post('year');
+			$annual_budget = str_replace(',', '', $this->input->post('annual_budget'));
+			$exist = $this->db->get_where("m_material_budget",array(
+				"item_id" => $id,
+				"year" => $year
+			))->row();
+
+			$get_target_price = $this->db->get_where("m_material_baseline_price",array(
+				"item_id" => $id
+			))->row();
+
+			$targetPrice = $annual_budget/$this->input->post('annual_usage');
+
+			if($exist){
+				$err = array(
+					'show' => true,
+					'type' => 'error',
+					'msg'  => 'Cannot add annual budget. Annual budget for year '.$year.' is already exist.'
+				);
+				$this->session->set_flashdata('toast', $err);				
+			}else{
+				$inserted = _add('m_material_budget', array(
+					"item_id" 		=> $id,
+					"item_code" 	=> $this->db->get_where("m_master_data_material",array(
+										"id" => $id
+									))->row()->item_code,
+					"annual_budget" => $annual_budget,
+					"annual_usage" 	=> $this->input->post('annual_usage'),
+					"year" => $year
+				));
+
+				if($inserted){
+					if($get_target_price && (date('Y') == $year)){
+						_update(
+							"m_material_baseline_price", 
+							array(
+								"baseline_price" => $targetPrice,								
+							), array(
+								"item_id" => $id,
+								"baseline_category" => "Budget"
+							));
+					}					
+					$err = array(
+						'show' => true,
+						'type' => 'success',
+						'msg'  => 'Successfully added new annual budget.'
+					);
+					$this->session->set_flashdata('toast', $err);
+				}else{
+					$err = array(
+						'show' => true,
+						'type' => 'error',
+						'msg'  => 'Add new annual budget failed.'
+					);
+					$this->session->set_flashdata('toast', $err);
+				}
+				redirect('master_data/detail_material/'._encrypt($id));
+			}
+			redirect('master_data/detail_material/'._encrypt($id));			
+		}
+	}	
+
+	public function edit_annual_budget()
+	{
+		if(isset($_POST['submit'])){
+			$id = $this->input->post('id');
+			$item_id = $this->input->post('item_id');
+			$year = $this->input->post('year');
+			$annual_budget = str_replace(',', '', $this->input->post('annual_budget'));
+			$annual_usage = $this->input->post('annual_usage');
+
+			$get_target_price = $this->db->get_where("m_material_baseline_price",array(
+				"item_id" => $item_id
+			))->row();
+
+			$targetPrice = $annual_budget/$annual_usage;
+			
+			$update  =_update(
+				"m_material_budget", 
+				array(					
+					"annual_budget" => $annual_budget,
+					"annual_usage" => $annual_usage
+				), array(
+					"id" => $id
+				));
+
+				if($update){
+					if($get_target_price && (date('Y') == $year)){
+						_update(
+							"m_material_baseline_price", 
+							array(
+								"baseline_price" => $targetPrice,								
+							), array(
+								"item_id" => $item_id,
+								"baseline_category" => "Budget"
+							));
+					}
+
+					$err = array(
+						'show' => true,
+						'type' => 'success',
+						'msg'  => 'Successfully update new annual budget.'
+					);
+					$this->session->set_flashdata('toast', $err);
+				}else{
+					$err = array(
+						'show' => true,
+						'type' => 'error',
+						'msg'  => 'Update annual budget failed.'
+					);
+					$this->session->set_flashdata('toast', $err);
+				}
+				redirect('master_data/detail_material/'._encrypt($item_id));	
+		}
+	}	
+
+
 	public function edit_material()
 	{
 		$item_code = _decrypt($this->uri->segment(3));
@@ -498,7 +655,11 @@ class Master_data extends CI_Controller
 		$data['settings'] = $this->db->get_where("m_variable_settings",array(
 			"item_id" => $item_code
 		))->row();		
-		// debugCode($data);
+
+		$data['budget'] = $this->db->get_where("m_material_baseline_price",array(
+			"item_id" => $item_code,
+			"baseline_category" => "Target",
+		))->row();		
 
 		$this->session->set_flashdata('page_title', 'FORM EDIT MATERIAL');
 		load_view('master-data/material/edit-form', $data);
@@ -529,6 +690,16 @@ class Master_data extends CI_Controller
 					"var_stock_card_overstock"  => $this->input->post('var_stock_card_overstock'),
 					'var_stock_card_ok'         => $this->input->post('var_stock_card_ok'),
 				), array("item_id" => $id));
+			
+			_update(
+				"m_material_baseline_price", 
+				array(
+					"baseline_price" => str_replace(',', '', $this->input->post('budget_target')),
+				),
+				array(
+					"item_id" => $id,
+					"baseline_category" => "Target"
+				));
 
 			if($inserted){
 				$err = array(
@@ -545,7 +716,7 @@ class Master_data extends CI_Controller
 				);
 				$this->session->set_flashdata('toast', $err);
 			}
-			redirect('master_data/material_list');
+			redirect('master_data/detail_material/'._encrypt($id));
 		}else{
 			redirect('master_data/material_list');
 		}
@@ -709,8 +880,8 @@ class Master_data extends CI_Controller
 				$frm = $field->type=='formula'?"selected":"";
 				$m = $field->type=='manual'?'selected':'';
 				$edit 	= '
-				<a class="btn btn-sm btn-outline-primary" data-bs-toggle="modal" data-bs-target="#modal-update-gross-req-'.$field->id.'">
-					<i class="fa-solid fa-pen-to-square"></i>		
+				<a class="btn btn-sm btn-outline-primary" data-bs-toggle="modal" data-bs-target="#modal-update-gross-req-'.$field->id.'" >
+					<i class="fa-solid fa-pen-to-square" data-bs-toggle="tooltip" data-bs-title="Edit Gross Requirement Formula"></i> Edit		
 				</a>
                       <form action="'.site_url('master_data/update_gross_req/'._encrypt($field->id)).'" method="post">
                         <div class="modal fade" id="modal-update-gross-req-'.$field->id.'" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
@@ -864,148 +1035,6 @@ class Master_data extends CI_Controller
 			redirect('master_data/edit_material/'._encrypt($get_data->item_id));
 		}else{
 			redirect('master_data/material_list');
-		}
-	}
-	public function update_item_movement()
-	{
-		if(isset($_POST['submit'])){
-			$id = $this->input->post('material_movement_id');			
-			$get_data = $this->db->get_where("t_material_movement",array(
-				"id"	=> $id,
-			))->row();
-			$get_initial_week = $get_data->week;
-
-			$get_material = $this->db->get_where("m_vendor_material",array(
-				"id"	=> $get_data->vendor_material_id,
-			))->row();			
-
-			$get_mat_detail = $this->db->get_where("m_master_data_material",array(
-				"item_code"	=> $get_data->item_code,
-			))->row();
-
-			$gross_req = $this->input->post('gross_requirement');
-			$schedule_receipt = $this->input->post('schedule_receipt');
-			$get_last_week = date('W', strtotime('December 28th'));
-			$get_last_week = 12;
-			$total_data = array();
-			
-			for($i = $get_initial_week; $i <= $get_last_week; $i++){
-				$get_stock_card = $this->db->get_where("m_stock_card_formula",array(
-					"item_code"				=> $get_data->item_code,
-					"week" 					=> $i
-				))->row();			
-
-				$get_prev_week_data = $this->db->get_where("t_material_movement",array(
-					"vendor_material_id"	=> $get_data->vendor_material_id,
-					"week" 					=> $i-1
-				))->row();		
-
-				$get_curr_week_data = $this->db->get_where("t_material_movement",array(
-					"vendor_material_id"	=> $get_data->vendor_material_id,
-					"week" 					=> $i
-				))->row();		
-
-				$stock_on_hand = $get_data->week==1?($get_material->initial_stock+$schedule_receipt)-$gross_req:($get_prev_week_data->stock_on_hand+$schedule_receipt)-$gross_req;
-				$current_safety_stock = min($stock_on_hand,$get_material->standart_safety_stock);
-				$net_on_hand = $stock_on_hand-$current_safety_stock;
-				$net_requirement = min($stock_on_hand,0);					
-
-				if($get_stock_card->type=='manual'){
-					if($i == $get_initial_week){
-						$gross_req = $this->input->post('gross_requirement');
-					}else{
-						$gross_req = $get_curr_week_data->gross_requirement;
-					}					
-				}else{
-					$gross_req = get_avg_value($get_data->vendor_material_id, $get_mat_detail->id,$i);
-				}
-
-				if($i == $get_initial_week){
-					$schedule_receipt = $this->input->post('schedule_receipt');
-				}else{
-					$schedule_receipt = $get_curr_week_data->schedules_receipts;
-				}
-
-				$data= array(
-					'week' => $i,
-					'gross_requirement' => $gross_req,
-					'schedules_receipts' => $schedule_receipt,
-					'stock_on_hand' => myNum($stock_on_hand),
-					'current_safety_stock' => myNum($current_safety_stock),
-					'net_on_hand' => myNum($net_on_hand),
-					'net_requirement' => myNum($net_requirement),
-					'planned_order_receipt' => 0,
-					'planned_order_release' => 0,					
-				);
-
-				_update('t_material_movement',$data, array(
-					"vendor_material_id"	=> $get_data->vendor_material_id,
-					"week" => $i
-				));
-
-				if($net_on_hand <= 0){
-
-					$exist = $this->db->get_where("t_stock_planned_request",array(
-						"vendor_material_id"	=> $get_data->vendor_material_id,
-						"week" => $i
-					))->row();
-
-					$planned_order_receipt = MAX($get_material->moq,$get_material->lot_size);
-					_update('t_material_movement',array(
-						'planned_order_receipt' => $planned_order_receipt,
-					), array(
-						"vendor_material_id"	=> $get_data->vendor_material_id,
-						"week" => $i
-					));
-					
-					$planned_release = array(
-						'vendor_code' => $get_data->vendor_code,
-						'item_code' => $get_mat_detail->item_code,
-						'vendor_material_id' => $get_data->vendor_material_id,
-						'item_name' => $get_mat_detail->item_name,
-						'qty' => $planned_order_receipt,
-						'uom' => $get_mat_detail->uom,
-						'year' => date('Y'),
-						'week' => $i,
-						'status' => 'urgent',
-						'due_date' => date("Y-m-d H:i:s"),
-						'until_due_date' => date("Y-m-d H:i:s"),
-						'order_status' => 0
-					);
-
-					if(!$exist){
-						_add('t_stock_planned_request', $planned_release);
-					}else{
-						_update('t_stock_planned_request',$planned_release, array(
-							"id"	=> $exist->id,
-						));
-					}
-				}else{
-					_hard_delete('t_stock_planned_request',array(
-						"vendor_material_id"	=> $get_data->vendor_material_id,
-						"week" => $i,
-						"order_status" => 0
-					));
-
-				}	
-
-				_update('t_material_movement',array(
-					'planned_order_release' => $planned_order_receipt,						
-				), array(
-					"vendor_material_id"	=> $get_data->vendor_material_id,
-					"week" => $i-1
-				));
-
-			}
-
-			$err = array(
-				'show' => true,
-				'type' => 'success',
-				'msg'  => 'Successfully update material movement.'
-			);
-			$this->session->set_flashdata('toast', $err);
-
-			redirect('master_data/item_movement/'._encrypt($get_data->vendor_material_id));			
 		}
 	}
 	

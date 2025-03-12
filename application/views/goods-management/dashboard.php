@@ -1,26 +1,5 @@
 <?php $this->load->view('_partials/head.php'); ?>
 
-<style>
-.dataTables_length label,
-.dataTables_filter label,
-.dataTables_info,
-.dataTables_paginate {
-    font-size: 12px !important;
-}
-
-.dataTables_length select {
-    font-size: 12px !important;
-}
-
-.dataTables_wrapper .dataTables_paginate .paginate_button {
-    font-size: 12px !important;
-}
-
-.dataTables_wrapper .dataTables_paginate .paginate_button a {
-    font-size: 12px !important;
-}
-</style>
-
 <div class="row mb-2 justify-between">
               <div class="col-sm-6">
                 <a class="btn btn-sm btn-primary position-relative" style="font-weight: 600; border-radius: 50px;">

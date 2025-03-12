@@ -148,9 +148,9 @@
                           </tr>
                       </thead>
                       <tbody>
-                        <?php foreach($order as $row) { ?>
+                        <?php foreach($detail as $row) { ?>
                             <tr>
-                            <td style="vertical-align: middle;text-align: center;font-size: 14px;"><?php echo $row->item_name; ?></td>
+                            <td style="vertical-align: middle;text-align: center;font-size: 14px;"><?php echo $row->item; ?></td>
                               <td style="vertical-align: middle; font-size: 14px; padding: 8px;">
                                 <div style="display: flex; align-items: center; justify-content: space-between; width: 100%;">
                                     <span style="flex-grow: 1; text-align: center;"><?php echo $row->qty; ?></span>
@@ -170,8 +170,8 @@
                             </div>
                             </td>
 
-                              <td style="vertical-align: middle;text-align: right;font-size: 14px;"><?php echo myNum($row->price_per_uom); ?></td>
-                              <td style="vertical-align: middle;text-align: right;font-size: 14px;"><?php echo myNum($row->moq*$row->price_per_uom); ?></td>
+                              <td style="vertical-align: middle;text-align: right;font-size: 14px;"><?php echo myNum($row->uom_price); ?></td>
+                              <td style="vertical-align: middle;text-align: right;font-size: 14px;"><?php echo myNum($row->total_price); ?></td>
                           </tr>
                         <?php } ?>                                                
                       </tbody>  

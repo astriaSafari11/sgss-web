@@ -43,9 +43,13 @@ class Gross_req_model extends CI_Model
 			return $query->num_rows();
 	}
 
-	public function count_all($type="")
+	public function count_all($p=array())
 	{
 		$this->db->from('m_stock_card_formula');		
+		if(isset($p['item_id']) && $p['item_id'] != null){
+			$this->db->where('item_id', $p['item_id']);
+		}
+
 		return $this->db->count_all_results();
 	}
 }

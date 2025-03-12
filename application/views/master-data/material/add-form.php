@@ -87,20 +87,33 @@
                                 <label for="floatingInput" class="fw-bold text-primary">Initial Stock</label>
                               </div>
                             </div>                                                                                                       
-                      <!--end::Col-->                      
-                      <!--begin::Col-->                 
-                      <!--end::Col-->    
-                    </div>
-                    <hr class="divider">      
-                          <div class="row">
-                            <!--begin::Col-->
                             <div class="col-3">
                               <div class="form-floating mb-3">
-                                <input type="text" class="form-control" id="floatingInput" placeholder="name@example.com" name="var_todo_list" value ="10">
+                                <input type="number" class="form-control" id="floatingInput" placeholder="name@example.com" name="gen_lead_time" value ="0">
+                                <label for="floatingInput" class="fw-bold text-primary">Avg Lead Time</label>
+                              </div>
+                            </div>        
+                            <!-- <div class="col-3">
+                              <div class="form-floating mb-3">
+                                <input type="text" class="form-control budgetPrice" id="floatingInput" placeholder="name@example.com" name="budget_price" id="budgetPrice" value ="0">
+                                <label for="floatingInput" class="fw-bold text-primary">Budget Per Item</label>
+                              </div>
+                            </div>   -->
+                            <div class="col-3">
+                              <div class="form-floating mb-3">
+                                <input type="text" class="form-control budgetTarget" id="floatingInput" placeholder="name@example.com" name="budget_target" id="budgetTarget" value ="0">
+                                <label for="floatingInput" class="fw-bold text-primary">Target Budget Per Item</label>
+                              </div>
+                            </div>                            
+                    </div>   
+                          <hr class="divider">      
+                          <div class="row">
+                          <div class="col-3">
+                              <div class="form-floating mb-3">
+                                <input type="text" class="form-control" id="floatingInput" placeholder="name@example.com" name="var_todo_list" value="10">
                                 <label for="floatingInput" class="fw-bold text-primary">Todo list variable</label>
                               </div>
                             </div>
-                            <!--end::Col-->      
                             <!--begin::Col-->
                             <div class="col-3">
                               <div class="form-floating mb-3">
@@ -125,7 +138,7 @@
                               </div>
                             </div>
                             <!--end::Col-->                            
-                          </div>                                                   
+                          </div>                                                                     
                   </div>
                   <!-- /.card-body -->
                   <div class="card-footer">
@@ -167,6 +180,33 @@
                   </script>
 <script>
   var URL_AJAX = '<?php echo base_url();?>index.php/ajax';
+  $(document).ready(function() {   
+          $(".budgetPrice").on('keyup', function(){
+            var val = this.value;
+            val = val.replace(/[^0-9\.]/g,'');
+            
+            if(val != "") {
+              valArr = val.split('.');
+              valArr[0] = (parseInt(valArr[0],10)).toLocaleString();
+              val = valArr.join('.');
+            }
+            
+            this.value = val;
+          });
+
+          $(".budgetTarget").on('keyup', function(){
+            var val = this.value;
+            val = val.replace(/[^0-9\.]/g,'');
+            
+            if(val != "") {
+              valArr = val.split('.');
+              valArr[0] = (parseInt(valArr[0],10)).toLocaleString();
+              val = valArr.join('.');
+            }
+            
+            this.value = val;
+          });          
+      });  
   $(document).ready(function(){
     get_uom();
     get_factory();

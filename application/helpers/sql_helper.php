@@ -152,10 +152,9 @@ function generate_gross_requirement($material_id){
 
     for($w = 1; $w <= $get_last_week; $w++){
         $exist = $CI->db->get_where('m_stock_card_formula', array(
-            "item_id"        => $get_data->id,
-            "item_code"     => $get_data->item_code,
-            "year" => $year,
-            "week" => $w
+            "item_id"           => $get_data->id,
+            "year"              => $year,
+            "week"              => $w
         ))->row();
 
         if(!$exist){
@@ -212,7 +211,7 @@ function generate_var_settings($material_id, $var1, $var2, $var3, $var4){
     }
 }
 
-function generate_item_movement($vendor_material_id){
+function generate_item_movement($last_id){
     $CI = getCI();
     $data = array();
 
@@ -220,24 +219,22 @@ function generate_item_movement($vendor_material_id){
     $get_last_week = date('W', strtotime('December 28th'));
     $get_max_manual_input = 6;
 
-    $get_data = $CI->db->get_where('m_vendor_material', array(
-        "id" => $vendor_material_id
+    $get_data = $CI->db->get_where('m_master_data_material', array(
+        "id" => $last_id
     ))->row();
 
     for($w = 1; $w <= $get_last_week; $w++){
         $exist = $CI->db->get_where('t_material_movement', array(
-            "vendor_code"   => $get_data->vendor_code,
             "item_code"     => $get_data->item_code,
-            "vendor_material_id" => $vendor_material_id,            
+            "item_id" => $last_id,            
             "year" => $year,
             "week" => $w
         ))->row();
 
         if(!$exist){
             $data = array(
-                "vendor_code"   => $get_data->vendor_code,
                 "item_code"     => $get_data->item_code,
-                "vendor_material_id" => $vendor_material_id,
+                "item_id" => $last_id,
                 "year" => $year,
                 "week" => $w,
                 'gross_requirement' => 0,
@@ -254,21 +251,23 @@ function generate_item_movement($vendor_material_id){
     }
 }
 
-function get_avg_value($vendor_material_id, $item_id, $week){
+function get_avg_value($item_id, $week){
     $CI = getCI();
+
     $get_data = $CI->db->get_where('m_stock_card_formula', array(
         "item_id" => $item_id,
+        "year" => date('Y'),
         "week" => $week
     ))->row();
 
     $get_avg = $CI->db->query('
-    SELECT AVG(gross_requirement) as avg_gross, vendor_material_id
+    SELECT AVG(gross_requirement) as avg_gross, item_id
     FROM t_material_movement
-    WHERE vendor_material_id = '.$vendor_material_id.'
+    WHERE item_id = '.$item_id.'
     AND week >= '.$get_data->week_start_average.'
     AND week <= '.$get_data->week_end_average.'
-    GROUP BY vendor_material_id
-    ORDER BY vendor_material_id DESC
+    GROUP BY item_id
+    ORDER BY item_id DESC
     ')->row();
 
     return $get_avg->avg_gross;
@@ -384,5 +383,36 @@ function calc_sched_receipt($mat_mov_id, $schedule_receipt)
             // ));
 
         }
+}
+
+function generate_budget_baseline($item_id, $budget, $target){
+    $CI = getCI();
+    $data = array();
+
+    $baseline = array('Best', 'Average', 'Latest', 'Target', 'Budget');
+
+    $get_data = $CI->db->get_where('m_master_data_material', array(
+        "id" => $item_id
+    ))->row();
+
+    foreach ($baseline as $key => $value) {
+        $is_default = 0;
+        $price = $target;
+
+        if($value == 'Budget'){
+            $price = $budget;
+        }
+        if($value == 'Best'){
+            $is_default = 1;
+        }
+        
+        _add('m_material_baseline_price', array(
+            "item_id" => $item_id,
+            "item_code" => $get_data->item_code,
+            "baseline_category" => $value,
+            "baseline_price" => $price,
+            "is_default" => $is_default          
+        ));
+    }
 }
 ?>

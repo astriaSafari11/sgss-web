@@ -206,4 +206,35 @@ function log_print($id = null, $desc = ""){
     );
 }
 
+function baseline_category_desc($category = ""){
+	switch($category){
+		case "Best":
+			$desc = 'Min [purchase price] - from time period [begin] to [end]';
+			break;
+		case "Average":
+			$desc = 'Avg [ purchase price ] - from time period [begin] to [end]';
+			break;
+		case "Latest":
+			$desc = 'Purchase price at transaction n-1';
+			break;
+		case "Target":
+			$desc = 'Target price set for the item';
+			break;
+		case "Budget":
+			$desc = 'Budget / Volume Forecast Annual Usage';
+			break;			
+		default:
+			$desc = 'Baseline Price';
+		break;
+	}
+
+	return $desc;
+}
+
+function week_start_date($wk_num, $yr, $first = 1, $format = 'Y-m-d')
+{
+    $wk_ts  = strtotime('+' . $wk_num . ' weeks', strtotime($yr . '0101'));
+    $mon_ts = strtotime('-' . date('w', $wk_ts) + $first . ' days', $wk_ts);
+    return date($format, $mon_ts);
+}
 ?>

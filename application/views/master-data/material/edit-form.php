@@ -87,7 +87,25 @@
                                 <input type="number" class="form-control" id="floatingInput" placeholder="name@example.com" name="initial_stock" value="<?php echo $material->initial_stock;?>">
                                 <label for="floatingInput" class="fw-bold text-primary">Initial Stock</label>
                               </div>
-                            </div>                                                                      
+                            </div>     
+                            <div class="col-3">
+                              <div class="form-floating mb-3">
+                                <input type="number" class="form-control" id="floatingInput" placeholder="name@example.com" name="gen_lead_time" value="<?php echo $material->gen_lead_time;?>">
+                                <label for="floatingInput" class="fw-bold text-primary">Avg Lead Time</label>
+                              </div>
+                            </div>        
+                            <!-- <div class="col-3">
+                              <div class="form-floating mb-3">
+                                <input type="text" class="form-control budgetPrice" id="floatingInput" placeholder="name@example.com" name="budget_price" id="budgetPrice" value="<?php echo $material->budget_price;?>">
+                                <label for="floatingInput" class="fw-bold text-primary">Budget Per Item</label>
+                              </div>
+                            </div>   -->
+                            <div class="col-3">
+                              <div class="form-floating mb-3">
+                                <input type="text" class="form-control budgetTarget" id="floatingInput" placeholder="name@example.com" name="budget_target" id="budgetTarget" value="<?php echo $budget->baseline_price;?>">
+                                <label for="floatingInput" class="fw-bold text-primary">Target Budget Per Item</label>
+                              </div>
+                            </div>                                                                                               
                       <!--end::Col-->                      
                       <!--begin::Col-->                 
                       <!--end::Col-->    
@@ -139,34 +157,7 @@
                 </div>
                 <!-- /.card -->
               </div>
-            </div>    
-            
-            <div class="row mb-2">
-              <div class="col-sm-6">
-                <a class="btn btn-primary position-relative" style="font-weight: 600; white-space:nowrap;">
-                  Gross Requirement Formula
-                </a> 
-              </div>             
-            </div>            
-            <!--begin::Row-->            
-            <div class="row">
-              <div class="col-12 mb-4">
-                    <table id="table-item" class="table table-sm table-bordered" width="100%">
-                      <thead  style="text-align: center;white-space:nowrap;">
-                          <tr >
-                              <th style="color: #fff;background-color:#001F82;text-align: center;">Year</th>
-                              <th style="color: #fff;background-color:#001F82;text-align: center;">Week</th>
-                              <th style="color: #fff;background-color:#001F82;text-align: center;">Type</th>
-                              <th style="color: #fff;background-color:#001F82;text-align: center;">AVG Week Start</th>
-                              <th style="color: #fff;background-color:#001F82;text-align: center;">AVG Week End</th>
-                              <th style="color: #fff;background-color:#001F82;text-align: center;">Action</th>
-                          </tr>
-                      </thead>
-                      <tbody style="text-align: center;white-space:nowrap;vertical-align:center;">                       
-                      </tbody>
-                    </table> 
-              </div>            
-            </div>              
+            </div>                
 </form> 
 <script>
                     // Example starter JavaScript for disabling form submissions if there are invalid fields
@@ -196,28 +187,20 @@
 <script>
   var URL_AJAX = '<?php echo base_url();?>index.php/ajax';
   $(document).ready(function(){
+    $(".budgetTarget").on('keyup', function(){
+            var val = this.value;
+            val = val.replace(/[^0-9\.]/g,'');
+            
+            if(val != "") {
+              valArr = val.split('.');
+              valArr[0] = (parseInt(valArr[0],10)).toLocaleString();
+              val = valArr.join('.');
+            }
+            
+            this.value = val;
+          });     
     get_uom('<?php if(isset($material->uom)){echo $material->uom;}?>');
     get_factory('<?php if(isset($material->factory)){echo $material->factory;}?>');
-
-    $('#table-item').DataTable({
-              scrollX: true,
-              "processing": true, 
-              "serverSide": true, 
-              "ordering": false,
-              "ajax": {
-                "url": "<?= site_url('master_data/get_gross_req?id='._encrypt($material->id));?>",
-                "type": "POST"
-              },
-              "order": [],        
-              "columnDefs": [
-                {
-                    targets: '_all',
-                    createdCell: function(cell) {
-                      $(cell).css('vertical-align', 'middle');
-                    }
-                }
-            ],
-          });     
   });
 
   function get_uom(id){

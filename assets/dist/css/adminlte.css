@@ -13918,8 +13918,8 @@ fieldset:disabled .btn {
 }
 
 .sidebar-mini.sidebar-collapse .app-sidebar {
-	min-width: 5rem;
-	max-width: 6rem;
+	min-width: 4.6rem;
+	max-width: 4.6rem;
 }
 .sidebar-mini.sidebar-collapse .sidebar-menu .nav-header {
 	display: none;

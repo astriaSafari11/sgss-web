@@ -44,10 +44,12 @@
                                 <th style="color: #fff;background-color: #001F82;text-align: center;">Lot Size</th>
                                 <th style="color: #fff;background-color: #001F82;text-align: center;">Order Cycle</th>
                                 <th style="color: #fff;background-color: #001F82;text-align: center;">Initial Stock</th>
+                                <th style="color: #fff;background-color: #001F82;text-align: center;">Avg Lead Time</th>
+                                <th style="color: #fff;background-color: #001F82;text-align: center;">Standard Safety Stock</th>
                                 <th style="color: #fff;background-color: #001F82;text-align: center;">Action</th>
                             </tr>
                         </thead>
-                        <tbody style="text-align: center;vertical-align:center;">
+                        <tbody style="text-align: center;vertical-align:center;white-space:nowrap;">
                         </tbody>
                         </table>                         
                     </div>             

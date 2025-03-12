@@ -140,7 +140,7 @@
                       <?php foreach($item as $k => $v){ ?>
                             <tr>
                               <td style="vertical-align: middle;text-align: center;">
-                                <a href="<?= site_url('goods_management/stock_card_detail/'._encrypt($v->vendor_material_id));?>" class="underline-custom">
+                                <a href="<?= site_url('goods_management/stock_card_detail/'._encrypt($v->id));?>" class="underline-custom">
                                   <?php echo $v->item_code;?></td>
                                 </a> 
                               <td style="vertical-align: middle;text-align: center;"><?php echo $v->item_name;?></td>
@@ -172,8 +172,8 @@
                               </td>
                           </tr>
 
-                          <?php } ?>
-                      </tbody>                        
+                      <?php } ?>
+                      </tbody>                                              
                   </table>              
                   </div>
                   <!-- /.card-body -->
