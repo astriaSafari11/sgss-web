@@ -258,17 +258,19 @@
               src="<?= base_url('assets/dist/images/logos/unilever-logo.png');?>"
               alt="Unilever Logo"
               class="brand-image"
-              style="margin-left: 5px;"
+              style="margin-left: 20px;"
             />
             <!--end::Brand Image-->
             <!--begin::Brand Text-->
-            <img src="<?= base_url('assets/dist/logo_sgss.png'); ?>"  
-              alt="SGSS Icon"  
-              class="img-fluid brand-image"
-              style="display: inline-block;
-              vertical-align: middle;
-              height: 24px;
-              margin-left:21px;">
+            <span class="brand-text">
+              <img src="<?= base_url('assets/dist/logo_sgss.png'); ?>"  
+                alt="SGSS Icon"  
+                class="img-fluid brand-image"
+                style="display: inline-block;
+                vertical-align: middle;
+                height: 24px;
+                margin-left:21px;">
+            </span>
 
             <!--end::Brand Text-->
           </a>
