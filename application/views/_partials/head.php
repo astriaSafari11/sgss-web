@@ -262,7 +262,14 @@
             />
             <!--end::Brand Image-->
             <!--begin::Brand Text-->
-            <span class="brand-text font-bold text-primary" style="font-weight: 800; font-size: 24px; margin-bottom: 5px;">SGSS</span>
+            <img src="<?= base_url('assets/dist/logo_sgss.png'); ?>"  
+              alt="SGSS Icon"  
+              class="img-fluid brand-image"
+              style="display: inline-block;
+              vertical-align: middle;
+              height: 24px;
+              margin-left:21px;">
+
             <!--end::Brand Text-->
           </a>
           <!--end::Brand Link-->

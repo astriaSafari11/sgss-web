@@ -24,7 +24,7 @@ class Auth extends CI_Controller
 
 			if(!empty($username) && !empty($password)){
 				if($this->auth_model->login($username, $password)){
-					redirect('dashboard');
+					redirect('landing_page');
 				} else {
 					// redirect('dashboard');
 					$this->session->set_flashdata('message_login_error', 'Login Failed, Please check your username or password!');
