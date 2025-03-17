@@ -28,7 +28,7 @@
     <!-- Filter 2 -->
     <label for="filterBy2" class="small">Filter 2:</label>
     <select id="filterBy2" class="form-select form-select-sm w-auto" name="column_filter">
-        <option value="like" <?php echo isset($param_search['column_filter']) && $param_search['column_filter'] == 'like' ? 'selected' : '';?> >Like</option>
+        <option value="like" <?php echo isset($param_search['column_filter']) && $param_search['column_filter'] == 'like' ? 'selected' : '';?> >Contain</option>
         <option value="=" <?php echo isset($param_search['column_filter']) && $param_search['column_filter'] == '=' ? 'selected' : '';?> >Is</option>
         <option value="!=" <?php echo isset($param_search['column_filter']) && $param_search['column_filter'] == '!=' ? 'selected' : '';?>>Not</option>
         <option value=">" <?php echo isset($param_search['column_filter']) && $param_search['column_filter'] == '>' ? 'selected' : '';?>>Greater Than</option>
