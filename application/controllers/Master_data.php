@@ -689,6 +689,7 @@ class Master_data extends CI_Controller
 					"var_stock_card_todo_list"  => $this->input->post('var_stock_card_todo_list'),
 					"var_stock_card_overstock"  => $this->input->post('var_stock_card_overstock'),
 					'var_stock_card_ok'         => $this->input->post('var_stock_card_ok'),
+					'var_pending_approval'      => $this->input->post('var_pending_approval'),
 				), array("item_id" => $id));
 			
 			_update(

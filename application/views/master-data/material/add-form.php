@@ -138,6 +138,15 @@
                               </div>
                             </div>
                             <!--end::Col-->                            
+                            <!--begin::Col-->
+                            <div class="col-3">
+                              <div class="form-floating mb-3">
+                                <input type="text" class="form-control" id="floatingInput" placeholder="name@example.com" name="var_pending_approval" value ="5">
+                                <label for="floatingInput" class="fw-bold text-primary">Pending Approval (days)</label>
+                              </div>
+                            </div>
+                            <!--begin::Col-->         
+                            <!--end::Col-->                            
                           </div>                                                                     
                   </div>
                   <!-- /.card-body -->

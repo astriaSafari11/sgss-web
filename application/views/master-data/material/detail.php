@@ -152,6 +152,14 @@
                               </div>
                             </div>
                             <!--end::Col-->                            
+                            <!--begin::Col-->
+                            <div class="col-3">
+                              <div class="form-floating mb-3">
+                                <input type="text" class="form-control" id="floatingInput" placeholder="name@example.com" name="var_pending_approval" value="<?php echo !empty($settings->var_pending_approval)?$settings->var_pending_approval:0;?>" disabled>
+                                <label for="floatingInput" class="fw-bold text-primary">Pending Approval (days)</label>
+                              </div>
+                            </div>
+                            <!--end::Col-->                            
                           </div>                                                
                   </div>
                   <!-- /.card-footer-->
