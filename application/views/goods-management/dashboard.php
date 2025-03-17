@@ -80,22 +80,31 @@
                               <td style="vertical-align: middle;text-align: center;"><?php echo $v->qty;?></td>
                               <td style="vertical-align: middle;text-align: center;"><?php echo $v->uom;?></td>
                               <td style="vertical-align: middle;text-align: center;">
-                                <button class="btn btn-sm btn-danger" style="font-weight: 600; border-radius: 50px; width: 100%;">
-                                  Urgent
-                                </button>                                
+                                <?php if($v->status == 'urgent'){ ?>
+                                  <button class="btn btn-sm btn-danger" style="font-weight: 600; border-radius: 50px; width: 100%;">
+                                    Urgent
+                                  </button>                     
+                                <?php } ?>           
+                                <?php if($v->status == 'ignored'){ ?>
+                                  <button class="btn btn-sm btn-secondary" style="font-weight: 600; border-radius: 50px; width: 100%;">
+                                    Ignored
+                                  </button>                     
+                                <?php } ?>           
                               </td>
-                              <td style="vertical-align: middle;text-align: center;">                
-                                <a href="<?= site_url('goods_management/order/'._encrypt($v->id));?>" class="btn btn-sm btn-outline-primary" style="font-weight: 600; border-radius: 50px; width: 150px;">
-                                ORDER NOW
-                                </a>  
-                                <button type="button" class="btn btn-sm btn-outline-danger" style="font-weight: 600; border-radius: 50px; width: 150px;" data-bs-toggle="modal" data-bs-target="#modal-ignore-value-<?php echo $v->id;?>">
-                                  IGNORE
-                                </button>  
+                              <td style="vertical-align: middle;text-align: center;"> 
+                                <?php if($v->status != 'ignored'){ ?>               
+                                  <a href="<?= site_url('goods_management/order/'._encrypt($v->id));?>" class="btn btn-sm btn-outline-primary" style="font-weight: 600; border-radius: 50px; width: 150px;">
+                                  ORDER NOW
+                                  </a>  
+                                  <button type="button" class="btn btn-sm btn-outline-danger" style="font-weight: 600; border-radius: 50px; width: 150px;" data-bs-toggle="modal" data-bs-target="#modal-ignore-value-<?php echo $v->id;?>">
+                                    IGNORE
+                                  </button> 
+                                <?php } ?> 
                               </td>
                           </tr>
-                          <form action="<?php echo site_url('master_data/order_reject');?>" method="post" id="modal-ignore-value-<?php echo $v->id;?>">
                             <div class="modal fade" id="modal-ignore-value-<?php echo $v->id;?>" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-                                <input type="hidden" name="order_id" value="<?php echo _encrypt($v->id);?>">
+                              <form action="<?= site_url('goods_management/order_reject');?>" method="post" id="modal-ignore-value-<?php echo $v->id;?>">
+                              <input type="hidden" name="id" value="<?php echo _encrypt($v->id);?>">
                                 <div class="modal-dialog modal-lg">
                                   <div class="modal-content">
                                     <div class="modal-header">
@@ -111,22 +120,41 @@
                                                       <label>Please fill your reason, to ignore this order request</label>
                                                       <div class="form-floating mb-3">
                                                         <input type="text" class="form-control" id="floatingInput" placeholder="name@example.com" name="ignore_remarks" value ="">
-                                                        <label for="floatingInput" class="fw-bold text-primary">Input Ignore Remarks</label>
+                                                        <label for="floatingInput" class="fw-bold text-primary">Reason</label>
                                                       </div>
                                                     </div>
+                                                    <div class="col-12">
+                                                      <div class="row">
+                                                        <div class="col-12">
+                                                          <div class="form-floating mb-3">
+                                                            <select class="form-select" aria-label="Default select example" id="ignore_days" style="height: 56px;" name="ignore_days" required>
+                                                              <option value="" disabled>-- Select Days --</option>
+                                                              <?php for($i = 1; $i <= 30; $i++){ ?>
+                                                                <option value="<?php echo $i;?>"><?php echo $i;?> day</option>
+                                                              <?php } ?>
+                                                            </select>
+                                                            <label for="ignore_days" class="fw-bold text-primary">Ignore For</label>
+                                                          </div>
+                                                        </div>                                                      
+                                                      </div>
+                                                    </div>                                                    
                                                     <!--end::Col-->                            
                                                 </div>         
                                               </div>
                                               </div>
                                     </div>
                                     <div class="modal-footer">
-                                      <button type="button" class="btn btn-outline-warning" data-bs-dismiss="modal">Cancel</button>
-                                      <button type="submit" name="submit" class="btn btn-outline-primary">Update Data</button>
+                                      <button type="submit" name="submit" class="btn btn-outline-primary">Ignore Request</button>
+                                      OR
+                                      <a href="<?= site_url('goods_management/ignore_order/'._encrypt($v->id));?>" class="btn btn-outline-danger" style="font-weight: 600; ">
+                                                          IGNORE & REMOVE FROM TO DO LIST
+                                                          </a>
+
                                     </div>
                                   </div>
                                 </div>
+                                </form>
                             </div>  
-                          </form>
                           <?php } ?>
                   </table>              
                   </div>

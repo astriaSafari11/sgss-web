@@ -206,6 +206,7 @@ function generate_var_settings($material_id, $var1, $var2, $var3, $var4){
             "var_stock_card_todo_list"  => $var2,
             "var_stock_card_overstock"  => $var3,
             'var_stock_card_ok'         => $var4,
+            'var_pending_approval'      => 5,
         );
         _add_nologs('m_variable_settings', $data);
     }
@@ -415,4 +416,79 @@ function generate_budget_baseline($item_id, $budget, $target){
         ));
     }
 }
+
+function generate_approval_track($order_id, $requestor){
+    $CI = getCI();
+    $getUser = $CI->db->get_where('m_employee', array(
+        "nip" => $requestor
+    ))->row();
+
+    //add first layer approval - LM - WL 1 - PIC AREA
+    _add('t_order_approval_track', array(
+        "order_id" => $order_id,
+        "approve_order" => 1,
+        "approve_level" => 1,
+        "approve_title" => 'WL1',
+        "approve_status" => 'pending',
+        "approve_by" => $getUser->lm_nip,
+    ));
+
+    //add second layer approval - WL2
+    _add('t_order_approval_track', array(
+        "order_id" => $order_id,
+        "approve_order" => 2,
+        "approve_level" => 2,
+        "approve_title" => 'WL2',
+        "approve_status" => 'inactive',
+    ));
+
+    //add third layer approval - WL3
+    _add('t_order_approval_track', array(
+        "order_id" => $order_id,
+        "approve_order" => 3,
+        "approve_level" => 3,
+        "approve_title" => 'WL3',
+        "approve_status" => 'inactive',
+    ));
+}
+
+function get_vendor_name($vendor_code){
+    $CI = getCI();
+    $data = $CI->db->get_where('m_master_data_vendor', array(
+        "vendor_code" => $vendor_code
+    ))->row();
+
+    return $data->vendor_name;
+}
+
+function get_baseline_price($item_id, $baseline){
+    $CI = getCI();
+    $data = $CI->db->get_where('m_material_baseline_price', array(
+        "item_id" => $item_id,
+        "baseline_category" => $baseline
+    ))->row();
+
+    return $data->baseline_price;
+}
+
+function get_annual_price($item_id, $year){
+    $CI = getCI();
+    $data = $CI->db->get_where('m_material_budget', array(
+        "item_id" => $item_id,
+        "year" => $year
+    ))->row();
+
+    return $data->annual_budget;
+}
+
+function get_vendor_price($vendor_code, $item_id){
+    $CI = getCI();
+    $data = $CI->db->get_where('m_vendor_material', array(
+        "vendor_code" => $vendor_code,
+        "item_code" => $item_id
+    ))->row();
+
+    return $data->price_per_uom;
+}
+
 ?>

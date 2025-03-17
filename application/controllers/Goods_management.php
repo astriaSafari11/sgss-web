@@ -152,8 +152,100 @@ class Goods_management extends CI_Controller
 			"order_id"	=> $data['order_detail']->id
 		))->result();
 
+		$data['planned'] = $this->db->get_where("t_stock_planned_request",array(
+			"id"	=> $id
+		))->result();
+
 		$this->session->set_flashdata('page_title', 'FORM INPUT ORDER');
 		$this->load->view('goods-management/order.php', $data);
+	}	
+
+	public function ignore_order()
+	{
+		$id = _decrypt($this->uri->segment(3));
+
+		$data['order'] = $this->db->query("
+		select * from t_stock_planned_request 
+		INNER JOIN m_master_data_material ON t_stock_planned_request.item_id = m_master_data_material.id 
+		where t_stock_planned_request.id = '$id'
+		")->row();	
+
+		$get_pending_days = $this->db->get_where("m_variable_settings",array(
+			"item_id" => $data['order']->item_id
+		))->row();
+
+		$exist = $this->db->get_where("t_order",array(
+			"planned_id"	=> $id,
+		))->row();	
+
+		if(!$exist){
+			_add("t_order",array(				
+				"planned_id"			=> $id,
+				"date"					=> date("Y-m-d"),
+				"ignored_reason"		=> $this->input->post('ignore_remarks'),
+				"requestor"				=> $this->session->userdata('user_name'),
+				"pending_days"			=> $get_pending_days->var_pending_approval,
+				"remarks"				=> $this->input->post('remarks'),
+				"status"				=> 'waiting_approval',
+				"order_category"		=> 'ignore',
+				"is_approval_required"	=> 1,
+				"is_approved"			=> 0,
+				"is_feedback"			=> 0,
+				"is_download"			=> 0,
+			));					
+		}
+
+		$data['order_detail'] = $this->db->get_where("t_order",array(
+			"planned_id"	=> $id
+		))->row();
+
+		$check_exist = $this->db->get_where("t_order_detail",array(
+			"order_id"	=> $data['order_detail']->id
+		))->row();
+
+		if(!$check_exist){
+			$order = $this->db->query("
+			select * from t_stock_planned_request 
+			INNER JOIN m_master_data_material ON t_stock_planned_request.item_code = m_master_data_material.item_code
+			where t_stock_planned_request.id = '$id'
+			")->row();		
+
+			$get_price = $this->db->get_where("m_vendor_material",array(
+				"vendor_code" => $order->vendor_code,
+				"item_code" => $order->item_code
+			))->row();
+
+			_add("t_order_detail",array(	
+				"order_id"	=> $data['order_detail']->id,
+				"item"		=> $order->item_code,
+				"qty"		=> $order->qty,
+				"uom"		=> $order->uom,
+				"vendor_code" => $order->vendor_code,
+				"uom_price"	  => $get_price->price_per_uom,
+				"total_price" => $get_price->moq*$get_price->price_per_uom,
+				"status"	  => 0
+			));			
+
+			_update("t_stock_planned_request", array(
+				"order_status" =>	1,
+				"status"	   => 'ignored'
+			), array("id" => $id));
+
+			generate_approval_track($data['order_detail']->id, $this->session->userdata('user_nip'));
+
+		}
+		$data['detail'] = $this->db->get_where("t_order_detail",array(
+			"order_id"	=> $data['order_detail']->id
+		))->result();
+
+		$err = array(
+			'show' => true,
+			'type' => 'success',
+			'msg'  => 'Successfully Ignore Request Planned'
+		);
+		$this->session->set_flashdata('toast', $err);
+
+		redirect('goods_management');
 	}	
 
 	public function submit_order(){
@@ -195,6 +287,7 @@ class Goods_management extends CI_Controller
 			"requested_for"			=> $this->input->post('requested_for'),
 			"area"					=> $this->input->post('area'),
 			"remarks"				=> $this->input->post('remarks'),
+			"order_category"		=> 'order',
 			"status"				=> $status,
 			"purchase_reason"		=> $purchase_reason,
 			"is_approval_required"	=> $is_approval_required,
@@ -305,20 +398,26 @@ class Goods_management extends CI_Controller
 
 	public function order_reject()
 	{
-		$id = $this->input->post('order_id');
-		$remarks = $this->input->post('ignore_remarks');
-
-		_update("t_order", array(
-			"is_approved" 	=> 1,
-			"is_feedback"	=> 0,
-			"status" 		=> "ignored",
-			"rejected_date" => date("Y-m-d"),
-			"rejected_by" 	=> $this->session->userdata('user_name'),
-			"rejected_remark" => $remarks,
-		), array("id" => $id));
-
-		$this->session->set_flashdata('page_title', 'FORM INPUT ORDER REJECTED');
-		redirect('goods_management');
+		if(isset($_POST['submit'])){
+			$id = $this->input->post('id');
+			$reason = $this->input->post('ignore_remarks');
+			$days = $this->input->post('ignore_days');
+	
+			_update("t_stock_planned_request", array(
+				"status" 		=> "ignored",
+				"ignored_for"	=> $days,
+				"ignored_reason" => $reason,
+			), array("id" => $id));
+	
+			$err = array(
+				'show' => true,
+				'type' => 'success',
+				'msg'  => 'Successfully Ignore Request Planned'
+			);
+			$this->session->set_flashdata('toast', $err);
+	
+			redirect('goods_management');	
+		}
 	}		
 
 	public function item_movement()
@@ -497,6 +596,7 @@ class Goods_management extends CI_Controller
 					$planned_release = array(
 						'vendor_code' 			=> $get_rec_material->vendor_code,
 						'item_code'			 	=> $get_mat_detail->item_code,
+						'item_id'				=> $get_mat_detail->id,
 						'vendor_material_id' 	=> $get_rec_material->vendor_material_id,
 						'item_name' 			=> $get_mat_detail->item_name,
 						'qty' 					=> $planned_order_receipt,
