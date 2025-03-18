@@ -173,6 +173,7 @@
 
                                 <td style="vertical-align: middle;text-align: right;font-size: 14px;"><?php echo myNum($detail->uom_price); ?></td>
                                 <td style="vertical-align: middle;text-align: right;font-size: 14px;"><?php echo myNum($detail->total_price); ?></td>
+                                <td style="vertical-align: middle;text-align: center;font-size: 14px;"><?php echo myDecimal(calculate_savings($detail->uom_price,get_baseline_price($detail->item_id,'target'))); ?> %</td>
                             </tr>                           
                         </tbody>  
                       </table>              
@@ -199,6 +200,7 @@
                                 <td style="vertical-align: middle;text-align: center;font-size: 14px;"><?php echo $planned->vendor_code; ?> - <?php echo get_vendor_name($planned->vendor_code);?></td>
                                 <td style="vertical-align: middle;text-align: right;font-size: 14px;"><?php echo myNum(get_vendor_price($planned->vendor_code, $planned->item_code)); ?></td>
                                 <td style="vertical-align: middle;text-align: right;font-size: 14px;"><?php echo myNum(get_vendor_price($planned->vendor_code, $planned->item_code) * $planned->qty); ?></td>
+                                <td style="vertical-align: middle;text-align: center;font-size: 14px;"><?php echo myDecimal(calculate_savings(get_vendor_price($planned->vendor_code, $planned->item_code),get_baseline_price($detail->item_id,'target'))); ?> %</td>
                             </tr>
                         </tbody>  
                       </table>              
@@ -267,7 +269,7 @@
             </form> 
             <div class="modal fade" id="modal-edit-qty" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
               <form action="<?= site_url('goods_management/edit_qty_order');?>" method="post" id="modal-edit-qty">
-                <input type="hidden" name="id" value="<?php echo _encrypt($detail->order_id);?>">
+                <input type="hidden" name="order_id" value="<?php echo _encrypt($detail->order_id);?>">
                   <div class="modal-dialog modal-lg">
                     <div class="modal-content">
                       <div class="modal-header">
@@ -299,7 +301,7 @@
               
               <div class="modal fade" id="modal-edit-vendor" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
               <form action="<?= site_url('goods_management/edit_vendor_order');?>" method="post" id="modal-edit-vendor">
-                <input type="hidden" name="id" value="<?php echo _encrypt($detail->order_id);?>">
+                <input type="hidden" name="order_id" value="<?php echo _encrypt($detail->order_id);?>">
                 <div class="modal-dialog modal-lg">
                     <div class="modal-content">
                       <div class="modal-header">
@@ -314,10 +316,9 @@
                               <div class="col-12">
                                 <div class="form-floating mb-3">
                                   <select class="form-select" id="vendor" data-placeholder="Choose Vendor" name="vendor" required>
-                                    <option></option>
-
+                                    <option>-- Select Vendor --</option>
                                     <?php foreach ($vendor_list as $row) { ?>
-                                        <option value="<?php echo $row->vendor_id; ?>"><?php echo $row->vendor_name; ?> - <?php echo $row->vendor_address; ?></option>
+                                        <option value="<?php echo $row->vendor_code; ?>"><?php echo $row->vendor_name; ?> - Item Price : <?php echo myNum($row->price_per_uom); ?></option>
                                     <?php } ?>
                                   </select>
                                   <label for="floatingInput" class="fw-bold text-primary">Vendor List</label>
@@ -328,7 +329,7 @@
                         </div>
                       </div>
                       <div class="modal-footer">
-                        <button type="submit" name="submit" class="btn btn-outline-primary">Edit Qty Order</button>
+                        <button type="submit" name="submit" class="btn btn-outline-primary">Edit Vendor</button>
                       </div>
                     </div>
                   </div>

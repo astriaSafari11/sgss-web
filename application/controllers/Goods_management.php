@@ -157,12 +157,125 @@ class Goods_management extends CI_Controller
 		$data['planned'] = $this->db->query("select * from t_stock_planned_request 
 			INNER JOIN m_master_data_material ON t_stock_planned_request.item_code = m_master_data_material.item_code where t_stock_planned_request.id = '$id'")->row();
 		
-		$data['vendor_list'] = get_vendor_material($check_exist->item_code);
+		$data['vendor_list'] = $this->db->query("select * from m_vendor_material 
+        INNER JOIN m_master_data_vendor ON m_master_data_vendor.vendor_code = m_vendor_material.vendor_code
+        where item_code = '$check_exist->item_code'")->result();
 
 		$this->session->set_flashdata('page_title', 'FORM INPUT ORDER');
 		$this->load->view('goods-management/order.php', $data);
 	}	
 
+	public function edit_qty_order(){
+		$order_id 	= $this->input->post('order_id');
+		$qty 		= $this->input->post('qty');
+
+		$order = $this->db->get_where("t_order",array(
+			"id"	=> $order_id
+		))->row();
+
+		$order_detail = $this->db->get_where("t_order_detail",array(
+			"order_id"	=> $order_id
+		))->row();
+
+		$threshold = $this->db->get_where("m_variable_settings",array(
+			"item_id"	=> $order_detail->item_id
+		))->row()->min_threshold;
+
+		$planned = $this->db->get_where("t_stock_planned_request",array(
+			"id"	=> $order->planned_id
+		))->row();
+
+		$diff = $qty - $planned->qty;
+		
+		$diff_percentage = (abs($diff)/$planned->qty)*100;
+		
+		if($diff_percentage >= $threshold){
+			$order_status = 'qty_over_threshold';
+		}else{
+			$order_status = 'normal';
+		}
+
+		$data = array(
+			"qty" => $qty,
+			"total_price" => $qty * $order_detail->uom_price
+		);
+
+		_update("t_order_detail",$data,array(
+			"id"	=> $order_detail->id
+		));
+
+		_update("t_order",array(
+			"approval_category" => $order_status
+		),array(
+			"id"				=> $order->id
+		));
+
+		redirect('goods_management/order/'._encrypt($order->planned_id));
+	}
+
+	public function edit_vendor_order(){
+		$order_id 		= $this->input->post('order_id');
+		$id 			= $this->input->post('vendor');
+
+		$order = $this->db->get_where("t_order",array(
+			"id"	=> $order_id
+		))->row();
+
+		$order_detail = $this->db->get_where("t_order_detail",array(
+			"order_id"	=> $order_id
+		))->row();
+
+		$threshold = $this->db->get_where("m_variable_settings",array(
+			"item_id"	=> $order_detail->item_id
+		))->row()->min_threshold;
+
+		$planned = $this->db->get_where("t_stock_planned_request",array(
+			"id"	=> $order->planned_id
+		))->row();
+
+		$planned_price = $this->db->get_where("m_vendor_material",array(
+			"vendor_code"	=> $planned->vendor_code,
+			"item_code"		=> $planned->item_code
+		))->row();
+		
+		
+		$vendor = $this->db->get_where("m_vendor_material",array(
+			"vendor_code"	=> $id,
+			"item_code"		=> $order_detail->item_code
+		))->row();
+
+		$planned_total_price = $planned_price->price_per_uom * $order_detail->qty;
+		
+		$total_price = $vendor->price_per_uom * $order_detail->qty;
+		$diff = $order->total_price - $total_price;
+		
+		$diff_percentage = (abs($diff)/$planned_total_price)*100;
+		
+		if($diff_percentage >= $threshold){
+			$order_status = 'price_over_threshold';
+		}else{
+			$order_status = 'normal';
+		}
+
+		$data = array(
+			"vendor_code" => $vendor->vendor_code,
+			"uom_price" => $vendor->price_per_uom,
+			"total_price" => $total_price
+		);
+
+		_update("t_order_detail",$data,array(
+			"id"	=> $order_detail->id
+		));
+
+		_update("t_order",array(
+			"approval_category" => $order_status
+		),array(
+			"id"				=> $order->id
+		));
+
+		redirect('goods_management/order/'._encrypt($order->planned_id));
+	}	
+	
 	public function ignore_order()
 	{
 		$id = _decrypt($this->uri->segment(3));
@@ -291,11 +404,20 @@ class Goods_management extends CI_Controller
 		$planned_id = $this->input->post('planned_id');
 		$is_approved = 0;
 		$is_feedback = 0;
-		if($purchase_reason == "Routine Buy"){
-			$is_approval_required = 0;
 
-			$status = "auto_approved";
-			$is_approved=1;
+		$order = $this->db->get_where("t_order",array(
+			"id"	=> $order_id
+		))->row();
+
+		if($purchase_reason == "Routine Buy"){
+			if($order->approval_category != 'normal'){
+				$is_approval_required = 1;
+				$status = "waiting_approval";	
+			}else{
+				$is_approval_required = 0;
+				$status = "auto_approved";
+				$is_approved=1;	
+			}
 		}else{
 			$is_approval_required = 1;
 			$status = "waiting_approval";
@@ -331,6 +453,8 @@ class Goods_management extends CI_Controller
 			"order_status" =>1
 		), array("id" => $planned_id));
 
+		generate_approval_track($order_id, $this->session->userdata('user_nip'));
+
 		redirect('goods_management/order_detail/'._encrypt($order_id));
 	}
 
@@ -345,7 +469,7 @@ class Goods_management extends CI_Controller
 		$data['order_detail'] = $this->db->query("
 		select * from t_order_detail 
 		INNER JOIN m_master_data_vendor ON m_master_data_vendor.vendor_code = t_order_detail.vendor_code
-		INNER JOIN m_master_data_material ON m_master_data_material.item_code = t_order_detail.item 
+		INNER JOIN m_master_data_material ON m_master_data_material.item_code = t_order_detail.item_code
 		where t_order_detail.order_id = '$id'
 		")->result();	
 		

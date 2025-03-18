@@ -501,4 +501,11 @@ function get_vendor_material($item_code){
         INNER JOIN m_master_data_vendor ON m_master_data_vendor.vendor_code = m_vendor_material.vendor_code
         where item_code = '.$item_code.'")->result();
 }
+
+function calculate_savings($vendor_price, $baseline_price){
+
+    $calculated = ($baseline_price/$vendor_price);
+    return $calculated;
+}
+
 ?>
