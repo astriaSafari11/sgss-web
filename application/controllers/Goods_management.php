@@ -47,10 +47,10 @@ class Goods_management extends CI_Controller
 			}
 		}
 
-		$fSearch = !empty($search)?$search." AND order_status = 0 AND type = 'goods'":"WHERE order_status = 0 AND type = 'goods'";
+		$fSearch = !empty($search)?$search." AND order_status = 0 AND type = 'goods'":"WHERE order_status = 0 AND type = 'goods' AND status != 'ignored'";
 		
 		$query =  $this->db->query("SELECT * FROM t_stock_planned_request $fSearch")->result();
-		$count =  $this->db->get_where('t_stock_planned_request',array("order_status" => 0, "type" => 'goods'))->num_rows();
+		$count =  $this->db->get_where('t_stock_planned_request',array("order_status" => 0, "type" => 'goods', "status !=" =>  "ignored"))->num_rows();
 		$feedback =  $this->db->get_where('t_order',array("is_approved" => 1, "is_feedback" => 0))->num_rows();
 
 		$data['req_list'] = $query;		
@@ -139,22 +139,25 @@ class Goods_management extends CI_Controller
 
 			_add("t_order_detail",array(	
 				"order_id"	=> $data['order_detail']->id,
-				"item"		=> $order->item_code,
+				"item_id"		=> $order->item_id,
+				"item_code"		=> $order->item_code,
+				"item_name"		=> $order->item_name,
 				"qty"		=> $order->qty,
 				"uom"		=> $order->uom,
 				"vendor_code" => $order->vendor_code,
 				"uom_price"	  => $get_price->price_per_uom,
-				"total_price" => $get_price->moq*$get_price->price_per_uom,
+				"total_price" => $order->qty*$get_price->price_per_uom,
 				"status"	  => 0
 			));			
 		}
 		$data['detail'] = $this->db->get_where("t_order_detail",array(
 			"order_id"	=> $data['order_detail']->id
-		))->result();
+		))->row();
 
-		$data['planned'] = $this->db->get_where("t_stock_planned_request",array(
-			"id"	=> $id
-		))->result();
+		$data['planned'] = $this->db->query("select * from t_stock_planned_request 
+			INNER JOIN m_master_data_material ON t_stock_planned_request.item_code = m_master_data_material.item_code where t_stock_planned_request.id = '$id'")->row();
+		
+		$data['vendor_list'] = get_vendor_material($check_exist->item_code);
 
 		$this->session->set_flashdata('page_title', 'FORM INPUT ORDER');
 		$this->load->view('goods-management/order.php', $data);
@@ -193,6 +196,23 @@ class Goods_management extends CI_Controller
 				"is_feedback"			=> 0,
 				"is_download"			=> 0,
 			));					
+		}else{
+			_update("t_order",array(
+				"planned_id"			=> $id,
+				"date"					=> date("Y-m-d"),
+				"ignored_reason"		=> $this->input->post('ignore_remarks'),
+				"requestor"				=> $this->session->userdata('user_name'),
+				"pending_days"			=> $get_pending_days->var_pending_approval,
+				"remarks"				=> $this->input->post('remarks'),
+				"status"				=> 'waiting_approval',
+				"order_category"		=> 'ignore',
+				"is_approval_required"	=> 1,
+				"is_approved"			=> 0,
+				"is_feedback"			=> 0,
+				"is_download"			=> 0,				
+			),array(
+				"id"	=> $exist->id
+			));
 		}
 
 		$data['order_detail'] = $this->db->get_where("t_order",array(
@@ -217,12 +237,14 @@ class Goods_management extends CI_Controller
 
 			_add("t_order_detail",array(	
 				"order_id"	=> $data['order_detail']->id,
-				"item"		=> $order->item_code,
+				"item_id"		=> $order->item_id,
+				"item_code"		=> $order->item_code,
+				"item_name"		=> $order->item_name,
 				"qty"		=> $order->qty,
 				"uom"		=> $order->uom,
 				"vendor_code" => $order->vendor_code,
 				"uom_price"	  => $get_price->price_per_uom,
-				"total_price" => $get_price->moq*$get_price->price_per_uom,
+				"total_price" => $order->qty*$get_price->price_per_uom,
 				"status"	  => 0
 			));			
 
@@ -232,8 +254,8 @@ class Goods_management extends CI_Controller
 			), array("id" => $id));
 
 			generate_approval_track($data['order_detail']->id, $this->session->userdata('user_nip'));
-
 		}
+
 		$data['detail'] = $this->db->get_where("t_order_detail",array(
 			"order_id"	=> $data['order_detail']->id
 		))->result();
@@ -281,7 +303,7 @@ class Goods_management extends CI_Controller
 
 		$request_id = 'REQ'.date("dmY").$order_id;
 		$data = array(
-			"date"					=> $this->input->post('date'),
+			"date"					=> date("Y-m-d"),
 			"request_id"			=> $request_id,
 			"requestor"				=> $this->session->userdata('user_name'),
 			"requested_for"			=> $this->input->post('requested_for'),
@@ -542,12 +564,14 @@ class Goods_management extends CI_Controller
 					$gross_req = get_avg_value($get_mat_detail->id,$i);
 				}
 
-				if($i == $get_initial_week){
-					$schedule_receipt = $this->input->post('schedule_receipt');
-				}else{
-					$schedule_receipt = $get_curr_week_data->schedules_receipts;
-				}
+				// if($i == $get_initial_week){
+				// 	$schedule_receipt = 100;
+				// }else{
+				// 	$schedule_receipt = $get_curr_week_data->schedules_receipts;
+				// }
 
+				$schedule_receipt = $get_curr_week_data->schedules_receipts;
+				
 				$data= array(
 					'week' => $i,
 					'gross_requirement' => $gross_req,
@@ -569,9 +593,9 @@ class Goods_management extends CI_Controller
 
 				if($net_on_hand <= 0){
 					$exist = $this->db->get_where("t_stock_planned_request",array(
-						"item_id"				=> $get_data->item_id,
-						"year" 					=> date('Y'),
-						"week" => $i
+						"item_id"	    => $get_data->item_id,
+						"year" 			=> date('Y'),
+						"week" 			=> $i
 					))->row();
 
 					$get_rec_material = $this->db->query("
@@ -632,7 +656,7 @@ class Goods_management extends CI_Controller
 				), array(
 					"item_id"				=> $get_data->item_id,
 					"year" 					=> date('Y'),
-					"week" => $i-1
+					"week" 					=> $i-1
 				));
 
 			}

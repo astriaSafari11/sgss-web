@@ -33,7 +33,7 @@
                   <div class="card-body">
                     <div class="dt-container">
                         <table id="table-vendor" class="table table-striped table-bordered" width="100%">
-                        <thead style="text-align: center;white-space:nowrap;">
+                        <thead style="text-align: center;">
                             <tr >
                                 <th style="color: #fff;background-color: #001F82;text-align: center;">No.</th>
                                 <th style="color: #fff;background-color: #001F82;text-align: center;">Item Code</th>
@@ -44,12 +44,13 @@
                                 <th style="color: #fff;background-color: #001F82;text-align: center;">Lot Size</th>
                                 <th style="color: #fff;background-color: #001F82;text-align: center;">Order Cycle</th>
                                 <th style="color: #fff;background-color: #001F82;text-align: center;">Initial Stock</th>
-                                <th style="color: #fff;background-color: #001F82;text-align: center;">Avg Lead Time</th>
+                                <th style="color: #fff;background-color: #001F82;text-align: center;">Average Lead Time</th>
+                                <th style="color: #fff;background-color: #001F82;text-align: center;">Lead Time PR to PO</th>
                                 <th style="color: #fff;background-color: #001F82;text-align: center;">Standard Safety Stock</th>
                                 <th style="color: #fff;background-color: #001F82;text-align: center;">Action</th>
                             </tr>
                         </thead>
-                        <tbody style="text-align: center;vertical-align:center;white-space:nowrap;">
+                        <tbody style="text-align: center;vertical-align:center;">
                         </tbody>
                         </table>                         
                     </div>             

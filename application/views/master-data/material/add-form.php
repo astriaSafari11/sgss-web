@@ -90,19 +90,19 @@
                             <div class="col-3">
                               <div class="form-floating mb-3">
                                 <input type="number" class="form-control" id="floatingInput" placeholder="name@example.com" name="gen_lead_time" value ="0">
-                                <label for="floatingInput" class="fw-bold text-primary">Avg Lead Time</label>
+                                <label for="floatingInput" class="fw-bold text-primary">Average Lead Time</label>
                               </div>
                             </div>        
-                            <!-- <div class="col-3">
+                            <div class="col-3">
                               <div class="form-floating mb-3">
-                                <input type="text" class="form-control budgetPrice" id="floatingInput" placeholder="name@example.com" name="budget_price" id="budgetPrice" value ="0">
-                                <label for="floatingInput" class="fw-bold text-primary">Budget Per Item</label>
+                                <input type="number" class="form-control" id="floatingInput" placeholder="name@example.com" name="lt_pr_po" value ="0">
+                                <label for="floatingInput" class="fw-bold text-primary">Lead Time PR to PO</label>
                               </div>
-                            </div>   -->
+                            </div>  
                             <div class="col-3">
                               <div class="form-floating mb-3">
                                 <input type="text" class="form-control budgetTarget" id="floatingInput" placeholder="name@example.com" name="budget_target" id="budgetTarget" value ="0">
-                                <label for="floatingInput" class="fw-bold text-primary">Target Budget Per Item</label>
+                                <label for="floatingInput" class="fw-bold text-primary">Target Price Per Item</label>
                               </div>
                             </div>                            
                     </div>   

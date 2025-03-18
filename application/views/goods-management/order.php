@@ -150,98 +150,30 @@
                             </tr>
                         </thead>
                         <tbody>
-                          <?php foreach($detail as $row) { ?>
                               <tr>
-                              <td style="vertical-align: middle;text-align: center;font-size: 14px;"><?php echo $row->item; ?></td>
+                              <td style="vertical-align: middle;text-align: center;font-size: 14px;"><?php echo $detail->item_code; ?> - <?php echo $detail->item_name; ?></td>
                                 <td style="vertical-align: middle; font-size: 14px; padding: 8px;">
                                   <div style="display: flex; align-items: center; justify-content: space-between; width: 100%;">
-                                      <span style="flex-grow: 1; text-align: center;"><?php echo $row->qty; ?></span>
-                                  <button type="button" class="btn btn-primary btn-sm rounded-circle p-2.1" style="margin-left: 3px;"  data-bs-toggle="modal" data-bs-target="#modal-edit-qty-<?php echo $row->id;?>">
+                                      <span style="flex-grow: 1; text-align: center;"><?php echo $detail->qty; ?></span>
+                                  <button type="button" class="btn btn-primary btn-sm rounded-circle p-2.1" style="margin-left: 3px;"  data-bs-toggle="modal" data-bs-target="#modal-edit-qty">
                                       <i class="fa-solid fa-pen text-white"></i>
                                   </button>
                                   </div>
                               </td>
 
-                                <td style="vertical-align: middle;text-align: center;font-size: 14px;"><?php echo $row->uom; ?></td>
+                                <td style="vertical-align: middle;text-align: center;font-size: 14px;"><?php echo $detail->uom; ?></td>
                                 <td style="vertical-align: middle; font-size: 14px; padding: 8px;">
                               <div style="display: flex; align-items: center; justify-content: space-between; width: 100%;">
-                                  <span style="flex-grow: 1; text-align: center;"><?php echo $row->vendor_code; ?></span>
-                              <button type="button" class="btn btn-primary btn-sm rounded-circle p-2.1" style="margin-left: 3px;" data-bs-toggle="modal" data-bs-target="#modal-edit-vendor-<?php echo $row->id;?>">
+                                  <span style="flex-grow: 1; text-align: center;"><?php echo $detail->vendor_code; ?></span>
+                              <button type="button" class="btn btn-primary btn-sm rounded-circle p-2.1" style="margin-left: 3px;" data-bs-toggle="modal" data-bs-target="#modal-edit-vendor">
                                   <i class="fa-solid fa-pen text-white"></i>
                               </button>
                               </div>
                               </td>
 
-                                <td style="vertical-align: middle;text-align: right;font-size: 14px;"><?php echo myNum($row->uom_price); ?></td>
-                                <td style="vertical-align: middle;text-align: right;font-size: 14px;"><?php echo myNum($row->total_price); ?></td>
-                            </tr>
-
-                            <div class="modal fade" id="modal-edit-qty-<?php echo $row->id;?>" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-                              <form action="<?= site_url('goods_management/order_reject');?>" method="post" id="modal-edit-qty-<?php echo $v->id;?>">
-                              <input type="hidden" name="id" value="<?php echo _encrypt($v->id);?>">
-                                <div class="modal-dialog modal-lg">
-                                  <div class="modal-content">
-                                    <div class="modal-header">
-                                      <h5 class="modal-title" id="exampleModalLabel" class="text-primary" style="color: #001F82;font-weight:600;">Edit Order Qty</h5>
-                                      <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                                    </div>
-                                    <div class="modal-body">
-                                      <div class="row">
-                                                <div class="col-12">
-                                                  <div class="row">
-                                                    <!--begin::Col-->
-                                                    <div class="col-12">
-                                                      <div class="form-floating mb-3">
-                                                        <input type="number" class="form-control" id="floatingInput" placeholder="name@example.com" name="qty" min="1">
-                                                        <label for="floatingInput" class="fw-bold text-primary">Qty</label>
-                                                      </div>
-                                                    </div>                        
-                                                </div>         
-                                              </div>
-                                              </div>
-                                    </div>
-                                    <div class="modal-footer">
-                                      <button type="submit" name="submit" class="btn btn-outline-primary">Edit Qty Order</button>
-                                    </div>
-                                  </div>
-                                </div>
-                                </form>
-                            </div>     
-                            
-                            <div class="modal fade" id="modal-edit-vendor-<?php echo $row->id;?>" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-                              <form action="<?= site_url('goods_management/order_reject');?>" method="post" id="modal-edit-qty-<?php echo $v->id;?>">
-                              <input type="hidden" name="id" value="<?php echo _encrypt($v->id);?>">
-                                <div class="modal-dialog modal-lg">
-                                  <div class="modal-content">
-                                    <div class="modal-header">
-                                      <h5 class="modal-title" id="exampleModalLabel" class="text-primary" style="color: #001F82;font-weight:600;">Edit Vendor</h5>
-                                      <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                                    </div>
-                                    <div class="modal-body">
-                                      <div class="row">
-                                                <div class="col-12">
-                                                  <div class="row">
-                                                    <!--begin::Col-->
-                                                    <div class="col-12">
-                                                      <div class="form-floating mb-3">
-                                                      <select class="form-select" aria-label="Default select example" id="vendor" style="height: 56px;" name="vendor" required>
-                                                              <option value="" disabled>-- Select Vendor --</option>
-                                                            </select>
-                                                        <label for="floatingInput" class="fw-bold text-primary">Vendor</label>
-                                                      </div>
-                                                    </div>                        
-                                                </div>         
-                                              </div>
-                                              </div>
-                                    </div>
-                                    <div class="modal-footer">
-                                      <button type="submit" name="submit" class="btn btn-outline-primary">Edit Vendor</button>
-                                    </div>
-                                  </div>
-                                </div>
-                                </form>
-                            </div>                             
-                          <?php } ?>                                                
+                                <td style="vertical-align: middle;text-align: right;font-size: 14px;"><?php echo myNum($detail->uom_price); ?></td>
+                                <td style="vertical-align: middle;text-align: right;font-size: 14px;"><?php echo myNum($detail->total_price); ?></td>
+                            </tr>                           
                         </tbody>  
                       </table>              
                     </div>
@@ -260,16 +192,14 @@
                             </tr>
                         </thead>
                         <tbody>
-                          <?php foreach($planned as $row) { ?>
                               <tr>
-                                <td style="vertical-align: middle;text-align: center;font-size: 14px;"><?php echo $row->item_code; ?></td>
-                                <td style="vertical-align: middle;text-align: center;font-size: 14px;"><?php echo myNum($row->qty); ?></td>
-                                <td style="vertical-align: middle;text-align: center;font-size: 14px;"><?php echo $row->uom; ?></td>
-                                <td style="vertical-align: middle;text-align: center;font-size: 14px;"><?php echo $row->vendor_code; ?> - <?php echo get_vendor_name($row->vendor_code);?></td>
-                                <td style="vertical-align: middle;text-align: right;font-size: 14px;"><?php echo myNum(get_vendor_price($row->vendor_code, $row->item_code)); ?></td>
-                                <td style="vertical-align: middle;text-align: right;font-size: 14px;"><?php echo myNum(get_vendor_price($row->vendor_code, $row->item_code) * $row->qty); ?></td>
+                                <td style="vertical-align: middle;text-align: center;font-size: 14px;"><?php echo $planned->item_code; ?> - <?php echo $planned->item_name; ?></td>
+                                <td style="vertical-align: middle;text-align: center;font-size: 14px;"><?php echo myNum($planned->qty); ?></td>
+                                <td style="vertical-align: middle;text-align: center;font-size: 14px;"><?php echo $planned->uom; ?></td>
+                                <td style="vertical-align: middle;text-align: center;font-size: 14px;"><?php echo $planned->vendor_code; ?> - <?php echo get_vendor_name($planned->vendor_code);?></td>
+                                <td style="vertical-align: middle;text-align: right;font-size: 14px;"><?php echo myNum(get_vendor_price($planned->vendor_code, $planned->item_code)); ?></td>
+                                <td style="vertical-align: middle;text-align: right;font-size: 14px;"><?php echo myNum(get_vendor_price($planned->vendor_code, $planned->item_code) * $planned->qty); ?></td>
                             </tr>
-                          <?php } ?>                                                
                         </tbody>  
                       </table>              
                     </div>                    
@@ -284,13 +214,11 @@
                             </tr>
                         </thead>
                         <tbody>
-                          <?php foreach($detail as $row) { ?>
                               <tr>
-                                <td style="vertical-align: middle;text-align: right;font-size: 14px;"><?php echo myNum($row->uom_price); ?></td>
-                                <td style="vertical-align: middle;text-align: right;font-size: 14px;"><?php echo myNum($row->uom_price); ?></td>
-                                <td style="vertical-align: middle;text-align: right;font-size: 14px;"><?php echo myNum($row->total_price); ?></td>
+                                <td style="vertical-align: middle;text-align: right;font-size: 14px;"><?php echo myNum(get_baseline_price($detail->item_id,'target')); ?></td>
+                                <td style="vertical-align: middle;text-align: right;font-size: 14px;"><?php echo myNum(get_baseline_price($detail->item_id,'target')); ?></td>
+                                <td style="vertical-align: middle;text-align: right;font-size: 14px;"><?php echo myNum(get_annual_price($detail->item_id,date('Y'))); ?></td>
                             </tr>
-                          <?php } ?>                                                
                         </tbody>  
                       </table>              
                     </div>                    
@@ -337,6 +265,75 @@
               </div>
             </div>   
             </form> 
+            <div class="modal fade" id="modal-edit-qty" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+              <form action="<?= site_url('goods_management/edit_qty_order');?>" method="post" id="modal-edit-qty">
+                <input type="hidden" name="id" value="<?php echo _encrypt($detail->order_id);?>">
+                  <div class="modal-dialog modal-lg">
+                    <div class="modal-content">
+                      <div class="modal-header">
+                        <h5 class="modal-title" id="exampleModalLabel" class="text-primary" style="color: #001F82;font-weight:600;">Edit Order Qty</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                      </div>
+                      <div class="modal-body">
+                        <div class="row">
+                          <div class="col-12">
+                            <div class="row">
+                              <!--begin::Col-->
+                              <div class="col-12">
+                                <div class="form-floating mb-3">
+                                  <input type="number" class="form-control" id="floatingInput" placeholder="name@example.com" name="qty" min="1">
+                                  <label for="floatingInput" class="fw-bold text-primary">Qty</label>
+                                </div>
+                              </div>                        
+                            </div>         
+                          </div>
+                        </div>
+                      </div>
+                      <div class="modal-footer">
+                        <button type="submit" name="submit" class="btn btn-outline-primary">Edit Qty Order</button>
+                      </div>
+                    </div>
+                  </div>
+                </form>
+              </div>   
+              
+              <div class="modal fade" id="modal-edit-vendor" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+              <form action="<?= site_url('goods_management/edit_vendor_order');?>" method="post" id="modal-edit-vendor">
+                <input type="hidden" name="id" value="<?php echo _encrypt($detail->order_id);?>">
+                <div class="modal-dialog modal-lg">
+                    <div class="modal-content">
+                      <div class="modal-header">
+                        <h5 class="modal-title" id="exampleModalLabel" class="text-primary" style="color: #001F82;font-weight:600;">Edit Selected Vendor</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                      </div>
+                      <div class="modal-body">
+                        <div class="row">
+                          <div class="col-12">
+                            <div class="row">
+                              <!--begin::Col-->
+                              <div class="col-12">
+                                <div class="form-floating mb-3">
+                                  <select class="form-select" id="vendor" data-placeholder="Choose Vendor" name="vendor" required>
+                                    <option></option>
+
+                                    <?php foreach ($vendor_list as $row) { ?>
+                                        <option value="<?php echo $row->vendor_id; ?>"><?php echo $row->vendor_name; ?> - <?php echo $row->vendor_address; ?></option>
+                                    <?php } ?>
+                                  </select>
+                                  <label for="floatingInput" class="fw-bold text-primary">Vendor List</label>
+                                </div>
+                              </div>                        
+                            </div>         
+                          </div>
+                        </div>
+                      </div>
+                      <div class="modal-footer">
+                        <button type="submit" name="submit" class="btn btn-outline-primary">Edit Qty Order</button>
+                      </div>
+                    </div>
+                  </div>
+                </form>
+              </div>              
 <?php $this->load->view('_partials/footer.php'); ?>
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
     <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>

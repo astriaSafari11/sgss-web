@@ -79,12 +79,12 @@
                               </div>
                             </div>
                             <!--end::Col-->                          
-                            <div class="col-3">
+                            <!-- <div class="col-3">
                               <div class="form-floating mb-3">
                                 <input type="number" class="form-control" id="floatingInput" placeholder="name@example.com" name="lt_pr_po" value ="<?php echo $material->lt_pr_po;?>">
                                 <label for="floatingInput" class="fw-bold text-primary">Est. Lead Time (PO)</label>
                               </div>
-                            </div>                          
+                            </div>                           -->
                             <div class="col-3">
                               <div class="form-floating mb-3">
                                 <input type="text" class="form-control" id="floatingInput" placeholder="name@example.com" name="place_to_buy" value ="<?php echo $material->place_to_buy;?>">

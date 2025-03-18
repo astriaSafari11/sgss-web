@@ -477,7 +477,6 @@ function get_annual_price($item_id, $year){
         "item_id" => $item_id,
         "year" => $year
     ))->row();
-
     return $data->annual_budget;
 }
 
@@ -491,4 +490,15 @@ function get_vendor_price($vendor_code, $item_id){
     return $data->price_per_uom;
 }
 
+function get_vendor_list(){
+    $CI = getCI();
+    return $CI->db->get('m_master_data_vendor')->result();
+}
+
+function get_vendor_material($item_code){
+    $CI = getCI();
+    return $CI->db->query("select * from m_vendor_material 
+        INNER JOIN m_master_data_vendor ON m_master_data_vendor.vendor_code = m_vendor_material.vendor_code
+        where item_code = '.$item_code.'")->result();
+}
 ?>

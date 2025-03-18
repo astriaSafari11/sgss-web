@@ -167,6 +167,7 @@ class Master_data extends CI_Controller
 					$row[] = $field->order_cycle;
 					$row[] = $field->initial_stock;
 					$row[] = myNum($field->gen_lead_time);
+					$row[] = myNum($field->lt_pr_po);
 					$row[] = myNum($field->standard_safety_stock);
 					$row[] = $edit;
 					$data[] = $row;
@@ -409,7 +410,6 @@ class Master_data extends CI_Controller
 		redirect('master_data/vendor_list');
 	}	
 
-
 	public function add_material()
 	{
 		$this->session->set_flashdata('page_title', 'FORM ADD NEW MATERIAL');
@@ -450,6 +450,7 @@ class Master_data extends CI_Controller
 						"order_cycle"				=> $this->input->post('order_cycle'),						
 						"initial_stock"				=> $this->input->post('initial_stock'),						
 						"gen_lead_time"				=> $this->input->post('gen_lead_time'),						
+						"lt_pr_po"					=> $this->input->post('lt_pr_po'),						
 						"standard_safety_stock"		=> round($standart_safety_stock),						
 					));				
 				if($inserted){
@@ -679,6 +680,8 @@ class Master_data extends CI_Controller
 					"lot_size"					=> $this->input->post('lot_size'),						
 					"order_cycle"				=> $this->input->post('order_cycle'),						
 					"initial_stock"				=> $this->input->post('initial_stock'),						
+					"gen_lead_time"				=> $this->input->post('gen_lead_time'),						
+					"lt_pr_po"					=> $this->input->post('lt_pr_po'),						
 				), array("id" => $id)
 			);
 
@@ -824,7 +827,7 @@ class Master_data extends CI_Controller
 				"item_code"	=> $get_data->item_code,
 			))->row();
 
-			$lt_po_deliv = !empty($this->input->post('lt_pr_po'))?$vendor->est_lead_time + $this->input->post('lt_pr_po'):NULL;
+			$lt_po_deliv = !empty($material->lt_pr_po)?$vendor->est_lead_time + $material->lt_pr_po:NULL;
 			$standart_safety_stock = !empty($material->order_cycle)&&!empty($material->lot_size)?($lt_po_deliv/$material->order_cycle)*$material->lot_size:NULL;
 			$price_per_uom = !empty($this->input->post('price_per_uom'))?str_replace(',', '', $this->input->post('price_per_uom')):NULL;
 			$price_equal_moq = !empty($this->input->post('price_equal_moq'))?str_replace(',', '', $this->input->post('price_equal_moq')):NULL;

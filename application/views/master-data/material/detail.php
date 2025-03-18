@@ -105,9 +105,15 @@
                             <div class="col-3">
                               <div class="form-floating mb-3">
                                 <input type="number" class="form-control" id="floatingInput" placeholder="name@example.com" name="gen_lead_time" value="<?php echo $material->gen_lead_time;?>" disabled>
-                                <label for="floatingInput" class="fw-bold text-primary">Avg Lead Time</label>
+                                <label for="floatingInput" class="fw-bold text-primary">Average Lead Time</label>
                               </div>
-                            </div>                                                                                                     
+                            </div>  
+                            <div class="col-3">
+                              <div class="form-floating mb-3">
+                                <input type="number" class="form-control" id="floatingInput" placeholder="name@example.com" name="lt_pr_po" value="<?php echo $material->lt_pr_po;?>" disabled>
+                                <label for="floatingInput" class="fw-bold text-primary">Lead Time PR to PO</label>
+                              </div>
+                            </div>  
                             <div class="col-3">
                               <div class="form-floating mb-3">
                                 <input type="number" class="form-control" id="floatingInput" placeholder="name@example.com" name="gen_lead_time" value="<?php echo myNum($material->standard_safety_stock);?>" disabled>
