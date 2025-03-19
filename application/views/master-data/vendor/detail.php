@@ -58,7 +58,7 @@
                           <div class="col-6">
                             <div class="form-floating mb-3">
                               <input type="text" class="form-control" id="floatingInput" placeholder="name@example.com" value ="<?php echo $vendor->est_lead_time;?>" disabled>
-                              <label for="floatingInput" class="fw-bold text-primary">Est. Lead Time</label>
+                              <label for="floatingInput" class="fw-bold text-primary">Lead Time PO to Deliver</label>
                             </div>
                           </div>
                           <!--end::Col-->

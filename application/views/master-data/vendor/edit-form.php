@@ -44,7 +44,7 @@
                       <div class="col-6">
                         <div class="form-floating mb-3">
                           <input type="number" min="0" class="form-control" id="floatingInput" placeholder="name@example.com" name="est_lead_time" value="<?php echo $vendor->est_lead_time;?>">
-                          <label for="floatingInput">Est. Lead Time</label>
+                          <label for="floatingInput">Lead Time PO to Deliver</label>
                           <div class="invalid-feedback">This field is required.</div>
                         </div>
                       </div>

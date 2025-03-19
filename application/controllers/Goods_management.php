@@ -23,51 +23,87 @@ class Goods_management extends CI_Controller
 
 	public function index()
 	{
-		$search = '';
+		$curr_user = $this->auth_model->current_user();
 
-		if(isset($_POST['reset'])){
-			$search = '';
-		}
 
-		if(isset($_POST['search'])){
-			$column_search = $this->input->post('column_search');
-			$search = $this->input->post('keyword');
-			$filter = $this->input->post('column_filter');
-
-			$data['param_search'] = array(
-				'column_search' => $column_search,
-				'keyword' => $search,
-				'column_filter' => $filter,
-			);
+		if($curr_user->role_id != 1){
+			$sql = "
+				SELECT * FROM t_order_approval_track				
+				INNER JOIN t_order_detail ON t_order_detail.order_id = t_order_approval_track.order_id
+				INNER JOIN t_order ON t_order.id = t_order_detail.order_id
+				WHERE t_order_approval_track.approve_by = '".$curr_user->nip."' and approve_status = 'pending'
+			";
+			
+			$query =  $this->db->query($sql)->result();
+			$count =  $this->db->query($sql)->num_rows();
+			$feedback =  $this->db->get_where('t_order',array("is_approved" => 1, "is_feedback" => 0))->num_rows();
 	
-			if($filter == 'like'){
-				$search = " WHERE ".$column_search." LIKE '%".$search."%'";				
-			}else{
-				$search = " WHERE ".$column_search." ".$filter." '".$search."'";
+			$data['req_list'] = $query;		
+			$data['req_count'] = $count;		
+			$data['feedback_count'] = $feedback;		
+			$data['column_search'] = array(
+				'due_date',
+				'until_due_date',
+				'item_code',
+				'item_name',
+				'qty',
+				'uom',
+				'status',
+			);			
+
+			// debugCode($data);
+			$this->session->set_flashdata('page_title', 'PERFORMANCE DASHBOARD');
+			$this->load->view('goods-management/dashboard-lm.php', $data);
+	
+		}else{
+
+			$search = '';
+
+			if(isset($_POST['reset'])){
+				$search = '';
 			}
-		}
-
-		$fSearch = !empty($search)?$search." AND order_status = 0 AND type = 'goods'":"WHERE order_status = 0 AND type = 'goods' AND status != 'ignored'";
+	
+			if(isset($_POST['search'])){
+				$column_search = $this->input->post('column_search');
+				$search = $this->input->post('keyword');
+				$filter = $this->input->post('column_filter');
+	
+				$data['param_search'] = array(
+					'column_search' => $column_search,
+					'keyword' => $search,
+					'column_filter' => $filter,
+				);
 		
-		$query =  $this->db->query("SELECT * FROM t_stock_planned_request $fSearch")->result();
-		$count =  $this->db->get_where('t_stock_planned_request',array("order_status" => 0, "type" => 'goods', "status !=" =>  "ignored"))->num_rows();
-		$feedback =  $this->db->get_where('t_order',array("is_approved" => 1, "is_feedback" => 0))->num_rows();
+				if($filter == 'like'){
+					$search = " WHERE ".$column_search." LIKE '%".$search."%'";				
+				}else{
+					$search = " WHERE ".$column_search." ".$filter." '".$search."'";
+				}
+			}
+	
+			$fSearch = !empty($search)?$search." AND order_status = 0 AND type = 'goods'":"WHERE order_status = 0 AND type = 'goods' AND status != 'ignored'";
+			
+			$query =  $this->db->query("SELECT * FROM t_stock_planned_request $fSearch")->result();
+			$count =  $this->db->get_where('t_stock_planned_request',array("order_status" => 0, "type" => 'goods', "status !=" =>  "ignored"))->num_rows();
+			$feedback =  $this->db->get_where('t_order',array("is_approved" => 1, "is_feedback" => 0))->num_rows();
+	
+			$data['req_list'] = $query;		
+			$data['req_count'] = $count;		
+			$data['feedback_count'] = $feedback;		
+			$data['column_search'] = array(
+				'due_date',
+				'until_due_date',
+				'item_code',
+				'item_name',
+				'qty',
+				'uom',
+				'status',
+			);
 
-		$data['req_list'] = $query;		
-		$data['req_count'] = $count;		
-		$data['feedback_count'] = $feedback;		
-		$data['column_search'] = array(
-			'due_date',
-			'until_due_date',
-			'item_code',
-			'item_name',
-			'qty',
-			'uom',
-			'status',
-		);		
-
-		$this->session->set_flashdata('page_title', 'PERFORMANCE DASHBOARD');
-		$this->load->view('goods-management/dashboard.php', $data);
+			$this->session->set_flashdata('page_title', 'PERFORMANCE DASHBOARD');
+			$this->load->view('goods-management/dashboard.php', $data);
+	
+		}
 	}
 
 	public function feedback()
