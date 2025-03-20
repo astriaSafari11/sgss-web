@@ -263,8 +263,14 @@
                                 <a href="<?= site_url('goods_management/export_pdf/'.$v->order_id); ?>"
                                   class="btn btn-sm btn-outline-primary download-btn btn-custom-download"
                                   style="border-radius: 50px;"
+                                  data-file="Validation_Report_<?php echo $v->order_id;?>.pdf"
                                 >
-                                <i class="fas fa-file-pdf text-primary file-icon"></i>
+                                <?php if($v->is_download == 0){ ?> 
+                                  <i class="fas fa-file-pdf text-primary file-icon"></i>
+                                <?php } ?>
+                                <?php if($v->is_download == 1){ ?> 
+                                  <i class="fas fa-file-circle-check text-success"></i>
+                                <?php } ?>
                               </a>
                               </td>
 
