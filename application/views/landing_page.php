@@ -15,6 +15,16 @@
     color: white !important;
     border: 1px solid #002F6C !important;
 }
+
+#dollar-chart {
+    width: 110px; /* Sesuaikan ukuran dengan gambar */
+    height: 90px;
+    position: absolute;
+    bottom: 0;
+    left: 45%;
+    transform: translateX(-50%);
+}
+
 </style>
 
 <!-- Welcoming Message -->
@@ -40,15 +50,34 @@
                             COST
                         </span>
                         <!-- Konten Cost -->
-                        <div class="info-box d-flex flex-column align-items-center justify-content-center text-center" 
-                            style="border-radius: 20px; background-color: #F8F9FA; padding: 15px; min-height: 150px;">
-                            <img src="<?= base_url('assets/dist/dollarIcon.png'); ?>" 
-                                alt="Dollar Icon" 
-                                class="img-fluid w-100" 
-                                style="height: 110px;">
-                            <h4 class="mb-0 mt-2 fw-bold text-primary">50%</h4>
-                            <h6 class="text-primary">vs Target</h6>
-                        </div>
+                            <div class="info-box d-flex flex-column align-items-center justify-content-center text-center" 
+                                style="border-radius: 20px; background-color: #F8F9FA; padding: 15px; min-height: 200px;">
+                                
+                                <div id="chart-container" style="position: relative; width: 150px; height: 110px; margin: auto;">  
+
+                                    <img src="<?= base_url('assets/dist/dollar_for_chart.png'); ?>" 
+                                        id="chart-image" 
+                                        alt="Dollar Icon"
+                                        class="img-fluid" 
+                                        style="
+                                            position: absolute; 
+                                            top: 0;  
+                                            left: 50%;
+                                            transform: translateX(-50%);
+                                            max-width: 100%;
+                                            height: auto;
+                                            pointer-events: none; /* Agar klik tetap ke chart */
+                                            z-index: 10; /* Pastikan gambar di depan */
+                                        ">
+
+                                    <!-- Chart -->
+                                    <div id="dollar-chart"></div>
+                                </div>
+                                
+                                <h4 class="mb-0 mt-2 fw-bold text-primary">50%</h4>
+                                <h6 class="text-primary">vs Target</h6>
+                            </div>
+
                     </div>
 
                     <!-- Cash -->
@@ -656,6 +685,42 @@
             credits: { enabled: false },
             tooltip: { enabled: false }
         });
+
+        Highcharts.chart('dollar-chart', {
+            chart: {
+                type: 'column',
+                backgroundColor: 'transparent', 
+                margin: [0, 0, 0, 0],
+                height: 55, 
+                width: 110  // Sesuaikan ukuran chart dengan gambar
+            },
+            title: { text: '' },
+            xAxis: { labels: { enabled: false }, tickLength: 0 },
+            yAxis: {
+                labels: { enabled: false },
+                gridLineWidth: 0,
+                title: { text: '' },
+                min: 0,
+                max: 100
+            },
+            legend: { enabled: false },
+            tooltip: { enabled: false }, 
+            exporting: { enabled: false }, 
+            plotOptions: {
+                column: {
+                    borderWidth: 0,
+                    pointPadding: 0,
+                    groupPadding: 0,
+                }
+            },
+            series: [{
+                name: 'Total',
+                data: [100], // Nilai bar
+                color: 'rgba(0, 110, 0, 0.7)' 
+            }]
+        });
+
+
 
     // logic untuk tinggi card tertentu
     document.addEventListener("DOMContentLoaded", function () {
