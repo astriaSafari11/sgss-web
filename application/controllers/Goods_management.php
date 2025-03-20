@@ -1280,4 +1280,81 @@ class Goods_management extends CI_Controller
 		$config['max_size'] 		= 4096; 
 		$this->load->library('upload', $config);
 	}	
+
+	public function export_pdf($id = NULL)
+	{
+		$id = _decrypt($this->uri->segment(3));
+
+		ini_set('max_execution_time', '300');
+		ini_set("pcre.backtrack_limit", "5000000");
+		$filename = 'Validation_Report_';
+		$mpdf = new \Mpdf\Mpdf(
+			[
+				'mode' => 'utf-8', 
+				'format' => 'A4-L',
+				// 'margin_left' => 3,
+				// 'margin_right' => 3,
+				// 'margin_top' => 1,
+				// 'margin_bottom' => 1,
+			]); 	
+
+		$html = '
+		<html>
+		<head>
+		<style>
+			
+		span {
+			font-family: Arial, Helvetica, sans-serif;  
+			font-weight:bold;
+			font-size:10px;
+			line-height:0px;
+			text-align:center;
+		  }
+		  table, th, thead {
+			border: 1px solid black;
+			border-collapse: collapse;
+			font-family: Arial, Helvetica, sans-serif;  
+			font-size:8px;
+			text-align:center;
+			padding-left:5px;
+			padding-right:5px;
+		  }
+		  
+		  td {
+			padding:5px;
+			font-family: Arial, Helvetica, sans-serif;  
+			font-size:8px;
+			border-right: 1px solid black;
+			border-collapse: collapse;
+		  }
+		  img {
+			display: block;
+			margin-left: auto;
+			margin-right: auto;
+		  }		  
+		  .center {
+			display: block;
+			margin-left: auto;
+			margin-right: auto;
+		  }
+		</style>
+		</head>
+
+		DOWNLOAD VALIDATION REPORT
+		';					
+			
+		$html .= '</html>';					
+
+		$mpdf->SetDisplayMode(50);	
+		// $mpdf->SetFooter('');			
+		$mpdf->WriteHTML($html);
+		$mpdf->Output('assets/export/pdf/'.$filename.'.pdf', 'F');
+		$fname = $filename.".pdf";
+		header('Content-type: application/PDF');
+			// It will be called file.xls
+		header("Content-Type: application/pdf");
+		header('Content-Disposition: attachment; filename="'.$fname.'"');
+		// Write file to the browser
+		$mpdf->Output($fname, 'D');
+	}	
 }

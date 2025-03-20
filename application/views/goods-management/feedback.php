@@ -260,11 +260,10 @@
                               </td> -->
 
                               <td style="vertical-align: middle; text-align: center;">
-                                <a href="<?php echo base_url('assets/upload/order/'.$v->attachment_file); ?>"
+                                <a href="<?= site_url('goods_management/export_pdf/'.$v->order_id); ?>"
                                   class="btn btn-sm btn-outline-primary download-btn btn-custom-download"
                                   style="border-radius: 50px;"
-                                  data-file="file1.pdf"
-                                download>
+                                >
                                 <i class="fas fa-file-pdf text-primary file-icon"></i>
                               </a>
                               </td>
