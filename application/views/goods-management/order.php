@@ -77,7 +77,7 @@
                       <!--begin::Col-->
                         <div class="col-6">
                             <div class="form-floating mb-3">
-                            <input type="text" class="form-control" id="floatingInputDate" placeholder="dd-mm-yyyy" name="date" required>
+                            <input type="text" class="form-control" id="floatingInputDate" placeholder="dd-mm-yyyy" name="date" value="<?php echo date('Y-m-d'); ?>" required>
                             <label for="floatingInput" class="fw-bold text-primary" style="font-size: 14px;">Action Date</label>
                         </div>
                         </div>
@@ -343,9 +343,6 @@
                 dateFormat: "d-m-Y",   
                 defaultDate: null,     
                 allowInput: true,     
-            onReady: function(selectedDates, dateStr, instance) {
-                instance._input.value = ""; 
-            },
             onOpen: function(selectedDates, dateStr, instance) {
                 if (instance._input.value === "dd-mm-yyyy") {
                     instance._input.value = "dd-mm-yyyy"; 

@@ -181,6 +181,132 @@
                 </div>
               </div>                      
             <?php } ?>
+            <?php if($order->status == "approved"){ ?>
+              <div class="row">
+                <div class="col-12 mb-4">
+                  <!-- Default box -->
+                  <div class="card text-bg-light">
+                    <div class="card-header">
+                      <h3 class="card-title">Approval</h3>
+                    </div>                  
+                    <div class="card-body">
+                      <div class="row">
+                        <div class="col-8">
+                          <div class="row">
+                            <!--begin::Col-->
+                            <div class="col-6">
+                              <div class="form-floating mb-3">
+                                <input type="text" class="form-control" id="floatingInput" placeholder="name@example.com" value ="<?php echo myDate($order->approved_date); ?>" disabled>
+                                <label for="floatingInput">Date of Approval</label>
+                              </div>
+                            </div>
+                            <!--end::Col-->
+                            <!--begin::Col-->
+                            <div class="col-6">
+                              <div class="form-floating mb-3">
+                                <input type="text" class="form-control" id="floatingInput" placeholder="name@example.com" value="<?php echo $order->approved_by; ?>" disabled>
+                                <label for="floatingInput">Approved By</label>
+                              </div>
+                            </div>
+                            <!--end::Col-->
+                            <!--begin::Col-->
+                            <div class="col-6 text-center">
+                              <span class="text-center" style="color: #001F82;font-weight:600;font-size:32px;">APPROVED</span>
+                            </div>
+                            <!--end::Col-->
+                            <!--hin::Col-->
+                            <div class="col-6">
+                              <div class="form-floating mb-3">
+                                <input type="text" class="form-control" id="floatingInput" placeholder="name@example.com" value="<?php echo $order->approve_by_title; ?>" disabled>
+                                <label for="floatingInput">As</label>
+                              </div>
+                            </div>
+                            <!--end::Col-->                                                                 
+                          </div>                    
+                        </div>
+                        <div class="col-4">
+                          <div class="row">                                                            
+                            <!--begin::Col-->
+                            <div class="col-12">
+                              <div class="form-floating mb-3">
+                                <textarea class="form-control" placeholder="Leave a comment here" id="floatingTextarea2" style="height: 100px" disabled><?php echo $order->approved_remark; ?></textarea>
+                                <label for="floatingInput">Remarks</label>
+                              </div>
+                            </div>
+                            <!--end::Col-->
+                          </div>                    
+                        </div>           
+                      </div>                     
+                    </div>
+                    <!-- /.card-body -->
+                  </div>
+                  <!-- /.card -->
+                </div>
+              </div>                      
+            <?php } ?>    
+            <?php if($order->status == "rejected"){ ?>
+              <div class="row">
+                <div class="col-12 mb-4">
+                  <!-- Default box -->
+                  <div class="card text-bg-light">
+                    <div class="card-header">
+                      <h3 class="card-title">Rejected</h3>
+                    </div>                  
+                    <div class="card-body">
+                      <div class="row">
+                        <div class="col-8">
+                          <div class="row">
+                            <!--begin::Col-->
+                            <div class="col-6">
+                              <div class="form-floating mb-3">
+                                <input type="text" class="form-control" id="floatingInput" placeholder="name@example.com" value ="<?php echo myDate($order->rejected_date); ?>" disabled>
+                                <label for="floatingInput">Date of Rejected</label>
+                              </div>
+                            </div>
+                            <!--end::Col-->
+                            <!--begin::Col-->
+                            <div class="col-6">
+                              <div class="form-floating mb-3">
+                                <input type="text" class="form-control" id="floatingInput" placeholder="name@example.com" value="<?php echo $order->rejected_by; ?>" disabled>
+                                <label for="floatingInput">Rejected By</label>
+                              </div>
+                            </div>
+                            <!--end::Col-->
+                            <!--begin::Col-->
+                            <div class="col-6 text-center">
+                              <span class="text-center" style="color:rgb(248, 0, 0);font-weight:600;font-size:32px;">REJECTED</span>
+                            </div>
+                            <!--end::Col-->
+                            <!--hin::Col-->
+                            <div class="col-6">
+                              <div class="form-floating mb-3">
+                                <input type="text" class="form-control" id="floatingInput" placeholder="name@example.com" value="<?php echo $order->approve_by_title; ?>" disabled>
+                                <label for="floatingInput">As</label>
+                              </div>
+                            </div>
+                            <!--end::Col-->                                                                 
+                          </div>                    
+                        </div>
+                        <div class="col-4">
+                          <div class="row">                                                            
+                            <!--begin::Col-->
+                            <div class="col-12">
+                              <div class="form-floating mb-3">
+                                <textarea class="form-control" placeholder="Leave a comment here" id="floatingTextarea2" style="height: 100px" disabled><?php echo $order->rejected_remark; ?></textarea>
+                                <label for="floatingInput">Remarks</label>
+                              </div>
+                            </div>
+                            <!--end::Col-->
+                          </div>                    
+                        </div>           
+                      </div>                     
+                    </div>
+                    <!-- /.card-body -->
+                  </div>
+                  <!-- /.card -->
+                </div>
+              </div>                      
+            <?php } ?>                     
             <?php if($order->status == "waiting_approval"){ ?>
               <div class="row">
                 <div class="col-12 mb-4">
@@ -243,8 +369,9 @@
                   <!-- /.card -->
                 </div>
               </div>                      
-            <?php } ?>            
-            <!-- <div class="row">
+            <?php } ?>     
+            <?php if($order->status == "waiting_approval" && $curr_user->role == "line_manager"){ ?>       
+            <div class="row">
               <div class="col-12 mb-4">
                 <div class="card text-bg-light">
                   <div class="card-header">
@@ -254,17 +381,49 @@
                     <h4 class="text-center" style="font-weight: 600; color:#001F82;">Do you want to approve this order?</h4>
                     <div class="text-center">
                     <a 
-                        href="<?= site_url('goods_management/order_approve');?>"
-                        class="btn btn-lg btn-secondary text-center" type="button" style="font-weight: 600; border-radius: 50px;color:#001F82; width: 150px;">APPROVE</a>
+                        href="<?= site_url('goods_management/approval_approve/'._encrypt($order->id));?>"
+                        class="btn btn-lg btn-outline-primary text-center" type="button" style="font-weight: 600; border-radius: 50px;width: 150px;">APPROVE</a>
                         <a 
-                        href="<?= site_url('goods_management/order_reject');?>"
-                        class="btn btn-lg btn-secondary text-center" type="button" style="font-weight: 600; border-radius: 50px;color:#001F82; width: 150px;">REJECT</a>
+                        class="btn btn-lg btn-outline-danger text-center" type="button" style="font-weight: 600; border-radius: 50px;width: 150px;" data-bs-toggle="modal" data-bs-target="#modal-reject">REJECT</a>
                     </div>
                   </div>
                 </div>
               </div>
-            </div>             -->
+            </div>
+            <?php } ?>            
           </div>
+          <div class="modal fade" id="modal-reject" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                              <form action="<?= site_url('goods_management/approval_reject');?>" method="post" id="modal-reject">
+                              <input type="hidden" name="id" value="<?php echo _encrypt($order->id);?>">
+                                <div class="modal-dialog modal-lg">
+                                  <div class="modal-content">
+                                    <div class="modal-header">
+                                      <h5 class="modal-title" id="exampleModalLabel" class="text-primary" style="color: #001F82;font-weight:600;">Reject Order Request</h5>
+                                      <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                    </div>
+                                    <div class="modal-body">
+                                      <div class="row">
+                                                <div class="col-12">
+                                                  <div class="row">
+                                                    <!--begin::Col-->
+                                                    <div class="col-12">
+                                                      <label>Please fill your reason, to reject this order request</label>
+                                                      <div class="form-floating mb-3">
+                                                        <input type="text" class="form-control" id="floatingInput" placeholder="name@example.com" name="remarks" value ="">
+                                                        <label for="floatingInput" class="fw-bold text-primary">Reason</label>
+                                                      </div>
+                                                    </div>
+                                                </div>         
+                                              </div>
+                                              </div>
+                                    </div>
+                                    <div class="modal-footer">
+                                      <button type="submit" name="submit" class="btn btn-outline-primary">Reject Request</button>
+                                    </div>
+                                  </div>
+                                </div>
+                                </form>
+                            </div>           
 <?php $this->load->view('_partials/footer.php'); ?>
 
 <script>

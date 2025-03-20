@@ -31,7 +31,9 @@ class Goods_management extends CI_Controller
 				SELECT * FROM t_order_approval_track				
 				INNER JOIN t_order_detail ON t_order_detail.order_id = t_order_approval_track.order_id
 				INNER JOIN t_order ON t_order.id = t_order_detail.order_id
+				INNER JOIN m_master_data_material ON t_order_detail.item_code = m_master_data_material.item_code
 				WHERE t_order_approval_track.approve_by = '".$curr_user->nip."' and approve_status = 'pending'
+				AND request_id IS NOT NULL
 			";
 			
 			$query =  $this->db->query($sql)->result();
@@ -330,6 +332,8 @@ class Goods_management extends CI_Controller
 			"planned_id"	=> $id,
 		))->row();	
 
+		$request_id = 'REQ'.date("dmY").$exist->id;
+
 		if(!$exist){
 			_add("t_order",array(				
 				"planned_id"			=> $id,
@@ -449,14 +453,23 @@ class Goods_management extends CI_Controller
 			if($order->approval_category != 'normal'){
 				$is_approval_required = 1;
 				$status = "waiting_approval";	
+				$approved_by = '';
+				$approve_remarks = '';
+				$approve_date = NULL;
 			}else{
 				$is_approval_required = 0;
 				$status = "auto_approved";
 				$is_approved=1;	
+				$approved_by = "auto_approved";
+				$approve_remarks = 'Auto Approved by SGSS System - as per application recommendation';
+				$approve_date = date("Y-m-d");
 			}
 		}else{
 			$is_approval_required = 1;
 			$status = "waiting_approval";
+			$approved_by = '';
+			$approve_remarks = '';
+			$approve_date = NULL;
 		}
 
 		$request_id = 'REQ'.date("dmY").$order_id;
@@ -464,6 +477,7 @@ class Goods_management extends CI_Controller
 			"date"					=> date("Y-m-d"),
 			"request_id"			=> $request_id,
 			"requestor"				=> $this->session->userdata('user_name'),
+			"requestor_nip"			=> $this->session->userdata('user_nip'),
 			"requested_for"			=> $this->input->post('requested_for'),
 			"area"					=> $this->input->post('area'),
 			"remarks"				=> $this->input->post('remarks'),
@@ -472,15 +486,12 @@ class Goods_management extends CI_Controller
 			"purchase_reason"		=> $purchase_reason,
 			"is_approval_required"	=> $is_approval_required,
 			"attachment_file"		=> $attachment,
-			"approved_by"			=> "auto_approved",
+			"approved_by"			=> $approved_by,
 			"is_approved"			=> $is_approved,
 			"is_feedback"			=> $is_feedback,
 			"is_download"			=> 0,
-			// "rejected_by"			=> $this->input->post('rejected_by'),
-			"approved_date"			=> date("Y-m-d"),
-			// "rejected_date"			=> $this->input->post('rejected_date'),
-			"approved_remark"		=> 'Auto Approved by SGSS System - as per application recommendation',
-			// "rejected_remark"		=> $this->input->post('rejected_remark'),
+			"approved_date"			=> $approve_date,
+			"approved_remark"		=> $approve_remarks,
 		);
 	
 		_update("t_order", $data, array("id" => $order_id));
@@ -508,7 +519,9 @@ class Goods_management extends CI_Controller
 		INNER JOIN m_master_data_material ON m_master_data_material.item_code = t_order_detail.item_code
 		where t_order_detail.order_id = '$id'
 		")->result();	
-		
+		$curr_user = $this->auth_model->current_user();
+		$data['curr_user'] = $curr_user;
+
 		$this->session->set_flashdata('page_title', 'FORM INPUT ORDER DETAIL');
 		$this->load->view('goods-management/order/detail.php', $data);
 	}	
@@ -572,10 +585,133 @@ class Goods_management extends CI_Controller
 		redirect('goods_management/order_detail/'._encrypt($id));
 	}	
 
-	public function order_approve()
+	public function approval_approve()
 	{
-		$this->session->set_flashdata('page_title', 'FORM INPUT ORDER APPROVED');
-		$this->load->view('goods-management/order/approved.php');
+		// $order_id = $this->input->post('order_id');
+		$id = _decrypt($this->uri->segment(3));
+
+		
+		$curr_user = $this->auth_model->current_user();
+		$order = $this->db->get_where('t_order',array("id" => $id))->row();
+		$get_requestor = $this->db->get_where('m_employee',array("nip" => $order->requestor_nip))->row();
+
+		if($curr_user->role == 'line_manager'){
+			$desc = 'Approved by Line Manager';
+			$title = 'Line Manager';
+			$level = 1;
+		}else{
+			$desc = 'Approved by WL1';
+			$title = 'WL1';
+			$level = 1;
+		}
+
+		$data = array(
+			"status"				=> "approved",
+			"is_approved"			=> 1,
+			"is_feedback"			=> 0,
+			"is_download"			=> 0,
+			"approved_by"			=> $this->session->userdata('user_name'),
+			"approve_by_title"		=> $title,
+			// "rejected_by"			=> $this->input->post('rejected_by'),
+			"approved_date"			=> date("Y-m-d"),
+			// "rejected_date"			=> $this->input->post('rejected_date'),
+			"approved_remark"		=> 'Approved by Line Manager',
+			// "rejected_remark"		=> $this->input->post('rejected_remark'),
+		);
+
+		_update("t_order", $data, array("id" => $id));
+
+		_update("t_order_approval_track", array(
+			"approve_status" => "approved",
+			"approve_by" => $this->session->userdata('user_nip'),
+			"approve_date" => date("Y-m-d"),
+		),
+			array(
+				"order_id" => $id,
+				"approve_level" => $level
+			));
+		
+		if($order->order_category == 'ignore'){
+			_hard_delete('t_stock_planned_request', array('id' => $order->planned_id));
+		}
+
+		$err = array(
+			'show' => true,
+			'type' => 'success',
+			'msg'  => 'Successfully Approved Order'
+		);
+		$this->session->set_flashdata('toast', $err);
+
+		$email_body = email_body('Approved Order', "
+		Hi, ".$get_requestor->name."<br>
+
+		Your order request is approved by Line Manager
+		");
+
+		send_email_notification($get_requestor->email, 'Approved Order', $email_body);
+
+		redirect('goods_management/order_detail/'._encrypt($id));
+	}
+	
+	public function approval_reject()
+	{
+		$id = _decrypt($this->uri->segment(3));
+		$id = $this->input->post('id');
+
+		
+		$curr_user = $this->auth_model->current_user();
+		$order = $this->db->get_where('t_order',array("id" => $id))->row();
+		$get_requestor = $this->db->get_where('m_employee',array("nip" => $order->requestor_nip))->row();
+
+		if($curr_user->role == 'line_manager'){
+			$desc = 'Rejected by Line Manager';
+			$title = 'Line Manager';
+			$level = 1;
+		}else{
+			$desc = 'Rejected by WL1';
+			$title = 'WL1';
+			$level = 1;
+		}
+
+		$data = array(
+			"status"				=> "rejected",
+			"is_approved"			=> 1,
+			"is_feedback"			=> 0,
+			"is_download"			=> 0,
+			"approve_by_title"		=> $title,
+			"rejected_by"			=> $this->session->userdata('user_name'),
+			"rejected_date"			=> date("Y-m-d"),
+			"rejected_remark"		=> $this->input->post('remarks'),
+		);
+
+		_update("t_order", $data, array("id" => $id));
+
+		_update("t_order_approval_track", array(
+			"approve_status" => "rejected",
+			"approve_by" => $this->session->userdata('user_nip'),
+			"approve_date" => date("Y-m-d"),
+		),
+			array(
+				"order_id" => $id,
+				"approve_level" => $level
+			));
+
+		$err = array(
+			'show' => true,
+			'type' => 'success',
+			'msg'  => 'Successfully Reject Order'
+		);
+		$this->session->set_flashdata('toast', $err);
+
+		$email_body = email_body('Rejected Order', "
+		Hi, ".$get_requestor->name."<br>
+
+		Your order request is rejected by Line Manager
+		");
+
+		send_email_notification($get_requestor->email, 'Rejected Order', $email_body);
+
+		redirect('goods_management/order_detail/'._encrypt($id));
 	}	
 
 	public function order_reject()

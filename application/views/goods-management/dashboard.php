@@ -144,7 +144,7 @@
                                               </div>
                                     </div>
                                     <div class="modal-footer">
-                                      <button type="submit" name="submit" class="btn btn-outline-primary">Ignore Request</button>
+                                      <button type="submit" name="submit" class="btn btn-outline-primary" style="font-weight: 600;">IGNORE REQUEST</button>
                                       OR
                                       <a href="<?= site_url('goods_management/ignore_order/'._encrypt($v->id));?>" class="btn btn-outline-danger" style="font-weight: 600; ">
                                                           IGNORE & REMOVE FROM TO DO LIST

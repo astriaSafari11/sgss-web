@@ -3,21 +3,21 @@
 <div class="row mb-2 justify-between">
               <div class="col-sm-6">
                 <a class="btn btn-sm btn-primary position-relative" style="font-weight: 600; border-radius: 50px;">
-                  Request List
+                  Approval List
                   <?php if($req_count > 0) { ?>
                     <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger"> <?php echo $req_count; ?>
                       <span class="visually-hidden">unread messages</span>
                     </span>
                   <?php } ?>
                 </a>                
-                <a href="<?= site_url('goods_management/feedback');?>" class="btn btn-sm btn-outline-primary position-relative" style="font-weight: 600; border-radius: 50px;">
+                <!-- <a href="<?= site_url('goods_management/feedback');?>" class="btn btn-sm btn-outline-primary position-relative" style="font-weight: 600; border-radius: 50px;">
                   Feedback List
                   <?php if($feedback_count > 0) { ?>
                     <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger"> <?php echo $feedback_count; ?>
                       <span class="visually-hidden">unread messages</span>
                     </span>
                   <?php } ?>
-                </a>                  
+                </a>                   -->
               </div>
               <div class="col-sm-6">
                 <div class="d-flex justify-content-end">
@@ -37,16 +37,6 @@
               <div class="col-12 mb-2">
                 <!-- Default box -->
                 <div class="card">
-                  <!-- <div class="card-header">
-                    <div class="card-tools">
-                      <button type="button" class="btn btn-sm btn-outline-danger position-relative" style="font-weight: 600; border-radius: 50px; width: 150px;">
-                        Export
-                      </button>                       
-                      <button type="button" class="btn btn-sm btn-outline-danger position-relative" style="font-weight: 600; border-radius: 50px;width: 150px;">
-                        Import
-                      </button>                       
-                    </div>
-                  </div> -->
                   <div class="card-body">
                     <form action="<?php echo site_url('goods_management'); ?>" method="post">
                       <?php $this->load->view('_partials/search_bar.php', $data); ?>
@@ -54,55 +44,40 @@
                     <table id="example" class="table table-sm" style="width:100%" cellspacing="0">
                       <thead>
                           <tr >
-                              <th style="color: #fff;background-color: #001F82;text-align: center;">Request ID</th>
                               <th style="color: #fff;background-color: #001F82;text-align: center;">Action Date</th>
-                              <th style="color: #fff;background-color: #001F82;text-align: center;">Item Code</th>
+                              <th style="color: #fff;background-color: #001F82;text-align: center;">SS Days Left</th>
                               <th style="color: #fff;background-color: #001F82;text-align: center;">Item</th>
-                              <th style="color: #fff;background-color: #001F82;text-align: center;">Requestor</th>
                               <th style="color: #fff;background-color: #001F82;text-align: center;">Qty</th>
-                              <th style="color: #fff;background-color: #001F82;text-align: center;">UoM</th>
-                              <!-- <th style="color: #fff;background-color: #001F82;text-align: center;">Status</th> -->
+                              <th style="color: #fff;background-color: #001F82;text-align: center;">Requestor</th>
+                              <th style="color: #fff;background-color: #001F82;text-align: center;">Reason</th>
                               <th style="color: #fff;background-color: #001F82;text-align: center;">Action</th>
-                              
-                              <!-- <th style="color: #fff;text-align: center;width: 400px;">
-                                <button class="btn btn-sm btn-primary" style="font-weight: 600; width: 100%;">
-                                Action
-                                </button>
-                              </th> -->
                           </tr>
                       </thead>
                       <tbody>
-                          <?php foreach($req_list as $k => $v){?>
+                          <?php foreach($req_list as $k => $v){ //debugCode($v);?>
                             <tr>
-                              <td style="vertical-align: middle;text-align: center;"><?php echo $v->request_id;?></td>
                               <td style="vertical-align: middle;text-align: center;"><?php echo mDate($v->date);?></td>
-                              <td style="vertical-align: middle;text-align: center;"><?php echo $v->item_code;?></td>
-                              <td style="vertical-align: middle;text-align: center;"><?php echo $v->item_name;?></td>
-                              <td style="vertical-align: middle;text-align: center;"><?php echo $v->requestor;?></td>
+                              <td style="vertical-align: middle;text-align: center;">5 Days</td>
+                              <td style="vertical-align: middle;text-align: center;"><?php echo $v->item_name;?> <?php echo $v->size;?> <?php echo $v->uom;?></td>
                               <td style="vertical-align: middle;text-align: center;"><?php echo $v->qty;?></td>
-                              <td style="vertical-align: middle;text-align: center;"><?php echo $v->uom;?></td>
-                              <!-- <td style="vertical-align: middle;text-align: center;">
-                                <?php if($v->approval_status == 'pending'){ ?>
-                                  <button class="btn btn-sm btn-danger" style="font-weight: 600; border-radius: 50px; width: 100%;">
-                                    Waiting for Approval
-                                  </button>                     
-                                <?php } ?>                  
-                              </td> -->
+                              <td style="vertical-align: middle;text-align: center;"><?php echo $v->requestor;?></td>
+                              <td style="vertical-align: middle;text-align: center;"><?php echo approval_category($v->approval_category, $v->order_category, $v->purchase_reason, $v->remarks);?></td>
                               <td style="vertical-align: middle;text-align: center;"> 
-                                <?php if($v->status != 'ignored'){ ?>               
-                                  <a href="<?= site_url('goods_management/order/'._encrypt($v->id));?>" class="btn btn-sm btn-outline-primary" style="font-weight: 600; border-radius: 50px; width: 150px;">
-                                  APPROVE NOW
+                                  <a href="<?= site_url('goods_management/order_detail/'._encrypt($v->order_id));?>" class="btn btn-sm btn-outline-primary" style="font-weight: 600; border-radius: 50px; width: 150px;">
+                                  APPROVE
                                   </a>  
-                                <?php } ?> 
+                                  <a class="btn btn-sm btn-outline-danger" style="font-weight: 600; border-radius: 50px; width: 150px;" data-bs-toggle="modal" data-bs-target="#modal-reject-value-<?php echo $v->id;?>">
+                                  REJECT
+                                  </a>  
                               </td>
                           </tr>
-                            <div class="modal fade" id="modal-ignore-value-<?php echo $v->id;?>" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-                              <form action="<?= site_url('goods_management/order_reject');?>" method="post" id="modal-ignore-value-<?php echo $v->id;?>">
-                              <input type="hidden" name="id" value="<?php echo _encrypt($v->id);?>">
+                            <div class="modal fade" id="modal-reject-value-<?php echo $v->id;?>" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                              <form action="<?= site_url('goods_management/approval_reject');?>" method="post" id="modal-reject-value-<?php echo $v->id;?>">
+                              <input type="hidden" name="id" value="<?php echo _encrypt($v->order_id);?>">
                                 <div class="modal-dialog modal-lg">
                                   <div class="modal-content">
                                     <div class="modal-header">
-                                      <h5 class="modal-title" id="exampleModalLabel" class="text-primary" style="color: #001F82;font-weight:600;">Ignore Order Request</h5>
+                                      <h5 class="modal-title" id="exampleModalLabel" class="text-primary" style="color: #001F82;font-weight:600;">Reject Order Request</h5>
                                       <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                                     </div>
                                     <div class="modal-body">
@@ -111,39 +86,18 @@
                                                   <div class="row">
                                                     <!--begin::Col-->
                                                     <div class="col-12">
-                                                      <label>Please fill your reason, to ignore this order request</label>
+                                                      <label>Please fill your reason, to reject this order request</label>
                                                       <div class="form-floating mb-3">
-                                                        <input type="text" class="form-control" id="floatingInput" placeholder="name@example.com" name="ignore_remarks" value ="">
+                                                        <input type="text" class="form-control" id="floatingInput" placeholder="name@example.com" name="remarks" value ="">
                                                         <label for="floatingInput" class="fw-bold text-primary">Reason</label>
                                                       </div>
                                                     </div>
-                                                    <div class="col-12">
-                                                      <div class="row">
-                                                        <div class="col-12">
-                                                          <div class="form-floating mb-3">
-                                                            <select class="form-select" aria-label="Default select example" id="ignore_days" style="height: 56px;" name="ignore_days" required>
-                                                              <option value="" disabled>-- Select Days --</option>
-                                                              <?php for($i = 1; $i <= 30; $i++){ ?>
-                                                                <option value="<?php echo $i;?>"><?php echo $i;?> day</option>
-                                                              <?php } ?>
-                                                            </select>
-                                                            <label for="ignore_days" class="fw-bold text-primary">Ignore For</label>
-                                                          </div>
-                                                        </div>                                                      
-                                                      </div>
-                                                    </div>                                                    
-                                                    <!--end::Col-->                            
                                                 </div>         
                                               </div>
                                               </div>
                                     </div>
                                     <div class="modal-footer">
-                                      <button type="submit" name="submit" class="btn btn-outline-primary">Ignore Request</button>
-                                      OR
-                                      <a href="<?= site_url('goods_management/ignore_order/'._encrypt($v->id));?>" class="btn btn-outline-danger" style="font-weight: 600; ">
-                                                          IGNORE & REMOVE FROM TO DO LIST
-                                                          </a>
-
+                                      <button type="submit" name="submit" class="btn btn-outline-primary">Reject Request</button>
                                     </div>
                                   </div>
                                 </div>
