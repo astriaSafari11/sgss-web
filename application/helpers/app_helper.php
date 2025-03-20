@@ -152,44 +152,6 @@ function _decrypt($key=""){
 	return $key;
 }
 
-function send_email($to, $name, $position, $subject, $body, $template) 
-{
-    $ci = & get_instance();
-    $ci->load->library('email');
-	$config = array(
-		'protocol' => 'smtp', // 'mail', 'sendmail', or 'smtp'
-		'smtp_host' => 'ssl://smtp.gmail.com', 
-		'smtp_port' => 465,
-		'smtp_user' => 'astria.safari@gmail.com',
-		'smtp_pass' => 'byalfezfbiftqsai',
-		'mailtype'	=> 'html'
-	);
-
-	$ci->email->initialize($config);
-
-	$ci->email->set_newline("\r\n");
-
-	$from 	= "astria.safari@gmail.com";
-
-	$data = array(
-		'name' 		=> $name,	
-		'position' 	=> $position,
-		'subject' 	=> $subject,
-		'body'		=> $body,
-		'url_link'	=> "http://103.161.185.45/cotton",		
-	);
-
-	$ci->email->from($from);
-	$ci->email->to($to);
-	$ci->email->subject($subject);
-	$ci->email->message($ci->load->view($template,$data, true));
-    $ci->email->send();
-
-	// if (!$ci->email->send()) {
-	// 	show_error($ci->email->print_debugger());
-	// }	
-}
-
 function log_print($id = null, $desc = ""){
 	$CI = & get_instance();
 
@@ -236,5 +198,235 @@ function week_start_date($wk_num, $yr, $first = 1, $format = 'Y-m-d')
     $wk_ts  = strtotime('+' . $wk_num . ' weeks', strtotime($yr . '0101'));
     $mon_ts = strtotime('-' . date('w', $wk_ts) + $first . ' days', $wk_ts);
     return date($format, $mon_ts);
+}
+
+function approval_category($category = "", $order_category = "", $purchase_reason = "", $remarks){
+	switch($category){
+		case "price_over_threshold":
+			$desc = 'Price allowance over threshold';
+			break;
+		case "qty_over_threshold":
+			$desc = 'Quantity allowanve over threshold';
+			break;
+		case "ignore_order":
+			$desc = 'Ignored by requestor';
+			break;
+		default:
+			if($order_category == "ignore"){
+				$desc = 'Ignored by requestor';				
+			}else{
+				$desc = $purchase_reason." - ".$remarks;				
+			}
+		break;
+	}
+
+	return $desc;
+}
+
+function send_email_notification($to, $subject, $body) 
+{
+    $ci = & get_instance();
+    $ci->load->library('email');
+	
+	$config = array(
+		'protocol' => 'smtp', // 'mail', 'sendmail', or 'smtp'
+		'smtp_host' => 'ssl://smtp.gmail.com', 
+		'smtp_port' => 465,
+		'smtp_user' => 'astria.safari@gmail.com',
+		'smtp_pass' => 'knucmduqxdmidvgm',
+		'mailtype'	=> 'html'
+	);
+
+	$ci->email->initialize($config);
+
+	$ci->email->set_newline("\r\n");
+
+	$from = "astria.safari@gmail.com";
+
+	$ci->email->from($from);
+	$ci->email->to($to);
+	$ci->email->subject($subject);
+	$ci->email->message($body);
+    // $ci->email->send();
+
+	if (!$ci->email->send()) {
+		show_error($ci->email->print_debugger());
+	}	
+}
+function email_body($subject, $body){
+	$html = '
+	<!DOCTYPE html>
+	<html>
+	<head>
+		<meta charset="UTF-8">
+		<meta name="viewport" content="width=device-width" initial-scale="1">
+		<style>
+			* { font-family: sans-serif !important; }
+		</style>
+		<style>
+			*,
+			*:after,
+			*:before {
+				-webkit-box-sizing: border-box;
+				-moz-box-sizing: border-box;
+				box-sizing: border-box;
+			}
+	
+			* {
+				-ms-text-size-adjust: 100%;
+				-webkit-text-size-adjust: 100%;
+			}
+	
+			html,
+			body,
+			.document {
+				width: 100% !important;
+				height: 100% !important;
+				margin: 0;
+				padding: 0;
+			}
+	
+			body {
+				-webkit-font-smoothing: antialiased;
+				-moz-osx-font-smoothing: grayscale;
+				text-rendering: optimizeLegibility;
+			}
+	
+			div[style*="margin: 16px 0"] {
+				margin: 0 !important;
+			}
+	
+			table,
+			td {
+				mso-table-lspace: 0pt;
+				mso-table-rspace: 0pt;
+			}
+	
+			table {
+				border-spacing: 0;
+				border-collapse: collapse;
+				table-layout: fixed;
+				margin: 0 auto;
+			}
+	
+			img {
+				-ms-interpolation-mode: bicubic;
+				max-width: 100%;
+				border: 0;
+			}
+	
+			*[x-apple-data-detectors] {
+				color: inherit !important;
+				text-decoration: none !important;
+			}
+	
+			.x-gmail-data-detectors,
+			.x-gmail-data-detectors *,
+			.aBn {
+				border-bottom: 0 !important;
+				cursor: default !important;
+			}
+	
+			.btn {
+				-webkit-transition: all 200ms ease;
+				transition: all 200ms ease;
+			}
+	
+			.btn:hover {
+				background-color: dodgerblue;
+			}
+	
+			@media screen and (max-width: 750px) {
+				.container {
+					/*width: 100%;*/
+					margin: auto;
+				}
+	
+				.stack {
+					display: block;
+					width: 100%;
+					max-width: 100%;
+				}
+			}
+		</style>
+	</head>
+	<body>	
+	<table role="presentation" aria-hidden="true" cellspacing="0" cellpadding="0" border="0" align="center"
+		   class="document">
+			<tr>
+				<td valign="top">
+				<br/>
+				<table role="presentation" aria-hidden="true" cellspacing="0" cellpadding="0" border="0" align="center"
+					   width="700" class="container" style="border:1px solid #ddd;">
+					<tr>
+						<td style="background: #1771ba;" align="left" valign="top">
+							<table cellspacing="0" cellpadding="0" border="0">
+								<tr>
+									<td width="100%" colspan="3" height="20">&nbsp;</td>
+								</tr>
+								<tr>
+									<td width="30" valign="top" align="center">
+										&nbsp;
+									</td>
+									<td width="640" valign="top" align="left">
+										<span style="font-family:Arial, Helvetica, sans-serif; color:#fff; font-size:12px;">SGSS NOTIFICATION</span>
+									</td>
+									<td width="30" valign="top" align="center">
+										&nbsp;
+									</td>
+								</tr>
+								<tr>
+									<td width="100%" colspan="3" height="20">&nbsp;</td>
+								</tr>
+							</table>
+						</td>
+					</tr>
+					<tr>
+						<td align="left" valign="top">
+							<table cellspacing="0" cellpadding="0" border="0">
+								<tr>
+									<td width="100%" colspan="3" height="20">&nbsp;</td>
+								</tr>
+								<tr>
+									<td width="50" valign="top" align="top">&nbsp;</td>
+									<td width="600" valign="top" align="top">
+										<h3 style="font-family: Arial, Helvetica, sans-serif; font-size:18px; color:#000;">
+										'.$subject.'</h3>
+										'.$body.'
+										</br></br>										
+									</p>
+									</td>
+									<td width="50" valign="top" align="top">&nbsp;</td>
+								</tr>
+								<tr>
+									<td width="100%" colspan="3" height="20">&nbsp;</td>
+								</tr>
+							</table>
+						</td>
+					</tr>
+					<tr>
+						<td style="background: #1771ba;" align="center" valign="top">
+							&nbsp;
+						</td>
+					</tr>
+					<tr>
+						<td style="background: #1771ba;" align="center" valign="top">
+							<span style="font-family:Arial, Helvetica, sans-serif; color:#fff; font-size:12px;">&copy; 2025 Unilever.</span>
+						</td>
+					</tr>
+					<tr>
+						<td style="background: #1771ba;" align="center" valign="top">
+							&nbsp;
+						</td>
+					</tr>
+				</table>
+			</td>
+		</tr>
+	</table>
+	</body>
+	</html>	
+	';
+
+	return $html;
 }
 ?>
