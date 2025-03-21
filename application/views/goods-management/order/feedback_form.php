@@ -124,7 +124,7 @@
                   <!-- Default box -->
                   <div class="card text-bg-light">
                     <div class="card-header">
-                      <h3 class="card-title">Approval</h3>
+                      <h3 class="card-title"><?php echo $order->status=='rejected'?'Rejected':'Approved'; ?></h3>
                     </div>                  
                     <div class="card-body">
                       <div class="row">
@@ -133,16 +133,16 @@
                             <!--begin::Col-->
                             <div class="col-6">
                               <div class="form-floating mb-3">
-                                <input type="text" class="form-control" id="floatingInput" placeholder="name@example.com" value ="<?php echo myDate($order->approved_date); ?>" disabled>
-                                <label for="floatingInput">Date of Approval</label>
+                                <input type="text" class="form-control" id="floatingInput" placeholder="name@example.com" value ="<?php echo mDate($order->approved_date); ?>" disabled>
+                                <label for="floatingInput"><?php echo $order->status=='rejected'?'Date of Rejection':'Date of Approval'; ?></label>
                               </div>
                             </div>
                             <!--end::Col-->
                             <!--begin::Col-->
                             <div class="col-6">
                               <div class="form-floating mb-3">
-                                <input type="text" class="form-control" id="floatingInput" placeholder="name@example.com" value="(auto-approved)" disabled>
-                                <label for="floatingInput">Approved By</label>
+                                <input type="text" class="form-control" id="floatingInput" placeholder="name@example.com" value="<?php echo $order->approved_by; ?>" disabled>
+                                <label for="floatingInput"><?php echo $order->status=='rejected'?'Rejected by':'Approved By'; ?></label>
                               </div>
                             </div>
                             <!--end::Col-->
@@ -157,7 +157,7 @@
                             <!--hin::Col-->
                             <div class="col-6">
                               <div class="form-floating mb-3">
-                                <input type="text" class="form-control" id="floatingInput" placeholder="name@example.com" value="(auto-approved)" disabled>
+                                <input type="text" class="form-control" id="floatingInput" placeholder="name@example.com" value="<?php echo $order->approve_by_title; ?>" disabled>
                                 <label for="floatingInput">As</label>
                               </div>
                             </div>
@@ -179,7 +179,7 @@
                       </div>                     
                     </div>
                     <div class="card-footer text-end text-white">
-                      <button class="btn btn-sm btn-secondary custom-btn" type="submit" name="submit" style="font-weight: 600; border-radius: 50px; color:#001F82; width: 150px;">
+                      <button class="btn btn-sm btn-outline-primary custom-btn" type="submit" name="submit" style="font-weight: 600; border-radius: 50px; width: 150px;">
                           Submit Feedback
                       </button>
                     </div>                    

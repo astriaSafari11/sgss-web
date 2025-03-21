@@ -19,6 +19,8 @@ class Goods_management extends CI_Controller
 		if (!$this->auth_model->session_timeout()) {
 			redirect('auth/login');
 		}
+
+		$this->load->model('goods_management_model');		
 	}
 
 	public function index()
@@ -537,7 +539,7 @@ class Goods_management extends CI_Controller
 		$data['order_detail'] = $this->db->query("
 		select * from t_order_detail 
 		INNER JOIN m_master_data_vendor ON m_master_data_vendor.vendor_code = t_order_detail.vendor_code
-		INNER JOIN m_master_data_material ON m_master_data_material.item_code = t_order_detail.item 
+		INNER JOIN m_master_data_material ON m_master_data_material.item_code = t_order_detail.item_code 
 		where t_order_detail.order_id = '$id'
 		")->result();	
 		
@@ -1285,9 +1287,11 @@ class Goods_management extends CI_Controller
 	{
 		$id = _decrypt($this->uri->segment(3));
 
+		$data = $this->goods_management_model->get_order_detail($id);
+
 		ini_set('max_execution_time', '300');
 		ini_set("pcre.backtrack_limit", "5000000");
-		$filename = 'Validation_Report_';
+		$filename = 'Validation_Report_'.$data->request_id."_".date('dmY');
 		$mpdf = new \Mpdf\Mpdf(
 			[
 				'mode' => 'utf-8', 
@@ -1306,26 +1310,18 @@ class Goods_management extends CI_Controller
 		span {
 			font-family: Arial, Helvetica, sans-serif;  
 			font-weight:bold;
-			font-size:10px;
+			font-size:16px;
 			line-height:0px;
 			text-align:center;
 		  }
 		  table, th, thead {
-			border: 1px solid black;
-			border-collapse: collapse;
 			font-family: Arial, Helvetica, sans-serif;  
 			font-size:8px;
-			text-align:center;
-			padding-left:5px;
-			padding-right:5px;
 		  }
 		  
 		  td {
 			padding:5px;
 			font-family: Arial, Helvetica, sans-serif;  
-			font-size:8px;
-			border-right: 1px solid black;
-			border-collapse: collapse;
 		  }
 		  img {
 			display: block;
@@ -1339,11 +1335,123 @@ class Goods_management extends CI_Controller
 		  }
 		</style>
 		</head>
+		<body>
+				<htmlpagefooter name="MyFooter1">
+					<small style="text-align:left;font-size:10px;font-style:italic;">this validation report is generated from sgss application</small>
+				</htmlpagefooter>
+				<sethtmlpagefooter name="MyFooter1" value="on" />
 
-		DOWNLOAD VALIDATION REPORT
-		';					
+				<div style="text-align:center;margin-bottom:20px;">
+					<img style="text-align:center;" src="./assets/dist/images/logos/unilever-logo.png" height="50px" width="50px"><br>
+					<span>SGSS - VALIDATION REPORT</span><br>
+					<span>PT UNILEVER INDONESIA, Tbk</span><br>
+				</div>	
+				
+				<div style="background-color:#87cdf0;width:100%;padding:5px;margin-bottom:5px;">
+					<span>GENERAL INFORMATION</span>
+				</div>
+
+				<table width="100%" cellspacing="0" style="margin-bottom:10px;">
+					<tr>
+						<td style="text-align: left;font-size:12px;width:200px;">Date of Request</td>
+						<td style="text-align: center;font-size:12px;width:50px;">:</td>
+						<td style="text-align: left;font-size:12px;">'.mDate($data->date).'</td>
+						<td style="text-align: left;font-size:12px;width:200px;">Requestor</td>
+						<td style="text-align: center;font-size:12px;width:50px;">:</td>
+						<td style="text-align: left;font-size:12px;">'.$data->requestor.'</td>
+					</tr>
+					<tr>
+						<td style="text-align: left;font-size:12px;width:200px;">Requested For</td>
+						<td style="text-align: center;font-size:12px;width:50px;">:</td>
+						<td style="text-align: left;font-size:12px;">'.$data->requested_for_name.'</td>
+						<td style="text-align: left;font-size:12px;width:200px;">Area</td>
+						<td style="text-align: center;font-size:12px;width:50px;">:</td>
+						<td style="text-align: left;font-size:12px;">'.$data->area.'</td>
+					</tr>
+					<tr>
+						<td style="text-align: left;font-size:12px;width:200px;">Purchase Reason</td>
+						<td style="text-align: center;font-size:12px;width:50px;">:</td>
+						<td style="text-align: left;font-size:12px;">'.$data->purchase_reason.'</td>
+						<td style="text-align: left;font-size:12px;width:200px;">Remarks</td>
+						<td style="text-align: center;font-size:12px;width:50px;">:</td>
+						<td style="text-align: left;font-size:12px;">'.$data->remarks.'</td>
+					</tr>
+				</table>
+				<div style="background-color:#87cdf0;width:100%;padding:5px;margin-bottom:5px;">
+					<span>ITEM INFORMATION</span>
+				</div>
+				<table width="100%" cellspacing="0" style="border: 1px solid #bac2bc;border-collapse: collapse;margin-bottom:10px;">
+					<tr>
+						<td style="text-align: center;font-size:12px;background-color:#bac2bc;font-weight:bold;border: 1px solid #bac2bc;">Item</td>
+						<td style="text-align: center;font-size:12px;background-color:#bac2bc;font-weight:bold;border: 1px solid #bac2bc;">Quantity</td>
+						<td style="text-align: center;font-size:12px;background-color:#bac2bc;font-weight:bold;border: 1px solid #bac2bc;">UoM</td>
+						<td style="text-align: center;font-size:12px;background-color:#bac2bc;font-weight:bold;border: 1px solid #bac2bc;">Vendor</td>
+						<td style="text-align: center;font-size:12px;background-color:#bac2bc;font-weight:bold;border: 1px solid #bac2bc;">UoM Price</td>
+						<td style="text-align: center;font-size:12px;background-color:#bac2bc;font-weight:bold;border: 1px solid #bac2bc;">Total Price</td>
+						<td style="text-align: center;font-size:12px;background-color:#bac2bc;font-weight:bold;border: 1px solid #bac2bc;">Purchase Reason</td>
+					</tr>
+					<tr>
+						<td style="text-align: center;font-size:12px;border: 1px solid #bac2bc;">'.$data->item_name.' '.$data->size.' '.$data->uom.'</td>
+						<td style="text-align: center;font-size:12px;border: 1px solid #bac2bc;">'.$data->qty.'</td>
+						<td style="text-align: center;font-size:12px;border: 1px solid #bac2bc;">'.$data->uom.'</td>
+						<td style="text-align: center;font-size:12px;border: 1px solid #bac2bc;">'.$data->vendor_code.' - '.$data->vendor_name.'</td>
+						<td style="text-align: right;font-size:12px;border: 1px solid #bac2bc;">'.myNum($data->uom_price).'</td>
+						<td style="text-align: right;font-size:12px;border: 1px solid #bac2bc;">'.myNum($data->total_price).'</td>
+						<td style="text-align: center;font-size:12px;border: 1px solid #bac2bc;">'.$data->purchase_reason.'</td>
+					</tr>
+				</table>	
+				
+		';
+
+		if($data->request_status == 'approved' || $data->request_status == 'auto_approved'){
+			$html .='
+				<div style="background-color:#87cdf0;width:100%;padding:5px;margin-bottom:5px;">
+					<span>APPROVAL</span>
+				</div>
+				<table width="100%" cellspacing="0">
+					<tr>
+						<td style="text-align: left;font-size:12px;width:200px;border: 1px solid #bac2bc;">Date of Approval</td>
+						<td style="text-align: left;font-size:12px;border: 1px solid #bac2bc;">: '.mDate($data->approval_date).'</td>
+						<td style="text-align: left;font-size:12px;width:200px;border: 1px solid #bac2bc;">Approved By</td>
+						<td style="text-align: left;font-size:12px;border: 1px solid #bac2bc;">: '.$data->approved_by.'</td>
+						<td style="text-align: left;font-size:12px;width:250px;border: 1px solid #bac2bc;" rowspan="2">Approval Remarks:<br/>'.$data->approved_remark.'</td>
+					</tr>
+					<tr>
+						<td style="text-align: center;font-size:20px;font-weight:bold;border: 1px solid #bac2bc;color:#046e19;" colspan="2">'.strtoupper(str_replace(" ", "_", $data->request_status)).'</td>
+						<td style="text-align: left;font-size:12px;width:200px;border: 1px solid #bac2bc;">As</td>
+						<td style="text-align: left;font-size:12px;border: 1px solid #bac2bc;">: '.$data->approve_by_title.'</td>
+					</tr>
+				</table>				
+			</body>
+			<pagebreak/>
+			';							
+		}else{
+			$html .='
+				<div style="background-color:#87cdf0;width:100%;padding:5px;margin-bottom:5px;">
+					<span>REJECTED</span>
+				</div>
+				<table width="100%" cellspacing="0">
+					<tr>
+						<td style="text-align: left;font-size:12px;width:200px;border: 1px solid #bac2bc;">Date of Rejection</td>
+						<td style="text-align: left;font-size:12px;border: 1px solid #bac2bc;">: '.mDate($data->approval_date).'</td>
+						<td style="text-align: left;font-size:12px;width:200px;border: 1px solid #bac2bc;">Rejected By</td>
+						<td style="text-align: left;font-size:12px;border: 1px solid #bac2bc;">: '.$data->approved_by.'</td>
+						<td style="text-align: left;font-size:12px;width:250px;border: 1px solid #bac2bc;" rowspan="2">Rejected Remarks:<br/>'.$data->approved_remark.'</td>
+					</tr>
+					<tr>
+						<td style="text-align: center;font-size:20px;font-weight:bold;border: 1px solid #bac2bc;color:#046e19;" colspan="2">'.strtoupper(str_replace(" ", "_", $data->request_status)).'</td>
+						<td style="text-align: left;font-size:12px;width:200px;border: 1px solid #bac2bc;">As</td>
+						<td style="text-align: left;font-size:12px;border: 1px solid #bac2bc;">: '.$data->approve_by_title.'</td>
+					</tr>
+				</table>				
+			</body>
+			<pagebreak/>
+			';							
+		}
 			
 		$html .= '</html>';					
+		
+		_update("t_order", ["is_download" => 1], ["id" => $id]);
 
 		$mpdf->SetDisplayMode(50);	
 		// $mpdf->SetFooter('');			

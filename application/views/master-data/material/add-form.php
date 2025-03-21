@@ -32,14 +32,14 @@
                       <!--begin::Col-->
                       <div class="col-3">
                         <div class="form-floating mb-3">
-                          <input type="text" class="form-control" id="floatingInput" placeholder="name@example.com" name="item_name" required>
+                          <input type="text" class="form-control" id="floatingInput"  name="item_name" required>
                           <label for="floatingInput" class="fw-bold text-primary">Material Name</label>
                           <div class="invalid-feedback">This field is required.</div>
                         </div>
                       </div>
                       <div class="col-3">
                         <div class="form-floating mb-3">
-                          <input type="number" class="form-control" id="floatingInput" placeholder="name@example.com" name="size" required>
+                          <input type="number" class="form-control" id="floatingInput"  name="size" required>
                           <label for="floatingInput" class="fw-bold text-primary">Size</label>
                           <div class="invalid-feedback">This field is required.</div>
                         </div>
@@ -69,7 +69,7 @@
                             <!--begin::Col-->
                             <div class="col-3">
                               <div class="form-floating mb-3">
-                                <input type="number" class="form-control" id="floatingInput" placeholder="name@example.com" name="lot_size" value ="0">
+                                <input type="number" class="form-control" id="floatingInput"  name="lot_size" value ="0">
                                 <label for="floatingInput" class="fw-bold text-primary">Lot Size</label>
                               </div>
                             </div>
@@ -77,31 +77,31 @@
                             <!--begin::Col-->
                             <div class="col-3">
                               <div class="form-floating mb-3">
-                                <input type="number" class="form-control" id="floatingInput" placeholder="name@example.com" name="order_cycle" value ="0">
+                                <input type="number" class="form-control" id="floatingInput"  name="order_cycle" value ="0">
                                 <label for="floatingInput" class="fw-bold text-primary">Order Cycle</label>
                               </div>
                             </div>
                             <div class="col-3">
                               <div class="form-floating mb-3">
-                                <input type="number" class="form-control" id="floatingInput" placeholder="name@example.com" name="initial_stock" value ="0">
+                                <input type="number" class="form-control" id="floatingInput"  name="initial_stock" value ="0">
                                 <label for="floatingInput" class="fw-bold text-primary">Initial Stock</label>
                               </div>
                             </div>                                                                                                       
                             <div class="col-3">
                               <div class="form-floating mb-3">
-                                <input type="number" class="form-control" id="floatingInput" placeholder="name@example.com" name="gen_lead_time" value ="0">
-                                <label for="floatingInput" class="fw-bold text-primary">Average Lead Time</label>
-                              </div>
-                            </div>        
-                            <div class="col-3">
-                              <div class="form-floating mb-3">
-                                <input type="number" class="form-control" id="floatingInput" placeholder="name@example.com" name="lt_pr_po" value ="0">
+                                <input type="number" class="form-control" id="floatingInput"  name="lt_pr_po" value ="0">
                                 <label for="floatingInput" class="fw-bold text-primary">Lead Time PR to PO</label>
                               </div>
                             </div>  
                             <div class="col-3">
                               <div class="form-floating mb-3">
-                                <input type="text" class="form-control budgetTarget" id="floatingInput" placeholder="name@example.com" name="budget_target" id="budgetTarget" value ="0">
+                                <input type="number" class="form-control" id="floatingInput"  name="lt_pr_to_deliv" value ="0">
+                                <label for="floatingInput" class="fw-bold text-primary">Lead Time PO to Deliv</label>
+                              </div>
+                            </div>        
+                            <div class="col-3">
+                              <div class="form-floating mb-3">
+                                <input type="text" class="form-control budgetTarget" id="floatingInput"  name="budget_target" id="budgetTarget" value ="0">
                                 <label for="floatingInput" class="fw-bold text-primary">Target Price Per Item</label>
                               </div>
                             </div>                            
@@ -110,42 +110,74 @@
                           <div class="row">
                           <div class="col-3">
                               <div class="form-floating mb-3">
-                                <input type="text" class="form-control" id="floatingInput" placeholder="name@example.com" name="var_todo_list" value="10">
-                                <label for="floatingInput" class="fw-bold text-primary">Todo list variable</label>
+                                <input type="number" class="form-control" id="floatingInput"  name="var_todo_list" value="10">
+                                <label for="floatingInput" class="fw-bold text-primary">To Do List Threshold</label>
                               </div>
                             </div>
                             <!--begin::Col-->
                             <div class="col-3">
                               <div class="form-floating mb-3">
-                                <input type="text" class="form-control" id="floatingInput" placeholder="name@example.com" name="var_stock_card_todo_list" value ="10">
-                                <label for="floatingInput" class="fw-bold text-primary">Stock card todo list variable</label>
-                              </div>
-                            </div>
-                            <!--end::Col-->
-                            <!--begin::Col-->
-                            <div class="col-3">
-                              <div class="form-floating mb-3">
-                                <input type="text" class="form-control" id="floatingInput" placeholder="name@example.com" name="var_stock_card_overstock" value ="50">
-                                <label for="floatingInput" class="fw-bold text-primary">Stock card overstock variable</label>
+                                <input type="number" class="form-control" id="floatingInput"  name="var_stock_card_todo_list" value ="10">
+                                <label for="floatingInput" class="fw-bold text-primary">SO To Do List Threshold</label>
                               </div>
                             </div>
                             <!--end::Col-->
                             <!--begin::Col-->
                             <div class="col-3">
                               <div class="form-floating mb-3">
-                                <input type="text" class="form-control" id="floatingInput" placeholder="name@example.com" name="var_stock_card_ok" value ="10">
-                                <label for="floatingInput" class="fw-bold text-primary">Stock card ok variable</label>
+                                <input type="number" class="form-control" id="floatingInput"  name="var_stock_card_overstock" value ="50">
+                                <label for="floatingInput" class="fw-bold text-primary">Overstock Threshold (%+SS)</label>
+                              </div>
+                            </div>
+                            <!--end::Col-->
+                            <!--begin::Col-->
+                            <div class="col-3">
+                              <div class="form-floating mb-3">
+                                <input type="number" class="form-control" id="floatingInput"  name="var_stock_card_ok" value ="10">
+                                <label for="floatingInput" class="fw-bold text-primary">Overstock Threshold (%+SS)</label>
                               </div>
                             </div>
                             <!--end::Col-->                            
                             <!--begin::Col-->
                             <div class="col-3">
                               <div class="form-floating mb-3">
-                                <input type="text" class="form-control" id="floatingInput" placeholder="name@example.com" name="var_pending_approval" value ="5">
-                                <label for="floatingInput" class="fw-bold text-primary">Pending Approval (days)</label>
+                                <input type="number" class="form-control" id="floatingInput"  name="var_pending_approval" value ="5">
+                                <label for="floatingInput" class="fw-bold text-primary">Approval Threshold (days)</label>
                               </div>
                             </div>
-                            <!--begin::Col-->         
+                            <!--begin::Col-->   
+                            <!--begin::Col-->
+                            <div class="col-3">
+                              <div class="form-floating mb-3">
+                                <input type="number" class="form-control" id="floatingInput"  name="min_threshold" value ="20">
+                                <label for="floatingInput" class="fw-bold text-primary">Approval Threshold (%)</label>
+                              </div>
+                            </div>
+                            <div class="col-3">
+                              <div class="form-floating mb-3">
+                                <input type="number" class="form-control" id="floatingInput"  name="fast_moving_threshold" value ="20">
+                                <label for="floatingInput" class="fw-bold text-primary">Fast Moving Threshold (% + Forecast)</label>
+                              </div>
+                            </div>
+                            <div class="col-3">
+                              <div class="form-floating mb-3">
+                                <input type="number" class="form-control" id="floatingInput"  name="slow_moving_threshold" value ="20">
+                                <label for="floatingInput" class="fw-bold text-primary">Slow Moving Threshold (% + Forecast)</label>
+                              </div>
+                            </div>
+                            <div class="col-3">
+                              <div class="form-floating mb-3">
+                                <input type="number" class="form-control" id="floatingInput"  name="usage_ok_threshold" value ="20">
+                                <label for="floatingInput" class="fw-bold text-primary">Usage OK Threshold (% + Forecast)</label>
+                              </div>
+                            </div>
+                            <div class="col-3">
+                              <div class="form-floating mb-3">
+                                <input type="text" class="form-control averageForecast" id="floatingInput"  name="average_forecast" value ="0">
+                                <label for="floatingInput" class="fw-bold text-primary">Average Forecast</label>
+                              </div>
+                            </div>                                                      
+                            <!--begin::Col-->                                   
                             <!--end::Col-->                            
                           </div>                                                                     
                   </div>
@@ -190,7 +222,7 @@
 <script>
   var URL_AJAX = '<?php echo base_url();?>index.php/ajax';
   $(document).ready(function() {   
-          $(".budgetPrice").on('keyup', function(){
+          $(".averageForecast").on('keyup', function(){
             var val = this.value;
             val = val.replace(/[^0-9\.]/g,'');
             

@@ -44,8 +44,9 @@
                                 <th style="color: #fff;background-color: #001F82;text-align: center;">Lot Size</th>
                                 <th style="color: #fff;background-color: #001F82;text-align: center;">Order Cycle</th>
                                 <th style="color: #fff;background-color: #001F82;text-align: center;">Initial Stock</th>
-                                <th style="color: #fff;background-color: #001F82;text-align: center;">Average Lead Time</th>
                                 <th style="color: #fff;background-color: #001F82;text-align: center;">Lead Time PR to PO</th>
+                                <th style="color: #fff;background-color: #001F82;text-align: center;">Lead Time PO to Deliv</th>
+                                <th style="color: #fff;background-color: #001F82;text-align: center;">Total Lead Time</th>
                                 <th style="color: #fff;background-color: #001F82;text-align: center;">Standard Safety Stock</th>
                                 <th style="color: #fff;background-color: #001F82;text-align: center;">Action</th>
                             </tr>

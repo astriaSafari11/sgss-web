@@ -104,14 +104,20 @@
                             </div>     
                             <div class="col-3">
                               <div class="form-floating mb-3">
-                                <input type="number" class="form-control" id="floatingInput" placeholder="name@example.com" name="gen_lead_time" value="<?php echo $material->gen_lead_time;?>" disabled>
-                                <label for="floatingInput" class="fw-bold text-primary">Average Lead Time</label>
+                                <input type="number" class="form-control" id="floatingInput"  name="lt_pr_po" value="<?php echo $material->lt_pr_po;?>" disabled>
+                                <label for="floatingInput" class="fw-bold text-primary">Lead Time PR to PO</label>
                               </div>
                             </div>  
                             <div class="col-3">
                               <div class="form-floating mb-3">
-                                <input type="number" class="form-control" id="floatingInput" placeholder="name@example.com" name="lt_pr_po" value="<?php echo $material->lt_pr_po;?>" disabled>
-                                <label for="floatingInput" class="fw-bold text-primary">Lead Time PR to PO</label>
+                                <input type="number" class="form-control" id="floatingInput"  name="lt_pr_to_deliv" value="<?php echo $material->lt_pr_to_deliv;?>" disabled>
+                                <label for="floatingInput" class="fw-bold text-primary">Lead Time PO to Deliv</label>
+                              </div>
+                            </div>                             
+                            <div class="col-3">
+                              <div class="form-floating mb-3">
+                                <input type="number" class="form-control" id="floatingInput" placeholder="name@example.com" name="gen_lead_time" value="<?php echo $material->gen_lead_time;?>" disabled>
+                                <label for="floatingInput" class="fw-bold text-primary">Total Lead Time</label>
                               </div>
                             </div>  
                             <div class="col-3">
@@ -119,7 +125,19 @@
                                 <input type="number" class="form-control" id="floatingInput" placeholder="name@example.com" name="gen_lead_time" value="<?php echo myNum($material->standard_safety_stock);?>" disabled>
                                 <label for="floatingInput" class="fw-bold text-primary">Standart Safety Stock</label>
                               </div>
-                            </div>                                                                                                     
+                            </div>         
+                            <div class="col-3">
+                              <div class="form-floating mb-3">
+                                <input type="number" class="form-control" id="floatingInput" placeholder="name@example.com" name="target_inventory" value="<?php echo myNum($material->target_inventory);?>" disabled>
+                                <label for="floatingInput" class="fw-bold text-primary">Target Inventory</label>
+                              </div>
+                            </div> 
+                            <div class="col-3">
+                              <div class="form-floating mb-3">
+                                <input type="text" class="form-control" id="floatingInput" placeholder="name@example.com" name="average_forecast" value="<?php echo myNum($material->average_forecast);?>" disabled>
+                                <label for="floatingInput" class="fw-bold text-primary">Average Forecast</label>
+                              </div>
+                            </div>                                                                                                                                                     
                       <!--end::Col-->                      
                       <!--begin::Col-->                 
                       <!--end::Col-->    
@@ -130,7 +148,7 @@
                             <div class="col-3">
                               <div class="form-floating mb-3">
                                 <input type="text" class="form-control" id="floatingInput" placeholder="name@example.com" name="var_todo_list" value="<?php echo !empty($settings->var_todo_list) ? $settings->var_todo_list : 0;?>" disabled>
-                                <label for="floatingInput" class="fw-bold text-primary">Todo list variable</label>
+                                <label for="floatingInput" class="fw-bold text-primary">To Do List Threshold</label>
                               </div>
                             </div>
                             <!--end::Col-->      
@@ -138,7 +156,7 @@
                             <div class="col-3">
                               <div class="form-floating mb-3">
                                 <input type="text" class="form-control" id="floatingInput" placeholder="name@example.com" name="var_stock_card_todo_list" value="<?php echo !empty($settings->var_stock_card_todo_list) ? $settings->var_stock_card_todo_list : 0;?>" disabled>
-                                <label for="floatingInput" class="fw-bold text-primary">Stock card todo list variable</label>
+                                <label for="floatingInput" class="fw-bold text-primary">SO To Do List Threshold</label>
                               </div>
                             </div>
                             <!--end::Col-->
@@ -146,7 +164,7 @@
                             <div class="col-3">
                               <div class="form-floating mb-3">
                                 <input type="text" class="form-control" id="floatingInput" placeholder="name@example.com" name="var_stock_card_overstock" value="<?php echo !empty($settings->var_stock_card_overstock)?$settings->var_stock_card_overstock:0;?>" disabled>
-                                <label for="floatingInput" class="fw-bold text-primary">Stock card overstock variable</label>
+                                <label for="floatingInput" class="fw-bold text-primary">Overstock Threshold (%+SS)</label>
                               </div>
                             </div>
                             <!--end::Col-->
@@ -154,7 +172,7 @@
                             <div class="col-3">
                               <div class="form-floating mb-3">
                                 <input type="text" class="form-control" id="floatingInput" placeholder="name@example.com" name="var_stock_card_ok" value="<?php echo !empty($settings->var_stock_card_ok)?$settings->var_stock_card_ok:0;?>" disabled>
-                                <label for="floatingInput" class="fw-bold text-primary">Stock card ok variable</label>
+                                <label for="floatingInput" class="fw-bold text-primary">Overstock Threshold (%+SS)</label>
                               </div>
                             </div>
                             <!--end::Col-->                            
@@ -162,9 +180,33 @@
                             <div class="col-3">
                               <div class="form-floating mb-3">
                                 <input type="text" class="form-control" id="floatingInput" placeholder="name@example.com" name="var_pending_approval" value="<?php echo !empty($settings->var_pending_approval)?$settings->var_pending_approval:0;?>" disabled>
-                                <label for="floatingInput" class="fw-bold text-primary">Pending Approval (days)</label>
+                                <label for="floatingInput" class="fw-bold text-primary">Approval Threshold (days)</label>
                               </div>
                             </div>
+                            <div class="col-3">
+                              <div class="form-floating mb-3">
+                                <input type="number" class="form-control" id="floatingInput"  name="min_threshold" value="<?php echo !empty($settings->min_threshold)?$settings->min_threshold:0;?>" disabled>
+                                <label for="floatingInput" class="fw-bold text-primary">Approval Threshold (%)</label>
+                              </div>
+                            </div>
+                            <div class="col-3">
+                              <div class="form-floating mb-3">
+                                <input type="number" class="form-control" id="floatingInput"  name="fast_moving_threshold" value="<?php echo !empty($settings->fast_moving_threshold)?$settings->fast_moving_threshold:0;?>" disabled>
+                                <label for="floatingInput" class="fw-bold text-primary">Fast Moving Threshold (% + Forecast)</label>
+                              </div>
+                            </div>
+                            <div class="col-3">
+                              <div class="form-floating mb-3">
+                                <input type="number" class="form-control" id="floatingInput"  name="slow_moving_threshold" value="<?php echo !empty($settings->slow_moving_threshold)?$settings->slow_moving_threshold:0;?>" disabled>
+                                <label for="floatingInput" class="fw-bold text-primary">Slow Moving Threshold (% + Forecast)</label>
+                              </div>
+                            </div>
+                            <div class="col-3">
+                              <div class="form-floating mb-3">
+                                <input type="number" class="form-control" id="floatingInput"  name="usage_ok_threshold" value="<?php echo !empty($settings->usage_ok_threshold)?$settings->usage_ok_threshold:0;?>" disabled>
+                                <label for="floatingInput" class="fw-bold text-primary">Usage OK Threshold (% + Forecast)</label>
+                              </div>
+                            </div>                            
                             <!--end::Col-->                            
                           </div>                                                
                   </div>

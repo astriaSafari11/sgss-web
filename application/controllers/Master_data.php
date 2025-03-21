@@ -166,8 +166,9 @@ class Master_data extends CI_Controller
 					$row[] = $field->lot_size;
 					$row[] = $field->order_cycle;
 					$row[] = $field->initial_stock;
-					$row[] = myNum($field->gen_lead_time);
 					$row[] = myNum($field->lt_pr_po);
+					$row[] = myNum($field->lt_pr_to_deliv);
+					$row[] = myNum($field->gen_lead_time);
 					$row[] = myNum($field->standard_safety_stock);
 					$row[] = $edit;
 					$data[] = $row;
@@ -419,7 +420,15 @@ class Master_data extends CI_Controller
 	public function save_material()
 	{
 		if(isset($_POST['submit'])){
-			$itemcode = strtolower(str_replace(' ','',$this->input->post('item_name')).$this->input->post('uom').$this->input->post('size'));
+			$itemName = explode(" ", $this->input->post('item_name'));
+
+			$itemNameCode = ''; 
+			for($i = 0; $i < count($itemName); $i++){
+				$length = $i==0?3:2;
+				$itemNameCode .= substr($itemName[$i], 0, $length);
+			}
+
+			$itemcode = strtoupper($itemNameCode.$this->input->post('size').$this->input->post('uom'));
 
 			$material_code = $this->input->post('material_code');
 			$exist = $this->db->get_where("m_master_data_material",array(
@@ -435,8 +444,10 @@ class Master_data extends CI_Controller
 				$this->session->set_flashdata('toast', $err);
 				$this->load->view('master-data/material/add-form.php');		
 			}else{
-				$standart_safety_stock = !empty($this->input->post('order_cycle'))&&!empty($this->input->post('lot_size'))?($this->input->post('gen_lead_time')/$this->input->post('order_cycle'))*$this->input->post('lot_size'):NULL;
-
+				$total_lead_time = $this->input->post('lt_pr_to_deliv')+$this->input->post('lt_pr_po');
+				$standart_safety_stock = !empty($this->input->post('order_cycle'))&&!empty($this->input->post('lot_size'))?($total_lead_time/$this->input->post('order_cycle'))*$this->input->post('lot_size'):NULL;
+				$target_price = !empty($this->input->post('budget_price'))?str_replace(',','',$this->input->post('budget_price'))*$standart_safety_stock:0;
+				$target_inventory = !empty($standart_safety_stock)?$standart_safety_stock*2:NULL;
 				$inserted = _add(
 					"m_master_data_material",
 					array(
@@ -449,9 +460,12 @@ class Master_data extends CI_Controller
 						"lot_size"					=> $this->input->post('lot_size'),						
 						"order_cycle"				=> $this->input->post('order_cycle'),						
 						"initial_stock"				=> $this->input->post('initial_stock'),						
-						"gen_lead_time"				=> $this->input->post('gen_lead_time'),						
 						"lt_pr_po"					=> $this->input->post('lt_pr_po'),						
-						"standard_safety_stock"		=> round($standart_safety_stock),						
+						"lt_pr_to_deliv"			=> $this->input->post('lt_pr_to_deliv'),						
+						"gen_lead_time"				=> $total_lead_time,						
+						"standard_safety_stock"		=> round($standart_safety_stock),			
+						'average_forecast'      	=> str_replace(',','',$this->input->post('average_forecast')),
+						'target_inventory'			=> round($target_inventory),
 					));				
 				if($inserted){
 
@@ -464,6 +478,22 @@ class Master_data extends CI_Controller
 						$last_id = $last_id->id;
 
 						generate_gross_requirement($last_id);
+						$data_var_settings = array(
+							"item_code"     			=> $itemcode,
+							"item_id"       			=> $last_id,            
+							"var_todo_list"             => $this->input->post('var_todo_list'),
+							"var_stock_card_todo_list"  => $this->input->post('var_stock_card_todo_list'),
+							"var_stock_card_overstock"  => $this->input->post('var_stock_card_overstock'),
+							'var_stock_card_ok'         => $this->input->post('var_stock_card_ok'),
+							'var_pending_approval'      => $this->input->post('var_pending_approval'),
+							'min_threshold'      		=> $this->input->post('min_threshold'),
+							'fast_moving_threshold'     => $this->input->post('fast_moving_threshold'),
+							'slow_moving_threshold'     => $this->input->post('slow_moving_threshold'),
+							'usage_ok_threshold'      	=> $this->input->post('usage_ok_threshold'),
+						);
+
+						_add_nologs('m_variable_settings', $data_var_settings);						
+						
 						generate_var_settings($last_id,
 							$this->input->post('var_todo_list'),
 							$this->input->post('var_stock_card_todo_list'),
@@ -520,7 +550,7 @@ class Master_data extends CI_Controller
 		$data['annual_budget'] = $this->db->get_where("m_material_budget",array(
 			"item_id" => $item_code
 		))->result();		
-
+				
 		$this->session->set_flashdata('page_title', 'GOODS MATERIAL DETAIL');
 		load_view('master-data/material/detail', $data);
 	}	
