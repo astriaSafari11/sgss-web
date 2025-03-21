@@ -25,6 +25,15 @@
     transform: translateX(-50%);
 }
 
+#cash-chart {
+    width: 80px; /* Sesuaikan ukuran dengan gambar */
+    height: 98px;
+    position: absolute;
+    bottom: 0;
+    left: 54%;
+    transform: translateX(-50%);
+}
+
 </style>
 
 <!-- Welcoming Message -->
@@ -88,14 +97,31 @@
                         <!-- Konten Cash -->
                         <div class="info-box d-flex flex-column align-items-center justify-content-center text-center" 
                             style="border-radius: 20px; background-color: #F8F9FA; padding: 15px; min-height: 150px;">
-                            <img src="<?= base_url('assets/dist/cash.png'); ?>" 
-                                alt="Cash Icon" 
-                                class="img-fluid" 
-                                style="height: 110px;">
+                            
+                            <div id="chart-container" style="position: relative; width: 150px; height: 110px; margin: auto;">  
+
+                                    <img src="<?= base_url('assets/dist/cash_chart_icon.png'); ?>" 
+                                        id="cash-chart-image" 
+                                        alt="Cash Icon"
+                                        class="img-fluid" 
+                                        style="
+                                            position: absolute; 
+                                            top: 0;  
+                                            transform: translateX(-50%);
+                                            height: 110px;
+                                            pointer-events: none;
+                                            z-index: 10;
+                                        ">
+
+                                    <!-- Chart -->
+                                    <div id="cash-chart"></div>
+                                </div>
+
                             <h4 class="mb-0 mt-2 fw-bold text-primary">95%</h4>
                             <h6 class="text-primary">vs baseline</h6>
                         </div>
                     </div>
+
 
                     <!-- Service -->
                     <div class="col-md-4 px-2">
@@ -715,11 +741,44 @@
             },
             series: [{
                 name: 'Total',
-                data: [100], // Nilai bar
+                data: [50], // Nilai bar
                 color: 'rgba(0, 110, 0, 0.7)' 
             }]
         });
 
+        Highcharts.chart('cash-chart', {
+            chart: {
+                type: 'column',
+                backgroundColor: 'transparent',
+                margin: [0, 0, 0, 0],
+                height: 62, 
+                width: 70  
+            },
+            title: { text: '' },
+            xAxis: { labels: { enabled: false }, tickLength: 0 },
+            yAxis: {
+                labels: { enabled: false },
+                gridLineWidth: 0,
+                title: { text: '' },
+                min: 0,
+                max: 100
+            },
+            legend: { enabled: false },
+            tooltip: { enabled: false }, 
+            exporting: { enabled: false }, 
+            plotOptions: {
+                column: {
+                    borderWidth: 0,
+                    pointPadding: 0,
+                    groupPadding: 0,
+                }
+            },
+            series: [{
+                name: 'Total',
+                data: [95], // Nilai bar
+                color: 'rgba(0, 110, 0, 0.7)'
+            }]
+        });
 
 
     // logic untuk tinggi card tertentu
