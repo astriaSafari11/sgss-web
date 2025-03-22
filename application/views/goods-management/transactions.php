@@ -46,6 +46,7 @@
               </div>
               <!-- /.col -->               
             </div>
+
 <!--begin::Row-->
 <div class="row">
               <div class="col-12 mb-2">
@@ -62,6 +63,17 @@
                     </div>
                   </div> -->
                   <div class="card-body">
+
+                    <!-- btn add new tr -->
+                    <div class="d-flex justify-content-between">
+                        <p class="text-primary fw-bold fs-5">TRANSACTIONS</p>
+                        <a href="#" class="btn btn-sm btn-outline-primary position-relative mb-3" style="font-weight: 600; border-radius: 50px; white-space:nowrap">
+                            <i class="fa-solid fa-circle-plus"></i>
+                            Add New Transactions
+                        </a>
+                    </div>
+                    <!-- end btn add new tr -->
+
                     <div class="d-flex justify-content-between align-items-center mb-2">
                     <!-- Start Dropdown Show X Entries -->
                     <div class="d-flex align-items-center">

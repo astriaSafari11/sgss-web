@@ -3,7 +3,7 @@
 <div class="row mb-2 justify-between">
               <div class="col-sm-6">
                 <a class="btn btn-sm btn-primary position-relative" style="font-weight: 600; border-radius: 50px;">
-                  Request List
+                  Order List
                   <?php if($req_count > 0) { ?>
                     <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger"> <?php echo $req_count; ?>
                       <span class="visually-hidden">unread messages</span>

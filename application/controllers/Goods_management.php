@@ -56,7 +56,7 @@ class Goods_management extends CI_Controller
 			);			
 
 			// debugCode($data);
-			$this->session->set_flashdata('page_title', 'PERFORMANCE DASHBOARD');
+			$this->session->set_flashdata('page_title', 'GOODS DASHBOARD - EDITABLE');
 			$this->load->view('goods-management/dashboard-lm.php', $data);
 	
 		}else{
@@ -104,7 +104,7 @@ class Goods_management extends CI_Controller
 				'status',
 			);
 
-			$this->session->set_flashdata('page_title', 'PERFORMANCE DASHBOARD');
+			$this->session->set_flashdata('page_title', 'GOODS DASHBOARD - EDITABLE');
 			$this->load->view('goods-management/dashboard.php', $data);
 	
 		}
@@ -127,7 +127,7 @@ class Goods_management extends CI_Controller
 		$data['req_count'] = $count;		
 		$data['feedback_count'] = $feedback;
 
-		$this->session->set_flashdata('page_title', 'PERFORMANCE DASHBOARD');
+		$this->session->set_flashdata('page_title', 'GOODS DASHBOARD - EDITABLE');
 		$this->load->view('goods-management/feedback.php', $data);
 	}	
 	public function order()
