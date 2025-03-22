@@ -16,12 +16,35 @@
     border: 1px solid #002F6C !important;
 }
 
+.btn-hover-set{
+    color: #001F82;
+    background-color: #DAEAFF;
+    border: 1px solid rgb(145, 167, 197);
+}
+
+.btn-hover-set:hover {
+    background-color: #001F82; 
+    color: white; 
+    border-color: #DAEAFF;
+    transition: 0.3s ease-in-out;
+    text-decoration: underline;
+}
+
 #dollar-chart {
     width: 110px; /* Sesuaikan ukuran dengan gambar */
     height: 90px;
     position: absolute;
     bottom: 0;
     left: 45%;
+    transform: translateX(-50%);
+}
+
+#cash-chart {
+    width: 80px; /* Sesuaikan ukuran dengan gambar */
+    height: 98px;
+    position: absolute;
+    bottom: 0;
+    left: 54%;
     transform: translateX(-50%);
 }
 
@@ -36,12 +59,12 @@
 <!-- start row 1 -->
 <div class="row">
     <!-- Card 1: Goods Management -->
-    <div class="col-md-6 col-sm-12 col-12">
+    <div class="col-md-9 col-sm-12 col-12">
         <span class="btn mb-2 fw-bold" style="border-radius: 50px; width: 100%; font-weight: 600; color: #FFFFFF; background-color:#001F82;">
             Goods Management
         </span>
 
-        <div class="info-box" style="border-radius: 20px;">
+        <div class="info-box info-box-main" style="border-radius: 20px;">
             <div class="info-box-content" style="color: #001F82;">
                 <div class="row">
                     <!-- Cost -->
@@ -52,7 +75,7 @@
                         <!-- Konten Cost -->
                             <div class="info-box d-flex flex-column align-items-center justify-content-center text-center" 
                                 style="border-radius: 20px; background-color: #F8F9FA; padding: 15px; min-height: 200px;">
-                                
+                                <p class="text-primary text-start fs-8 mx-0" style="line-height: 1.2;">Contains the percentage of achievement purchase compared to target</p>
                                 <div id="chart-container" style="position: relative; width: 150px; height: 110px; margin: auto;">  
 
                                     <img src="<?= base_url('assets/dist/dollar_for_chart.png'); ?>" 
@@ -88,14 +111,31 @@
                         <!-- Konten Cash -->
                         <div class="info-box d-flex flex-column align-items-center justify-content-center text-center" 
                             style="border-radius: 20px; background-color: #F8F9FA; padding: 15px; min-height: 150px;">
-                            <img src="<?= base_url('assets/dist/cash.png'); ?>" 
-                                alt="Cash Icon" 
-                                class="img-fluid" 
-                                style="height: 110px;">
+                            <p class="text-primary text-start fs-8 mx-0" style="line-height: 1.2;">Contains the percentage of achievement purchase compared to target</p>
+                            <div id="chart-container" style="position: relative; width: 150px; height: 110px; margin: auto;">  
+
+                                    <img src="<?= base_url('assets/dist/cash_chart_icon.png'); ?>" 
+                                        id="cash-chart-image" 
+                                        alt="Cash Icon"
+                                        class="img-fluid" 
+                                        style="
+                                            position: absolute; 
+                                            top: 0;  
+                                            transform: translateX(-50%);
+                                            height: 110px;
+                                            pointer-events: none;
+                                            z-index: 10;
+                                        ">
+
+                                    <!-- Chart -->
+                                    <div id="cash-chart"></div>
+                                </div>
+
                             <h4 class="mb-0 mt-2 fw-bold text-primary">95%</h4>
                             <h6 class="text-primary">vs baseline</h6>
                         </div>
                     </div>
+
 
                     <!-- Service -->
                     <div class="col-md-4 px-2">
@@ -105,6 +145,8 @@
                         <!-- Konten Service -->
                         <div class="info-box d-flex flex-column align-items-center justify-content-center text-center" 
                             style="border-radius: 20px; background-color: #F8F9FA; padding: 15px; min-height: 150px;">
+                            <p class="text-primary text-start fs-8 mx-0" style="line-height: 1.2;">Contains the percentage of achievement purchase compared to target</p>
+                            
                             <img src="<?= base_url('assets/dist/service1.png'); ?>" 
                                 alt="Service1 Icon" 
                                 class="img-fluid" 
@@ -122,13 +164,50 @@
         </div>
     </div>
 
-    <!-- Card 2: Service Management -->
-    <div class="col-md-6 col-sm-12 col-12">
+    <!-- Card 2: To Do List -->
+    <div class="col-md-3 col-sm-12 col-12">
+        <span class="btn mb-2 fw-bold" style="border-radius: 50px;width: 100%;font-weight: 600;color: #FFFFFF;background-color:#001F82;">Goods Management</span>
+
+        <div class="info-box info-box-main align-item-center" style="border-radius: 20px;">
+            <div class="info-box-content" style="color: #001F82;">
+                
+                <div class="row justify-content-between">
+                    <!-- ITEM TO DO LIST -->
+                    <div class="col-12 px-3 mt-0">
+                    <a href= "#" class="btn mb-2 fw-bold btn-hover-set" style="border-radius: 50px;width: 100%;font-weight: 600;">ITEM TO DO LIST</a>
+                    <div class="info-box align-items-center justify-content-center py-4" style="border-radius: 20px; background-color: #F8F9FA;">
+                            <h3 class="fw-bold text-primary">5</h3>
+                        </div>
+                    
+                    </div>
+
+                    <!-- NEED FEEDBACK -->
+                    <div class="col-12 px-3 mt-3">
+                    <a href="#" class="btn mb-2 fw-bold btn-hover-set" style="border-radius: 50px;width: 100%;font-weight: 600;">NEED FEEDBACK</a>
+                    <div class="info-box align-items-center justify-content-center py-4 mb-0" style="border-radius: 20px; background-color: #F8F9FA;">
+                        <h3 class="fw-bold text-primary text-center">5</h3>
+                        </div>
+
+                    </div>
+                </div> 
+
+            </div>
+        </div>
+    </div>
+    
+</div>
+<!-- end row 1 -->
+
+
+<!-- start row 2 -->
+<div class="row">
+    <!-- Card 1: Service Management -->
+    <div class="col-md-9 col-sm-12 col-12">
         <span class="btn mb-2 fw-bold" style="border-radius: 50px;width: 100%;font-weight: 600;color: #FFFFFF;background-color:#001F82;">
             Service Management
         </span>
 
-        <div class="info-box" style="border-radius: 20px;">
+        <div class="info-box info-box-main" style="border-radius: 20px;">
             <div class="info-box-content" style="color: #001F82;">
                 <div class="row">
                     <!-- Cost -->
@@ -139,6 +218,9 @@
                         <!-- Konten Cost -->
                         <div class="info-box d-flex flex-column align-items-center justify-content-center text-center" 
                             style="border-radius: 20px; background-color: #F8F9FA; padding: 15px; min-height: 150px;">
+                            
+                            <p class="text-primary text-start fs-8 mx-0" style="line-height: 1.2;">Contains the percentage of achievement purchase compared to target</p>
+                            
                             <img src="<?= base_url('assets/dist/cost2.png'); ?>" 
                                 alt="Cost2 Icon" 
                                 class="img-fluid" 
@@ -166,11 +248,14 @@
                         <!-- Konten Service -->
                         <div class="info-box d-flex flex-column align-items-center justify-content-center text-center" 
                             style="border-radius: 20px; background-color: #F8F9FA; padding: 15px; min-height: 150px;">
+                            
+                            <p class="text-primary text-start fs-8 mx-0" style="line-height: 1.2;">Contains the percentage of achievement purchase compared to target</p>
+
                             <img src="<?= base_url('assets/dist/people.png'); ?>" 
                                 alt="people Icon" 
-                                class="img-fluid my-4 w-100">
+                                class="img-fluid my-3 w-100">
                             <h4 class="mb-0 mt-1 fw-bold text-primary">50</h4>
-                            <h6 class="mb-3 text-primary">late requests</h6>
+                            <h6 class="mb-1 text-primary">late requests</h6>
                         </div>
                     </div>
                 </div>
@@ -181,33 +266,28 @@
             </div>
         </div>
     </div>
-</div>
-<!-- end row 1 -->
 
+    <!-- Card 2: To Do List -->
+    <div class="col-md-3 col-sm-12 col-12">
+        <span class="btn mb-2 fw-bold" style="border-radius: 50px;width: 100%;font-weight: 600;color: #FFFFFF;background-color:#001F82;">Service Management</span>
 
-<!-- start row 2 -->
-<div class="row">
-    <!-- Card 1: Goods Management -->
-    <div class="col-md-6 col-sm-12 col-12">
-        <span class="btn mb-2 fw-bold" style="border-radius: 50px;width: 100%;font-weight: 600;color: #FFFFFF;background-color:#001F82;">Goods Management</span>
-
-        <div class="info-box" style="border-radius: 20px;">
+        <div class="info-box info-box-main align-item-center" style="border-radius: 20px;">
             <div class="info-box-content" style="color: #001F82;">
                 
-                <div class="row">
+                <div class="row justify-content-between">
                     <!-- ITEM TO DO LIST -->
-                    <div class="col-md-6 px-2">
-                    <span class="btn mb-2 fw-bold" style="border-radius: 50px;width: 100%;font-weight: 600;color: #001F82;background-color:#DAEAFF;border: 1px solid rgb(145, 167, 197);">ITEM TO DO LIST</span>
-                    <div class="info-box align-items-center justify-content-center" style="border-radius: 20px; background-color: #F8F9FA;">
+                    <div class="col-12 px-3 mt-0">
+                    <a href="#" class="btn mb-2 fw-bold btn-hover-set" style="border-radius: 50px;width: 100%;font-weight: 600;">ITEM TO DO LIST</a>
+                    <div class="info-box align-items-center justify-content-center py-4" style="border-radius: 20px; background-color: #F8F9FA;">
                             <h3 class="fw-bold text-primary">5</h3>
                         </div>
                     
                     </div>
 
                     <!-- NEED FEEDBACK -->
-                    <div class="col-md-6 px-2">
-                    <span class="btn mb-2 fw-bold" style="border-radius: 50px;width: 100%;font-weight: 600;color: #001F82;background-color:#DAEAFF;border: 1px solid rgb(145, 167, 197);">NEED FEEDBACK</span>
-                    <div class="info-box align-items-center justify-content-center" style="border-radius: 20px; background-color: #F8F9FA;">
+                    <div class="col-12 px-3 mt-3">
+                    <a href="#" class="btn mb-2 fw-bold btn-hover-set" style="border-radius: 50px;width: 100%;font-weight: 600;">NEED FEEDBACK</a>
+                    <div class="info-box align-items-center justify-content-center py-4 mb-0" style="border-radius: 20px; background-color: #F8F9FA;">
                         <h3 class="fw-bold text-primary text-center">5</h3>
                         </div>
 
@@ -218,238 +298,12 @@
         </div>
     </div>
 
-    <!-- Card 2: Service Management -->
-    <div class="col-md-6 col-sm-12 col-12">
-        <span class="btn mb-2 fw-bold" style="border-radius: 50px;width: 100%;font-weight: 600;color: #FFFFFF;background-color:#001F82;">Service Management</span>
-
-        <div class="info-box" style="border-radius: 20px;">
-            <div class="info-box-content" style="color: #001F82;">
-                
-                <div class="row">
-                    <!-- ITEM TO DO LIST -->
-                    <div class="col-md-6 px-2">
-                    <span class="btn mb-2 fw-bold" style="border-radius: 50px;width: 100%;font-weight: 600;color: #001F82;background-color:#DAEAFF;border: 1px solid rgb(145, 167, 197);">ITEM TO DO LIST</span>
-                    <div class="info-box align-items-center justify-content-center" style="border-radius: 20px; background-color: #F8F9FA;">
-                        <h3 class="fw-bold text-primary text-center">5</h3>
-                        </div>
-
-                    </div>
-
-                    <!-- NEED FEEDBACK -->
-                    <div class="col-md-6 px-2">
-                    <span class="btn mb-2 fw-bold" style="border-radius: 50px;width: 100%;font-weight: 600;color: #001F82;background-color:#DAEAFF;border: 1px solid rgb(145, 167, 197);">NEED FEEDBACK</span>
-                    <div class="info-box align-items-center justify-content-center" style="border-radius: 20px; background-color: #F8F9FA;">
-                        <h3 class="fw-bold text-primary text-center">5</h3>
-                        </div>
-
-                    </div>
-                </div> 
-
-            </div>
-        </div>
-    </div>
 </div>
 <!-- end row 2 -->
 
-<!-- Goods Management Section (Detail) -->
-<div class="container-fluid">
-    <div class="row">
-        <h3 class="fw-bold text-primary mt-3">Goods Management</h3>
-        <h6 class="text-primary">Reports and overview of goods management performance</h6>
-
-        <!-- Bagian Atas: Cost, Cash, Service -->
-        <div class="col-12">
-            <div class="row">
-                <div class="col-md-4 px-2">
-                    <span class="btn mb-2 fw-bold w-100" style="border-radius: 50px; font-weight: 600; color: #001F82; background-color:#DAEAFF; border: 1px solid rgb(145, 167, 197);">
-                        COST
-                    </span>
-                    <div class="info-box d-flex flex-column align-items-center justify-content-center text-center bg-white" 
-                        style="border-radius: 20px; padding: 15px; min-height: 150px;">
-                        
-                        <h10 class="text-primary fs-7 text-start">Contains the percentage of achievement purchase compared to target</h10>
-                        
-                        <img src="<?= base_url('assets/dist/dollarIcon.png'); ?>" 
-                            alt="Dollar Icon" 
-                            class="img-fluid" 
-                            style="height: 110px;">
-                        <h4 class="mb-0 mt-2 fw-bold text-primary">50%</h4>
-                        <h6 class="text-primary">vs Target</h6>
-                    </div>
-                </div>
-
-                <div class="col-md-4 px-2">
-                    <span class="btn mb-2 fw-bold w-100" style="border-radius: 50px; font-weight: 600; color: #001F82; background-color:#DAEAFF; border: 1px solid rgb(145, 167, 197);">
-                        CASH
-                    </span>
-                    <div class="info-box d-flex flex-column align-items-center justify-content-center text-center bg-white" 
-                        style="border-radius: 20px; padding: 15px; min-height: 150px;">
-
-                        <h10 class="text-primary fs-7 text-start">Contains the percentage of achievement purchase compared to target</h10>
-
-                        <img src="<?= base_url('assets/dist/cash.png'); ?>" 
-                            alt="Cash Icon" 
-                            class="img-fluid" 
-                            style="height: 110px;">
-                        <h4 class="mb-0 mt-2 fw-bold text-primary">95%</h4>
-                        <h6 class="text-primary">vs baseline</h6>
-                    </div>
-                </div>
-
-                <div class="col-md-4 px-2">
-                    <span class="btn mb-2 fw-bold w-100" style="border-radius: 50px; font-weight: 600; color: #001F82; background-color:#DAEAFF; border: 1px solid rgb(145, 167, 197);">
-                        SERVICE
-                    </span>
-                    <div class="info-box d-flex flex-column align-items-center justify-content-center text-center bg-white" 
-                        style="border-radius: 20px; padding: 15px; min-height: 150px;">
-
-                        <h10 class="text-primary fs-7 text-start">Contains the percentage of achievement purchase compared to target</h10>
-
-                        <img src="<?= base_url('assets/dist/service1.png'); ?>" 
-                            alt="Service1 Icon" 
-                            class="img-fluid" 
-                            style="height: 110px;">
-                        <h4 class="mb-0 mt-2 fw-bold text-primary">10</h4>
-                        <h6 class="text-primary">late requests</h6>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <!-- Btn See More -->
-        <div class="col-12">
-            <a href="#" class="btn btn-sm btn-outline-primary fw-bold py-2 px-5" style="border-radius: 10px;">
-                See more..
-            </a>
-        </div>
-
-        <!-- Bagian Bawah: ITEM TO DO LIST & NEED FEEDBACK -->
-        <h3 class="fw-bold text-primary mt-3">Goods Management</h3>
-        <h6 class="text-primary">Summary of item status and activity</h6>
-
-        <div class="col-12 mt-3">
-            <div class="row">
-                <div class="col-md-6 px-2">
-                    <span class="btn mb-2 fw-bold w-100" style="border-radius: 50px; font-weight: 600; color: #001F82; background-color:#DAEAFF; border: 1px solid rgb(145, 167, 197);">
-                        ITEM TO DO LIST
-                    </span>
-                    <div class="info-box d-flex align-items-center justify-content-center bg-white" style="border-radius: 20px;">
-                        <h3 class="fw-bold text-primary" style="font-size:40px;">5</h3>
-                    </div>
-                </div>
-
-                <div class="col-md-6 px-2">
-                    <span class="btn mb-2 fw-bold w-100" style="border-radius: 50px; font-weight: 600; color: #001F82; background-color:#DAEAFF; border: 1px solid rgb(145, 167, 197);">
-                        NEED FEEDBACK
-                    </span>
-                    <div class="info-box d-flex align-items-center justify-content-center bg-white" style="border-radius: 20px;">
-                        <h3 class="fw-bold text-primary text-center" style="font-size:40px;">5</h3>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-
-    </div>
-</div>
-<!-- end Goods Management Detail -->
-
-<!-- Service Management Section (Detail) -->
-<div class="container-fluid">
-    <div class="row">
-        <h3 class="fw-bold text-primary mt-3">Service Management</h3>
-        <h6 class="text-primary">Reports and overview of service management performance</h6>
-
-        <!-- Bagian Atas: Cost & Service -->
-        <div class="col-12">
-            <div class="row">
-                <div class="col-md-6 px-2">
-                    <span class="btn mb-2 fw-bold w-100" style="border-radius: 50px; font-weight: 600; color: #001F82; background-color:#DAEAFF; border: 1px solid rgb(145, 167, 197);">
-                        COST
-                    </span>
-                    <div class="info-box d-flex flex-column bg-white" 
-                        style="border-radius: 20px; padding: 15px; min-height: 150px;">
-
-                        <h10 class="text-primary fs-7 text-start w-100">Contains the percentage of achievement purchase compared to target</h10>
-
-                        <div class="row w-100 d-flex align-items-center text-center mt-2">
-                            <div class="col-4">
-                                <h4 class="mb-0 fw-bold text-primary">5%</h4>
-                                <h6 class="text-primary">on cost</h6>
-                            </div>
-                            <div class="col-4">
-                                <img src="<?= base_url('assets/dist/cost2.png'); ?>" 
-                                    alt="Cost2 Icon" 
-                                    class="img-fluid" 
-                                    style="height: 115px;">
-                            </div>
-                            <div class="col-4">
-                                <h4 class="mb-0 fw-bold text-primary">2%</h4>
-                                <h6 class="text-primary">gain</h6>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="col-md-6 px-2">
-                    <span class="btn mb-2 fw-bold w-100" style="border-radius: 50px; font-weight: 600; color: #001F82; background-color:#DAEAFF; border: 1px solid rgb(145, 167, 197);">
-                        SERVICE
-                    </span>
-                    <div class="info-box d-flex flex-column align-items-center justify-content-center text-center bg-white" 
-                        style="border-radius: 20px; padding: 15px; min-height: 150px;">
-
-                        <h10 class="text-primary fs-7 text-start w-100">Contains the percentage of achievement purchase compared to target</h10>
-
-                        <img src="<?= base_url('assets/dist/people.png'); ?>" 
-                            alt="People Icon" 
-                            class="img-fluid" 
-                            style="height: 80px;">
-                        <h4 class="mb-0 mt-0 fw-bold text-primary">50</h4>
-                        <h6 class="text-primary">late requests</h6>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <!-- Btn See More -->
-        <div class="col-12">
-            <a href="#" class="btn btn-sm btn-outline-primary fw-bold py-2 px-5" style="border-radius: 10px;">
-                See more..
-            </a>
-        </div>
-
-        <!-- Bagian Bawah: ITEM TO DO LIST & NEED FEEDBACK -->
-        <h3 class="fw-bold text-primary mt-3">Service Tasks</h3>
-        <h6 class="text-primary">Summary of item status and activity</h6>
-
-        <div class="col-12 mt-3">
-            <div class="row">
-                <div class="col-md-6 px-2">
-                    <span class="btn mb-2 fw-bold w-100" style="border-radius: 50px; font-weight: 600; color: #001F82; background-color:#DAEAFF; border: 1px solid rgb(145, 167, 197);">
-                        ITEM TO DO LIST
-                    </span>
-                    <div class="info-box d-flex align-items-center justify-content-center bg-white" style="border-radius: 20px;">
-                        <h3 class="fw-bold text-primary" style="font-size:40px;">5</h3>
-                    </div>
-                </div>
-
-                <div class="col-md-6 px-2">
-                    <span class="btn mb-2 fw-bold w-100" style="border-radius: 50px; font-weight: 600; color: #001F82; background-color:#DAEAFF; border: 1px solid rgb(145, 167, 197);">
-                        NEED FEEDBACK
-                    </span>
-                    <div class="info-box d-flex align-items-center justify-content-center bg-white" style="border-radius: 20px;">
-                        <h3 class="fw-bold text-primary text-center" style="font-size:40px;">5</h3>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
-<!-- end Service Management Detail -->
-
 <!-- saving simulator section  -->
 <div class="row d-flex align-items-stretch mt-3 ms-1">
-    <h3 class="fw-bold text-primary">Saving Simulator</h3>
+    <h4 class="fw-bold text-primary">Saving Simulator</h4>
     <h6 class="text-primary">Summary of item savings</h6>
 </div>
 
@@ -530,73 +384,6 @@
 
     </div>
     <!-- row 3 end --->
-
-    <!-- saving table section  -->
-    <div class="row d-flex align-items-stretch mt-3 mx-2">
-        <h4 class="fw-bold text-primary">Saving Table</h4>
-
-        <table id="example" class="table table-sm mx-2" style="max-width:100%; box-sizing: border-box;" cellspacing="0">
-        <thead>
-            <tr>
-                <th style="color: #fff;background-color: #001F82;text-align: center;">Item</th>
-                <th style="color: #fff;background-color: #001F82;text-align: center;">Quantity</th>
-                <th style="color: #fff;background-color: #001F82;text-align: center;">UoM</th>
-                <th style="color: #fff;background-color: #001F82;text-align: center;">Vendor</th>
-                <th style="color: #fff;background-color: #001F82;text-align: center;">UoM Price</th>
-                <th style="color: #fff;background-color: #001F82;text-align: center;">Total Price</th>
-                <th style="color: #fff;background-color: #001F82;text-align: center;">Purchase Reason</th>
-            </tr>
-        </thead>
-        <tbody>
-            <tr>
-                <td style="text-align: center;">Masker</td>
-                <td style="text-align: center;">20</td>
-                <td style="text-align: center;">Box</td>
-                <td style="text-align: center;">VND01</td>
-                <td style="text-align: center;">Rp 5000</td>
-                <td style="text-align: center;">Rp 500000</td>
-                <td style="text-align: center;">Routine Buy</td>
-            </tr>
-            <tr>
-                <td style="text-align: center;">Earplug</td>
-                <td style="text-align: center;">20</td>
-                <td style="text-align: center;">Box</td>
-                <td style="text-align: center;">VND02</td>
-                <td style="text-align: center;">Rp 5000</td>
-                <td style="text-align: center;">Rp 500000</td>
-                <td style="text-align: center;">Routine Buy</td>
-            </tr>
-            <tr>
-                <td style="text-align: center;">Masker</td>
-                <td style="text-align: center;">50</td>
-                <td style="text-align: center;">Box</td>
-                <td style="text-align: center;">VND01</td>
-                <td style="text-align: center;">Rp 5000</td>
-                <td style="text-align: center;">Rp 500000</td>
-                <td style="text-align: center;">Routine Buy</td>
-            </tr>
-            <tr>
-                <td style="text-align: center;">Alkohol</td>
-                <td style="text-align: center;">100</td>
-                <td style="text-align: center;">ml</td>
-                <td style="text-align: center;">VND01</td>
-                <td style="text-align: center;">Rp 5000</td>
-                <td style="text-align: center;">Rp 500000</td>
-                <td style="text-align: center;">Routine Buy</td>
-            </tr>
-            <tr>
-                <td style="text-align: center;">Alkohol</td>
-                <td style="text-align: center;">100</td>
-                <td style="text-align: center;">ml</td>
-                <td style="text-align: center;">VND03</td>
-                <td style="text-align: center;">Rp 5000</td>
-                <td style="text-align: center;">Rp 500000</td>
-                <td style="text-align: center;">Routine Buy</td>
-            </tr>
-        </tbody>
-    </table>
-    </div>
-    <!-- end saving table section -->
 
     <!-- details calculation section  -->
 <div class="row d-flex align-items-stretch mt-3 mx-1">
@@ -715,16 +502,49 @@
             },
             series: [{
                 name: 'Total',
-                data: [100], // Nilai bar
+                data: [40], // Nilai bar
                 color: 'rgba(0, 110, 0, 0.7)' 
             }]
         });
 
+        Highcharts.chart('cash-chart', {
+            chart: {
+                type: 'column',
+                backgroundColor: 'transparent',
+                margin: [0, 0, 0, 0],
+                height: 62, 
+                width: 70  
+            },
+            title: { text: '' },
+            xAxis: { labels: { enabled: false }, tickLength: 0 },
+            yAxis: {
+                labels: { enabled: false },
+                gridLineWidth: 0,
+                title: { text: '' },
+                min: 0,
+                max: 100
+            },
+            legend: { enabled: false },
+            tooltip: { enabled: false }, 
+            exporting: { enabled: false }, 
+            plotOptions: {
+                column: {
+                    borderWidth: 0,
+                    pointPadding: 0,
+                    groupPadding: 0,
+                }
+            },
+            series: [{
+                name: 'Total',
+                data: [95], // Nilai bar
+                color: 'rgba(0, 110, 0, 0.7)'
+            }]
+        });
 
 
     // logic untuk tinggi card tertentu
     document.addEventListener("DOMContentLoaded", function () {
-    let targetRows = [2, 12, 16]; // Index row yang ingin diatur
+    let targetRows = [2, 3, 5, 6, 9]; // Index row yang ingin diatur
 
     targetRows.forEach(index => {
         let targetRow = document.querySelectorAll(".row")[index];
@@ -744,6 +564,34 @@
                 });
 
                 // Set semua card di row ini ke tinggi maksimum
+                cards.forEach(card => {
+                    card.style.height = maxHeight + "px";
+                });
+            }
+        }
+    });
+});
+
+// Logic untuk menyamakan tinggi card putih utama
+document.addEventListener("DOMContentLoaded", function () {
+    let targetRows = [1, 4]; // row tertentu
+
+    targetRows.forEach(index => {
+        let targetRow = document.querySelectorAll(".row")[index];
+
+        if (targetRow) {
+            let cards = targetRow.querySelectorAll(".info-box-main"); // Hanya card putih utama
+
+            if (cards.length > 0) {
+                let maxHeight = 0;
+
+                cards.forEach(card => {
+                    let cardHeight = card.offsetHeight;
+                    if (cardHeight > maxHeight) {
+                        maxHeight = cardHeight;
+                    }
+                });
+
                 cards.forEach(card => {
                     card.style.height = maxHeight + "px";
                 });

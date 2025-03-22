@@ -43,7 +43,7 @@
   <div class="col-sm-6">
     <a href="<?= site_url ('goods_management'); ?>" class="btn btn-sm btn-outline-primary position-relative"
       style="font-weight: 600; border-radius: 50px;">
-      Request List
+      Order List
       <?php if ($req_count > 0)
       { ?>
         <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">

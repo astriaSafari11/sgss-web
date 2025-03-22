@@ -360,7 +360,7 @@
                   style="width:30px; height:30px"
                 />  
                 <p class="ms-1">
-                    Goods Management
+                    Goods
                     <i class="nav-arrow bi bi-chevron-right"></i>
                   </p>
                 </a>
@@ -368,7 +368,7 @@
                   <li class="nav-item sidebar">
                     <a href="<?= site_url('goods_management');?>" class="nav-link">
                       <i class="nav-icon fa-solid fa-chart-area icon"></i>
-                      <p>Performance Dashboard</p>
+                      <p>Goods Dashboard - Editable</p>
                     </a>
                   </li>
                   <li class="nav-item sidebar">
@@ -400,7 +400,7 @@
                   style="width:30px; height:30px"
                 />  
                 <p class="ms-1">
-                    Service Management
+                    Service
                     <i class="nav-arrow bi bi-chevron-right"></i>
                   </p>
                 </a>
@@ -408,7 +408,7 @@
                   <li class="nav-item sidebar">
                     <a href="<?= site_url('service_management');?>" class="nav-link">
                       <i class="nav-icon fa-solid fa-chart-area icon"></i>
-                      <p>Performance Dashboard</p>
+                      <p>Goods Dashboard - Viewer</p>
                     </a>
                   </li>
                   <li class="nav-item sidebar">
@@ -439,7 +439,7 @@
                           class="brand-image icon me-2" 
                           style="width: 33px; height: 33px;"
                       />
-                      <p class="mb-0">Saving Simulator</p>  
+                      <p class="mb-0">Saving</p>  
                   </a>
               </li>
 
