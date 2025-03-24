@@ -31,7 +31,7 @@ class Goods_management extends CI_Controller
 		$curr_user = $this->auth_model->current_user ();
 
 
-		if ($curr_user->role_id != 1)
+		if ($curr_user->role_id != 1 && $curr_user->role_id != 3)
 			{
 			$sql = "
 				SELECT * FROM t_order_approval_track				
@@ -96,9 +96,12 @@ class Goods_management extends CI_Controller
 					}
 				}
 
-			$fSearch = ! empty ($search) ? $search . " AND order_status = 0 AND type = 'goods'" : "WHERE order_status = 0 AND type = 'goods' AND status != 'ignored'";
+			$fSearch = ! empty ($search) ? $search . " AND planned.order_status = 0 AND planned.type = 'goods'" : "WHERE planned.order_status = 0 AND planned.type = 'goods' AND planned.status != 'ignored'";
 
-			$query = $this->db->query ("SELECT * FROM t_stock_planned_request $fSearch")->result ();
+			$query = $this->db->query ("select planned.*, material.item_group, vendor.vendor_name from t_stock_planned_request as planned
+			INNER JOIN m_master_data_material as material ON planned.item_id = material.id
+			INNER JOIN m_master_data_vendor as vendor ON planned.vendor_code = vendor.vendor_code
+			$fSearch")->result ();
 			$count = $this->db->get_where ('t_stock_planned_request', array("order_status" => 0, "type" => 'goods', "status !=" => "ignored"))->num_rows ();
 			$feedback = $this->db->get_where ('t_order', array("is_approved" => 1, "is_feedback" => 0))->num_rows ();
 
@@ -106,13 +109,14 @@ class Goods_management extends CI_Controller
 			$data['req_count'] = $count;
 			$data['feedback_count'] = $feedback;
 			$data['column_search'] = array(
-				'due_date',
-				'until_due_date',
+				'status',
 				'item_code',
 				'item_name',
+				'item_group',
+				'vendor_code',
+				'vendor_name',
 				'qty',
 				'uom',
-				'status',
 			);
 
 			$this->session->set_flashdata ('page_title', 'GOODS DASHBOARD - EDITABLE');
@@ -124,8 +128,10 @@ class Goods_management extends CI_Controller
 	public function feedback()
 		{
 		$query = $this->db->query (
-			"SELECT t_stock_planned_request.*, t_order.id as order_id, t_order.status as order_statuses, t_order.is_download, t_order.attachment_file  FROM t_stock_planned_request 
-			 INNER JOIN t_order ON t_order.planned_id = t_stock_planned_request.id 
+			"select t_order.*, t_order.status as order_status, detail.*, material.item_group, vendor.vendor_name FROM t_order
+			INNER JOIN t_order_detail as detail ON t_order.id = detail.order_id
+			INNER JOIN m_master_data_material as material on detail.item_id = material.id
+			INNER JOIN m_master_data_vendor as vendor on detail.vendor_code = vendor.vendor_code
 			 WHERE t_order.is_approved = 1 and t_order.is_feedback = 0"
 		)->result ();
 
@@ -203,12 +209,15 @@ class Goods_management extends CI_Controller
 				"status" => 0
 			));
 			}
-		$data['detail'] = $this->db->get_where ("t_order_detail", array(
-			"order_id" => $data['order_detail']->id
-		))->row ();
+		$data['detail'] = $this->db->query ("select * from t_order_detail 
+			INNER JOIN m_master_data_material ON t_order_detail.item_code = m_master_data_material.item_code 
+			INNER JOIN m_master_data_vendor ON t_order_detail.vendor_code = m_master_data_vendor.vendor_code 			
+			where t_order_detail.order_id = '" . $data['order_detail']->id . "'")->row ();
 
 		$data['planned'] = $this->db->query ("select * from t_stock_planned_request 
-			INNER JOIN m_master_data_material ON t_stock_planned_request.item_code = m_master_data_material.item_code where t_stock_planned_request.id = '$id'")->row ();
+			INNER JOIN m_master_data_material ON t_stock_planned_request.item_code = m_master_data_material.item_code 
+			INNER JOIN m_master_data_vendor ON t_stock_planned_request.vendor_code = m_master_data_vendor.vendor_code 			
+			where t_stock_planned_request.id = '$id'")->row ();
 
 		$data['vendor_list'] = $this->db->query ("select * from m_vendor_material 
         INNER JOIN m_master_data_vendor ON m_master_data_vendor.vendor_code = m_vendor_material.vendor_code
@@ -355,17 +364,19 @@ class Goods_management extends CI_Controller
 			"planned_id" => $id,
 		))->row ();
 
-		$request_id = 'REQ' . date ("dmY") . $exist->id;
+		$request_id = 'REQ' . date ("dmYHi");
 
 		if (! $exist)
 			{
 			_add ("t_order", array(
+				"request_id" => $request_id,
 				"planned_id" => $id,
 				"date" => date ("Y-m-d"),
 				"ignored_reason" => $this->input->post ('ignore_remarks'),
 				"requestor" => $this->session->userdata ('user_name'),
+				"requestor_nip" => $this->session->userdata ('user_nip'),
 				"pending_days" => $get_pending_days->var_pending_approval,
-				"remarks" => $this->input->post ('remarks'),
+				"remarks" => 'Request to remove and ignore this order',
 				"status" => 'waiting_approval',
 				"order_category" => 'ignore',
 				"is_approval_required" => 1,
@@ -381,8 +392,9 @@ class Goods_management extends CI_Controller
 				"date" => date ("Y-m-d"),
 				"ignored_reason" => $this->input->post ('ignore_remarks'),
 				"requestor" => $this->session->userdata ('user_name'),
+				"requestor_nip" => $this->session->userdata ('user_nip'),
 				"pending_days" => $get_pending_days->var_pending_approval,
-				"remarks" => $this->input->post ('remarks'),
+				"remarks" => 'Request to remove and ignore this order',
 				"status" => 'waiting_approval',
 				"order_category" => 'ignore',
 				"is_approval_required" => 1,
@@ -446,6 +458,7 @@ class Goods_management extends CI_Controller
 			'msg' => 'Successfully Ignore Request Planned'
 		);
 		$this->session->set_flashdata ('toast', $err);
+
 
 		redirect ('goods_management');
 		}
@@ -842,6 +855,14 @@ class Goods_management extends CI_Controller
 
 		$data['total_gross_req'] = count ($data['gross_req']);
 
+		$get_current_week = date ('W', strtotime (date ('Y-m-d')));
+		$get_past_week = $get_current_week - 5;
+		$get_up_week = $get_current_week + 6;
+
+		$data['current_week'] = $get_current_week;
+		$data['past_week'] = $get_past_week;
+		$data['up_week'] = $get_up_week;
+
 		$this->session->set_flashdata ('page_title', 'STOCK CARD');
 		load_view ('goods-management/item-movement/detail.php', $data);
 		}
@@ -863,7 +884,7 @@ class Goods_management extends CI_Controller
 			$gross_req = $this->input->post ('gross_requirement');
 
 			$get_last_week = date ('W', strtotime ('December 28th'));
-			$get_last_week = 12;
+			$get_last_week = 20;
 			$total_data = array();
 
 			for ($i = $get_initial_week; $i <= $get_last_week; $i++)
@@ -1528,13 +1549,13 @@ class Goods_management extends CI_Controller
 				<table width="100%" cellspacing="0">
 					<tr>
 						<td style="text-align: left;font-size:12px;width:200px;border: 1px solid #bac2bc;">Date of Rejection</td>
-						<td style="text-align: left;font-size:12px;border: 1px solid #bac2bc;">: ' . mDate ($data->approval_date) . '</td>
+						<td style="text-align: left;font-size:12px;border: 1px solid #bac2bc;">: ' . mDate ($data->rejected_date) . '</td>
 						<td style="text-align: left;font-size:12px;width:200px;border: 1px solid #bac2bc;">Rejected By</td>
-						<td style="text-align: left;font-size:12px;border: 1px solid #bac2bc;">: ' . $data->approved_by . '</td>
+						<td style="text-align: left;font-size:12px;border: 1px solid #bac2bc;">: ' . $data->rejected_by . '</td>
 						<td style="text-align: left;font-size:12px;width:250px;border: 1px solid #bac2bc;" rowspan="2">Rejected Remarks:<br/>' . $data->approved_remark . '</td>
 					</tr>
 					<tr>
-						<td style="text-align: center;font-size:20px;font-weight:bold;border: 1px solid #bac2bc;color:#046e19;" colspan="2">' . strtoupper (str_replace (" ", "_", $data->request_status)) . '</td>
+						<td style="text-align: center;font-size:20px;font-weight:bold;border: 1px solid #bac2bc;color:#e60606;" colspan="2">' . strtoupper (str_replace (" ", "_", $data->request_status)) . '</td>
 						<td style="text-align: left;font-size:12px;width:200px;border: 1px solid #bac2bc;">As</td>
 						<td style="text-align: left;font-size:12px;border: 1px solid #bac2bc;">: ' . $data->approve_by_title . '</td>
 					</tr>

@@ -82,12 +82,6 @@
             <?php foreach ($req_list as $k => $v)
             { ?>
               <tr>
-                <td style="vertical-align: middle;text-align: center;"><?php echo mDate ($v->due_date); ?></td>
-                <td style="vertical-align: middle;text-align: center;"><?php echo mDate ($v->until_due_date); ?></td>
-                <td style="vertical-align: middle;text-align: center;"><?php echo $v->item_code; ?></td>
-                <td style="vertical-align: middle;text-align: center;"><?php echo $v->item_name; ?></td>
-                <td style="vertical-align: middle;text-align: center;"><?php echo $v->qty; ?></td>
-                <td style="vertical-align: middle;text-align: center;"><?php echo $v->uom; ?></td>
                 <td style="vertical-align: middle;text-align: center;">
                   <?php if ($v->status == 'urgent')
                   { ?>
@@ -101,7 +95,20 @@
                       Ignored
                     </button>
                   <?php } ?>
+                  <?php if ($v->status == 'medium')
+                  { ?>
+                    <button class="btn btn-sm btn-warning" style="font-weight: 600; border-radius: 50px; width: 100%;">
+                      Medium
+                    </button>
+                  <?php } ?>
                 </td>
+
+                <td style="vertical-align: middle;text-align: center;"><?php echo $v->item_name; ?></td>
+                <td style="vertical-align: middle;text-align: center;"><?php echo $v->item_group; ?></td>
+                <td style="vertical-align: middle;text-align: center;"><?php echo $v->vendor_name; ?></td>
+                <td style="vertical-align: middle;text-align: center;"><?php echo $v->qty; ?></td>
+                <td style="vertical-align: middle;text-align: center;"><?php echo $v->uom; ?></td>
+                <td style="vertical-align: middle;text-align: center;">5 Days</td>
                 <td style="vertical-align: middle;text-align: center;">
                   <?php if ($v->status != 'ignored')
                   { ?>

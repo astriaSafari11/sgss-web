@@ -232,7 +232,7 @@
               <th style="color: #fff;background-color: #001F82;text-align: center;">Adjustment</th>
               <th style="color: #fff;background-color: #001F82;text-align: center;">Status</th>
               <th style="color: #fff;background-color: #001F82;text-align: center;">Download</th>
-              <th style="color: #fff;background-color: #001F82;text-align: center; width: 30%;">Action</th>
+              <th style="color: #fff;background-color: #001F82;text-align: center; width: 10%;">Action</th>
 
               <!-- <th style="color: #fff;text-align: center;width: 400px;">
                                 <button class="btn btn-sm btn-primary" style="font-weight: 600; border-radius: 50px; width: 100%;">
@@ -245,23 +245,23 @@
             <?php foreach ($feedback_list as $k => $v)
             { ?>
               <tr>
-                <td style="vertical-align: middle;text-align: center;font-size: 14px;"><?php echo mDate ($v->due_date); ?>
+                <td style="vertical-align: middle;text-align: center;font-size: 14px;"><?php echo mDate ($v->date); ?>
                 </td>
-                <td style="vertical-align: middle;text-align: center;font-size: 14px;">
-                  <?php echo mDate ($v->until_due_date); ?>
-                </td>
-                <td style="vertical-align: middle;text-align: center;font-size: 14px;"><?php echo $v->item_code; ?></td>
                 <td style="vertical-align: middle;text-align: center;font-size: 14px;"><?php echo $v->item_name; ?></td>
+                <td style="vertical-align: middle;text-align: center;font-size: 14px;"><?php echo $v->item_group; ?></td>
+                <td style="vertical-align: middle;text-align: center;font-size: 14px;"><?php echo $v->vendor_name; ?></td>
                 <td style="vertical-align: middle;text-align: center;font-size: 14px;"><?php echo $v->qty; ?></td>
                 <td style="vertical-align: middle;text-align: center;font-size: 14px;"><?php echo $v->uom; ?></td>
                 <td style="vertical-align: middle;text-align: center;font-size: 14px;">
-                  <?php if ($v->order_statuses == 'rejected')
+                  <?php echo empty ($v->adjustment) ? 'none' : $v->adjustment; ?></td>
+                <td style="vertical-align: middle;text-align: center;font-size: 14px;">
+                  <?php if ($v->order_status == 'rejected')
                   { ?>
                     <button class="btn btn-sm btn-danger" style="font-weight: 600; border-radius: 50px; width: 100%;">
                       Rejected
                     </button>
                   <?php } ?>
-                  <?php if ($v->order_statuses == 'auto_approved' || $v->order_statuses == 'approved')
+                  <?php if ($v->order_status == 'auto_approved' || $v->order_status == 'approved')
                   { ?>
                     <button class="btn btn-sm btn-success" style="font-weight: 600; border-radius: 50px; width: 100%;">
                       Approved
