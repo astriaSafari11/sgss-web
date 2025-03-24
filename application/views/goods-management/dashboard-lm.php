@@ -116,7 +116,7 @@
             <!--end::Row-->
             <div class="row">
               <div class="col-12 mb-2">
-                <span class="btn btn-primary" style="border-radius: 50px;width: 100%;font-weight: 600;">KPI RESULT</span>  
+                <span class="btn btn-primary" style="border-radius: 50px;width: 100%;font-weight: 600;">KPI</span>  
               </div>
             </div>
             <div class="row">
