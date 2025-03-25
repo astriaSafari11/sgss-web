@@ -122,14 +122,21 @@
                 <div class="row justify-content-between">
                     <!-- Item To Do List -->
                     <div class="col-12 px-3 mt-0">
-                        <a href="#" class="btn mb-2 fw-bold btn-hover-set w-100 text-center" style="border-radius: 50px; font-weight: 600;">ITEM TO DO LIST</a>
+
+                    <!-- <a href="<?= site_url ('goods_management/order/' . _encrypt ($v->id)); ?>"
+                      class="btn btn-sm btn-outline-primary" style="font-weight: 600; border-radius: 50px; width: 150px;">
+                      ORDER NOW
+                    </a> -->
+
+                        <a href="<?=site_url('goods_management');?>" class="btn mb-2 fw-bold btn-hover-set w-100 text-center" style="border-radius: 50px; font-weight: 600;">ITEM TO DO LIST</a>
+
                         <div class="info-box align-items-center justify-content-center py-4" style="border-radius: 20px; background-color: #F8F9FA;">
                             <h3 class="fw-bold text-primary">5</h3>
                         </div>
                     </div>
                     <!-- Need Feedback -->
                     <div class="col-12 px-3 mt-3">
-                        <a href="#" class="btn mb-2 fw-bold btn-hover-set w-100 text-center" style="border-radius: 50px; font-weight: 600;">NEED FEEDBACK</a>
+                        <a href="<?=site_url('goods_management/feedback');?>" class="btn mb-2 fw-bold btn-hover-set w-100 text-center" style="border-radius: 50px; font-weight: 600;">NEED FEEDBACK</a>
                         <div class="info-box align-items-center justify-content-center py-4 mb-0" style="border-radius: 20px; background-color: #F8F9FA;">
                             <h3 class="fw-bold text-primary text-center">5</h3>
                         </div>
@@ -227,7 +234,7 @@
                 <div class="row justify-content-between">
                     <!-- ITEM TO DO LIST -->
                     <div class="col-12 px-3 mt-0">
-                    <a href="#" class="btn mb-2 fw-bold btn-hover-set" style="border-radius: 50px;width: 100%;font-weight: 600;">ITEM TO DO LIST</a>
+                    <a href="<?=site_url('service_management');?>" class="btn mb-2 fw-bold btn-hover-set" style="border-radius: 50px;width: 100%;font-weight: 600;">ITEM TO DO LIST</a>
                     <div class="info-box align-items-center justify-content-center py-4" style="border-radius: 20px; background-color: #F8F9FA;">
                             <h3 class="fw-bold text-primary">5</h3>
                         </div>
@@ -236,7 +243,7 @@
 
                     <!-- NEED FEEDBACK -->
                     <div class="col-12 px-3 mt-3">
-                    <a href="#" class="btn mb-2 fw-bold btn-hover-set" style="border-radius: 50px;width: 100%;font-weight: 600;">NEED FEEDBACK</a>
+                    <a href="<?=site_url('goods_management/feedback');?>" class="btn mb-2 fw-bold btn-hover-set" style="border-radius: 50px;width: 100%;font-weight: 600;">NEED FEEDBACK</a>
                     <div class="info-box align-items-center justify-content-center py-4 mb-0" style="border-radius: 20px; background-color: #F8F9FA;">
                         <h3 class="fw-bold text-primary text-center">5</h3>
                         </div>

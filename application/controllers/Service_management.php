@@ -64,7 +64,7 @@ class Service_management extends CI_Controller
 			'status',
 		);
 
-		$this->session->set_flashdata ('page_title', 'SERVICE MANAGEMENT');
+		$this->session->set_flashdata ('page_title', 'GOODS DASHBOARD - VIEWER');
 		$this->load->view ('service-management/dashboard.php', $data);
 		}
 
