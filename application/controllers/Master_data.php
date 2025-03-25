@@ -45,6 +45,12 @@ class Master_data extends CI_Controller
 		$this->load->view ('master-data/material-list.php');
 		}
 
+	public function uom_list()
+	{
+		$this->session->set_flashdata('page_title', 'MASTER DATA UoM');
+		$this->load->view('master-data/uom-list.php');
+	}
+		
 	function get_master_vendor()
 		{
 		$search = $this->session->userdata ('search');
