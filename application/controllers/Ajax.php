@@ -130,13 +130,14 @@ class Ajax extends CI_Controller
 
 		foreach ($item_code as $k => $v)
 			{
+
 			$exist = $this->db->get_where ("m_vendor_material", array(
 				'vendor_code' => $vendor_code,
 				'item_code' => $v
 			))->row ();
 
 			$getMat = $this->db->get_where ("m_master_data_material", array(
-				'item_code' => $item_code,
+				'item_code' => $v,
 			))->row ();
 
 			if (! $exist)

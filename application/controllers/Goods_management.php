@@ -98,10 +98,11 @@ class Goods_management extends CI_Controller
 
 			$fSearch = ! empty ($search) ? $search . " AND planned.order_status = 0 AND planned.type = 'goods'" : "WHERE planned.order_status = 0 AND planned.type = 'goods' AND planned.status != 'ignored'";
 
-			$query = $this->db->query ("select planned.*, material.item_group, vendor.vendor_name from t_stock_planned_request as planned
+			$query = $this->db->query ("select planned.*, material.item_group, material.size, material.uom, vendor.vendor_name from t_stock_planned_request as planned
 			INNER JOIN m_master_data_material as material ON planned.item_id = material.id
 			INNER JOIN m_master_data_vendor as vendor ON planned.vendor_code = vendor.vendor_code
 			$fSearch")->result ();
+
 			$count = $this->db->get_where ('t_stock_planned_request', array("order_status" => 0, "type" => 'goods', "status !=" => "ignored"))->num_rows ();
 			$feedback = $this->db->get_where ('t_order', array("is_approved" => 1, "is_feedback" => 0))->num_rows ();
 
@@ -263,7 +264,8 @@ class Goods_management extends CI_Controller
 
 		$data = array(
 			"qty" => $qty,
-			"total_price" => $qty * $order_detail->uom_price
+			"total_price" => $qty * $order_detail->uom_price,
+			"adjustment" => 'qty'
 		);
 
 		_update ("t_order_detail", $data, array(
@@ -330,7 +332,8 @@ class Goods_management extends CI_Controller
 		$data = array(
 			"vendor_code" => $vendor->vendor_code,
 			"uom_price" => $vendor->price_per_uom,
-			"total_price" => $total_price
+			"total_price" => $total_price,
+			"adjustment" => 'vendor'
 		);
 
 		_update ("t_order_detail", $data, array(
@@ -618,7 +621,7 @@ class Goods_management extends CI_Controller
 		))->row ();
 
 		$get_stock_card = $this->db->get_where ("t_material_movement", array(
-			"vendor_material_id" => $get_planned->vendor_material_id,
+			"item_id" => $get_planned->item_id,
 			"week" => $get_planned->week
 		))->row ();
 
@@ -629,7 +632,7 @@ class Goods_management extends CI_Controller
 		_update ("t_material_movement", array(
 			"schedules_receipts" => $schedule_receipt
 		), array(
-			"vendor_material_id" => $get_planned->vendor_material_id,
+			"item_id" => $get_planned->item_id,
 			"week" => $get_planned->week
 		));
 
@@ -956,10 +959,10 @@ class Goods_management extends CI_Controller
 					'week' => $i,
 					'gross_requirement' => $gross_req,
 					'schedules_receipts' => $schedule_receipt,
-					'stock_on_hand' => myNum ($stock_on_hand),
-					'current_safety_stock' => myNum ($current_safety_stock),
-					'net_on_hand' => myNum ($net_on_hand),
-					'net_requirement' => myNum ($net_requirement),
+					'stock_on_hand' => $stock_on_hand,
+					'current_safety_stock' => round ($current_safety_stock, 0),
+					'net_on_hand' => $net_on_hand,
+					'net_requirement' => $net_requirement,
 					'planned_order_receipt' => 0,
 					'planned_order_release' => 0,
 				);

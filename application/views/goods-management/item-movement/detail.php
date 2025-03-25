@@ -112,10 +112,10 @@
             <th style="color: #fff;background-color:#001F82;text-align: center;vertical-align: middle;width:80px;"
               rowspan="3">Initial Value</th>
             <th style="color: #fff;background-color:#001F82;text-align: center;vertical-align: middle;"
-              colspan="<?php echo 15; ?>"><?php echo date ('Y'); ?> Week</th>
+              colspan="<?php echo 20; ?>"><?php echo date ('Y'); ?> Week</th>
           </tr>
           <tr>
-            <?php for ($i = 1; $i <= 15; $i++)
+            <?php for ($i = 1; $i <= 20; $i++)
             { ?>
               <th style="color: #fff;background-color:#001F82;text-align: center;<?php if ($i == $current_week)
               {
@@ -126,7 +126,7 @@
             <?php } ?>
           </tr>
           <tr>
-            <?php for ($i = 1; $i <= 15; $i++)
+            <?php for ($i = 1; $i <= 20; $i++)
             { ?>
               <th style="text-align: center;white-space:nowrap;">
                 <button class="btn btn-sm btn-outline-primary" data-bs-toggle="modal"
@@ -141,7 +141,7 @@
           <tr>
             <td>Gross Requirements</td>
             <td></td>
-            <?php for ($i = 1; $i <= 15; $i++)
+            <?php for ($i = 1; $i <= 20; $i++)
             { ?>
               <td style="text-align: center; <?php if ($i == $current_week)
               {
@@ -154,7 +154,7 @@
           <tr>
             <td>Schedule Receipts</td>
             <td></td>
-            <?php for ($i = 1; $i <= 15; $i++)
+            <?php for ($i = 1; $i <= 20; $i++)
             { ?>
               <td style="text-align: center; <?php if ($i == $current_week)
               {
@@ -170,7 +170,7 @@
             {
             echo 'background-color:#DAEAFF;color: #001F82;';
             } ?>"><?php echo myNum ($material->initial_stock); ?></td>
-            <?php for ($i = 1; $i <= 15; $i++)
+            <?php for ($i = 1; $i <= 20; $i++)
             { ?>
               <td style="text-align: center; <?php if ($i == $current_week)
               {
@@ -188,7 +188,7 @@
             } ?>">
               <?php echo myNum (min ($material->initial_stock, $material->standard_safety_stock)); ?>
             </td>
-            <?php for ($i = 1; $i <= 15; $i++)
+            <?php for ($i = 1; $i <= 20; $i++)
             { ?>
               <td style="text-align: center; <?php if ($i == $current_week)
               {
@@ -206,7 +206,7 @@
             } ?>">
               <?php echo myNum ($material->initial_stock - $material->standart_safety_stock); ?>
             </td>
-            <?php for ($i = 1; $i <= 15; $i++)
+            <?php for ($i = 1; $i <= 20; $i++)
             { ?>
               <td style="text-align: center; <?php if ($i == $current_week)
               {
@@ -219,7 +219,7 @@
           <tr>
             <td>Net Requirement</td>
             <td></td>
-            <?php for ($i = 1; $i <= 15; $i++)
+            <?php for ($i = 1; $i <= 20; $i++)
             { ?>
               <td style="text-align: center; <?php if ($i == $current_week)
               {
@@ -232,7 +232,7 @@
           <tr>
             <td>Planned Order Receipts</td>
             <td></td>
-            <?php for ($i = 1; $i <= 15; $i++)
+            <?php for ($i = 1; $i <= 20; $i++)
             { ?>
               <td style="text-align: center; <?php if ($i == $current_week)
               {
@@ -245,7 +245,7 @@
           <tr>
             <td>Planned Order Release</td>
             <td></td>
-            <?php for ($i = 1; $i <= 15; $i++)
+            <?php for ($i = 1; $i <= 20; $i++)
             { ?>
               <td style="text-align: center; <?php if ($i == $current_week)
               {
@@ -262,7 +262,7 @@
   </div>
 </div>
 
-<?php for ($i = 1; $i <= 15; $i++)
+<?php for ($i = 1; $i <= 20; $i++)
     { ?>
   <form action="<?php echo site_url ('goods_management/update_item_movement'); ?>" method="post">
     <div class="modal fade" id="modal-edit-value-<?php echo $i; ?>" tabindex="-1" aria-labelledby="exampleModalLabel"

@@ -197,7 +197,15 @@
                         </button>
                       </div>
                     </td>
+                    <?php
+                    $savings = myDecimal (calculate_savings ($detail->uom_price, get_baseline_price ($detail->item_id, 'target')));
+                    $saving_value = myNum (($detail->qty * get_baseline_price ($detail->item_id, 'target')) - $detail->total_price);
+                    $lead_time_impact = myNum ($detail->est_lead_time - $detail->lt_pr_po);
 
+                    $bg = $savings < 1 ? '#FBE2D5' : '#80f578';
+
+                    $bg_lead_time = $lead_time_impact < 1 ? '#FBE2D5' : '#80f578';
+                    ?>
                     <td style="vertical-align: middle;text-align: center;font-size: 14px;">
                       <?php echo myNum ($detail->est_lead_time); ?>
                     </td>
@@ -208,17 +216,20 @@
                       <?php echo myNum ($detail->total_price); ?>
                     </td>
                     <td style="vertical-align: middle;text-align: center;font-size: 14px;">
-                      0
+                      <?php echo myNum (calc_remaining_budget ($detail->item_id)); ?>
                     </td>
-                    <td style="vertical-align: middle;text-align: center;font-size: 14px;background-color:#FBE2D5;">
-                      <?php echo myDecimal (calculate_savings ($detail->uom_price, get_baseline_price ($detail->item_id, 'target'))); ?>
+                    <td
+                      style="vertical-align: middle;text-align: center;font-size: 14px;background-color:<?php echo $bg; ?>;">
+                      <?php echo $savings; ?>
                       %
                     </td>
-                    <td style="vertical-align: middle;text-align: center;font-size: 14px;background-color:#FBE2D5;">
-                      0
+                    <td
+                      style="vertical-align: middle;text-align: center;font-size: 14px;background-color:<?php echo $bg; ?>;">
+                      <?php echo $saving_value; ?>
                     </td>
-                    <td style="vertical-align: middle;text-align: center;font-size: 14px;background-color:#FBE2D5;">
-                      0
+                    <td
+                      style="vertical-align: middle;text-align: center;font-size: 14px;background-color:<?php echo $bg_lead_time; ?>;">
+                      <?php echo $lead_time_impact; ?> days
                     </td>
                   </tr>
                 </tbody>
@@ -413,11 +424,13 @@
                         </tr>
                       </thead>
                       <tbody>
-                        <?php foreach ($vendor_list as $row)
-                          $savings = calculate_savings (get_vendor_price ($row->vendor_code, $detail->item_code), get_baseline_price ($detail->item_id, 'target'));
-                        $total_price = $row->price_per_uom * $detail->qty;
-                        $saving_value = $total_price * round ($savings, 2);
-                          { ?>
+                        <?php
+                        foreach ($vendor_list as $row)
+                          {
+                          $savings = calculate_savings ($row->price_per_uom, get_baseline_price ($detail->item_id, 'target'));
+                          $total_price = $row->price_per_uom * $detail->qty;
+                          $saving_value = ($detail->qty * get_baseline_price ($detail->item_id, 'target')) - $total_price;
+                          ?>
                           <tr>
                             <td style="vertical-align: middle;text-align: center;font-size: 14px;">
                               <?php echo $row->vendor_code; ?> - <?php echo $row->vendor_name; ?>

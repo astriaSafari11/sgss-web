@@ -337,12 +337,12 @@ function calc_sched_receipt($mat_mov_id, $schedule_receipt)
         ))->row ();
 
         $get_prev_week_data = $CI->db->get_where ("t_material_movement", array(
-            "vendor_material_id" => $get_data->vendor_material_id,
+            "item_id" => $get_data->item_id,
             "week" => $i - 1
         ))->row ();
 
         $get_curr_week_data = $CI->db->get_where ("t_material_movement", array(
-            "vendor_material_id" => $get_data->vendor_material_id,
+            "item_id" => $get_data->item_id,
             "week" => $i
         ))->row ();
 
@@ -353,7 +353,7 @@ function calc_sched_receipt($mat_mov_id, $schedule_receipt)
 
         if ($get_stock_card->type == 'formula')
             {
-            $gross_req = get_avg_value ($get_data->vendor_material_id, $get_mat_detail->id, $i);
+            $gross_req = get_avg_value ($get_data->item_id, $get_mat_detail->id, $i);
             }
 
         if ($i != $get_initial_week)
@@ -365,23 +365,23 @@ function calc_sched_receipt($mat_mov_id, $schedule_receipt)
             'week' => $i,
             'gross_requirement' => $gross_req,
             'schedules_receipts' => $schedule_receipt,
-            'stock_on_hand' => myNum ($stock_on_hand),
-            'current_safety_stock' => myNum ($current_safety_stock),
-            'net_on_hand' => myNum ($net_on_hand),
-            'net_requirement' => myNum ($net_requirement),
+            'stock_on_hand' => $stock_on_hand,
+            'current_safety_stock' => $current_safety_stock,
+            'net_on_hand' => $net_on_hand,
+            'net_requirement' => $net_requirement,
             'planned_order_receipt' => 0,
             'planned_order_release' => 0,
         );
 
         _update ('t_material_movement', $data, array(
-            "vendor_material_id" => $get_data->vendor_material_id,
+            "item_id" => $get_data->item_id,
             "week" => $i
         ));
 
         if ($net_on_hand >= 1)
             {
             _hard_delete ('t_stock_planned_request', array(
-                "vendor_material_id" => $get_data->vendor_material_id,
+                "item_id" => $get_data->item_id,
                 "week" => $i,
                 "order_status" => 0
             ));
@@ -562,7 +562,23 @@ function get_vendor_material($item_code)
 function calculate_savings($vendor_price, $baseline_price)
     {
 
-    $calculated = ($baseline_price / $vendor_price);
+    $diffPrice = $baseline_price - $vendor_price;
+    $calculated = ($diffPrice / $baseline_price) * 100;
+    return $calculated;
+    }
+
+
+function calc_remaining_budget($item_id)
+    {
+
+    $CI = getCI ();
+    $getTotalTrx = $CI->db->query ("select SUM(total_price) as total FROM t_order_detail
+    INNER JOIN t_order ON t_order_detail.order_id = t_order.id
+    WHERE is_feedback = 1 AND item_id = '$item_id'")->row ();
+
+    $getAnnualBudget = get_annual_price ($item_id, date ('Y'));
+
+    $calculated = $getAnnualBudget - $getTotalTrx->total;
     return $calculated;
     }
 

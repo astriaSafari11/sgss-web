@@ -69,7 +69,7 @@
               <th style="color: #fff;background-color: #001F82;text-align: center;">SGSS Quantity</th>
               <th style="color: #fff;background-color: #001F82;text-align: center;">UoM</th>
               <th style="color: #fff;background-color: #001F82;text-align: center;">SS Days Left</th>
-              <th style="color: #fff;background-color: #001F82;text-align: center; width: 30%;">Action</th>
+              <th style="color: #fff;background-color: #001F82;text-align: center;">Action</th>
 
               <!-- <th style="color: #fff;text-align: center;width: 400px;">
                                 <button class="btn btn-sm btn-primary" style="font-weight: 600; width: 100%;">
@@ -103,7 +103,9 @@
                   <?php } ?>
                 </td>
 
-                <td style="vertical-align: middle;text-align: center;"><?php echo $v->item_name; ?></td>
+                <td style="vertical-align: middle;text-align: center;"><?php echo $v->item_name; ?>
+                  <?php echo $v->size . $v->uom; ?>
+                </td>
                 <td style="vertical-align: middle;text-align: center;"><?php echo $v->item_group; ?></td>
                 <td style="vertical-align: middle;text-align: center;"><?php echo $v->vendor_name; ?></td>
                 <td style="vertical-align: middle;text-align: center;"><?php echo $v->qty; ?></td>
