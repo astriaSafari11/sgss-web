@@ -51,6 +51,17 @@ class Master_model extends CI_Model
 				}
 			}
 
+			elseif ($type == "uom_list")
+			{
+				$table = 'm_uom';
+				
+				if (!empty($_POST['id'])) { 
+					$this->db->where('id', $_POST['id']);
+					
+				}
+				
+			}						
+
 		$this->db->from ($table);
 
 		$i = 0;

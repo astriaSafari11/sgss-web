@@ -45,6 +45,40 @@ class Master_data extends CI_Controller
 		$this->load->view ('master-data/material-list.php');
 		}
 
+	public function uom_list()
+	{
+		$this->session->set_flashdata('page_title', 'MASTER DATA UoM');
+		$this->load->view('master-data/uom-list.php');
+	}
+
+	function get_uom_list()
+		{
+		$search = $this->session->userdata ('search');
+		$list = $this->master_model->get_datatables ($search, 'uom_list');
+		$data = array();
+		$no = $_POST['start'];
+		foreach ($list as $field)
+			{
+			$row = array();
+
+			$row[] = ++$no;
+			$row[] = $field->id;
+			$row[] = $field->uom_code;
+			$row[] = $field->uom_name;
+
+			$data[] = $row;
+			}
+
+		$output = array(
+			"draw" => $_POST['draw'],
+			"recordsTotal" => $this->master_model->count_all ($search, 'uom_list'),
+			"recordsFiltered" => $this->master_model->count_filtered ($search, 'uom_list'),
+			"data" => $data,
+		);
+		//output dalam format JSON
+		echo json_encode ($output);
+		}
+	
 	function get_master_vendor()
 		{
 		$search = $this->session->userdata ('search');
