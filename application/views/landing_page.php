@@ -4,13 +4,13 @@
 
 <!-- style tambahan buat hover -->
 <style>
-.card-2 button:hover {
+.custom-btn-a:hover {
     background-color: white !important;
     color: #002F6C !important;
     border: 1px solid #002F6C !important;
 }
 
-.card-3 button:hover {
+.custom-btn-b:hover {
     background-color: #002F6C !important;
     color: white !important;
     border: 1px solid #002F6C !important;
@@ -110,7 +110,7 @@
                         </div>
                     </div>
                 </div>
-                <a href="#" class="btn btn-sm btn-outline-primary fw-bold py-2" style="border-radius: 30px; margin-top: 2px;">See more..</a>
+                <a href="<?=site_url('goods_management');?>" class="btn btn-sm btn-outline-primary fw-bold py-2" style="border-radius: 30px; margin-top: 2px;">See more..</a>
             </div>
         </div>
     </div>
@@ -128,18 +128,33 @@
                       ORDER NOW
                     </a> -->
 
-                        <a href="<?=site_url('goods_management');?>" class="btn mb-2 fw-bold btn-hover-set w-100 text-center" style="border-radius: 50px; font-weight: 600;">ITEM TO DO LIST</a>
+                        <!-- <a href="<?=site_url('goods_management');?>" class="btn mb-2 fw-bold btn-hover-set w-100 text-center" style="border-radius: 50px; font-weight: 600;">ITEM TO DO LIST</a> -->
 
-                        <div class="info-box align-items-center justify-content-center py-4" style="border-radius: 20px; background-color: #F8F9FA;">
-                            <h3 class="fw-bold text-primary">5</h3>
+                        <span class="btn mb-2 fw-bold w-100 text-center" style="border-radius: 50px; font-weight: 600; color: #001F82; background-color:#DAEAFF; border: 1px solid rgb(145, 167, 197);">ITEM TO DO LIST</span>
+
+                        <div class="info-box d-flex flex-column align-items-center justify-content-center" style="border-radius: 20px; background-color: #F8F9FA;">
+                            <h3 class="fw-bold text-primary mb-3">5</h3>
+                            <a href="<?=site_url('goods_management');?>" class="btn fw-bold w-100 text-uppercase custom-btn-b" 
+                                style="background-color: white; color: #001F82; border: 1px solid #C4C4C4; border-radius: 20px; padding: 5px; text-align: center; display: block;">
+                                ACTION
+                            </a>
                         </div>
+
                     </div>
                     <!-- Need Feedback -->
                     <div class="col-12 px-3 mt-3">
-                        <a href="<?=site_url('goods_management/feedback');?>" class="btn mb-2 fw-bold btn-hover-set w-100 text-center" style="border-radius: 50px; font-weight: 600;">NEED FEEDBACK</a>
-                        <div class="info-box align-items-center justify-content-center py-4 mb-0" style="border-radius: 20px; background-color: #F8F9FA;">
-                            <h3 class="fw-bold text-primary text-center">5</h3>
+                        <!-- <a href="<?=site_url('goods_management/feedback');?>" class="btn mb-2 fw-bold btn-hover-set w-100 text-center" style="border-radius: 50px; font-weight: 600;">NEED FEEDBACK</a> -->
+
+                        <span class="btn mb-2 fw-bold w-100 text-center" style="border-radius: 50px; font-weight: 600; color: #001F82; background-color:#DAEAFF; border: 1px solid rgb(145, 167, 197);">NEED FEEDBACK</span>
+
+                        <div class="info-box d-flex flex-column align-items-center justify-content-center" style="border-radius: 20px; background-color: #F8F9FA;">
+                            <h3 class="fw-bold text-primary mb-3">5</h3>
+                            <a href="<?=site_url('goods_management/feedback');?>" class="btn fw-bold w-100 text-uppercase custom-btn-b" 
+                                style="background-color: white; color: #001F82; border: 1px solid #C4C4C4; border-radius: 20px; padding: 5px; text-align: center; display: block;">
+                                ACTION
+                            </a>
                         </div>
+
                     </div>
                 </div>
             </div>
@@ -218,7 +233,7 @@
                     </div>
                 </div>
 
-                <a href="#" class="btn btn-sm btn-outline-primary fw-bold py-2" style="border-radius: 30px;">
+                <a href="<?=site_url('service_management');?>" class="btn btn-sm btn-outline-primary fw-bold py-2" style="border-radius: 30px;">
                     See more..
                 </a>
             </div>
@@ -234,18 +249,32 @@
                 <div class="row justify-content-between">
                     <!-- ITEM TO DO LIST -->
                     <div class="col-12 px-3 mt-0">
-                    <a href="<?=site_url('service_management');?>" class="btn mb-2 fw-bold btn-hover-set" style="border-radius: 50px;width: 100%;font-weight: 600;">ITEM TO DO LIST</a>
-                    <div class="info-box align-items-center justify-content-center py-4" style="border-radius: 20px; background-color: #F8F9FA;">
-                            <h3 class="fw-bold text-primary">5</h3>
+                    <!-- <a href="<?=site_url('service_management');?>" class="btn mb-2 fw-bold btn-hover-set" style="border-radius: 50px;width: 100%;font-weight: 600;">ITEM TO DO LIST</a> -->
+
+                    <span class="btn mb-2 fw-bold w-100 text-center" style="border-radius: 50px; font-weight: 600; color: #001F82; background-color:#DAEAFF; border: 1px solid rgb(145, 167, 197);">ITEM TO DO LIST</span>
+
+                    <div class="info-box d-flex flex-column align-items-center justify-content-center" style="border-radius: 20px; background-color: #F8F9FA;">
+                            <h3 class="fw-bold text-primary mb-3">5</h3>
+                            <a href="<?=site_url('service_management');?>" class="btn fw-bold w-100 text-uppercase custom-btn-b" 
+                                style="background-color: white; color: #001F82; border: 1px solid #C4C4C4; border-radius: 20px; padding: 5px; text-align: center; display: block;">
+                                ACTION
+                            </a>
                         </div>
                     
                     </div>
 
                     <!-- NEED FEEDBACK -->
                     <div class="col-12 px-3 mt-3">
-                    <a href="<?=site_url('goods_management/feedback');?>" class="btn mb-2 fw-bold btn-hover-set" style="border-radius: 50px;width: 100%;font-weight: 600;">NEED FEEDBACK</a>
-                    <div class="info-box align-items-center justify-content-center py-4 mb-0" style="border-radius: 20px; background-color: #F8F9FA;">
-                        <h3 class="fw-bold text-primary text-center">5</h3>
+                    <!-- <a href="<?=site_url('goods_management/feedback');?>" class="btn mb-2 fw-bold btn-hover-set" style="border-radius: 50px;width: 100%;font-weight: 600;">NEED FEEDBACK</a> -->
+
+                    <span class="btn mb-2 fw-bold w-100 text-center" style="border-radius: 50px; font-weight: 600; color: #001F82; background-color:#DAEAFF; border: 1px solid rgb(145, 167, 197);">NEED FEEDBACK</span>
+
+                    <div class="info-box d-flex flex-column align-items-center justify-content-center" style="border-radius: 20px; background-color: #F8F9FA;">
+                            <h3 class="fw-bold text-primary mb-3">5</h3>
+                            <a href="<?=site_url('goods_management/feedback');?>" class="btn fw-bold w-100 text-uppercase custom-btn-b" 
+                                style="background-color: white; color: #001F82; border: 1px solid #C4C4C4; border-radius: 20px; padding: 5px; text-align: center; display: block;">
+                                ACTION
+                            </a>
                         </div>
 
                     </div>
@@ -306,7 +335,7 @@
         </div>
 
         <!-- Tombol Action -->
-        <button class="btn mt-2 fw-bold" 
+        <button class="btn mt-2 fw-bold custom-btn-a" 
             style="background-color: #002F6C; color: white; border-radius: 20px; padding: 10px 30px;">
             ACTION
         </button>
@@ -328,7 +357,7 @@
                 <!-- Deskripsi -->
                 <div class="fs-4 text-center mt-0 mb-1">need action</div>
 
-                <button class="btn mt-4 fw-bold w-100 text-uppercase"
+                <button class="btn mt-3 fw-bold w-100 text-uppercase custom-btn-b"
                     style="background-color: white; color: #001F82; border: 1px solid #C4C4C4; border-radius: 20px; padding: 10px;">
                     ACTION
                 </button>

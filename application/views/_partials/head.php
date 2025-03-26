@@ -368,7 +368,7 @@
                   <li class="nav-item sidebar">
                     <a href="<?= site_url('goods_management');?>" class="nav-link">
                       <i class="nav-icon fa-solid fa-chart-area icon"></i>
-                      <p>Goods Dashboard - Editable</p>
+                      <p>Goods Dashboard</p>
                     </a>
                   </li>
                   <li class="nav-item sidebar">
@@ -408,7 +408,7 @@
                   <li class="nav-item sidebar">
                     <a href="<?= site_url('service_management');?>" class="nav-link">
                       <i class="nav-icon fa-solid fa-chart-area icon"></i>
-                      <p>Goods Dashboard - Viewer</p>
+                      <p>Goods Dashboard</p>
                     </a>
                   </li>
                   <li class="nav-item sidebar">
