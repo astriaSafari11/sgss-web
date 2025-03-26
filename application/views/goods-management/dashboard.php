@@ -110,7 +110,9 @@
                 <td style="vertical-align: middle;text-align: center;"><?php echo $v->vendor_name; ?></td>
                 <td style="vertical-align: middle;text-align: center;"><?php echo $v->qty; ?></td>
                 <td style="vertical-align: middle;text-align: center;"><?php echo $v->uom; ?></td>
-                <td style="vertical-align: middle;text-align: center;">5 Days</td>
+                <td style="vertical-align: middle;text-align: center;">
+                  <?php echo get_ss_days_left ($v->item_id, $v->week); ?> Days
+                </td>
                 <td style="vertical-align: middle;text-align: center;">
                   <?php if ($v->status != 'ignored')
                   { ?>

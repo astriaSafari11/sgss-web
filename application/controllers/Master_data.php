@@ -71,12 +71,12 @@ class Master_data extends CI_Controller
 			$row[] = 0;
 			$row[] = $field->item_name;
 			$row[] = $field->uom;
-			$row[] = $field->est_lead_time;
+			$row[] = myNum ($field->lt_po_deliv);
 			$row[] = myNum ($field->moq);
 			$row[] = myCurr ($field->price_per_uom);
-			$row[] = myCurr ($field->total_price);
+			$row[] = myCurr ($field->moq * $field->price_per_uom);
 			$row[] = myCurr ($field->price_equal_moq);
-			$row[] = myCurr ($field->price_moq_divide_moq);
+			$row[] = myCurr ($field->price_equal_moq / $field->moq);
 			$row[] = myDecimal ($field->saving);
 			$row[] = $field->place_to_buy;
 			$row[] = $link;
@@ -105,17 +105,17 @@ class Master_data extends CI_Controller
 			$row[] = ++$no;
 			$row[] = $field->item_code;
 			$row[] = $field->item_name;
-			$row[] = $field->vendor_code;
+			$row[] = $field->vendor_code . ' - ' . $field->vendor_name;
 			$row[] = $field->factory;
 			$row[] = $field->uom;
 			$row[] = $field->moq;
-			$row[] = $field->est_lead_time;
 			$row[] = $field->lt_pr_po;
-			$row[] = myNum ($field->lt_po_deliv);
+			$row[] = $field->lt_pr_to_deliv;
+			$row[] = myNum ($field->gen_lead_time);
 			$row[] = $field->lot_size;
 			$row[] = $field->order_cycle;
 			$row[] = myNum ($field->initial_stock);
-			$row[] = myNum ($field->standart_safety_stock);
+			$row[] = myNum ($field->standard_safety_stock);
 			$data[] = $row;
 			}
 

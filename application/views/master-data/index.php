@@ -1,4 +1,4 @@
-<?php $this->load->view('_partials/head.php'); ?>
+<?php $this->load->view ('_partials/head.php'); ?>
 <style>
     div.dt-container {
         width: 100%;
@@ -6,98 +6,105 @@
     }
 </style>
 <div class="row mb-2">
-              <div class="col-sm-9">
-                <?php $this->load->view('master-data/_header_parts.php'); ?>     
-              </div>
-              <div class="col-sm-3">
-                <ol class="breadcrumb float-sm-end">
-                  <li class="breadcrumb-item"><a href="#">Home</a></li>
-                  <li class="breadcrumb-item" aria-current="page">Master Data</li>
-                  <li class="breadcrumb-item active" aria-current="page">Vendor</li>
-                </ol>
-              </div>
-            </div>
-            <!--begin::Row-->
-            <div class="row">
-              <div class="col-12 mb-4">
-                <!-- Default box -->
-                <div class="card">
-                  <div class="card-body">
-                    <div class="dt-container">
+    <div class="col-sm-9">
+        <?php $this->load->view ('master-data/_header_parts.php'); ?>
+    </div>
+    <div class="col-sm-3">
+        <ol class="breadcrumb float-sm-end">
+            <li class="breadcrumb-item"><a href="#">Home</a></li>
+            <li class="breadcrumb-item" aria-current="page">Master Data</li>
+            <li class="breadcrumb-item active" aria-current="page">Vendor</li>
+        </ol>
+    </div>
+</div>
+<!--begin::Row-->
+<div class="row">
+    <div class="col-12 mb-4">
+        <!-- Default box -->
+        <div class="card">
+            <div class="card-body">
+                <div class="dt-container">
                     <div class="d-flex justify-content-between align-items-center flex-wrap">
                         <div class="d-flex align-items-center">
-                                <label for="entriesSelect" class="me-2 fs-7">Show</label>
-                                <select id="entriesSelect" class="form-select form-select-sm w-auto fs-7">
-                                    <option value="10">10</option>
-                                    <option value="25">25</option>
-                                    <option value="50">50</option>
-                                    <option value="100">100</option>
-                                </select>
-                                <span class="ms-2 fs-7">entries</span>
-                            </div>
-                            <!-- End Dropdown Show X Entries -->
-
-                            <!-- Start Search + Filter -->
-                            <div class="d-flex align-items-center gap-2 flex-wrap">
-                                <!-- Filter 1 -->
-                                <label for="filterBy1" class="small">Column:</label>
-                                <select id="filterBy1" class="form-select form-select-sm w-auto">
-                                    <option value="all">All</option>
-                                    <option value="0">Vendor Code</option>
-                                    <option value="1">Vendor Name</option>
-                                    <option value="2">Vendor Category</option>
-                                    <option value="2">Item Code</option>
-                                    <option value="2">Item Name</option>
-                                    <option value="2">Est. Lead Time</option>
-                                    <option value="2">MoQ</option>
-                                    <option value="2">Price per Uom</option>
-                                    <option value="2">Saving</option>
-                                    <option value="2">Price Equal MoQ</option>
-                                </select>
-
-                                <!-- Filter 2 -->
-                                <label for="filterBy2" class="small">Filter:</label>
-                                <select id="filterBy2" class="form-select form-select-sm w-auto">
-                                    <option value="all">Is</option>
-                                    <option value="A">Not</option>
-                                    <option value="B">Greater Than</option>
-                                    <option value="C">Less Than</option>
-                                    <option value="C">Equal</option>
-                                    <option value="B">Greater Than Equal</option>
-                                    <option value="C">Less Than Equal</option>
-                                    <option value="C">Like</option>
-                                </select>
-
-                                <!-- Filter 3 -->
-                                <label for="filterBy3" class="small">Search:</label>
-                                <input type="text" id="searchInput" class="form-control form-control-sm w-auto" placeholder="Search">
-
-                                <!-- Search Button -->
-                                <button class="btn btn-outline-primary btn-sm" type="button" id="searchBtn">
-                                    <i class="fas fa-search"></i>
-                                </button>
-
-                            </div>
+                            <label for="entriesSelect" class="me-2 fs-7">Show</label>
+                            <select id="entriesSelect" class="form-select form-select-sm w-auto fs-7">
+                                <option value="10">10</option>
+                                <option value="25">25</option>
+                                <option value="50">50</option>
+                                <option value="100">100</option>
+                            </select>
+                            <span class="ms-2 fs-7">entries</span>
                         </div>
-                        <!-- End Search + filter -->
+                        <!-- End Dropdown Show X Entries -->
 
-                        <table id="table-vendor" class="table table-striped table-bordered">
-                        <thead style="text-align: center;vertical-align: middle;">
-                            <tr >
+                        <!-- Start Search + Filter -->
+                        <div class="d-flex align-items-center gap-2 flex-wrap">
+                            <!-- Filter 1 -->
+                            <label for="filterBy1" class="small">Column:</label>
+                            <select id="filterBy1" class="form-select form-select-sm w-auto">
+                                <option value="all">All</option>
+                                <option value="0">Vendor Code</option>
+                                <option value="1">Vendor Name</option>
+                                <option value="2">Vendor Category</option>
+                                <option value="2">Item Code</option>
+                                <option value="2">Item Name</option>
+                                <option value="2">Est. Lead Time</option>
+                                <option value="2">MoQ</option>
+                                <option value="2">Price per Uom</option>
+                                <option value="2">Saving</option>
+                                <option value="2">Price Equal MoQ</option>
+                            </select>
+
+                            <!-- Filter 2 -->
+                            <label for="filterBy2" class="small">Filter:</label>
+                            <select id="filterBy2" class="form-select form-select-sm w-auto">
+                                <option value="all">Is</option>
+                                <option value="A">Not</option>
+                                <option value="B">Greater Than</option>
+                                <option value="C">Less Than</option>
+                                <option value="C">Equal</option>
+                                <option value="B">Greater Than Equal</option>
+                                <option value="C">Less Than Equal</option>
+                                <option value="C">Like</option>
+                            </select>
+
+                            <!-- Filter 3 -->
+                            <label for="filterBy3" class="small">Search:</label>
+                            <input type="text" id="searchInput" class="form-control form-control-sm w-auto"
+                                placeholder="Search">
+
+                            <!-- Search Button -->
+                            <button class="btn btn-outline-primary btn-sm" type="button" id="searchBtn">
+                                <i class="fas fa-search"></i>
+                            </button>
+
+                        </div>
+                    </div>
+                    <!-- End Search + filter -->
+
+                    <table id="table-vendor" class="table table-striped table-bordered">
+                        <thead style="text-align: center;vertical-align: middle;white-space:nowrap;">
+                            <tr>
                                 <th style="color: #fff;background-color: #001F82;text-align: center;">No.</th>
                                 <th style="color: #fff;background-color: #001F82;text-align: center;">Vendor Code</th>
                                 <th style="color: #fff;background-color: #001F82;text-align: center;">Category</th>
                                 <th style="color: #fff;background-color: #001F82;text-align: center;">Vendor Name</th>
                                 <th style="color: #fff;background-color: #001F82;text-align: center;">Rating</th>
-                                <th style="color: #fff;background-color: #001F82;text-align: center;">Purchase History</th>
+                                <th style="color: #fff;background-color: #001F82;text-align: center;">Purchase History
+                                </th>
                                 <th style="color: #fff;background-color: #001F82;text-align: center;">Item</th>
                                 <th style="color: #fff;background-color: #001F82;text-align: center;">UoM</th>
-                                <th style="color: #fff;background-color: #001F82;text-align: center;">Est. Lead Time</th>
+                                <th style="color: #fff;background-color: #001F82;text-align: center;">Est. Lead Time
+                                </th>
                                 <th style="color: #fff;background-color: #001F82;text-align: center;">MoQ</th>
-                                <th style="color: #fff;background-color: #001F82;text-align: center;">Price / UoM (Rp.)</th>
-                                <th style="color: #fff;background-color: #001F82;text-align: center;">Total Price (Rp.)</th>
-                                <th style="color: #fff;background-color: #001F82;text-align: center;">Total Price if QTY = MOQ (Rp.)</th>
-                                <th style="color: #fff;background-color: #001F82;text-align: center;">Price MOQ/MOQ (Rp.)</th>
+                                <th style="color: #fff;background-color: #001F82;text-align: center;">Price / UoM (Rp.)
+                                </th>
+                                <th style="color: #fff;background-color: #001F82;text-align: center;">Total Price (Rp.)
+                                </th>
+                                <th style="color: #fff;background-color: #001F82;text-align: center;">Total Price if QTY
+                                    = MOQ (Rp.)</th>
+                                <th style="color: #fff;background-color: #001F82;text-align: center;">Price MOQ/MOQ
+                                    (Rp.)</th>
                                 <th style="color: #fff;background-color: #001F82;text-align: center;">Savings (%)</th>
                                 <th style="color: #fff;background-color: #001F82;text-align: center;">Place to buy</th>
                                 <th style="color: #fff;background-color: #001F82;text-align: center;">Link</th>
@@ -105,51 +112,53 @@
                         </thead>
                         <tbody>
                         </tbody>
-                        </table>                         
-                    </div>             
-                  </div>
-                  <!-- /.card-body -->
-                  <!-- <div class="card-footer">Footer</div> -->
-                  <!-- /.card-footer-->
+                    </table>
                 </div>
-                <!-- /.card -->
-              </div>
             </div>
-            <!--end::Row-->
+            <!-- /.card-body -->
+            <!-- <div class="card-footer">Footer</div> -->
+            <!-- /.card-footer-->
+        </div>
+        <!-- /.card -->
+    </div>
+</div>
+<!--end::Row-->
 
-<?php $this->load->view('_partials/footer.php'); ?>
+<?php $this->load->view ('_partials/footer.php'); ?>
 
 
 <script>
-    $(document).ready(function() {
+    $(document).ready(function () {
         var vendorTable = $('#table-vendor').DataTable({
             scrollX: true,
-            "processing": true, 
-            "serverSide": true, 
+            "processing": true,
+            "serverSide": true,
             "ordering": false,
             "ajax": {
-                "url": "<?= site_url('master_data/get_master_vendor');?>",
+                "url": "<?= site_url ('master_data/get_master_vendor'); ?>",
                 "type": "POST"
             },
-            "order": [],        
+            "order": [],
             "columnDefs": [
-                { targets: [10,11,12,13],
-                    createdCell: function(cell) {
+                {
+                    targets: [10, 11, 12, 13],
+                    createdCell: function (cell) {
                         $(cell).css('text-align', 'right');
                         $(cell).css('vertical-align', 'middle');
                         $(cell).css('white-space', 'nowrap');
                     }
                 },
-                { targets: [1,2,3,4,5,6,7,8,9,14,15,16],
-                    createdCell: function(cell) {
+                {
+                    targets: [1, 2, 3, 4, 5, 6, 7, 8, 9, 14, 15, 16],
+                    createdCell: function (cell) {
                         $(cell).css('text-align', 'center');
                         $(cell).css('vertical-align', 'middle');
                         $(cell).css('white-space', 'nowrap');
-                    }                    
-                },         
+                    }
+                },
                 {
                     targets: '_all',
-                    createdCell: function(cell) {
+                    createdCell: function (cell) {
                         $(cell).css('vertical-align', 'middle');
                         $(cell).css('white-space', 'nowrap');
                     }
@@ -165,7 +174,7 @@
             vendorTable.page.len(length).draw();
         });
 
-        $('#searchBtn').on('click', function() {
+        $('#searchBtn').on('click', function () {
             var filter1 = $('#filterBy1').val();
             var filter2 = $('#filterBy2').val();
             var filter3 = $('#filterBy3').val();
@@ -185,7 +194,7 @@
               "serverSide": true, 
               "ordering": false,
               "ajax": {
-                "url": "<?= site_url('master_data/get_master_vendor');?>",
+                "url": "<?= site_url ('master_data/get_master_vendor'); ?>",
                 "type": "POST"
               },
               "order": [],        

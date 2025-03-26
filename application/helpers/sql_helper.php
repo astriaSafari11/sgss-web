@@ -582,4 +582,23 @@ function calc_remaining_budget($item_id)
     return $calculated;
     }
 
+function get_ss_days_left($item_id, $week)
+    {
+    $CI = getCI ();
+    $getStockCard = $CI->db->get_where ('t_material_movement', array(
+        "item_id" => $item_id,
+        "week" => $week
+    ))->row ();
+
+    $getMat = $CI->db->get_where ('m_master_data_material', array(
+        "id" => $item_id
+    ))->row ();
+
+    if (empty ($getMat->standard_safety_stock) || empty ($getStockCard->gross_requirement))
+        return 0;
+
+    $ss = ($getMat->standard_safety_stock / $getStockCard->gross_requirement) * 6;
+
+    return round ($ss);
+    }
 ?>

@@ -39,6 +39,7 @@ class Goods_management extends CI_Controller
 				INNER JOIN t_order ON t_order.id = t_order_detail.order_id
 				INNER JOIN m_master_data_material ON t_order_detail.item_code = m_master_data_material.item_code
 				WHERE t_order_approval_track.approve_by = '" . $curr_user->nip . "' and approve_status = 'pending'
+				AND t_order.status = 'waiting_approval'
 				AND request_id IS NOT NULL
 			";
 
@@ -172,6 +173,7 @@ class Goods_management extends CI_Controller
 			{
 			_add ("t_order", array(
 				"planned_id" => $id,
+				"approval_category" => 'normal',
 				"is_approval_required" => 0
 			));
 			}
