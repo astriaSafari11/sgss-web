@@ -25,7 +25,7 @@
     <div class="card">
       <div class="card-header">
         <div class="card-tools">
-          <a href="<?= site_url ('master_data/add_vendor'); ?>" class="btn btn-sm btn-outline-primary position-relative"
+          <a href="#" class="btn btn-sm btn-outline-primary position-relative"
             style="font-weight: 600; border-radius: 50px; white-space:nowrap">
             <i class="fa-solid fa-circle-plus"></i>
             Add New UoM
@@ -34,10 +34,10 @@
       </div>
       <div class="card-body">
         <div class="dt-container">
-          <table id="table-vendor" class="table table-striped table-bordered" width="100%">
+          <table id="uom_table" class="table table-striped table-bordered" width="100%">
             <thead style="text-align: center;white-space:nowrap;">
               <tr>
-                <th style="color: #fff;background-color: #001F82;text-align: center;">No.</th>
+                <th style="color: #fff;background-color: #001F82;text-align: center; width: 80px">No.</th>
                 <th style="color: #fff;background-color: #001F82;text-align: center;">ID</th>
                 <th style="color: #fff;background-color: #001F82;text-align: center;">UoM Code</th>
                 <th style="color: #fff;background-color: #001F82;text-align: center;">UoM Name</th>
@@ -60,25 +60,36 @@
 <?php $this->load->view ('_partials/footer.php'); ?>
 
 <script>
-  // $(document).ready(function () {
-  //   $('#table-vendor').DataTable({
-  //     scrollX: true,
-  //     "processing": true,
-  //     "serverSide": true,
-  //     "ordering": false,
-  //     "ajax": {
-  //       "url": "<?= site_url ('master_data/get_master_vendor_list'); ?>",
-  //       "type": "POST"
-  //     },
-  //     "order": [],
-  //     "columnDefs": [
-  //       {
-  //         targets: '_all',
-  //         createdCell: function (cell) {
-  //           $(cell).css('vertical-align', 'middle');
-  //         }
-  //       }
-  //     ],
-  //   });
-  // });
+$(document).ready(function () {
+    $('#uom_table').DataTable({
+      scrollX: true,
+      "processing": true,
+      "serverSide": true,
+      "ordering": false,
+      "ajax": {
+        "url": "<?= site_url ('master_data/get_uom_list'); ?>",
+        "type": "POST"
+      },
+      "order": [],
+      "columnDefs": [
+            {
+                targets: 1,
+                visible: false 
+            },
+            {
+                targets: '_all',
+                createdCell: function (cell) {
+                    $(cell).css('vertical-align', 'middle');
+                }
+            }
+        ],
+        "columns": [
+            { "data": 0 },
+            { "data": 1, "visible": false}, 
+            { "data": 2 }, 
+            { "data": 3 } 
+        
+      ]
+    });
+  });
 </script>
