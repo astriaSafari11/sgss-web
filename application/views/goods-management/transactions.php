@@ -1,12 +1,12 @@
 <?php $this->load->view('_partials/head.php'); ?>
 
 <div class="row">
-              <div class="col-md-9 col-sm-12 col-12">
+              <div class="col-md-8 col-sm-12 col-12">
                 <span class="btn mb-2" style="border-radius: 50px;width: 100%;font-weight: 600;color: #001F82;background-color:#DAEAFF;">KPI</span>  
                 <div class="info-box" style="border-radius: 25px;">
                   <div class="info-box-content" style="color: #001F82;">
                     <figure class="highcharts-figure">
-                      <div id="container" style="height: 250px;"></div>
+                      <div id="container" style="height: 250px; position: relative;"></div>
                     </figure>
                   </div>
                   <!-- /.info-box-content -->
@@ -14,36 +14,18 @@
                 <!-- /.info-box -->
               </div>
 
-              <div class="col-md-3 col-sm-12 col-12">
-                <span class="btn mb-2" style="border-radius: 50px;width: 100%;font-weight: 600;color: #001F82;background-color:#DAEAFF;">SEARCH</span>  
+              <div class="col-md-4 col-sm-12 col-12">
+                <span class="btn mb-2" style="border-radius: 50px;width: 100%;font-weight: 600;color: #001F82;background-color:#DAEAFF;">YoY Consumption</span>  
                 <div class="info-box" style="border-radius: 25px;">
-                  <div class="info-box-content" style="color: #001F82;height: 265px;">
-                  <div class="row mb-3">
-                          <div class="col-sm-12 mb-2" style="margin:0px;">
-                            <div class="form-floating">
-                              <select class="form-select" id="floatingSelect">
-                                <option value="" disabled selected>ALL</option>   
-                              </select>
-                              <label for="floatingSelect" class="fw-bold text-primary" style="font-size: 14px;">Search by Item Code</label>
-                            </div>
-                          </div>
-                          <div class="col-sm-12" style="margin:0px;">
-                            <div class="form-floating mb-3">
-                              <input type="email" class="form-control" id="floatingInput" placeholder="name@example.com">
-                              <label for="floatingInput" class="fw-bold text-primary" style="font-size: 14px;">Search by Item Desc</label>
-                            </div>
-                          </div>
-                          <div class="col-sm-12" style="margin:0px;">
-                            <button class="btn btn-sm btn-outline-primary" type="button" style="font-weight: 600; border-radius: 50px;width: 100%;">
-                                Search
-                            </button>
-                          </div>
-                        </div>
+                  <div class="info-box-content" style="color: #001F82;">
+                        <div id="yoy-consumption-chart" style="height: 250px;"></div>
                   </div>
                   <!-- /.info-box-content -->
                 </div>
                 <!-- /.info-box -->
               </div>
+
+              
               <!-- /.col -->               
             </div>
 
@@ -185,6 +167,7 @@ $('#entriesSelect').on('change', function () {
       });
 
       Highcharts.chart('container', {
+
         chart: {
             type: 'pie',
             custom: {},
@@ -194,7 +177,11 @@ $('#entriesSelect').on('change', function () {
                         series = chart.series[0];
                     let customLabel = chart.options.chart.custom.label;
                 }
-            }
+            },
+            backgroundColor: 'transparent'
+        },
+        credits: {
+            enabled: false
         },
         accessibility: {
             point: {
@@ -444,4 +431,73 @@ $('#entriesSelect').on('change', function () {
           }]
        });            
   });
+
+  Highcharts.chart('yoy-consumption-chart', {
+        chart: {
+            type: 'column',
+            backgroundColor: 'transparent'
+        },
+        title: {
+            text: 'YoY Consumption',
+            align: 'center',
+            style: { fontSize: '16px', fontWeight: 'bold' }
+        },
+        xAxis: {
+            categories: ['2024', '2025']
+        },
+        yAxis: {
+            title: { text: '' },
+            min: 0
+        },
+        legend: { enabled: false },
+        credits: {
+            enabled: false
+        },
+        series: [{
+            name: 'Consumption',
+            type: 'column',
+            data: [500000, 200000],
+            color: '#001F82',
+            dataLabels: {
+                enabled: true,
+                format: '{y:,.0f}'
+            }
+        }, {
+            name: 'Trend',
+            type: 'line',
+            data: [500000, 200000],
+            color: 'orange',
+            marker: { enabled: false }
+        }]
+    });
+
+    // logic untuk tinggi card tertentu
+    document.addEventListener("DOMContentLoaded", function () {
+    let targetRows = [0]; // Index row yang ingin diatur
+
+    targetRows.forEach(index => {
+        let targetRow = document.querySelectorAll(".row")[index];
+
+        if (targetRow) {
+            let cards = targetRow.querySelectorAll(".info-box");
+
+            if (cards.length > 0) {
+                let maxHeight = 0;
+
+                // Cari tinggi maksimum dalam row ini
+                cards.forEach(card => {
+                    let cardHeight = card.offsetHeight;
+                    if (cardHeight > maxHeight) {
+                        maxHeight = cardHeight;
+                    }
+                });
+
+                // Set semua card di row ini ke tinggi maksimum
+                cards.forEach(card => {
+                    card.style.height = maxHeight + "px";
+                });
+            }
+        }
+    });
+});
 </script>

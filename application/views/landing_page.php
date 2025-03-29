@@ -203,7 +203,7 @@
                             <div id="cost-service-chart" style="width: 400px; height: 100px;"></div>
                             
                             <!-- Teks 2 Kolom -->
-                            <div class="row w-100 text-center">
+                            <div class="row w-100 text-center mt-3">
                                 <div class="col-6">
                                     <h4 class="mb-0 fw-bold text-primary">5%</h4>
                                     <h6 class="text-primary">on cost</h6>
@@ -222,7 +222,7 @@
                             SERVICE
                         </span>
                         <!-- Konten Service -->
-                        <div class="info-box d-flex flex-column align-items-center justify-content-center text-center" 
+                        <div class="info-box d-flex flex-column align-items-center text-center" 
                             style="border-radius: 20px; background-color: #F8F9FA; padding: 15px; min-height: 150px;">
                             
                             <p class="text-primary text-start fs-8 mx-0" style="line-height: 1.2;">Contains the percentage of achievement purchase compared to target</p>
@@ -230,8 +230,8 @@
                             <img src="<?= base_url('assets/dist/people.png'); ?>" 
                                 alt="people Icon" 
                                 class="img-fluid my-3 w-100">
-                            <h4 class="mb-0 mt-1 fw-bold text-primary">50</h4>
-                            <h6 class="mb-1 text-primary">late requests</h6>
+                            <h4 class="mb-0 mt-0 fw-bold text-primary">50</h4>
+                            <h6 class="mb-0 text-primary">late requests</h6>
                         </div>
                     </div>
                 </div>
