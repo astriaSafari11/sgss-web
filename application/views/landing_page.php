@@ -32,8 +32,9 @@
 
 #dollar-chart {
     width: 110px; /* Sesuaikan ukuran dengan gambar */
+    position: relative;
+    top: 20px;
     height: 90px;
-    position: absolute;
     bottom: 0;
     left: 45%;
     transform: translateX(-50%);
@@ -41,13 +42,13 @@
 
 #cash-chart {
     width: 80px; /* Sesuaikan ukuran dengan gambar */
-    height: 98px;
-    position: absolute;
+    height: 90px;
+    position: relative;
+    top: 12px;
     bottom: 0;
     left: 54%;
     transform: translateX(-50%);
 }
-
 </style>
 
 <!-- Welcoming Message -->
@@ -189,15 +190,17 @@
                             COST
                         </span>
                         <!-- Konten Cost -->
-                        <div class="info-box d-flex flex-column align-items-center justify-content-center text-center" 
+                        <div class="info-box d-flex flex-column align-items-center text-center" 
                             style="border-radius: 20px; background-color: #F8F9FA; padding: 15px; min-height: 150px;">
                             
                             <p class="text-primary text-start fs-8 mx-0" style="line-height: 1.2;">Contains the percentage of achievement purchase compared to target</p>
                             
-                            <img src="<?= base_url('assets/dist/cost2.png'); ?>" 
+                            <!-- <img src="<?= base_url('assets/dist/cost2.png'); ?>" 
                                 alt="Cost2 Icon" 
                                 class="img-fluid" 
-                                style="height: 120px;">
+                                style="height: 120px;"> -->
+
+                            <div id="cost-service-chart" style="width: 400px; height: 100px;"></div>
                             
                             <!-- Teks 2 Kolom -->
                             <div class="row w-100 text-center">
@@ -238,7 +241,7 @@
                 </a>
             </div>
         </div>
-    </div>
+    </div>  
 
     <!-- Card 2: To Do List -->
     <div class="col-md-3 col-sm-12 col-12">
@@ -303,7 +306,7 @@
         <div class="info-box card-1" style="border-radius: 20px;">
             <div class="info-box-content justify-content-center align-items-center" style="color: #001F82;">
                 
-            <div id="savingcharts" style="width: 330px; height: 250px;" class="mx-0 my-0 mb-0 mt-0"></div>
+            <div id="savingcharts" style="width: 330px; height: 250px; position: relative;" class="mx-0 my-0 mb-0 mt-0"></div>
             
             </div>
             <!-- /.info-box-content -->
@@ -486,9 +489,12 @@
                     groupPadding: 0,
                 }
             },
+            credits: {
+                enabled: false
+            },
             series: [{
                 name: 'Total',
-                data: [40], // Nilai bar
+                data: [50], // Nilai bar
                 color: 'rgba(0, 110, 0, 0.7)' 
             }]
         });
@@ -498,7 +504,7 @@
                 type: 'column',
                 backgroundColor: 'transparent',
                 margin: [0, 0, 0, 0],
-                height: 62, 
+                height: 58, 
                 width: 70  
             },
             title: { text: '' },
@@ -520,9 +526,69 @@
                     groupPadding: 0,
                 }
             },
+            credits: {
+                enabled: false
+            },
             series: [{
                 name: 'Total',
                 data: [95], // Nilai bar
+                color: 'rgba(0, 110, 0, 0.7)'
+            }]
+        });
+
+        Highcharts.chart('cost-service-chart', {
+            chart: {
+                type: 'bar',
+                backgroundColor: 'transparent',
+                margin: [0, 0, 0, 0]
+            },
+            title: { text: '' },
+            xAxis: {
+                categories: [''],
+                title: { text: null },
+                lineWidth: 0,
+                opposite: true 
+            },
+            yAxis: {
+                title: { text: 'Persentase (%)' },
+                min: -10, 
+                max: 10,
+                gridLineWidth: 1, 
+                plotLines: [{
+                    color: 'black', // Warna sumbu tengah
+                    width: 2, // Ketebalan sumbu
+                    value: 0, // Letak di titik nol
+                    zIndex: 5 // Supaya di atas elemen lain
+                }]
+            },
+            legend: { enabled: false },
+            exporting: {
+                enabled: true,
+                menuItemStyle: {
+                    background: 'transparent', // Buat transparan
+                    color: '#000' // Pastikan teks tetap terlihat
+                },
+                buttons: {
+                    contextButton: {
+                        symbolFill: '#000', // Warna ikon garis tiga
+                        theme: {
+                            fill: 'transparent' // Transparan saat diklik
+                        }
+                    }
+                }
+            },
+            plotOptions: {
+                series: {
+                    stacking: 'normal'
+                }
+            },
+            series: [{
+                name: 'On Cost',
+                data: [-5], // Nilai negatif, jadi ke kiri
+                color: ' #C1272D'
+            }, {
+                name: 'Gain',
+                data: [2], // Nilai positif, jadi ke kanan
                 color: 'rgba(0, 110, 0, 0.7)'
             }]
         });
