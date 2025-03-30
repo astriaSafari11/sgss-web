@@ -51,16 +51,49 @@ class Master_model extends CI_Model
 				}
 			}
 
-			elseif ($type == "uom_list")
-			{
-				$table = 'm_uom';
+		elseif ($type == "uom_list")
+		{
+			$table = 'm_uom';
+			
+			if (!empty($_POST['id'])) { 
+				$this->db->where('id', $_POST['id']);
 				
-				if (!empty($_POST['id'])) { 
-					$this->db->where('id', $_POST['id']);
-					
-				}
+			}
+			
+		}
+		
+		elseif ($type == "category_list")
+		{
+			$table = 'm_category';
+			
+			if (!empty($_POST['id'])) { 
+				$this->db->where('id', $_POST['id']);
 				
-			}						
+			}
+			
+		}
+
+		elseif ($type == "factory_list")
+		{
+			$table = 'm_factory';
+			
+			if (!empty($_POST['id'])) { 
+				$this->db->where('id', $_POST['id']);
+				
+			}
+			
+		}
+
+		elseif ($type == "purchase_reason")
+		{
+			$table = 'm_purchase_reason';
+			
+			if (!empty($_POST['id'])) { 
+				$this->db->where('id', $_POST['id']);
+				
+			}
+			
+		}
 
 		$this->db->from ($table);
 

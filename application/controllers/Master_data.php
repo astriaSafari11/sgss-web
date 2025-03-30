@@ -51,6 +51,126 @@ class Master_data extends CI_Controller
 		$this->load->view('master-data/uom-list.php');
 	}
 
+	public function category_list()
+	{
+		$this->session->set_flashdata('page_title', 'MASTER DATA CATEGORY');
+		$this->load->view('master-data/category-list.php');
+	}
+
+	public function factory_list()
+	{
+		$this->session->set_flashdata('page_title', 'MASTER DATA FACTORY');
+		$this->load->view('master-data/factory-list.php');
+	}
+
+	public function purchase_reason()
+	{
+		$this->session->set_flashdata('page_title', 'MASTER DATA PURCHASE REASON');
+		$this->load->view('master-data/purchase-reason.php');
+	}
+
+	function get_purchase_reason()
+		{
+		$search = $this->session->userdata ('search');
+		$list = $this->master_model->get_datatables ($search, 'purchase_reason');
+		$data = array();
+		$no = $_POST['start'];
+		foreach ($list as $field)
+			{
+			$edit = '
+			<a href="#" class="btn btn-outline-primary">
+				<i class="fa-solid fa-circle-info"></i>						
+			</a>';
+
+			$row = array();
+
+			$row[] = ++$no;
+			$row[] = $field->id;
+			$row[] = $field->type;
+			$row[] = $field->purchase_reason;
+			$row[] = $field->is_approval;
+			$row[] = $field->WL_Approval;
+			$row[] = $edit;
+
+			$data[] = $row;
+			}
+
+		$output = array(
+			"draw" => $_POST['draw'],
+			"recordsTotal" => $this->master_model->count_all ($search, 'purchase_reason'),
+			"recordsFiltered" => $this->master_model->count_filtered ($search, 'purchase_reason'),
+			"data" => $data,
+		);
+		//output dalam format JSON
+		echo json_encode ($output);
+		}
+
+	function get_factory_list()
+		{
+		$search = $this->session->userdata ('search');
+		$list = $this->master_model->get_datatables ($search, 'factory_list');
+		$data = array();
+		$no = $_POST['start'];
+		foreach ($list as $field)
+			{
+			$edit = '
+			<a href="#" class="btn btn-outline-primary">
+				<i class="fa-solid fa-circle-info"></i>						
+			</a>';
+
+			$row = array();
+
+			$row[] = ++$no;
+			$row[] = $field->id;
+			$row[] = $field->factory_name;
+			$row[] = $edit;
+
+			$data[] = $row;
+			}
+
+		$output = array(
+			"draw" => $_POST['draw'],
+			"recordsTotal" => $this->master_model->count_all ($search, 'factory_list'),
+			"recordsFiltered" => $this->master_model->count_filtered ($search, 'factory_list'),
+			"data" => $data,
+		);
+		//output dalam format JSON
+		echo json_encode ($output);
+		}
+
+	function get_category_list()
+		{
+		$search = $this->session->userdata ('search');
+		$list = $this->master_model->get_datatables ($search, 'category_list');
+		$data = array();
+		$no = $_POST['start'];
+		foreach ($list as $field)
+			{
+			$edit = '
+			<a href="#" class="btn btn-outline-primary">
+				<i class="fa-solid fa-circle-info"></i>						
+			</a>';
+
+			$row = array();
+
+			$row[] = ++$no;
+			$row[] = $field->id;
+			$row[] = $field->category_name;
+			$row[] = $edit;
+
+			$data[] = $row;
+			}
+
+		$output = array(
+			"draw" => $_POST['draw'],
+			"recordsTotal" => $this->master_model->count_all ($search, 'category_list'),
+			"recordsFiltered" => $this->master_model->count_filtered ($search, 'category_list'),
+			"data" => $data,
+		);
+		//output dalam format JSON
+		echo json_encode ($output);
+		}
+
 	function get_uom_list()
 		{
 		$search = $this->session->userdata ('search');
@@ -59,12 +179,18 @@ class Master_data extends CI_Controller
 		$no = $_POST['start'];
 		foreach ($list as $field)
 			{
+			$edit = '
+				<a href="#" class="btn btn-outline-primary">
+					<i class="fa-solid fa-circle-info"></i>						
+				</a>';
+
 			$row = array();
 
 			$row[] = ++$no;
 			$row[] = $field->id;
 			$row[] = $field->uom_code;
 			$row[] = $field->uom_name;
+			$row[] = $edit;
 
 			$data[] = $row;
 			}

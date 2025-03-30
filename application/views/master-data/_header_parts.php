@@ -14,13 +14,17 @@
                             <i class="fa-solid fa-box-archive" style="margin-right:5px; margin-left: 5px;"></i>
                             UoM                           
                         </a></li>
-                        <li><a class="dropdown-item" href="#">
+                        <li><a class="dropdown-item" href="<?= site_url('master_data/category_list');?>">
                             <i class="fa-solid fa-box-archive" style="margin-right:5px; margin-left: 5px;"></i>
                             Category                    
                         </a></li>                        
-                        <li><a class="dropdown-item" href="#">
+                        <li><a class="dropdown-item" href="<?= site_url('master_data/factory_list');?>">
                             <i class="fa-solid fa-box-archive" style="margin-right:5px; margin-left: 5px;"></i>
                             Factory                   
+                        </a></li>
+                        <li><a class="dropdown-item" href="<?= site_url('master_data/purchase_reason');?>">
+                            <i class="fa-solid fa-box-archive" style="margin-right:5px; margin-left: 5px;"></i>
+                            Purchase Reason                   
                         </a></li>                        
                         <li><hr class="dropdown-divider" /></li>
                         <li><a class="dropdown-item" href="<?= site_url('master_data/material_list');?>">

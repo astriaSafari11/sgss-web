@@ -13,7 +13,7 @@
     <ol class="breadcrumb float-sm-end">
       <li class="breadcrumb-item"><a href="#">Home</a></li>
       <li class="breadcrumb-item" aria-current="page">Master Data</li>
-      <li class="breadcrumb-item active" aria-current="page">UoM List</li>
+      <li class="breadcrumb-item active" aria-current="page">Factory List</li>
     </ol>
   </div>
 </div>
@@ -28,7 +28,7 @@
           <a href="#" class="btn btn-sm btn-outline-primary position-relative"
             style="font-weight: 600; border-radius: 50px; white-space:nowrap">
             <i class="fa-solid fa-circle-plus"></i>
-            Add New UoM
+            Add New Factory
           </a>
         </div>
       </div>
@@ -37,13 +37,12 @@
 
         <?php $this->load->view ('_partials/search_bar.php'); ?>
 
-          <table id="uom_table" class="table table-striped table-bordered" width="100%">
+          <table id="factory_table" class="table table-striped table-bordered" width="100%">
             <thead style="text-align: center;white-space:nowrap;">
               <tr>
                 <th style="color: #fff;background-color: #001F82;text-align: center; width: 80px">No.</th>
                 <th style="color: #fff;background-color: #001F82;text-align: center;">ID</th>
-                <th style="color: #fff;background-color: #001F82;text-align: center;">UoM Code</th>
-                <th style="color: #fff;background-color: #001F82;text-align: center;">UoM Name</th>
+                <th style="color: #fff;background-color: #001F82;text-align: center;">Factory Name</th>
                 <th style="color: #fff;background-color: #001F82;text-align: center; width: 120px;">Action</th>
               </tr>
             </thead>
@@ -65,13 +64,13 @@
 
 <script>
 $(document).ready(function () {
-    $('#uom_table').DataTable({
+    $('#factory_table').DataTable({
       scrollX: true,
       "processing": true,
       "serverSide": true,
       "ordering": false,
       "ajax": {
-        "url": "<?= site_url ('master_data/get_uom_list'); ?>",
+        "url": "<?= site_url ('master_data/get_factory_list'); ?>",
         "type": "POST"
       },
       "order": [],
@@ -89,10 +88,9 @@ $(document).ready(function () {
         ],
         "columns": [
             { "data": 0 },
-            { "data": 1, "visible": false}, 
+            { "data": 1 }, 
             { "data": 2 }, 
-            { "data": 3 },
-            { "data": 4 }
+            { "data": 3 }
         
       ],
       "searching": false,
