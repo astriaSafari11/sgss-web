@@ -226,7 +226,7 @@ class Goods_management extends CI_Controller
         INNER JOIN m_master_data_vendor ON m_master_data_vendor.vendor_code = m_vendor_material.vendor_code
         where item_code = '$check_exist->item_code'")->result ();
 
-		$this->session->set_flashdata ('page_title', 'FORM INPUT ORDER');
+		$this->session->set_flashdata ('page_title', 'INPUT ORDER FORM');
 		$this->load->view ('goods-management/order.php', $data);
 		}
 
@@ -577,7 +577,7 @@ class Goods_management extends CI_Controller
 		$curr_user = $this->auth_model->current_user ();
 		$data['curr_user'] = $curr_user;
 
-		$this->session->set_flashdata ('page_title', 'FORM INPUT ORDER DETAIL');
+		$this->session->set_flashdata ('page_title', 'INPUT ORDER FORM DETAIL');
 		$this->load->view ('goods-management/order/detail.php', $data);
 		}
 
@@ -826,7 +826,7 @@ class Goods_management extends CI_Controller
 		WHERE week = '$week'
 		")->result ();
 
-		$this->session->set_flashdata ('page_title', 'STOCK CARD');
+		$this->session->set_flashdata ('page_title', 'INVENTORY');
 		load_view ('goods-management/item-movement.php', $data);
 		}
 
@@ -868,7 +868,7 @@ class Goods_management extends CI_Controller
 		$data['past_week'] = $get_past_week;
 		$data['up_week'] = $get_up_week;
 
-		$this->session->set_flashdata ('page_title', 'STOCK CARD');
+		$this->session->set_flashdata ('page_title', 'INVENTORY');
 		load_view ('goods-management/item-movement/detail.php', $data);
 		}
 
@@ -1065,13 +1065,13 @@ class Goods_management extends CI_Controller
 
 	public function item_movement_detail()
 		{
-		$this->session->set_flashdata ('page_title', 'STOCK CARD');
+		$this->session->set_flashdata ('page_title', 'INVENTORY');
 		$this->load->view ('goods-management/item-movement/index.php');
 		}
 
 	public function transactions()
 		{
-		$this->session->set_flashdata ('page_title', 'TRANSACTIONS CARD');
+		$this->session->set_flashdata ('page_title', 'USAGE');
 		$this->load->view ('goods-management/transactions.php');
 		}
 

@@ -374,13 +374,13 @@
                   <li class="nav-item sidebar">
                     <a href="<?= site_url('goods_management/item_movement');?>" class="nav-link">
                       <i class="nav-icon fa-solid fa-boxes-stacked icon"></i>
-                      <p>Stock Card</p>
+                      <p>Inventory</p>
                     </a>
                   </li>
                   <li class="nav-item sidebar">
                     <a href="<?= site_url('goods_management/transactions');?>" class="nav-link">
                       <i class="nav-icon bi bi-receipt icon"></i>
-                      <p>Transaction Card</p>
+                      <p>Usage</p>
                     </a>
                   </li>
                   <li class="nav-item sidebar">
@@ -408,19 +408,19 @@
                   <li class="nav-item sidebar">
                     <a href="<?= site_url('service_management');?>" class="nav-link">
                       <i class="nav-icon fa-solid fa-chart-area icon"></i>
-                      <p>Goods Dashboard</p>
+                      <p>Service Dashboard</p>
                     </a>
                   </li>
                   <li class="nav-item sidebar">
                     <a href="<?= site_url('service_management/requirement_calculation');?>" class="nav-link">
                       <i class="nav-icon fa-solid fa-boxes-stacked icon"></i>
-                      <p>Requirement Calculation</p>
+                      <p>Variable Validation</p>
                     </a>
                   </li>
                   <li class="nav-item sidebar">
                     <a href="<?= site_url('service_management/absenteeism');?>" class="nav-link">
                       <i class="nav-icon bi bi-receipt icon"></i>
-                      <p>Absenteeism</p>
+                      <p>Fixed Validation</p>
                     </a>
                   </li>
                   <li class="nav-item sidebar">
@@ -439,7 +439,7 @@
                           class="brand-image icon me-2" 
                           style="width: 33px; height: 33px;"
                       />
-                      <p class="mb-0">Saving</p>  
+                      <p class="mb-0">Savings</p>  
                   </a>
               </li>
 

@@ -12,7 +12,7 @@ class Saving_simulator extends CI_Controller
 
 	public function index()
 		{
-		$this->session->set_flashdata ('page_title', 'SAVING SIMULATOR');
+		$this->session->set_flashdata ('page_title', 'SAVINGS');
 		$this->load->view ('saving-simulator.php');
 		}
 	}

@@ -64,7 +64,7 @@ class Service_management extends CI_Controller
 			'status',
 		);
 
-		$this->session->set_flashdata ('page_title', 'GOODS DASHBOARD');
+		$this->session->set_flashdata ('page_title', 'SERVICE DASHBOARD');
 		$this->load->view ('service-management/dashboard.php', $data);
 		}
 
@@ -103,13 +103,13 @@ class Service_management extends CI_Controller
 
 	public function requirement_calculation()
 		{
-		$this->session->set_flashdata ('page_title', 'REQUIREMENT CALCULATION');
+		$this->session->set_flashdata ('page_title', 'VARIABLE VALIDATION');
 		load_view ('service-management/requirement_calculation.php', array());
 		}
 
 	public function absenteeism()
 		{
-		$this->session->set_flashdata ('page_title', 'ABSENTEEISM');
+		$this->session->set_flashdata ('page_title', 'FIXED VALIDATION');
 		load_view ('service-management/absenteeism.php', array());
 		}
 	}

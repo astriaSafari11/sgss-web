@@ -30,22 +30,8 @@
             </div>
 
 <!--begin::Row-->
-<div class="row">
-              <div class="col-12 mb-2">
-                <!-- Default box -->
-                <div class="card">
-                  <!-- <div class="card-header">
-                    <div class="card-tools">
-                      <button type="button" class="btn btn-sm btn-outline-danger position-relative" style="font-weight: 600; border-radius: 50px; width: 150px;">
-                        Export
-                      </button>                       
-                      <button type="button" class="btn btn-sm btn-outline-danger position-relative" style="font-weight: 600; border-radius: 50px;width: 150px;">
-                        Import
-                      </button>                       
-                    </div>
-                  </div> -->
-                  <div class="card-body">
-
+<div class="row info-box d-flex align-items-stretch ms-1 py-3 rounded-5">
+        <div class="col-md-12 col-sm-12 col-12">
                     <!-- btn add new tr -->
                     <div class="d-flex justify-content-between">
                         <p class="text-primary fw-bold fs-5">TRANSACTIONS</p>
@@ -56,54 +42,9 @@
                     </div>
                     <!-- end btn add new tr -->
 
-                    <div class="d-flex justify-content-between align-items-center mb-2">
-                    <!-- Start Dropdown Show X Entries -->
-                    <div class="d-flex align-items-center">
-                        <label for="entriesSelect" class="me-2 fs-7">Show</label>
-                        <select id="entriesSelect" class="form-select form-select-sm w-auto fs-7">
-                            <option value="10">10</option>
-                            <option value="25">25</option>
-                            <option value="50">50</option>
-                            <option value="100">100</option>
-                        </select>
-                        <span class="ms-2 fs-7">entries</span>
-                    </div>
-                    <!-- End Dropdown Show X Entries -->
+                    <?php $this->load->view ('_partials/search_bar.php'); ?>
 
-                    <!-- Start Search + Filter -->
-                    <div class="d-flex align-items-center gap-2">
-                    <!-- Filter 1 -->
-                    <label for="filterBy1" class="small">Filter 1:</label>
-                    <select id="filterBy1" class="form-select form-select-sm w-auto">
-                        <option value="all">All</option>
-                        <option value="0">Column 1</option>
-                        <option value="1">Column 2</option>
-                        <option value="2">Column 3</option>
-                    </select>
-
-                    <!-- Filter 2 -->
-                    <label for="filterBy2" class="small">Filter 2:</label>
-                    <select id="filterBy2" class="form-select form-select-sm w-auto">
-                        <option value="all">All</option>
-                        <option value="A">Category A</option>
-                        <option value="B">Category B</option>
-                        <option value="C">Category C</option>
-                    </select>
-
-                    <!-- Filter 3 -->
-                    <label for="filterBy3" class="small">Filter 3:</label>
-                    <select id="filterBy3" class="form-select form-select-sm w-auto">
-                        <option value="all">All</option>
-                        <option value="active">Active</option>
-                        <option value="inactive">Inactive</option>
-                    </select>
-
-                    <!-- Search Button -->
-                    <button class="btn btn-outline-primary btn-sm" type="button" id="searchBtn">
-                        <i class="fas fa-search"></i>
-                    </button>
-                </div>
-                  <!--End Search Bar-->
+                    
                   </div>
 
                   <style>
@@ -122,14 +63,14 @@
                     <table id="example" class="table table-sm" style="width:100%" cellspacing="0">
                       <thead>
                           <tr >
-                              <th style="color: #fff;background-color: #001F82;text-align: center;">Code</th>
-                              <th style="color: #fff;background-color: #001F82;text-align: center;">Item</th>
-                              <th style="color: #fff;background-color: #001F82;text-align: center;">Current On-Hand Stock</th>
-                              <th style="color: #fff;background-color: #001F82;text-align: center;">UoM</th>
-                              <th style="color: #fff;background-color: #001F82;text-align: center;">Safety Stock</th>
-                              <th style="color: #fff;background-color: #001F82;text-align: center;">Most Recent Transactions</th>
-                              <th style="color: #fff;background-color: #001F82;text-align: center;">Status</th>
-                              <th style="color: #fff;background-color: #001F82;text-align: center;">Action</th>                              
+                              <th style="color: #fff;background-color: #001F82;text-align: center; vertical-align: middle;">Code</th>
+                              <th style="color: #fff;background-color: #001F82;text-align: center; vertical-align: middle;">Item</th>
+                              <th style="color: #fff;background-color: #001F82;text-align: center; vertical-align: middle;">Current On-Hand Stock</th>
+                              <th style="color: #fff;background-color: #001F82;text-align: center; vertical-align: middle;">UoM</th>
+                              <th style="color: #fff;background-color: #001F82;text-align: center; vertical-align: middle;">Safety Stock</th>
+                              <th style="color: #fff;background-color: #001F82;text-align: center; vertical-align: middle;">Most Recent Transactions</th>
+                              <th style="color: #fff;background-color: #001F82;text-align: center; vertical-align: middle;">Status</th>
+                              <th style="color: #fff;background-color: #001F82;text-align: center; vertical-align: middle;">Action</th>                              
                           </tr>
                       </thead>
                       <tbody>
@@ -500,4 +441,6 @@ $('#entriesSelect').on('change', function () {
         }
     });
 });
+
+
 </script>
