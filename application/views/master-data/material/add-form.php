@@ -1,3 +1,40 @@
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" />
+<link rel="stylesheet"
+  href="https://cdn.jsdelivr.net/npm/select2-bootstrap-5-theme@1.3.0/dist/select2-bootstrap-5-theme.min.css" />
+<!-- Scripts -->
+<script src="https://cdn.jsdelivr.net/npm/jquery@3.5.0/dist/jquery.slim.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+<style>
+  .select2-container--bootstrap-5 .select2-selection {
+    width: 100%;
+    min-height: calc(1.5em + .75rem + 2px);
+    padding: .375rem .75rem;
+    font-family: inherit;
+    font-size: 1rem;
+    font-weight: 400;
+    line-height: 1.5;
+    color: #212529;
+    background-color: #fff;
+    border: 1px solid #ced4da;
+    border-radius: .25rem;
+    transition: border-color .15sease-in-out, box-shadow .15sease-in-out;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+    height: 58px;
+  }
+
+  .select2-container .select2-selection--single .select2-selection__rendered {
+    display: block;
+    /* padding-left: 8px;
+      padding-right: 20px; */
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    margin-top: 18px;
+  }
+</style>
 <form action="<?= site_url ('master_data/save_material'); ?>" method="post" class="needs-validation" novalidate
   id="submit_form">
   <div class="row mb-2">
@@ -52,8 +89,12 @@
             <div class="col-3">
               <div class="form-floating mb-3">
                 <select class="form-select" aria-label="Default select example" id="item_group" style="height: 56px;"
-                  name="item_group" required>
-                  <option value="" disabled>-- Select Item Category --</option>
+                  data-placeholder="Choose Item Group" name="item_group" required>
+                  <option></option>
+                  <?php foreach ($item_group as $row)
+                  { ?>
+                    <option value="<?php echo $row->id; ?>"><?php echo $row->item_category_name; ?></option>
+                  <?php } ?>
                 </select>
                 <label for="uom" class="fw-bold text-primary">Item Category</label>
                 <div class="invalid-feedback">This field is required.</div>
@@ -62,8 +103,13 @@
             <div class="col-3">
               <div class="form-floating mb-3">
                 <select class="form-select" aria-label="Default select example" id="size_uom" style="height: 56px;"
-                  name="size_uom" required>
-                  <option value="" disabled>-- Select Size UoM --</option>
+                  data-placeholder="Choose Size UoM" name="size_uom" required>
+                  <option></option>
+                  <?php foreach ($size_uom as $row)
+                  { ?>
+                    <option value="<?php echo $row->uom_code; ?>"><?php echo $row->uom_code; ?>
+                      (<?php echo $row->uom_name; ?>)</option>
+                  <?php } ?>
                 </select>
                 <label for="uom" class="fw-bold text-primary">Size UoM</label>
                 <div class="invalid-feedback">This field is required.</div>
@@ -72,8 +118,13 @@
             <div class="col-3">
               <div class="form-floating mb-3">
                 <select class="form-select" aria-label="Default select example" id="uom" style="height: 56px;"
-                  name="uom" required>
-                  <option value="" disabled>-- Select UoM --</option>
+                  data-placeholder="Choose UoM" name="uom" required>
+                  <option></option>
+                  <?php foreach ($uom as $row)
+                  { ?>
+                    <option value="<?php echo $row->uom_code; ?>"><?php echo $row->uom_code; ?>
+                      (<?php echo $row->uom_name; ?>)</option>
+                  <?php } ?>
                 </select>
                 <label for="uom" class="fw-bold text-primary">UoM</label>
                 <div class="invalid-feedback">This field is required.</div>
@@ -84,8 +135,12 @@
             <div class="col-3">
               <div class="form-floating mb-3">
                 <select class="form-select" aria-label="Default select example" id="factory" style="height: 56px;"
-                  name="factory" required>
-                  <option value="" disabled>-- Select Factory --</option>
+                  data-placeholder="Choose Factory" name="factory" required>
+                  <option></option>
+                  <?php foreach ($factory as $row)
+                  { ?>
+                    <option value="<?php echo $row->factory_name; ?>"><?php echo $row->factory_name; ?></option>
+                  <?php } ?>
                 </select>
                 <label for="factory" class="fw-bold text-primary">Factory</label>
                 <div class="invalid-feedback">This field is required.</div>
@@ -133,8 +188,16 @@
             </div>
             <div class="col-3">
               <div class="form-floating mb-3">
-                <input type="text" class="form-control" id="floatingInput" name="pic" id="pic" value="">
-                <label for="floatingInput" class="fw-bold text-primary">PIC</label>
+                <select class="form-select" aria-label="Default select example" id="pic" style="height: 56px;"
+                  data-placeholder="Choose PIC" name="pic" required>
+                  <option></option>
+                  <?php foreach ($user as $row)
+                  { ?>
+                    <option value="<?php echo $row->nip; ?>"><?php echo $row->nama; ?></option>
+                  <?php } ?>
+                </select>
+                <label for="pic" class="fw-bold text-primary">PIC</label>
+                <div class="invalid-feedback">This field is required.</div>
               </div>
             </div>
           </div>
@@ -205,13 +268,13 @@
                 <label for="floatingInput" class="fw-bold text-primary">Usage OK Threshold (% + Forecast)</label>
               </div>
             </div>
-            <div class="col-3">
+            <!-- <div class="col-3">
               <div class="form-floating mb-3">
                 <input type="text" class="form-control averageForecast" id="floatingInput" name="average_forecast"
                   value="0">
                 <label for="floatingInput" class="fw-bold text-primary">Average Forecast</label>
               </div>
-            </div>
+            </div> -->
             <!--begin::Col-->
             <!--end::Col-->
           </div>
@@ -261,6 +324,36 @@
 <script>
   var URL_AJAX = '<?php echo base_url (); ?>index.php/ajax';
   $(document).ready(function () {
+    $('#uom').select2({
+      theme: "bootstrap-5",
+      width: $(this).data('width') ? $(this).data('width') : $(this).hasClass('w-100') ? '100%' : 'style',
+      placeholder: $(this).data('placeholder'),
+    });
+
+    $('#size_uom').select2({
+      theme: "bootstrap-5",
+      width: $(this).data('width') ? $(this).data('width') : $(this).hasClass('w-100') ? '100%' : 'style',
+      placeholder: $(this).data('placeholder'),
+    });
+
+    $('#factory').select2({
+      theme: "bootstrap-5",
+      width: $(this).data('width') ? $(this).data('width') : $(this).hasClass('w-100') ? '100%' : 'style',
+      placeholder: $(this).data('placeholder'),
+    });
+
+    $('#item_group').select2({
+      theme: "bootstrap-5",
+      width: $(this).data('width') ? $(this).data('width') : $(this).hasClass('w-100') ? '100%' : 'style',
+      placeholder: $(this).data('placeholder'),
+    });
+
+    $('#pic').select2({
+      theme: "bootstrap-5",
+      width: $(this).data('width') ? $(this).data('width') : $(this).hasClass('w-100') ? '100%' : 'style',
+      placeholder: $(this).data('placeholder'),
+    });
+
     $(".averageForecast").on('keyup', function () {
       var val = this.value;
       val = val.replace(/[^0-9\.]/g, '');
@@ -286,13 +379,6 @@
 
       this.value = val;
     });
-  });
-
-  $(document).ready(function () {
-    get_uom();
-    get_factory();
-    get_size_uom();
-    get_item_group();
   });
 
   function submit_material() {
