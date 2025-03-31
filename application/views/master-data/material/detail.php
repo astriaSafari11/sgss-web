@@ -165,22 +165,22 @@
           </div>
           <div class="col-3">
             <div class="form-floating mb-3">
-              <input type="number" class="form-control" id="floatingInput" name="target_inventory"
+              <input type="text" class="form-control" id="floatingInput" name="target_inventory"
                 value="<?php echo myNum ($material->target_inventory); ?>" disabled>
               <label for="floatingInput" class="fw-bold text-primary">Target Inventory</label>
             </div>
           </div>
-          <div class="col-3">
+          <!-- <div class="col-3">
             <div class="form-floating mb-3">
               <input type="text" class="form-control" id="floatingInput" name="average_forecast"
                 value="<?php echo myNum ($material->average_forecast); ?>" disabled>
               <label for="floatingInput" class="fw-bold text-primary">Average Forecast</label>
             </div>
-          </div>
+          </div> -->
           <div class="col-3">
             <div class="form-floating mb-3">
-              <input type="text" class="form-control" id="floatingInput" name="average_forecast"
-                value="<?php echo $material->pic; ?>" disabled>
+              <input type="text" class="form-control" id="floatingInput" name="pic"
+                value="<?php echo $material->pic_name; ?>" disabled>
               <label for="floatingInput" class="fw-bold text-primary">PIC</label>
             </div>
           </div>
@@ -412,6 +412,114 @@
   <?php } ?>
   </tbody>
   </table>
+
+  <div class="row">
+    <div class="col-6 mb-2">
+      <a class="btn btn-primary position-relative" style="font-weight: 600; white-space:nowrap;">
+        Average Forecast
+      </a>
+    </div>
+    <div class="col-6 mb-2 d-flex justify-content-end">
+      <button type="button" class="btn btn-sm btn-outline-primary" style="font-weight: 600;" data-bs-toggle="modal"
+        data-bs-target="#modal-update-average-forecast">
+        <i class="fa-solid fa-add"></i>
+        Update Average Forecast
+      </button>
+    </div>
+  </div>
+  <table id="table-budget" class="table table-striped table-bordered" width="100%">
+    <thead style="text-align: center;white-space:nowrap;">
+      <tr>
+        <th style="color: #fff;background-color:#001F82;text-align: left;">Baseline</th>
+        <th style="color: #fff;background-color:#001F82;text-align: ;">Description</th>
+        <th style="color: #fff;background-color:#001F82;text-align: center;"></th>
+      </tr>
+    </thead>
+    <tbody style="text-align: center;vertical-align:center;">
+      <?php foreach ($average_forecast as $k => $v)
+      { ?>
+        <tr>
+          <td style="vertical-align: middle;text-align: left;"><?php echo $v->baseline; ?></td>
+          <td style="vertical-align: middle;text-align: left;">
+            <?php if ($v->baseline == 'Default')
+            { ?>
+              <span style="font-size: 12px;font-style: italic;">By default, the average forecast calculation will be taken
+                from the <b><?php echo $v->start_week; ?></b> weeks
+                prior to the
+                current week.</span>
+            <?php } ?>
+            <?php if ($v->baseline == 'YTD')
+            { ?>
+              <span style="font-size: 12px;font-style: italic;">YTD Forecast is a calculation taken over the current year,
+                from the first week
+                up to the current week.</span>
+            <?php } ?>
+            <?php if ($v->baseline == 'Start-To')
+            { ?>
+              <span style="font-size: 12px;font-style: italic;">Start-To Forecast is a custom calculation, with adjustable
+                start and end weeks for average value calculation. The current average is calculated from weeks
+                <b><?php echo $v->start_week; ?></b> to
+                <b><?php echo $v->to_week; ?></b>.</span>
+            <?php } ?>
+          </td>
+          <td style="vertical-align: middle;text-align: center;">
+            <?php echo $v->is_default == 1 ? '<i class="fa-solid fa-star-of-life" data-bs-toggle="tooltip" data-bs-title="The formula used to calculate the average forecast."></i>' : ''; ?>
+          </td>
+        </tr>
+        <form action="<?php echo site_url ('master_data/edit_annual_budget'); ?>" method="post"
+          enctype="multipart/form-data" class="needs-validation" novalidate>
+          <input type="hidden" name="id" value="<?php echo $v->id; ?>">
+          <input type="hidden" name="item_id" value="<?php echo $material->id; ?>">
+          <div class="modal fade" id="modal-edit-annual-budget-<?php echo $v->id; ?>" tabindex="-1"
+            aria-labelledby="exampleModalLabel" aria-hidden="true">
+            <div class="modal-dialog modal-lg">
+              <div class="modal-content">
+                <div class="modal-header">
+                  <h5 class="modal-title" id="exampleModalLabel" class="text-primary"
+                    style="color: #001F82;font-weight:600;">Edit Annual Budget</h5>
+                  <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                  <!--begin::Col-->
+                  <div class="col-12">
+                    <div class="form-floating mb-3">
+                      <input type="text" min="1" class="form-control" id="floatingInput" name="year" id="year"
+                        value="<?php echo $v->year; ?>" readonly>
+                      <label for="floatingInput" class="fw-bold text-primary">Year</label>
+                      <div class="invalid-feedback">This field is required.</div>
+                    </div>
+                  </div>
+                  <!--end::Col-->
+                  <!--begin::Col-->
+                  <div class="col-12">
+                    <div class="form-floating mb-3">
+                      <input type="text" min="1" class="form-control annualBudget" id="floatingInput" name="annual_budget"
+                        id="annualBudget" value="<?php echo myNum ($v->annual_budget); ?>" required>
+                      <label for="floatingInput" class="fw-bold text-primary">Annual Budget (Price)</label>
+                      <div class="invalid-feedback">This field is required.</div>
+                    </div>
+                  </div>
+                  <div class="col-12">
+                    <div class="form-floating mb-3">
+                      <input type="number" min="1" class="form-control" id="floatingInput" name="annual_usage"
+                        value="<?php echo $v->annual_usage; ?>" required>
+                      <label for="floatingInput" class="fw-bold text-primary">Annual Usage (UoM)</label>
+                      <div class="invalid-feedback">This field is required.</div>
+                    </div>
+                  </div>
+                </div>
+                <div class="modal-footer">
+                  <button type="button" class="btn btn-outline-warning" data-bs-dismiss="modal">No, Cancel.</button>
+                  <button name="submit" type="submit" class="btn btn-outline-primary">Yes, Update Data.</button>
+                </div>
+              </div>
+            </div>
+          </div>
+  </div>
+  </form>
+<?php } ?>
+</tbody>
+</table>
 </div>
 <div class="col-6 mb-4">
   <table id="table-item" class="table table-bordered" width="100%">
@@ -479,8 +587,71 @@
           </div>
         </div>
         <div class="modal-footer">
-          <button type="button" class="btn btn-outline-warning" data-bs-dismiss="modal">No, Cancel.</button>
-          <button type="submit" name="submit" class="btn btn-outline-danger">Yes, Submit Data.</button>
+          <button type="button" class="btn btn-outline-danger" data-bs-dismiss="modal">No, Cancel.</button>
+          <button type="submit" name="submit" class="btn btn-outline-primary">Yes, Submit Data.</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</form>
+<form action="<?= site_url ('master_data/update_average_forecast'); ?>" method="post" class="needs-validation"
+  novalidate>
+  <input type="hidden" name="item_id" value="<?php echo $material->id; ?>">
+  <div class="modal fade" id="modal-update-average-forecast" tabindex="-1" aria-labelledby="exampleModalLabel"
+    aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="exampleModalLabel" class="text-primary" style="color: #001F82;font-weight:600;">
+            Update Average Forecast</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <div class="row">
+            <!--begin::Col-->
+            <div class="col-4">
+              <div class="form-floating mb-3">
+                <input type="number" min="1" max="52" class="form-control" id="floatingInput" name="week">
+                <label for="floatingInput" class="fw-bold text-primary">Default Week</label>
+                <div class="invalid-feedback">This field is required.</div>
+              </div>
+            </div>
+            <!--end::Col-->
+            <!--begin::Col-->
+            <div class="col-4">
+              <div class="form-floating mb-3">
+                <input type="number" min="1" max="52" class="form-control" id="floatingInput" name="start_week">
+                <label for="floatingInput" class="fw-bold text-primary">Start (Week)</label>
+                <div class="invalid-feedback">This field is required.</div>
+              </div>
+            </div>
+            <div class="col-4">
+              <div class="form-floating mb-3">
+                <input type="number" min="1" max="52" class="form-control" id="floatingInput" name="to_week">
+                <label for="floatingInput" class="fw-bold text-primary">To (Week)</label>
+                <div class="invalid-feedback">This field is required.</div>
+              </div>
+            </div>
+          </div>
+          <ul>
+            <li>
+              <span style="font-size: 14px;font-style: italic;">Modify the <b>Default Week</b> to alter the default
+                formula’s
+                standard number of weeks leading up to the current week.
+              </span><br>
+            </li>
+            <li>
+              <span style="font-size: 14px;font-style: italic;">Modify the <b>Start Week</b> and <b>To Week</b> to
+                adjust
+                the start and end
+                calculation weeks within the Start-To formula.
+              </span>
+            </li>
+          </ul>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-outline-danger" data-bs-dismiss="modal">No, Cancel.</button>
+          <button type="submit" name="submit" class="btn btn-outline-primary">Yes, Submit Data.</button>
         </div>
       </div>
     </div>
