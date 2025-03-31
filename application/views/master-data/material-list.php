@@ -32,6 +32,7 @@
       </div>
       <div class="card-body">
         <div class="dt-container">
+        <?php $this->load->view ('_partials/search_bar.php'); ?>
           <table id="table-vendor" class="table table-striped table-bordered" width="100%">
             <thead style="text-align: center;white-space:nowrap;">
               <tr>
@@ -87,6 +88,8 @@
           $(cell).css('vertical-align', 'middle');
         }
       }],
+      "searching": false,
+      "lengthChange": false
     });
   });
 </script>

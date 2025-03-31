@@ -24,8 +24,9 @@
         <div class="card">
             <div class="card-body">
                 <div class="dt-container">
+                <?php $this->load->view ('_partials/search_bar.php'); ?>
                     <div class="d-flex justify-content-between align-items-center flex-wrap">
-                        <div class="d-flex align-items-center">
+                        <!-- <div class="d-flex align-items-center">
                             <label for="entriesSelect" class="me-2 fs-7">Show</label>
                             <select id="entriesSelect" class="form-select form-select-sm w-auto fs-7">
                                 <option value="10">10</option>
@@ -34,13 +35,13 @@
                                 <option value="100">100</option>
                             </select>
                             <span class="ms-2 fs-7">entries</span>
-                        </div>
+                        </div> -->
                         <!-- End Dropdown Show X Entries -->
 
                         <!-- Start Search + Filter -->
-                        <div class="d-flex align-items-center gap-2 flex-wrap">
+                        <!-- <div class="d-flex align-items-center gap-2 flex-wrap"> -->
                             <!-- Filter 1 -->
-                            <label for="filterBy1" class="small">Column:</label>
+                            <!-- <label for="filterBy1" class="small">Column:</label>
                             <select id="filterBy1" class="form-select form-select-sm w-auto">
                                 <option value="all">All</option>
                                 <option value="0">Vendor Code</option>
@@ -53,10 +54,10 @@
                                 <option value="2">Price per Uom</option>
                                 <option value="2">Saving</option>
                                 <option value="2">Price Equal MoQ</option>
-                            </select>
+                            </select> -->
 
                             <!-- Filter 2 -->
-                            <label for="filterBy2" class="small">Filter:</label>
+                            <!-- <label for="filterBy2" class="small">Filter:</label>
                             <select id="filterBy2" class="form-select form-select-sm w-auto">
                                 <option value="all">Is</option>
                                 <option value="A">Not</option>
@@ -66,19 +67,19 @@
                                 <option value="B">Greater Than Equal</option>
                                 <option value="C">Less Than Equal</option>
                                 <option value="C">Like</option>
-                            </select>
+                            </select> -->
 
                             <!-- Filter 3 -->
-                            <label for="filterBy3" class="small">Search:</label>
+                            <!-- <label for="filterBy3" class="small">Search:</label>
                             <input type="text" id="searchInput" class="form-control form-control-sm w-auto"
-                                placeholder="Search">
+                                placeholder="Search"> -->
 
                             <!-- Search Button -->
-                            <button class="btn btn-outline-primary btn-sm" type="button" id="searchBtn">
+                            <!-- <button class="btn btn-outline-primary btn-sm" type="button" id="searchBtn">
                                 <i class="fas fa-search"></i>
                             </button>
 
-                        </div>
+                        </div> -->
                     </div>
                     <!-- End Search + filter -->
 
