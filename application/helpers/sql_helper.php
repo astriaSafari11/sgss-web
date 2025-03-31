@@ -458,6 +458,56 @@ function generate_budget_baseline($item_id, $budget, $target)
         }
     }
 
+function generate_average_forecast($item_id)
+    {
+    $CI = getCI ();
+    $data = array();
+
+    $baseline = array('Default', 'YTD', 'Start-To');
+
+    $get_data = $CI->db->get_where ('m_master_data_material', array(
+        "id" => $item_id
+    ))->row ();
+
+    foreach ($baseline as $key => $value)
+        {
+        $is_default = 0;
+        $start_week = 0;
+        $to_week = 0;
+
+        if ($value == 'YTD')
+            {
+            $is_default = 1;
+            $start_week = 1;
+            $to_week = 52;
+            }
+        if ($value == 'Default')
+            {
+            $is_default = 0;
+            $start_week = 5;
+            $to_week = 5;
+            }
+
+        $exist = $CI->db->get_where ('m_material_average_forecast', array(
+            "item_id" => $item_id,
+            "baseline" => $value
+        ))->row ();
+
+        if (! $exist)
+            {
+            _add ('m_material_average_forecast', array(
+                "item_id" => $item_id,
+                "item_code" => $get_data->item_code,
+                "baseline" => $value,
+                "start_week" => $start_week,
+                "to_week" => $to_week,
+                "is_default" => $is_default
+            ));
+
+            }
+        }
+    }
+
 function generate_approval_track($order_id, $requestor)
     {
     $CI = getCI ();
