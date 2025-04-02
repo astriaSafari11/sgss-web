@@ -59,7 +59,7 @@
 </div>
 <!--begin::Row-->
 <div class="row info-box d-flex align-items-stretch ms-1 py-3 rounded-5">
-    <div class="col-md-12 col-sm-12 col-12">
+    <!-- <div class="col-md-12 col-sm-12 col-12">
         <form action="<?php echo site_url ('goods_management/item_movement'); ?>" method="post">
             <div class="d-flex justify-content-between align-items-center mb-2">
                 <label for="filterBy1" class="small" style="width: 60px;">Search :</label>
@@ -106,7 +106,9 @@
         </form>
 
 
-    </div>
+    </div> -->
+
+    <?php $this->load->view ('_partials/search_bar_special.php'); ?>
 
     <style>
         a.underline-custom {

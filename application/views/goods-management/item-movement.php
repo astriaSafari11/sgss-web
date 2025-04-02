@@ -89,7 +89,7 @@
                 font-weight: 600;
             }
         </style>
-        <form action="<?php echo site_url ('goods_management/item_movement'); ?>" method="post">
+        <!-- <form action="<?php echo site_url ('goods_management/item_movement'); ?>" method="post">
             <div class="d-flex justify-content-between align-items-center mb-2">
                 <label for="filterBy1" class="small" style="width: 60px;">Search :</label>
                 <input type="text" id="searchInput" class="form-control form-control-sm w-full"
@@ -132,7 +132,10 @@
                     </div>
                 </div>
             </div>
-        </form>
+        </form> -->
+
+        <?php $this->load->view ('_partials/search_bar_special.php'); ?>
+        
         <table id="example" class="table table-sm" style="width:100%" cellspacing="0">
             <thead>
                 <tr>
