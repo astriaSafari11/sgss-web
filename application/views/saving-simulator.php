@@ -272,6 +272,7 @@ Highcharts.chart('loss_chart', {
         margin: 0,
         y: -10
     },
+    credits: { enabled: false },
     series: [{
         name: 'Series 1',
         data: [5, 7, 15, 20], 
@@ -318,6 +319,7 @@ Highcharts.chart('gain_chart', {
         margin: 0,
         y: -10
     },
+    credits: { enabled: false },
     series: [{
         name: 'Series 1',
         data: [5, 7, 15, 20], 
@@ -341,6 +343,7 @@ Highcharts.chart('gauge-chart', {
         spacingBottom: 0,
     },
     title: null,
+    credits: { enabled: false },
     pane: {
         startAngle: -90,
         endAngle: 90,
@@ -438,6 +441,7 @@ Highcharts.chart('stackedBarChart', {
         }
         },
         legend: { layout: 'horizontal', align: 'center', verticalAlign: 'top' },
+        credits: { enabled: false },
         series: [
             { name: 'Series 1', data: [5, 10, 15, 20], color: '#001F82' }, 
             { name: 'Series 2', data: [10, 20, 25, 20], color: '#AEBECD' }
@@ -464,6 +468,7 @@ Highcharts.chart('stackedBarChart', {
         legend: {
             enabled: false
         },
+        credits: { enabled: false },
         series: [{
             name: 'Series 1',
             data: [7, 2, 15, 5],

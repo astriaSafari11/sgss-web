@@ -366,6 +366,7 @@
       legend: {
         enabled: false
       },
+      credits: { enabled: false },
       plotOptions: {
         series: {
           allowPointSelect: true,
@@ -461,6 +462,7 @@
       legend: {
         enabled: false
       },
+      credits: { enabled: false },
       plotOptions: {
         innerSize: '20%',
         series: {
@@ -557,6 +559,7 @@
       legend: {
         enabled: false
       },
+      credits: { enabled: false },
       plotOptions: {
         series: {
           allowPointSelect: true,

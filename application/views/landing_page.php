@@ -562,6 +562,7 @@
                 }]
             },
             legend: { enabled: false },
+            credits: { enabled: false },
             exporting: {
                 enabled: true,
                 menuItemStyle: {

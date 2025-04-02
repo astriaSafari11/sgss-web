@@ -32,7 +32,7 @@
   .resetDownload {
     font-size: 12px;
     padding: 5px 10px;
-    margin-left: 60%;
+    margin-left: 70%;
     margin-bottom: 10px;
     position: relative;
     top: -50px;
@@ -67,79 +67,8 @@
   <div class="col-sm-6">
     <div class="d-flex justify-content-end">
 
-      <!-- btn download all -->
       <button onclick="DownloadAll()" class="btn btn-sm btn-outline-primary"
         style="font-weight: 600; border-radius: 50px; width: 150px;">Download All</button>
-
-      <!-- Logic Download All (sementara) -->
-      <script>
-        document.addEventListener("DOMContentLoaded", function () {
-          document.querySelectorAll(".download-btn").forEach(function (btn) {
-            let fileName = btn.getAttribute("data-file");
-            let icon = btn.querySelector(".file-icon");
-
-            if (localStorage.getItem(fileName) === "downloaded") {
-              icon.className = "fas fa-file-circle-check text-success";
-            }
-
-            btn.addEventListener("click", function () {
-              setTimeout(() => {
-                icon.className = "fas fa-file-circle-check text-success";
-                localStorage.setItem(fileName, "downloaded");
-              }, 500);
-            });
-          });
-        });
-
-        function DownloadAll() {
-          let downloadLinks = document.querySelectorAll('.download-btn');
-
-          downloadLinks.forEach((link, index) => {
-            setTimeout(() => {
-              let url = link.getAttribute('href');
-              let fileName = link.getAttribute('data-file');
-
-              let a = document.createElement('a');
-              a.href = url;
-              a.download = fileName;
-              document.body.appendChild(a);
-              a.click();
-              document.body.removeChild(a);
-
-              // Ubah ikon setelah download
-              let icon = link.querySelector(".file-icon");
-              icon.className = "fas fa-file-circle-check text-success";
-              localStorage.setItem(fileName, "downloaded");
-            }, index * 200);
-          });
-        }
-
-        // Fungsi untuk mereset status download dan ikon
-        function resetIcons() {
-          localStorage.clear();
-          document.querySelectorAll(".download-btn .file-icon").forEach(function (icon) {
-            icon.className = "fas fa-file-pdf text-primary";
-          });
-          alert("Status download telah di-reset!");
-          location.reload();
-        }
-
-        // supaya card tidak kepanjangan
-        function adjustCardHeight() {
-          document.querySelectorAll(".adjusted-card-body").forEach(cardBody => {
-            let parentCard = cardBody.closest(".card");
-
-            if (parentCard) {
-              let newHeight = parentCard.scrollHeight - 60;
-              cardBody.style.height = newHeight + "px";
-            }
-          });
-        }
-
-        window.addEventListener("load", adjustCardHeight);
-        window.addEventListener("resize", adjustCardHeight);
-
-      </script>
 
       <button type="button" class="btn btn-sm btn-outline-primary"
         style="font-weight: 600; border-radius: 50px; width: 150px;">
@@ -168,57 +97,7 @@
                     </div>
                   </div> -->
       <div class="card-body adjusted-card-body">
-
-        <!-- Start Dropdown Show X Entries -->
-        <div class="d-flex justify-content-between align-items-center flex-wrap">
-          <div class="d-flex align-items-center">
-            <label for="entriesSelect" class="me-2 fs-7">Show</label>
-            <select id="entriesSelect" class="form-select form-select-sm w-auto fs-7">
-              <option value="10">10</option>
-              <option value="25">25</option>
-              <option value="50">50</option>
-              <option value="100">100</option>
-            </select>
-            <span class="ms-2 fs-7">entries</span>
-          </div>
-          <!-- End Dropdown Show X Entries -->
-
-          <!-- Start Search + Filter -->
-          <div class="d-flex align-items-center gap-2 flex-wrap">
-            <!-- Filter 1 -->
-            <label for="filterBy1" class="small">Filter 1:</label>
-            <select id="filterBy1" class="form-select form-select-sm w-auto">
-              <option value="all">All</option>
-              <option value="0">Column 1</option>
-              <option value="1">Column 2</option>
-              <option value="2">Column 3</option>
-            </select>
-
-            <!-- Filter 2 -->
-            <label for="filterBy2" class="small">Filter 2:</label>
-            <select id="filterBy2" class="form-select form-select-sm w-auto">
-              <option value="all">All</option>
-              <option value="A">Category A</option>
-              <option value="B">Category B</option>
-              <option value="C">Category C</option>
-            </select>
-
-            <!-- Filter 3 -->
-            <label for="filterBy3" class="small">Filter 3:</label>
-            <select id="filterBy3" class="form-select form-select-sm w-auto">
-              <option value="all">All</option>
-              <option value="active">Active</option>
-              <option value="inactive">Inactive</option>
-            </select>
-
-            <!-- Search Button -->
-            <button class="btn btn-outline-primary btn-sm" type="button" id="searchBtn">
-              <i class="fas fa-search"></i>
-            </button>
-
-          </div>
-        </div>
-        <!-- End Search + filter -->
+        <?php $this->load->view ('_partials/search_bar.php'); ?>
 
         <table id="example" class="table table-sm" style="width:100%" cellspacing="0">
           <thead>
@@ -367,6 +246,72 @@
 <?php $this->load->view ('_partials/footer.php'); ?>
 
 <script>
+   document.addEventListener("DOMContentLoaded", function () {
+          document.querySelectorAll(".download-btn").forEach(function (btn) {
+            let fileName = btn.getAttribute("data-file");
+            let icon = btn.querySelector(".file-icon");
+
+            if (localStorage.getItem(fileName) === "downloaded") {
+              icon.className = "fas fa-file-circle-check text-success";
+            }
+
+            btn.addEventListener("click", function () {
+              setTimeout(() => {
+                icon.className = "fas fa-file-circle-check text-success";
+                localStorage.setItem(fileName, "downloaded");
+              }, 500);
+            });
+          });
+        });
+
+        function DownloadAll() {
+          let downloadLinks = document.querySelectorAll('.download-btn');
+
+          downloadLinks.forEach((link, index) => {
+            setTimeout(() => {
+              let url = link.getAttribute('href');
+              let fileName = link.getAttribute('data-file');
+
+              let a = document.createElement('a');
+              a.href = url;
+              a.download = fileName;
+              document.body.appendChild(a);
+              a.click();
+              document.body.removeChild(a);
+
+              // Ubah ikon setelah download
+              let icon = link.querySelector(".file-icon");
+              icon.className = "fas fa-file-circle-check text-success";
+              localStorage.setItem(fileName, "downloaded");
+            }, index * 200);
+          });
+        }
+
+        // Fungsi untuk mereset status download dan ikon
+        function resetIcons() {
+          localStorage.clear();
+          document.querySelectorAll(".download-btn .file-icon").forEach(function (icon) {
+            icon.className = "fas fa-file-pdf text-primary";
+          });
+          alert("Status download telah di-reset!");
+          location.reload();
+        }
+
+        // supaya card tidak kepanjangan
+        function adjustCardHeight() {
+          document.querySelectorAll(".adjusted-card-body").forEach(cardBody => {
+            let parentCard = cardBody.closest(".card");
+
+            if (parentCard) {
+              let newHeight = parentCard.scrollHeight - 60;
+              cardBody.style.height = newHeight + "px";
+            }
+          });
+        }
+
+        window.addEventListener("load", adjustCardHeight);
+        window.addEventListener("resize", adjustCardHeight);
+
   $(document).ready(function () {
     var table = $('#example').DataTable({
       dom: "t<'row'<'col-sm-6'i><'col-sm-6'p>>",
@@ -414,6 +359,7 @@
       legend: {
         enabled: false
       },
+      credits: { enabled: false },
       plotOptions: {
         series: {
           allowPointSelect: true,
@@ -509,6 +455,7 @@
       legend: {
         enabled: false
       },
+      credits: { enabled: false },
       plotOptions: {
         innerSize: '20%',
         series: {
@@ -605,6 +552,7 @@
       legend: {
         enabled: false
       },
+      credits: { enabled: false },
       plotOptions: {
         series: {
           allowPointSelect: true,
