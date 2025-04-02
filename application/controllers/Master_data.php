@@ -2114,13 +2114,13 @@ class Master_data extends CI_Controller
 								$itemName = explode (" ", $item_name);
 
 								$itemNameCode = '';
-								for ($i = 0; $i < 2; $i++)
+								for ($i = 0; $i < 3; $i++)
 									{
 									$length = $i == 0 ? 3 : 2;
 									$itemNameCode .= substr ($itemName[$i], 0, $length);
 									}
 
-								$itemcode = strtoupper ($itemNameCode . $this->input->post ('size') . $this->input->post ('uom'));
+								$itemcode = strtoupper ($itemNameCode . $size . $uom);
 
 								$get_item_group = $this->db->get_where ("m_item_category", array(
 									"item_category_name" => $item_group,

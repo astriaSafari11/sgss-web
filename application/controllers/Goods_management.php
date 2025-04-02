@@ -810,22 +810,27 @@ class Goods_management extends CI_Controller
 
 	public function item_movement()
 		{
-		$week = date ("W");
-		$data['item'] = $this->db->query ("
-		select *,
-		(standard_safety_stock + ((standard_safety_stock /100)* var_stock_card_ok)) as ok,
-		(standard_safety_stock + ((standard_safety_stock /100)* var_stock_card_overstock)) as overstock,
-		(CASE
-		WHEN net_on_hand >= (standard_safety_stock + ((standard_safety_stock /100)* var_stock_card_overstock)) THEN 'overstock'
-		WHEN net_on_hand >= (standard_safety_stock + ((standard_safety_stock /100)* var_stock_card_ok)) 	   THEN 'OK'
-		WHEN net_on_hand = 0 THEN 'understock'
-		WHEN net_on_hand <= standard_safety_stock THEN 'understock'
-		WHEN current_safety_stock <= standard_safety_stock THEN 'understock'
-		END) AS status 
-		from view_stock_card
-		WHERE week = '$week'
-		")->result ();
 
+		$data = array();
+		if (isset ($_POST['search']))
+			{
+			$week = date ("W");
+			$data['item'] = $this->db->query ("
+				select *,
+				(standard_safety_stock + ((standard_safety_stock /100)* var_stock_card_ok)) as ok,
+				(standard_safety_stock + ((standard_safety_stock /100)* var_stock_card_overstock)) as overstock,
+				(CASE
+				WHEN net_on_hand >= (standard_safety_stock + ((standard_safety_stock /100)* var_stock_card_overstock)) THEN 'overstock'
+				WHEN net_on_hand >= (standard_safety_stock + ((standard_safety_stock /100)* var_stock_card_ok)) 	   THEN 'OK'
+				WHEN net_on_hand = 0 THEN 'understock'
+				WHEN net_on_hand <= standard_safety_stock THEN 'understock'
+				WHEN current_safety_stock <= standard_safety_stock THEN 'understock'
+				END) AS status 
+				from view_stock_card
+				WHERE week = '$week'
+				")->result ();
+
+			}
 		$this->session->set_flashdata ('page_title', 'INVENTORY');
 		load_view ('goods-management/item-movement.php', $data);
 		}
@@ -861,8 +866,19 @@ class Goods_management extends CI_Controller
 		$data['total_gross_req'] = count ($data['gross_req']);
 
 		$get_current_week = date ('W', strtotime (date ('Y-m-d')));
-		$get_past_week = $get_current_week - 5;
-		$get_up_week = $get_current_week + 6;
+
+		if (isset ($_POST['search']))
+			{
+			$get_past_week = $this->input->post ('start_week');
+			$get_up_week = $this->input->post ('to_week');
+
+			}
+		else
+			{
+			$get_past_week = $get_current_week - 5;
+			$get_up_week = $get_current_week + 6;
+
+			}
 
 		$data['current_week'] = $get_current_week;
 		$data['past_week'] = $get_past_week;
