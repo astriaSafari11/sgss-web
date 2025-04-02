@@ -46,28 +46,28 @@ class Master_data extends CI_Controller
 		}
 
 	public function uom_list()
-	{
-		$this->session->set_flashdata('page_title', 'MASTER DATA UoM');
-		$this->load->view('master-data/uom-list.php');
-	}
+		{
+		$this->session->set_flashdata ('page_title', 'MASTER DATA UoM');
+		$this->load->view ('master-data/uom-list.php');
+		}
 
 	public function category_list()
-	{
-		$this->session->set_flashdata('page_title', 'MASTER DATA CATEGORY');
-		$this->load->view('master-data/category-list.php');
-	}
+		{
+		$this->session->set_flashdata ('page_title', 'MASTER DATA CATEGORY');
+		$this->load->view ('master-data/category-list.php');
+		}
 
 	public function factory_list()
-	{
-		$this->session->set_flashdata('page_title', 'MASTER DATA FACTORY');
-		$this->load->view('master-data/factory-list.php');
-	}
+		{
+		$this->session->set_flashdata ('page_title', 'MASTER DATA FACTORY');
+		$this->load->view ('master-data/factory-list.php');
+		}
 
 	public function purchase_reason()
-	{
-		$this->session->set_flashdata('page_title', 'MASTER DATA PURCHASE REASON');
-		$this->load->view('master-data/purchase-reason.php');
-	}
+		{
+		$this->session->set_flashdata ('page_title', 'MASTER DATA PURCHASE REASON');
+		$this->load->view ('master-data/purchase-reason.php');
+		}
 
 	function get_purchase_reason()
 		{
@@ -204,7 +204,7 @@ class Master_data extends CI_Controller
 		//output dalam format JSON
 		echo json_encode ($output);
 		}
-	
+
 	function get_master_vendor()
 		{
 		$search = $this->session->userdata ('search');
@@ -651,8 +651,16 @@ class Master_data extends CI_Controller
 
 	public function add_material()
 		{
+
+		$user = $this->db->get ("m_employee")->result ();
+		$data['user'] = $user;
+		$data['uom'] = $this->db->get ("m_uom")->result ();
+		$data['size_uom'] = $this->db->get ("m_uom")->result ();
+		$data['factory'] = $this->db->get ("m_factory")->result ();
+		$data['item_group'] = $this->db->get ("m_item_category")->result ();
+
 		$this->session->set_flashdata ('page_title', 'FORM ADD NEW MATERIAL');
-		load_view ('master-data/material/add-form.php', []);
+		load_view ('master-data/material/add-form.php', $data);
 		}
 
 	public function save_material()
@@ -662,7 +670,7 @@ class Master_data extends CI_Controller
 			$itemName = explode (" ", $this->input->post ('item_name'));
 
 			$itemNameCode = '';
-			for ($i = 0; $i < count ($itemName); $i++)
+			for ($i = 0; $i < 2; $i++)
 				{
 				$length = $i == 0 ? 3 : 2;
 				$itemNameCode .= substr ($itemName[$i], 0, $length);
@@ -679,6 +687,10 @@ class Master_data extends CI_Controller
 				"id" => $this->input->post ('item_group'),
 			))->row ();
 
+			$get_pic = $this->db->get_where ("m_employee", array(
+				"nip" => $this->input->post ('pic'),
+			))->row ();
+
 			if ($exist)
 				{
 				$err = array(
@@ -693,7 +705,7 @@ class Master_data extends CI_Controller
 				{
 				$total_lead_time = $this->input->post ('lt_pr_to_deliv') + $this->input->post ('lt_pr_po');
 				$standart_safety_stock = ! empty ($this->input->post ('order_cycle')) && ! empty ($this->input->post ('lot_size')) ? ($total_lead_time / $this->input->post ('order_cycle')) * $this->input->post ('lot_size') : NULL;
-				$target_price = ! empty ($this->input->post ('budget_price')) ? str_replace (',', '', $this->input->post ('budget_price')) * $standart_safety_stock : 0;
+				$target_price = ! empty ($this->input->post ('budget_target')) ? str_replace (',', '', $this->input->post ('budget_target')) * $standart_safety_stock : 0;
 				$target_inventory = ! empty ($standart_safety_stock) ? $standart_safety_stock * 2 : NULL;
 				$inserted = _add (
 					"m_master_data_material",
@@ -715,8 +727,9 @@ class Master_data extends CI_Controller
 						"gen_lead_time" => $total_lead_time,
 						"standard_safety_stock" => round ($standart_safety_stock),
 						'average_forecast' => str_replace (',', '', $this->input->post ('average_forecast')),
-						'target_inventory' => round ($target_inventory),
+						'target_inventory' => $target_price,
 						"pic" => $this->input->post ('pic'),
+						"pic_name" => $get_pic->nama,
 					)
 				);
 				if ($inserted)
@@ -747,17 +760,9 @@ class Master_data extends CI_Controller
 						);
 
 						_add_nologs ('m_variable_settings', $data_var_settings);
-
-						generate_var_settings (
-							$last_id,
-							$this->input->post ('var_todo_list'),
-							$this->input->post ('var_stock_card_todo_list'),
-							$this->input->post ('var_stock_card_overstock'),
-							$this->input->post ('var_stock_card_ok')
-						);
-
 						generate_budget_baseline ($last_id, str_replace (',', '', $this->input->post ('budget_price')), str_replace (',', '', $this->input->post ('budget_target')));
 						generate_item_movement ($last_id);
+						generate_average_forecast ($last_id);
 
 						_add ('m_material_budget', array(
 							"item_id" => $last_id,
@@ -808,6 +813,10 @@ class Master_data extends CI_Controller
 		))->result ();
 
 		$data['annual_budget'] = $this->db->get_where ("m_material_budget", array(
+			"item_id" => $item_code
+		))->result ();
+
+		$data['average_forecast'] = $this->db->get_where ("m_material_average_forecast", array(
 			"item_id" => $item_code
 		))->result ();
 
@@ -954,6 +963,62 @@ class Master_data extends CI_Controller
 			}
 		}
 
+	public function update_average_forecast()
+		{
+		if (isset ($_POST['submit']))
+			{
+			$item_id = $this->input->post ('item_id');
+			$week = $this->input->post ('week');
+			$start_week = $this->input->post ('start_week');
+			$to_week = $this->input->post ('to_week');
+
+			$get_default = $this->db->get_where ("m_material_average_forecast", array(
+				"item_id" => $item_id,
+				"baseline" => 'Default'
+			))->row ();
+
+			$get_custom = $this->db->get_where ("m_material_average_forecast", array(
+				"item_id" => $item_id,
+				"baseline" => 'Start-To'
+			))->row ();
+
+			if (! empty ($week))
+				{
+				_update (
+					"m_material_average_forecast",
+					array(
+						"start_week" => $week,
+					),
+					array(
+						"id" => $get_default->id
+					)
+				);
+				}
+
+			if (! empty ($start_week) && ! empty ($to_week))
+				{
+				_update (
+					"m_material_average_forecast",
+					array(
+						"start_week" => $start_week,
+						"to_week" => $to_week,
+					),
+					array(
+						"id" => $get_custom->id
+					)
+				);
+				}
+
+			$err = array(
+				'show' => true,
+				'type' => 'success',
+				'msg' => 'Successfully update average forecast.'
+			);
+			$this->session->set_flashdata ('toast', $err);
+			redirect ('master_data/detail_material/' . _encrypt ($item_id));
+			}
+		}
+
 
 	public function edit_material()
 		{
@@ -970,6 +1035,12 @@ class Master_data extends CI_Controller
 			"item_id" => $item_code,
 			"baseline_category" => "Target",
 		))->row ();
+		$user = $this->db->get ("m_employee")->result ();
+		$data['user'] = $user;
+		$data['uom'] = $this->db->get ("m_uom")->result ();
+		$data['size_uom'] = $this->db->get ("m_uom")->result ();
+		$data['factory'] = $this->db->get ("m_factory")->result ();
+		$data['item_group'] = $this->db->get ("m_item_category")->result ();
 
 		$this->session->set_flashdata ('page_title', 'FORM EDIT MATERIAL');
 		load_view ('master-data/material/edit-form', $data);
@@ -979,19 +1050,42 @@ class Master_data extends CI_Controller
 		{
 		if (isset ($_POST['submit']))
 			{
+			$get_group = $this->db->get_where ("m_item_category", array(
+				"id" => $this->input->post ('item_group'),
+			))->row ();
+
+			$get_pic = $this->db->get_where ("m_employee", array(
+				"nip" => $this->input->post ('pic'),
+			))->row ();
+
 			$id = $this->input->post ('id');
+			$total_lead_time = $this->input->post ('lt_pr_to_deliv') + $this->input->post ('lt_pr_po');
+			$standart_safety_stock = ! empty ($this->input->post ('order_cycle')) && ! empty ($this->input->post ('lot_size')) ? ($total_lead_time / $this->input->post ('order_cycle')) * $this->input->post ('lot_size') : NULL;
+			$target_price = ! empty ($this->input->post ('budget_target')) ? str_replace (',', '', $this->input->post ('budget_target')) * $standart_safety_stock : 0;
+			$target_inventory = ! empty ($standart_safety_stock) ? $standart_safety_stock * 2 : NULL;
+
 			$inserted = _update (
 				"m_master_data_material",
 				array(
-					"item_code" => $this->input->post ('item_code'),
 					"item_name" => $this->input->post ('item_name'),
+					"type" => 'goods',
+					"size" => $this->input->post ('size'),
 					"factory" => $this->input->post ('factory'),
+					"size_uom" => $this->input->post ('size_uom'),
 					"uom" => $this->input->post ('uom'),
+					"item_category_id" => $this->input->post ('item_group'),
+					"item_group" => $get_group->item_category_name,
 					"lot_size" => $this->input->post ('lot_size'),
 					"order_cycle" => $this->input->post ('order_cycle'),
 					"initial_stock" => $this->input->post ('initial_stock'),
-					"gen_lead_time" => $this->input->post ('gen_lead_time'),
 					"lt_pr_po" => $this->input->post ('lt_pr_po'),
+					"lt_pr_to_deliv" => $this->input->post ('lt_pr_to_deliv'),
+					"gen_lead_time" => $total_lead_time,
+					"standard_safety_stock" => round ($standart_safety_stock),
+					'average_forecast' => str_replace (',', '', $this->input->post ('average_forecast')),
+					'target_inventory' => $target_price,
+					"pic" => $this->input->post ('pic'),
+					"pic_name" => $get_pic->nama,
 				),
 				array("id" => $id)
 			);
@@ -1004,6 +1098,10 @@ class Master_data extends CI_Controller
 					"var_stock_card_overstock" => $this->input->post ('var_stock_card_overstock'),
 					'var_stock_card_ok' => $this->input->post ('var_stock_card_ok'),
 					'var_pending_approval' => $this->input->post ('var_pending_approval'),
+					'min_threshold' => $this->input->post ('min_threshold'),
+					'fast_moving_threshold' => $this->input->post ('fast_moving_threshold'),
+					'slow_moving_threshold' => $this->input->post ('slow_moving_threshold'),
+					'usage_ok_threshold' => $this->input->post ('usage_ok_threshold'),
 				),
 				array("item_id" => $id)
 			);
@@ -1382,12 +1480,12 @@ class Master_data extends CI_Controller
 
 		$reader = IOFactory::createReader ('Xlsx');
 		$spreadsheet = $reader->load ('assets/format/template_master.xlsx');
-		$spreadsheet->setActiveSheetIndexByName ('uom');
+		$spreadsheet->setActiveSheetIndexByName ('UoM');
 		$sheet = $spreadsheet->getActiveSheet ();
 		$index = 2;
-		$getData = $this->db->query ("SELECT * FROM m_uom")->result ();
+		$getUom = $this->db->query ("SELECT * FROM m_uom")->result ();
 
-		foreach ((array) $getData as $datas => $list)
+		foreach ((array) $getUom as $datas => $list)
 			{
 			// $sheet->insertNewRowBefore($index + 1, 1);
 			$sheet->setCellValue ("A{$index}", trim ($list->uom_code));
@@ -1408,12 +1506,12 @@ class Master_data extends CI_Controller
 			$index++;
 			}
 
-		$spreadsheet->setActiveSheetIndexByName ('category');
+		$spreadsheet->setActiveSheetIndexByName ('Category');
 		$sheet = $spreadsheet->getActiveSheet ();
 		$index = 2;
-		$getData = $this->db->query ("SELECT * FROM m_category")->result ();
+		$getCategory = $this->db->query ("SELECT * FROM m_category")->result ();
 
-		foreach ((array) $getData as $datas => $list)
+		foreach ((array) $getCategory as $datas => $list)
 			{
 			// $sheet->insertNewRowBefore($index + 1, 1);
 			$sheet->setCellValue ("A{$index}", trim ($list->category_name));
@@ -1429,16 +1527,16 @@ class Master_data extends CI_Controller
 				]
 			];
 
-			$sheet->getStyle ("A{$index}:B{$index}")->applyFromArray ($styleArray);
+			$sheet->getStyle ("A2:B{$index}")->applyFromArray ($styleArray);
 			$index++;
 			}
 
-		$spreadsheet->setActiveSheetIndexByName ('factory');
+		$spreadsheet->setActiveSheetIndexByName ('Factory');
 		$sheet = $spreadsheet->getActiveSheet ();
 		$index = 2;
-		$getData = $this->db->query ("SELECT * FROM m_factory")->result ();
+		$getFactory = $this->db->query ("SELECT * FROM m_factory")->result ();
 
-		foreach ((array) $getData as $datas => $list)
+		foreach ((array) $getFactory as $datas => $list)
 			{
 			// $sheet->insertNewRowBefore($index + 1, 1);
 			$sheet->setCellValue ("A{$index}", trim ($list->factory_name));
@@ -1458,19 +1556,40 @@ class Master_data extends CI_Controller
 			$index++;
 			}
 
-		$spreadsheet->setActiveSheetIndexByName ('vendor');
+		$spreadsheet->setActiveSheetIndexByName ('Item Group');
 		$sheet = $spreadsheet->getActiveSheet ();
 		$index = 2;
-		$getData = $this->db->query ("SELECT * FROM m_master_data_vendor WHERE is_active = 1")->result ();
+		$getItemGroup = $this->db->query ("SELECT * FROM m_item_category")->result ();
 
-		foreach ((array) $getData as $datas => $list)
+		foreach ((array) $getItemGroup as $datas => $list)
 			{
 			// $sheet->insertNewRowBefore($index + 1, 1);
-			$sheet->setCellValue ("A{$index}", trim ($list->vendor_code));
-			$sheet->setCellValue ("B{$index}", trim ($list->category));
-			$sheet->setCellValue ("C{$index}", trim ($list->rating));
-			$sheet->setCellValue ("D{$index}", trim ($list->vendor_name));
-			$sheet->setCellValue ("E{$index}", trim ($list->est_lead_time));
+			$sheet->setCellValue ("A{$index}", trim ($list->item_category_name));
+
+			$styleArray = [
+				'font' => [
+					'name' => 'Calibri',
+					'size' => 10
+				],
+				'alignment' => [
+					'horizontal' => \PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER,
+					'vertical' => \PhpOffice\PhpSpreadsheet\Style\Alignment::VERTICAL_CENTER
+				]
+			];
+
+			$sheet->getStyle ("A2:B{$index}")->applyFromArray ($styleArray);
+			$index++;
+			}
+
+		$spreadsheet->setActiveSheetIndexByName ('Factory');
+		$sheet = $spreadsheet->getActiveSheet ();
+		$index = 2;
+		$getFactory = $this->db->query ("SELECT * FROM m_factory")->result ();
+
+		foreach ((array) $getFactory as $datas => $list)
+			{
+			// $sheet->insertNewRowBefore($index + 1, 1);
+			$sheet->setCellValue ("A{$index}", trim ($list->factory_name));
 
 			$styleArray = [
 				'font' => [
@@ -1487,22 +1606,25 @@ class Master_data extends CI_Controller
 			$index++;
 			}
 
-		$spreadsheet->setActiveSheetIndexByName ('material');
+		$spreadsheet->setActiveSheetIndexByName ('Master Vendor');
 		$sheet = $spreadsheet->getActiveSheet ();
 		$index = 2;
-		$getData = $this->db->query ("SELECT * FROM m_master_data_material WHERE is_active = 1")->result ();
+		$getVendor = $this->db->query ("SELECT * FROM m_master_data_vendor WHERE is_active = 1")->result ();
 
-		foreach ((array) $getData as $datas => $list)
+		foreach ((array) $getVendor as $datas => $list)
 			{
 			// $sheet->insertNewRowBefore($index + 1, 1);
-			$sheet->setCellValue ("A{$index}", trim ($list->item_code));
-			$sheet->setCellValue ("B{$index}", trim ($list->item_name));
-			$sheet->setCellValue ("C{$index}", trim ($list->factory));
-			$sheet->setCellValue ("D{$index}", trim ($list->uom));
-			$sheet->setCellValue ("E{$index}", trim ($list->size));
-			$sheet->setCellValue ("F{$index}", trim ($list->lot_size));
-			$sheet->setCellValue ("G{$index}", trim ($list->order_cycle));
-			$sheet->setCellValue ("H{$index}", trim ($list->initial_stock));
+			$sheet->setCellValue ("A{$index}", trim ($list->vendor_code));
+			$sheet->setCellValue ("B{$index}", trim ($list->vendor_name));
+			$sheet->setCellValue ("C{$index}", trim ($list->vendor_location));
+			$sheet->setCellValue ("D{$index}", trim ($list->vendor_channel));
+			$sheet->setCellValue ("E{$index}", trim ($list->additional_margin));
+			$sheet->setCellValue ("F{$index}", trim ($list->last_transaction));
+			$sheet->setCellValue ("G{$index}", trim ($list->validity));
+			$sheet->setCellValue ("H{$index}", trim ($list->category));
+			$sheet->setCellValue ("I{$index}", trim ($list->total_spend_ytd));
+			$sheet->setCellValue ("J{$index}", trim ($list->last_year_spend));
+			$sheet->setCellValue ("K{$index}", trim ($list->est_lead_time));
 
 			$styleArray = [
 				'font' => [
@@ -1515,30 +1637,135 @@ class Master_data extends CI_Controller
 				]
 			];
 
-			$sheet->getStyle ("A{$index}:B{$index}")->applyFromArray ($styleArray);
+			$sheet->getStyle ("A2:K{$index}")->applyFromArray ($styleArray);
 			$index++;
 			}
 
-		$spreadsheet->setActiveSheetIndexByName ('vendor_material');
+		$spreadsheet->setActiveSheetIndexByName ('Master Material');
 		$sheet = $spreadsheet->getActiveSheet ();
-		$index = 2;
-		$getData = $this->db->query ("SELECT * FROM m_vendor_material WHERE is_active = 1")->result ();
+		$index = 3;
+		$getMaterial = $this->db->query ("SELECT * FROM m_master_data_material WHERE is_active = 1")->result ();
 
-		foreach ((array) $getData as $datas => $list)
+		foreach ((array) $getMaterial as $datas => $list)
 			{
+
+			$setting = $this->db->query ("SELECT * FROM m_variable_settings WHERE item_id = '{$list->id}'")->row ();
 			// $sheet->insertNewRowBefore($index + 1, 1);
-			$sheet->setCellValue ("A{$index}", trim ($list->vendor_code));
+			$sheet->setCellValue ("A{$index}", trim ($list->factory));
 			$sheet->setCellValue ("B{$index}", trim ($list->item_code));
-			$sheet->setCellValue ("C{$index}", trim ($list->moq ? $list->moq : 0));
-			$sheet->setCellValue ("D{$index}", trim ($list->lt_pr_po ? $list->lt_pr_po : 0));
-			// $sheet->setCellValue("E{$index}", trim($list->lot_size?$list->lot_size:0));
-			// $sheet->setCellValue("F{$index}", trim($list->order_cycle?$list->order_cycle:0));
-			// $sheet->setCellValue("G{$index}", trim($list->initial_stock?$list->initial_stock:0));
-			$sheet->setCellValue ("E{$index}", trim ($list->price_per_uom ? $list->price_per_uom : 0));
-			$sheet->setCellValue ("F{$index}", $list->price_per_uom * $list->moq);
-			$sheet->setCellValue ("G{$index}", trim ($list->price_equal_moq ? $list->price_equal_moq : 0));
-			$sheet->setCellValue ("H{$index}", trim ($list->place_to_buy));
-			$sheet->setCellValue ("I{$index}", trim ($list->link));
+			$sheet->setCellValue ("C{$index}", trim ($list->item_name));
+			$sheet->setCellValue ("D{$index}", trim ($list->item_group));
+			$sheet->setCellValue ("E{$index}", trim ($list->size));
+			$sheet->setCellValue ("F{$index}", trim ($list->size_uom));
+			$sheet->setCellValue ("G{$index}", trim ($list->uom));
+			$sheet->setCellValue ("H{$index}", trim ($list->lot_size));
+			$sheet->setCellValue ("I{$index}", trim ($list->initial_stock));
+			$sheet->setCellValue ("J{$index}", trim ($list->standard_safety_stock));
+			$sheet->setCellValue ("K{$index}", trim ($list->order_cycle));
+			$sheet->setCellValue ("L{$index}", trim ($list->lt_pr_po));
+			$sheet->setCellValue ("M{$index}", trim ($list->lt_pr_to_deliv));
+			$sheet->setCellValue ("N{$index}", trim ($list->gen_lead_time));
+			$sheet->setCellValue ("O{$index}", trim (get_baseline_price ($list->id, 'Best')));
+			$sheet->setCellValue ("P{$index}", trim (get_baseline_price ($list->id, 'Average')));
+			$sheet->setCellValue ("Q{$index}", trim (get_baseline_price ($list->id, 'Latest')));
+			$sheet->setCellValue ("R{$index}", trim (get_baseline_price ($list->id, 'Target')));
+			$sheet->setCellValue ("S{$index}", trim (get_baseline_price ($list->id, 'Budget')));
+			$sheet->setCellValue ("T{$index}", trim ($setting->var_stock_card_overstock));
+			$sheet->setCellValue ("U{$index}", trim ($setting->var_stock_card_ok));
+			$sheet->setCellValue ("V{$index}", trim ($list->target_inventory));
+			$sheet->setCellValue ("W{$index}", trim ($setting->fast_moving_threshold));
+			$sheet->setCellValue ("X{$index}", trim ($setting->slow_moving_threshold));
+			$sheet->setCellValue ("Y{$index}", trim ($setting->usage_ok_threshold));
+			$sheet->setCellValue ("Z{$index}", trim ($setting->pic_name));
+
+			$styleArray = [
+				'font' => [
+					'name' => 'Calibri',
+					'size' => 10
+				],
+				'alignment' => [
+					'horizontal' => \PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER,
+					'vertical' => \PhpOffice\PhpSpreadsheet\Style\Alignment::VERTICAL_CENTER
+				]
+			];
+
+			$sheet->getStyle ("A3:Z{$index}")->applyFromArray ($styleArray);
+			$index++;
+			}
+
+		$spreadsheet->setActiveSheetIndexByName ('Master Vendor x Material');
+		$sheet = $spreadsheet->getActiveSheet ();
+		$index = 2;
+		$getVendorMaterial = $this->db->query ("SELECT m_vendor_material.*, m_master_data_vendor.vendor_name, m_master_data_material.item_name FROM m_vendor_material 
+		INNER JOIN m_master_data_vendor ON m_master_data_vendor.vendor_code = m_vendor_material.vendor_code
+		INNER JOIN m_master_data_material ON m_master_data_material.item_code = m_vendor_material.item_code
+		WHERE m_vendor_material.is_active = 1")->result ();
+
+		foreach ((array) $getVendorMaterial as $datas => $list)
+			{
+
+			$get_price = $this->db->get_where ("m_vendor_material_price", array(
+				"item_id" => $list->item_id
+			))->result ();
+
+			// $sheet->insertNewRowBefore($index + 1, 1);
+			$sheet->setCellValue ("A{$index}", trim ($list->vendor_code));
+			$sheet->setCellValue ("B{$index}", trim ($list->vendor_name));
+			$sheet->setCellValue ("C{$index}", trim ($list->item_code));
+			$sheet->setCellValue ("D{$index}", trim ($list->item_name));
+			$sheet->setCellValue ("E{$index}", trim ($list->uom));
+			$sheet->setCellValue ("F{$index}", trim ($list->total_spend_ytd));
+			$sheet->setCellValue ("G{$index}", trim ($list->last_year_spend));
+			$sheet->setCellValue ("H{$index}", trim ($list->lt_po_deliv ? $list->lt_po_deliv : 0));
+			$sheet->setCellValue ("I{$index}", trim ($list->price_per_uom ? $list->price_per_uom : 0));
+			$sheet->setCellValue ("J{$index}", trim ($list->moq ? $list->moq : 0));
+			$sheet->setCellValue ("K{$index}", $get_price[0]->minimum_order ? $get_price[0]->minimum_order : 0);
+			$sheet->setCellValue ("L{$index}", $get_price[0]->price_per_uom ? $get_price[0]->price_per_uom : 0);
+			$sheet->setCellValue ("M{$index}", $get_price[1]->minimum_order ? $get_price[1]->minimum_order : 0);
+			$sheet->setCellValue ("N{$index}", $get_price[1]->price_per_uom ? $get_price[1]->price_per_uom : 0);
+			$sheet->setCellValue ("O{$index}", $get_price[2]->minimum_order ? $get_price[2]->minimum_order : 0);
+			$sheet->setCellValue ("P{$index}", $get_price[3]->price_per_uom ? $get_price[2]->price_per_uom : 0);
+			$sheet->setCellValue ("Q{$index}", trim ($list->saving));
+
+			$styleArray = [
+				'font' => [
+					'name' => 'Calibri',
+					'size' => 10
+				],
+				'alignment' => [
+					'horizontal' => \PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER,
+					'vertical' => \PhpOffice\PhpSpreadsheet\Style\Alignment::VERTICAL_CENTER
+				]
+			];
+
+			$sheet->getStyle ("A{$index}:Q{$index}")->applyFromArray ($styleArray);
+			$index++;
+			}
+
+		$writer = new Xlsx($spreadsheet); // instantiate Xlsx
+		$writer->setPreCalculateFormulas (false);
+		$filename = 'SGSS_Master_Data_' . date ('YmdHis'); // set filename for excel file to be exported
+		header ('Content-Type: application/vnd.ms-excel'); // generate excel file
+		header ('Content-Disposition: attachment;filename="' . $filename . '.xlsx"');
+		header ('Cache-Control: max-age=0');
+		$writer->save ('php://output');	// download file 
+		}
+	public function generate_template()
+		{
+		ini_set ("max_execution_time", 0);
+
+		$reader = IOFactory::createReader ('Xlsx');
+		$spreadsheet = $reader->load ('assets/format/template_import_master.xlsx');
+		$spreadsheet->setActiveSheetIndexByName ('UoM');
+		$sheet = $spreadsheet->getActiveSheet ();
+		$index = 2;
+		$getUom = $this->db->query ("SELECT * FROM m_uom")->result ();
+
+		foreach ((array) $getUom as $datas => $list)
+			{
+			// $sheet->insertNewRowBefore($index + 1, 1);
+			$sheet->setCellValue ("A{$index}", trim ($list->uom_code));
+			$sheet->setCellValue ("B{$index}", trim ($list->uom_name));
 
 			$styleArray = [
 				'font' => [
@@ -1555,15 +1782,166 @@ class Master_data extends CI_Controller
 			$index++;
 			}
 
-		ob_end_clean ();
-		$writer = new Xlsx($spreadsheet); // instantiate Xlsx
-		header ('Content-type: application/vnd.ms-excel');
-		// It will be called file.xls
-		header ('Content-Disposition: attachment; filename="template_master_data.xlsx"');
-		// Write file to the browser
-		$writer->save ('php://output');
-		}
+		$spreadsheet->setActiveSheetIndexByName ('Category');
+		$sheet = $spreadsheet->getActiveSheet ();
+		$index = 2;
+		$getCategory = $this->db->query ("SELECT * FROM m_category")->result ();
 
+		foreach ((array) $getCategory as $datas => $list)
+			{
+			// $sheet->insertNewRowBefore($index + 1, 1);
+			$sheet->setCellValue ("A{$index}", trim ($list->category_name));
+
+			$styleArray = [
+				'font' => [
+					'name' => 'Calibri',
+					'size' => 10
+				],
+				'alignment' => [
+					'horizontal' => \PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER,
+					'vertical' => \PhpOffice\PhpSpreadsheet\Style\Alignment::VERTICAL_CENTER
+				]
+			];
+
+			$sheet->getStyle ("A2:B{$index}")->applyFromArray ($styleArray);
+			$index++;
+			}
+
+		$spreadsheet->setActiveSheetIndexByName ('Factory');
+		$sheet = $spreadsheet->getActiveSheet ();
+		$index = 2;
+		$getFactory = $this->db->query ("SELECT * FROM m_factory")->result ();
+
+		foreach ((array) $getFactory as $datas => $list)
+			{
+			// $sheet->insertNewRowBefore($index + 1, 1);
+			$sheet->setCellValue ("A{$index}", trim ($list->factory_name));
+
+			$styleArray = [
+				'font' => [
+					'name' => 'Calibri',
+					'size' => 10
+				],
+				'alignment' => [
+					'horizontal' => \PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER,
+					'vertical' => \PhpOffice\PhpSpreadsheet\Style\Alignment::VERTICAL_CENTER
+				]
+			];
+
+			$sheet->getStyle ("A{$index}:B{$index}")->applyFromArray ($styleArray);
+			$index++;
+			}
+
+		$spreadsheet->setActiveSheetIndexByName ('Item Group');
+		$sheet = $spreadsheet->getActiveSheet ();
+		$index = 2;
+		$getItemGroup = $this->db->query ("SELECT * FROM m_item_category")->result ();
+
+		foreach ((array) $getItemGroup as $datas => $list)
+			{
+			// $sheet->insertNewRowBefore($index + 1, 1);
+			$sheet->setCellValue ("A{$index}", trim ($list->item_category_name));
+
+			$styleArray = [
+				'font' => [
+					'name' => 'Calibri',
+					'size' => 10
+				],
+				'alignment' => [
+					'horizontal' => \PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER,
+					'vertical' => \PhpOffice\PhpSpreadsheet\Style\Alignment::VERTICAL_CENTER
+				]
+			];
+
+			$sheet->getStyle ("A2:B{$index}")->applyFromArray ($styleArray);
+			$index++;
+			}
+
+		$spreadsheet->setActiveSheetIndexByName ('Factory');
+		$sheet = $spreadsheet->getActiveSheet ();
+		$index = 2;
+		$getFactory = $this->db->query ("SELECT * FROM m_factory")->result ();
+
+		foreach ((array) $getFactory as $datas => $list)
+			{
+			// $sheet->insertNewRowBefore($index + 1, 1);
+			$sheet->setCellValue ("A{$index}", trim ($list->factory_name));
+
+			$styleArray = [
+				'font' => [
+					'name' => 'Calibri',
+					'size' => 10
+				],
+				'alignment' => [
+					'horizontal' => \PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER,
+					'vertical' => \PhpOffice\PhpSpreadsheet\Style\Alignment::VERTICAL_CENTER
+				]
+			];
+
+			$sheet->getStyle ("A{$index}:B{$index}")->applyFromArray ($styleArray);
+			$index++;
+			}
+
+		$spreadsheet->setActiveSheetIndexByName ('Master Material');
+		$sheet = $spreadsheet->getActiveSheet ();
+		$index = 3;
+		$getMaterial = $this->db->query ("SELECT * FROM m_master_data_material WHERE is_active = 1")->result ();
+
+		foreach ((array) $getMaterial as $datas => $list)
+			{
+
+			$setting = $this->db->query ("SELECT * FROM m_variable_settings WHERE item_id = '{$list->id}'")->row ();
+			// $sheet->insertNewRowBefore($index + 1, 1);
+			$sheet->setCellValue ("A{$index}", trim ($list->factory));
+			$sheet->setCellValue ("B{$index}", trim ($list->item_code));
+			$sheet->setCellValue ("C{$index}", trim ($list->item_name));
+			$sheet->setCellValue ("D{$index}", trim ($list->item_group));
+			$sheet->setCellValue ("E{$index}", trim ($list->size));
+			$sheet->setCellValue ("F{$index}", trim ($list->size_uom));
+			$sheet->setCellValue ("G{$index}", trim ($list->uom));
+			$sheet->setCellValue ("H{$index}", trim ($list->lot_size));
+			$sheet->setCellValue ("I{$index}", trim ($list->initial_stock));
+			$sheet->setCellValue ("J{$index}", trim ($list->standard_safety_stock));
+			$sheet->setCellValue ("K{$index}", trim ($list->order_cycle));
+			$sheet->setCellValue ("L{$index}", trim ($list->lt_pr_po));
+			$sheet->setCellValue ("M{$index}", trim ($list->lt_pr_to_deliv));
+			$sheet->setCellValue ("N{$index}", trim ($list->gen_lead_time));
+			$sheet->setCellValue ("O{$index}", trim (get_baseline_price ($list->id, 'Best')));
+			$sheet->setCellValue ("P{$index}", trim (get_baseline_price ($list->id, 'Average')));
+			$sheet->setCellValue ("Q{$index}", trim (get_baseline_price ($list->id, 'Latest')));
+			$sheet->setCellValue ("R{$index}", trim (get_baseline_price ($list->id, 'Target')));
+			$sheet->setCellValue ("S{$index}", trim (get_baseline_price ($list->id, 'Budget')));
+			$sheet->setCellValue ("T{$index}", trim ($setting->var_stock_card_overstock));
+			$sheet->setCellValue ("U{$index}", trim ($setting->var_stock_card_ok));
+			$sheet->setCellValue ("V{$index}", trim ($list->target_inventory));
+			$sheet->setCellValue ("W{$index}", trim ($setting->fast_moving_threshold));
+			$sheet->setCellValue ("X{$index}", trim ($setting->slow_moving_threshold));
+			$sheet->setCellValue ("Y{$index}", trim ($setting->usage_ok_threshold));
+			$sheet->setCellValue ("Z{$index}", trim ($setting->pic_name));
+
+			$styleArray = [
+				'font' => [
+					'name' => 'Calibri',
+					'size' => 10
+				],
+				'alignment' => [
+					'horizontal' => \PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER,
+					'vertical' => \PhpOffice\PhpSpreadsheet\Style\Alignment::VERTICAL_CENTER
+				]
+			];
+
+			$sheet->getStyle ("A3:Z{$index}")->applyFromArray ($styleArray);
+			$index++;
+			}
+
+		$writer = new Xlsx($spreadsheet); // instantiate Xlsx
+		$writer->setPreCalculateFormulas (false);
+		$filename = 'SGSS_Import_Template'; // set filename for excel file to be exported
+		header ('Content-Type: application/vnd.ms-excel'); // generate excel file
+		header ('Content-Disposition: attachment;filename="' . $filename . '.xlsx"');
+		header ('Cache-Control: max-age=0');
+		$writer->save ('php://output');	// download file 
+		}
 	public function upload()
 		{
 		ini_set ("max_execution_time", 0);
@@ -1596,8 +1974,8 @@ class Master_data extends CI_Controller
 			$list = [];
 
 			//check uom
-			$sheetData = $spreadsheet->getSheetbyName ('uom');
-			$cellRow = $spreadsheet->getSheetbyName ('uom')->getHighestRow ();
+			$sheetData = $spreadsheet->getSheetbyName ('UoM');
+			$cellRow = $spreadsheet->getSheetbyName ('UoM')->getHighestRow ();
 			for ($i = 2; $i <= $cellRow; $i++)
 				{
 				$uom = $sheetData->getCell ('A' . $i)->getValue ();
@@ -1617,8 +1995,8 @@ class Master_data extends CI_Controller
 				}
 
 			//check category
-			$sheetData = $spreadsheet->getSheetbyName ('category');
-			$cellRow = $spreadsheet->getSheetbyName ('category')->getHighestRow ();
+			$sheetData = $spreadsheet->getSheetbyName ('Category');
+			$cellRow = $spreadsheet->getSheetbyName ('Category')->getHighestRow ();
 			for ($i = 2; $i <= $cellRow; $i++)
 				{
 				$name = $sheetData->getCell ('A' . $i)->getValue ();
@@ -1638,8 +2016,8 @@ class Master_data extends CI_Controller
 				}
 
 			//check factory
-			$sheetData = $spreadsheet->getSheetbyName ('factory');
-			$cellRow = $spreadsheet->getSheetbyName ('factory')->getHighestRow ();
+			$sheetData = $spreadsheet->getSheetbyName ('Factory');
+			$cellRow = $spreadsheet->getSheetbyName ('Factory')->getHighestRow ();
 			for ($i = 2; $i <= $cellRow; $i++)
 				{
 				$name = $sheetData->getCell ('A' . $i)->getValue ();
@@ -1658,26 +2036,62 @@ class Master_data extends CI_Controller
 					}
 				}
 
-			//check material
-			$sheetData = $spreadsheet->getSheetbyName ('material');
-			$cellRow = $spreadsheet->getSheetbyName ('material')->getHighestRow ();
+			//check item group
+			$sheetData = $spreadsheet->getSheetbyName ('Item Group');
+			$cellRow = $spreadsheet->getSheetbyName ('Item Group')->getHighestRow ();
 			for ($i = 2; $i <= $cellRow; $i++)
 				{
-				$item_code = $sheetData->getCell ('A' . $i)->getValue ();
-				$item_name = $sheetData->getCell ('B' . $i)->getValue ();
-				$factory = $sheetData->getCell ('C' . $i)->getValue ();
-				$uom = $sheetData->getCell ('D' . $i)->getValue ();
+				$name = $sheetData->getCell ('A' . $i)->getValue ();
+				if (! empty ($name))
+					{
+					$check = $this->db->query ("SELECT * FROM m_item_category WHERE item_category_name = ?", array($name))->row ();
+					if (empty ($check))
+						{
+						_add ("m_item_category", array("item_category_name" => $name));
+
+						$list[] = [
+							"status" => "success",
+							"data" => "New Item Group " . $name . " added",
+						];
+						}
+					}
+				}
+
+			//check material
+			$sheetData = $spreadsheet->getSheetbyName ('Master Material');
+			$cellRow = $spreadsheet->getSheetbyName ('Master Material')->getHighestRow ();
+			for ($i = 3; $i <= $cellRow; $i++)
+				{
+				$factory = $sheetData->getCell ('A' . $i)->getValue ();
+				$item_code = $sheetData->getCell ('B' . $i)->getValue ();
+				$item_name = $sheetData->getCell ('C' . $i)->getValue ();
+				$item_group = $sheetData->getCell ('D' . $i)->getValue ();
 				$size = $sheetData->getCell ('E' . $i)->getValue ();
-				$lot_size = $sheetData->getCell ('F' . $i)->getValue ();
-				$order_cycle = $sheetData->getCell ('G' . $i)->getValue ();
-				$initial_stock = $sheetData->getCell ('H' . $i)->getValue ();
+				$size_uom = $sheetData->getCell ('F' . $i)->getValue ();
+				$uom = $sheetData->getCell ('G' . $i)->getValue ();
+				$lot_size = $sheetData->getCell ('H' . $i)->getValue ();
+				$initial_stock = $sheetData->getCell ('I' . $i)->getValue ();
+				$order_cycle = $sheetData->getCell ('K' . $i)->getValue ();
+				$lt_pr_po = $sheetData->getCell ('L' . $i)->getValue ();
+				$lt_pr_to_deliv = $sheetData->getCell ('M' . $i)->getValue ();
+				$total_lead_time = $lt_pr_po + $lt_pr_to_deliv;
+				$target = $sheetData->getCell ('R' . $i)->getValue ();
+				$overstock_threshold = $sheetData->getCell ('T' . $i)->getValue ();
+				$ok_threshold = $sheetData->getCell ('U' . $i)->getValue ();
+				$target_inventory = $sheetData->getCell ('V' . $i)->getValue ();
+				$fast_moving_threshold = $sheetData->getCell ('W' . $i)->getValue ();
+				$slow_moving_threshold = $sheetData->getCell ('X' . $i)->getValue ();
+				$usage_ok_threshold = $sheetData->getCell ('Y' . $i)->getValue ();
+				$pic = $sheetData->getCell ('Z' . $i)->getValue ();
+				$standart_safety_stock = ! empty ($order_cycle) && ! empty ($lot_size) ? ($total_lead_time / $order_cycle) * $lot_size : NULL;
+				$target_price = ! empty ($target) ? $target * $standart_safety_stock : 0;
 
 				if (! empty ($item_name) && ! empty ($uom) && ! empty ($size) && ! empty ($lot_size) && ! empty ($order_cycle) && ! empty ($initial_stock))
 					{
 					$check = $this->db->query ("SELECT * FROM m_master_data_material WHERE item_name = ? AND size = ? AND uom = ? ", array($item_name, $size, $uom))->row ();
 					$checkUoM = $this->db->query ("SELECT * FROM m_uom WHERE uom_code = ? ", array($uom))->row ();
 
-					if (! is_numeric ($lot_size) || ! is_numeric ($order_cycle) || ! is_numeric ($initial_stock))
+					if (! is_numeric ($lot_size) || ! is_numeric ($order_cycle) || ! is_numeric ($initial_stock) || ! is_numeric ($initial_stock))
 						{
 						$list[] = [
 							"status" => "failed",
@@ -1697,19 +2111,94 @@ class Master_data extends CI_Controller
 							{
 							if (empty ($check))
 								{
-								$genItemcode = strtolower (str_replace (' ', '', $item_name) . $uom . $size);
-								_add ("m_master_data_material", array("item_code" => $genItemcode, "item_name" => $item_name, "uom" => $uom, "size" => $size, "factory" => $factory, "lot_size" => $lot_size, "order_cycle" => $order_cycle, "initial_stock" => $initial_stock));
+								$itemName = explode (" ", $item_name);
 
-								$get_last_id = $this->db->get_where ("m_master_data_material", array(
-									'item_code' => $genItemcode,
-								))->row ()->id;
+								$itemNameCode = '';
+								for ($i = 0; $i < 3; $i++)
+									{
+									$length = $i == 0 ? 3 : 2;
+									$itemNameCode .= substr ($itemName[$i], 0, $length);
+									}
 
-								generate_gross_requirement ($get_last_id);
-								generate_var_settings ($get_last_id, 10, 10, 50, 10);
+								$itemcode = strtoupper ($itemNameCode . $size . $uom);
+
+								$get_item_group = $this->db->get_where ("m_item_category", array(
+									"item_category_name" => $item_group,
+								))->row ();
+
+								$get_pic = $this->db->get_where ("m_employee", array(
+									"nama" => $pic,
+								))->row ();
+
+								$inserted = _add (
+									"m_master_data_material",
+									array(
+										"item_code" => $itemcode,
+										"item_name" => $item_name,
+										"type" => 'goods',
+										"size" => $size,
+										"factory" => $factory,
+										"size_uom" => $size_uom,
+										"uom" => $uom,
+										"item_category_id" => $get_item_group->id,
+										"item_group" => $item_group,
+										"lot_size" => $lot_size,
+										"order_cycle" => $order_cycle,
+										"initial_stock" => $initial_stock,
+										"lt_pr_po" => $lt_pr_po,
+										"lt_pr_to_deliv" => $lt_pr_to_deliv,
+										"gen_lead_time" => $total_lead_time,
+										"standard_safety_stock" => round ($standart_safety_stock),
+										'target_inventory' => $target_price,
+										"pic" => $get_pic->nip,
+										"pic_name" => $get_pic->nama,
+									)
+								);
+								if ($inserted)
+									{
+
+									$get_last_id = $this->db->get_where ("m_master_data_material", array(
+										"item_code" => $itemcode
+									));
+
+									if ($get_last_id->num_rows () > 0)
+										{
+										$last_id = $get_last_id->row ();
+										$last_id = $last_id->id;
+
+										generate_gross_requirement ($last_id);
+										$data_var_settings = array(
+											"item_code" => $itemcode,
+											"item_id" => $last_id,
+											"var_todo_list" => 10,
+											"var_stock_card_todo_list" => 10,
+											"var_stock_card_overstock" => $overstock_threshold,
+											'var_stock_card_ok' => $ok_threshold,
+											'var_pending_approval' => 5,
+											'min_threshold' => 20,
+											'fast_moving_threshold' => $fast_moving_threshold,
+											'slow_moving_threshold' => $slow_moving_threshold,
+											'usage_ok_threshold' => $usage_ok_threshold,
+										);
+
+										_add_nologs ('m_variable_settings', $data_var_settings);
+										generate_budget_baseline ($last_id, 0, $target_price);
+										generate_item_movement ($last_id);
+										generate_average_forecast ($last_id);
+
+										_add ('m_material_budget', array(
+											"item_id" => $last_id,
+											"item_code" => $itemcode,
+											"annual_budget" => 0,
+											"annual_usage" => 0,
+											"year" => date ('Y')
+										));
+										}
+									}
 
 								$list[] = [
 									"status" => "success",
-									"data" => "New material " . $genItemcode . " - " . $item_name . " added. ",
+									"data" => "New material " . $itemcode . " - " . $item_name . " added. ",
 								];
 								}
 							}
@@ -1718,15 +2207,19 @@ class Master_data extends CI_Controller
 				}
 
 			//check vendor
-			$sheetData = $spreadsheet->getSheetbyName ('vendor');
-			$cellRow = $spreadsheet->getSheetbyName ('vendor')->getHighestRow ();
+			$sheetData = $spreadsheet->getSheetbyName ('Master Vendor');
+			$cellRow = $spreadsheet->getSheetbyName ('Master Vendor')->getHighestRow ();
 			for ($i = 2; $i <= $cellRow; $i++)
 				{
 				$vendor_code = $sheetData->getCell ('A' . $i)->getValue ();
-				$category = $sheetData->getCell ('B' . $i)->getValue ();
-				$rating = $sheetData->getCell ('C' . $i)->getValue ();
-				$vendor_name = $sheetData->getCell ('D' . $i)->getValue ();
-				$est_lead_time = $sheetData->getCell ('E' . $i)->getValue ();
+				$vendor_name = $sheetData->getCell ('B' . $i)->getValue ();
+				$vendor_location = $sheetData->getCell ('C' . $i)->getValue ();
+				$vendor_channel = $sheetData->getCell ('D' . $i)->getValue ();
+				$additional_margin = $sheetData->getCell ('E' . $i)->getValue ();
+				$validity = $sheetData->getCell ('G' . $i)->getValue ();
+				$category = $sheetData->getCell ('H' . $i)->getValue ();
+				$rating = 5;
+				$est_lead_time = $sheetData->getCell ('K' . $i)->getValue ();
 
 				if (! empty ($vendor_code) && ! empty ($vendor_name) && ! empty ($est_lead_time) && ! empty ($category))
 					{
@@ -1753,7 +2246,20 @@ class Master_data extends CI_Controller
 							{
 							if (empty ($check))
 								{
-								_add ("m_master_data_vendor", array("vendor_code" => $vendor_code, "category" => $category, "rating" => $rating, "vendor_name" => $vendor_name, "est_lead_time" => $est_lead_time));
+								$get_max_id = $this->db->query ("select max(id) as id from m_master_data_vendor")->row ();
+								$vendorCode = 'VND' . sprintf ('%04s', $get_max_id->id + 1);
+
+								_add ("m_master_data_vendor", array(
+									"vendor_code" => $vendorCode,
+									"vendor_name" => $vendor_name,
+									"vendor_location" => $vendor_location,
+									"vendor_channel" => $vendor_channel,
+									"additional_margin" => $additional_margin,
+									"validity" => $validity,
+									"category" => $category,
+									"rating" => $rating,
+									"est_lead_time" => $est_lead_time
+								));
 								$list[] = [
 									"status" => "success",
 									"data" => "New Vendor " . $vendor_code . " - " . $vendor_name . " added",
@@ -1765,8 +2271,8 @@ class Master_data extends CI_Controller
 				}
 
 			//check vendor material
-			$sheetData = $spreadsheet->getSheetbyName ('vendor_material');
-			$cellRow = $spreadsheet->getSheetbyName ('vendor_material')->getHighestRow ();
+			$sheetData = $spreadsheet->getSheetbyName ('Master Vendor x Material');
+			$cellRow = $spreadsheet->getSheetbyName ('Master Vendor x Material')->getHighestRow ();
 			for ($i = 2; $i <= $cellRow; $i++)
 				{
 				$vendor_code = $sheetData->getCell ('A' . $i)->getValue ();

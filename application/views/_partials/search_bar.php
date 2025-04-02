@@ -24,7 +24,8 @@
                     {
                     $s = isset ($param_search['column_search']) && $param_search['column_search'] == $v ? 'selected' : '';
                     ?>
-                        <option value="<?php echo $v; ?>" <?php echo $s; ?>><?php echo str_replace ('_', ' ', $v); ?></option>
+                        <option value="<?php echo $v; ?>" <?php echo $s; ?>><?php echo str_replace ('_', ' ', $v); ?>
+                        </option>
                     <?php } ?>
                 </select>
 
@@ -44,7 +45,8 @@
                 <!-- Filter 3 -->
                 <label for="filterBy3" class="small">Keyword:</label>
                 <input type="text" id="searchInput" class="form-control form-control-sm w-auto" placeholder="Search"
-                    name="keyword" value="<?php echo isset ($param_search['keyword']) ? $param_search['keyword'] : ''; ?>">
+                    name="keyword"
+                    value="<?php echo isset ($param_search['keyword']) ? $param_search['keyword'] : ''; ?>">
 
                 <!-- btn add filter (hanya muncul di baris pertama) -->
                 <button class="btn btn-outline-primary btn-sm add-row" type="button">
@@ -67,18 +69,16 @@
 </div>
 
 <script>
-$(document).ready(function () {
-    $(document).on("click", ".add-row", function () {
-        var newRow = $(".search-row:first").clone();
-        newRow.find("input").val(""); // Kosongkan input
-        newRow.find(".add-row").removeClass("add-row btn-outline-primary").addClass("remove-row btn-outline-danger").html('<i class="fas fa-minus"></i>');
-        $("#searchContainer").append(newRow);
-    });
+    $(document).ready(function () {
+        $(document).on("click", ".add-row", function () {
+            var newRow = $(".search-row:first").clone();
+            newRow.find("input").val(""); // Kosongkan input
+            newRow.find(".add-row").removeClass("add-row btn-outline-primary").addClass("remove-row btn-outline-danger").html('<i class="fas fa-minus"></i>');
+            $("#searchContainer").append(newRow);
+        });
 
-    $(document).on("click", ".remove-row", function () {
-        $(this).closest(".search-row").remove();
+        $(document).on("click", ".remove-row", function () {
+            $(this).closest(".search-row").remove();
+        });
     });
-});
 </script>
-
-
