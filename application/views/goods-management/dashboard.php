@@ -632,4 +632,57 @@
       }]
     });
   });
+
+  window.onload = function () {
+  const sidebar = document.querySelector(".app-sidebar");
+  let originalSizes = [];
+
+  if (sidebar) {
+    // Menyimpan ukuran asli dari semua chart
+    Highcharts.charts.forEach((chart, index) => {
+      if (chart) {
+        originalSizes[index] = {
+          width: chart.chartWidth,
+          height: chart.chartHeight
+        };
+      }
+    });
+
+    sidebar.addEventListener("mouseenter", function () {
+      Highcharts.charts.forEach((chart, index) => {
+        if (chart) {
+          // Kurangi ukuran lebar 25%
+          let newWidth = originalSizes[index].width * 0.75;
+          let newHeight = newWidth * 1;
+          chart.setSize(newWidth, newHeight, false);
+
+          // Set margin/padding menjadi 0 dan align center
+          chart.renderTo.style.margin = '0';
+          chart.renderTo.style.padding = '0';
+          chart.renderTo.style.display = 'block';
+          chart.renderTo.style.marginLeft = 'auto';
+          chart.renderTo.style.marginRight = 'auto';
+        }
+      });
+    });
+
+    sidebar.addEventListener("mouseleave", function () {
+      Highcharts.charts.forEach((chart, index) => {
+        if (chart) {
+          let newWidth = originalSizes[index].width;
+          let newHeight = originalSizes[index].height;
+          chart.setSize(newWidth, newHeight, false);
+
+          // Set margin/padding kembali ke normal
+          chart.renderTo.style.margin = '';
+          chart.renderTo.style.padding = '';
+          chart.renderTo.style.display = '';
+          chart.renderTo.style.marginLeft = '';
+          chart.renderTo.style.marginRight = '';
+        }
+      });
+    });
+  }
+};
+
 </script>

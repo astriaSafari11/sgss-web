@@ -13,7 +13,7 @@
     <ol class="breadcrumb float-sm-end">
       <li class="breadcrumb-item"><a href="#">Home</a></li>
       <li class="breadcrumb-item" aria-current="page">Master Data</li>
-      <li class="breadcrumb-item active" aria-current="page">Purchase Reason List</li>
+      <li class="breadcrumb-item active" aria-current="page">Item Group List</li>
     </ol>
   </div>
 </div>
@@ -28,7 +28,7 @@
           <a href="#" class="btn btn-sm btn-outline-primary position-relative"
             style="font-weight: 600; border-radius: 50px; white-space:nowrap">
             <i class="fa-solid fa-circle-plus"></i>
-            Add New Purchase Reason
+            Add New Item Group
           </a>
         </div>
       </div>
@@ -37,15 +37,12 @@
 
         <?php $this->load->view ('_partials/search_bar.php'); ?>
 
-          <table id="purchase_table" class="table table-striped table-bordered" width="100%">
+          <table id="item_table" class="table table-striped table-bordered" width="100%">
             <thead style="text-align: center;white-space:nowrap;">
               <tr>
                 <th style="color: #fff;background-color: #001F82;text-align: center; width: 80px">No.</th>
                 <th style="color: #fff;background-color: #001F82;text-align: center;">ID</th>
-                <th style="color: #fff;background-color: #001F82;text-align: center;">Type</th>
-                <th style="color: #fff;background-color: #001F82;text-align: center;">Purchase Reason</th>
-                <th style="color: #fff;background-color: #001F82;text-align: center;">Approval</th>
-                <th style="color: #fff;background-color: #001F82;text-align: center;">WL Approval</th>
+                <th style="color: #fff;background-color: #001F82;text-align: center;">Item Category Name</th>
                 <th style="color: #fff;background-color: #001F82;text-align: center; width: 120px;">Action</th>
               </tr>
             </thead>
@@ -67,13 +64,13 @@
 
 <script>
 $(document).ready(function () {
-    $('#purchase_table').DataTable({
+    $('#item_table').DataTable({
         scrollX: true,
         "processing": true,
         "serverSide": true,
         "ordering": false,
         "ajax": {
-            "url": "<?= site_url('master_data/get_purchase_reason'); ?>",
+            "url": "<?= site_url('master_data/get_item_group'); ?>",
             "type": "POST"
         },
         "order": [],
@@ -81,13 +78,6 @@ $(document).ready(function () {
             {
                 targets: 1, // Sembunyikan kolom ID
                 visible: false 
-            },
-            {
-                targets: 4, // Kolom Approval Status
-                render: function (data, type, row) {
-                    return data == "1" ? '<span class="badge bg-success fs-6">YES</span>' : 
-                                         '<span class="badge bg-danger fs-6">NO</span>';
-                }
             },
             {
                 targets: '_all',
@@ -100,10 +90,7 @@ $(document).ready(function () {
             { "data": 0 }, 
             { "data": 1 }, // ID (Hidden)
             { "data": 2 }, 
-            { "data": 3 }, 
-            { "data": 4 }, 
-            { "data": 5 },
-            { "data": 6 } 
+            { "data": 3 }
         ],
         "searching": false,
         "lengthChange": false

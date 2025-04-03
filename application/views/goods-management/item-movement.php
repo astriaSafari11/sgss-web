@@ -243,6 +243,7 @@
             chart: {
                 type: 'pie',
                 custom: {},
+                backgroundColor: 'transparent',
                 events: {
                     render() {
                         const chart = this,
@@ -313,6 +314,7 @@
             chart: {
                 type: 'pie',
                 custom: {},
+                backgroundColor: 'transparent',
                 events: {
                     render() {
                         const chart = this,
@@ -500,4 +502,5 @@
             }]
         });
     });
+    
 </script>

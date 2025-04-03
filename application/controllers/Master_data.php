@@ -69,6 +69,45 @@ class Master_data extends CI_Controller
 		$this->load->view ('master-data/purchase-reason.php');
 		}
 
+	public function item_group()
+		{
+		$this->session->set_flashdata ('page_title', 'MASTER DATA ITEM GROUP');
+		$this->load->view ('master-data/item-group.php');
+		}
+
+	function get_item_group()
+		{
+		$search = $this->session->userdata ('search');
+		$list = $this->master_model->get_datatables ($search, 'item_group');
+		$data = array();
+		$no = $_POST['start'];
+		foreach ($list as $field)
+			{
+			$edit = '
+			<a href="#" class="btn btn-outline-primary">
+				<i class="fa-solid fa-circle-info"></i>						
+			</a>';
+
+			$row = array();
+
+			$row[] = ++$no;
+			$row[] = $field->id;
+			$row[] = $field->item_category_name;
+			$row[] = $edit;
+
+			$data[] = $row;
+			}
+
+		$output = array(
+			"draw" => $_POST['draw'],
+			"recordsTotal" => $this->master_model->count_all ($search, 'item_group'),
+			"recordsFiltered" => $this->master_model->count_filtered ($search, 'item_group'),
+			"data" => $data,
+		);
+		//output dalam format JSON
+		echo json_encode ($output);
+		}
+	
 	function get_purchase_reason()
 		{
 		$search = $this->session->userdata ('search');

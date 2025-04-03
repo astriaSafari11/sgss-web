@@ -95,6 +95,17 @@ class Master_model extends CI_Model
 			
 		}
 
+		elseif ($type == "item_group")
+		{
+			$table = 'm_item_category';
+			
+			if (!empty($_POST['id'])) { 
+				$this->db->where('id', $_POST['id']);
+				
+			}
+			
+		}
+
 		$this->db->from ($table);
 
 		$i = 0;

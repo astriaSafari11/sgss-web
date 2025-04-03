@@ -13554,7 +13554,7 @@ fieldset:disabled .btn {
 }
 :root,
 [data-bs-theme="light"] {
-	--lte-sidebar-width: 350px;
+	--lte-sidebar-width: 250px;
 }
 
 .app-wrapper {
@@ -13918,8 +13918,8 @@ fieldset:disabled .btn {
 }
 
 .sidebar-mini.sidebar-collapse .app-sidebar {
-	min-width: 4.6rem;
-	max-width: 4.6rem;
+	min-width: 6rem;
+	max-width: 6rem;
 }
 .sidebar-mini.sidebar-collapse .sidebar-menu .nav-header {
 	display: none;
@@ -14008,7 +14008,7 @@ fieldset:disabled .btn {
 }
 
 .sidebar-collapse:not(.sidebar-mini) .app-sidebar {
-	margin-left: calc(var(--lte-sidebar-width) * -1);
+	margin-left: calc(var(--lte-sidebar-width) * -1z);
 }
 
 .sidebar-expand {

@@ -13274,7 +13274,7 @@ textarea.form-control-lg {
   display: inline-block;
 }
 .sidebar-mini.sidebar-collapse .app-sidebar:hover .sidebar-menu .nav-link {
-  width: auto;
+  width: autoz;
 }
 .sidebar-mini.sidebar-collapse .app-sidebar:hover .sidebar-menu .nav-link p,
 .sidebar-mini.sidebar-collapse .app-sidebar:hover .brand-text,

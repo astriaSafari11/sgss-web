@@ -21,6 +21,10 @@
         <i class="fa-solid fa-box-archive" style="margin-right:5px; margin-left: 5px;"></i>
         Purchase Reason
       </a></li>
+    <li><a class="dropdown-item" href="<?= site_url ('master_data/item_group'); ?>">
+        <i class="fa-solid fa-box-archive" style="margin-right:5px; margin-left: 5px;"></i>
+        Item Group
+    </a></li>
     <li>
       <hr class="dropdown-divider" />
     </li>
