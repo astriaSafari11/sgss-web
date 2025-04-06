@@ -25,7 +25,7 @@
     <div class="card">
       <div class="card-header">
         <div class="card-tools">
-          <a href="#" class="btn btn-sm btn-outline-primary position-relative"
+          <a href="<?= site_url ('master_data/add_item_group'); ?>" class="btn btn-sm btn-outline-primary position-relative"
             style="font-weight: 600; border-radius: 50px; white-space:nowrap">
             <i class="fa-solid fa-circle-plus"></i>
             Add New Item Group

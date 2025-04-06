@@ -469,6 +469,265 @@ class Master_data extends CI_Controller
 		$this->load->view ('master-data/vendor/add-form.php');
 		}
 
+	public function add_uom()
+		{
+		$this->session->set_flashdata ('page_title', 'FORM ADD NEW UOM');
+		$this->load->view ('master-data/uom/add-form.php');
+		}
+
+	public function save_uom()
+		{
+		if (isset ($_POST['submit']))
+			{
+			$uom_code = $this->input->post ('uom_code');
+			$exist = $this->db->get_where ("m_master_data_uom", array(
+				"uom_code" => $this->input->post ('uom_code'),
+			))->row ();
+
+			if ($exist)
+				{
+				$err = array(
+					'show' => true,
+					'type' => 'error',
+					'msg' => 'Add new UoM failed. UoM with code ' . $uom_code . ' is already exist.'
+				);
+				$this->session->set_flashdata ('toast', $err);
+				$this->load->view ('master-data/uom/add-form.php');
+				}
+			else
+				{
+				$inserted = _add (
+					"m_master_data_uom",
+					array(
+						"uom_code" => $this->input->post ('uom_code'),
+						"uom_name" => $this->input->post ('uom_name'),
+					)
+				);
+				if ($inserted)
+					{
+					$err = array(
+						'show' => true,
+						'type' => 'success',
+						'msg' => 'Successfully added new UoM.'
+					);
+					$this->session->set_flashdata ('toast', $err);
+					redirect ('master_data/uom_list');
+					}
+				else
+					{
+					$err = array(
+						'show' => true,
+						'type' => 'error',
+						'msg' => 'Add new UoM failed.'
+					);
+					$this->session->set_flashdata ('toast', $err);
+					redirect ('master_data/uom_list');
+					}
+				redirect ('master_data/uom_list');
+				exit ();
+				}
+			redirect ('master_data/uom_list');
+			exit ();
+			}
+		}
+
+	public function add_category()
+		{
+		$this->session->set_flashdata ('page_title', 'FORM ADD NEW CATEGORY');
+		$this->load->view ('master-data/category/add-form.php');
+		}
+
+	public function add_purchase_reason()
+		{
+		$this->session->set_flashdata ('page_title', 'FORM ADD NEW PURCHASE REASON');
+		$this->load->view ('master-data/purchase-reason/add-form.php');
+		}
+
+	public function add_item_group()
+		{
+		$this->session->set_flashdata ('page_title', 'FORM ADD NEW ITEM GROUP');
+		$this->load->view ('master-data/item-group/add-form.php');
+		}
+
+	public function save_item_group()
+		{
+		if (isset ($_POST['submit']))
+			{
+			$item_group = $this->input->post ('item_group');
+			$exist = $this->db->get_where ("m_master_data_item_group", array(
+				"item_group" => $this->input->post ('item_group'),
+			))->row ();
+
+			if ($exist)
+				{
+				$err = array(
+					'show' => true,
+					'type' => 'error',
+					'msg' => 'Add new item group failed. Item group with code ' . $item_group . ' is already exist.'
+				);
+				$this->session->set_flashdata ('toast', $err);
+				redirect ('master_data/item_group');
+				exit ();
+				}
+			else
+				{
+				$inserted = _add (
+					"m_master_data_item_group",
+					array(
+						"item_group" => $this->input->post ('item_group'),
+						"item_category_name" => $this->input->post ('item_category_name'),
+					)
+				);
+				if ($inserted)
+					{
+					$err = array(
+						'show' => true,
+						'type' => 'success',
+						'msg' => 'Successfully added new item group.'
+					);
+					$this->session->set_flashdata ('toast', $err);
+					redirect ('master_data/item_group');
+					exit ();
+					}
+				else
+					{
+					$err = array(
+						'show' => true,
+						'type' => 'error',
+						'msg' => 'Add new item group failed.'
+					);
+					$this->session->set_flashdata ('toast', $err);
+					redirect ('master_data/item_group');
+					exit ();
+					}
+				redirect ('master_data/item_group');
+				exit ();
+				}
+			redirect ('master_data/item_group');
+			exit ();
+			}
+		}
+		
+	public function save_purchase_reason()
+		{
+		if (isset ($_POST['submit']))
+			{
+			$purchase_reason = $this->input->post ('purchase_reason');
+			$exist = $this->db->get_where ("m_master_data_purchase_reason", array(
+				"purchase_reason" => $this->input->post ('purchase_reason'),
+			))->row ();
+
+			if ($exist)
+				{
+				$err = array(
+					'show' => true,
+					'type' => 'error',
+					'msg' => 'Add new purchase reason failed. Purchase reason with code ' . $purchase_reason . ' is already exist.'
+				);
+				$this->session->set_flashdata ('toast', $err);
+				redirect ('master_data/purchase_reason');
+				exit ();
+				}
+			else
+				{
+				$inserted = _add (
+					"m_master_data_purchase_reason",
+					array(
+						"purchase_reason" => $this->input->post ('purchase_reason'),
+						"type" => $this->input->post ('type'),
+						"is_approval" => $this->input->post ('is_approval'),
+						"WL_Approval" => $this->input->post ('WL_Approval'),
+					)
+				);
+				if ($inserted)
+					{
+					$err = array(
+						'show' => true,
+						'type' => 'success',
+						'msg' => 'Successfully added new purchase reason.'
+					);
+					$this->session->set_flashdata ('toast', $err);
+					redirect ('master_data/purchase_reason');
+					exit ();
+					}
+				else
+					{
+					$err = array(
+						'show' => true,
+						'type' => 'error',
+						'msg' => 'Add new purchase reason failed.'
+					);
+					$this->session->set_flashdata ('toast', $err);
+					redirect ('master_data/purchase_reason');
+					exit ();
+					}
+				redirect ('master_data/purchase_reason');
+				exit ();
+				}
+			redirect ('master_data/purchase_reason');
+			exit ();
+			}
+		}
+	
+	public function save_category()
+		{
+			if (isset ($_POST['submit']))
+				{
+				$category_code = $this->input->post ('category_code');
+				$exist = $this->db->get_where ("m_master_data_category", array(
+					"category_code" => $this->input->post ('category_code'),
+				))->row ();
+
+				if ($exist)
+					{
+					$err = array(
+						'show' => true,
+						'type' => 'error',
+						'msg' => 'Add new category failed. Category with code ' . $category_code . ' is already exist.'
+					);
+					$this->session->set_flashdata ('toast', $err);
+					redirect ('master_data/category_list');
+					exit ();
+					}
+				else
+					{
+					$inserted = _add (
+						"m_master_data_category",
+						array(
+							"category_code" => $this->input->post ('category_code'),
+							"category_name" => $this->input->post ('category_name'),
+						)
+					);
+					if ($inserted)
+						{
+						$err = array(
+							'show' => true,
+							'type' => 'success',
+							'msg' => 'Successfully added new category.'
+						);
+						$this->session->set_flashdata ('toast', $err);
+						redirect ('master_data/category_list');
+						exit ();
+						}
+					else
+						{
+						$err = array(
+							'show' => true,
+							'type' => 'error',
+							'msg' => 'Add new category failed.'
+						);
+						$this->session->set_flashdata ('toast', $err);
+						redirect ('master_data/category_list');
+						exit ();
+						}
+					redirect ('master_data/category_list');
+					exit ();
+					}
+				redirect ('master_data/category_list');
+				exit ();
+				}
+		}
+
 	public function save_vendor()
 		{
 		if (isset ($_POST['submit']))

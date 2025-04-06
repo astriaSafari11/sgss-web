@@ -2,6 +2,7 @@
 	<?php $this->load->view('_partials/head.php'); ?>
 </head>
 
+<div class="main-content"> 
     <!-- row 1 start -->
     <div class="row d-flex align-items-stretch">
         <h3 class="fw-bold text-primary">Main Dashboard</h3>
@@ -16,7 +17,7 @@
 
             <div class="d-flex justify-content-between align-items-center rounded me-1">
         
-            <div class="text-center me-3">
+            <div class="text-center me-1">
                 <div class="fw-bold text-primary fs-5">50.000.0000 IDR</div>
                 <div class="text-primary small">vs 42.500.000 IDR</div>
             </div>
@@ -30,7 +31,7 @@
                 <div class="text-primary small">vs 2024 YoY</div>
             </div>
         </div>
-        <a href="#" class="btn btn-sm btn-outline-primary fw-bold mt-3 py-2" style="border-radius: 30px">
+        <a href="#" class="btn btn-sm btn-outline-primary fw-bold mt-2 py-2" style="border-radius: 30px">
                 See Details...
             </a>
             </div>
@@ -232,6 +233,8 @@
     </table>
     </div>
     <!-- end saving table section -->
+
+</div>
 
 <!-- script buat gauge chart -->
 <script src="https://code.highcharts.com/highcharts.js"></script>
@@ -480,31 +483,65 @@ Highcharts.chart('stackedBarChart', {
         }]
     }); 
 
-function equalizeCardHeight() {
-    let firstRow = document.querySelector('.row'); // Hanya memilih row pertama
+function equalizeSelectedRowsCardHeight() {
+    let targetRows = [0]; // Index row yang ingin diatur
+    let allRows = document.querySelectorAll(".row");
 
-    if (firstRow) {
-        let cards = firstRow.querySelectorAll('.info-box'); 
-        let maxHeight = 0;
+    targetRows.forEach(index => {
+        let targetRow = allRows[index];
 
-        cards.forEach(card => {
-            card.style.height = "auto"; 
-        });
+        if (targetRow) {
+            let cards = targetRow.querySelectorAll(".info-box");
 
-        cards.forEach(card => {
-            maxHeight = Math.max(maxHeight, card.offsetHeight);
-        });
+            if (cards.length > 0) {
+                // Reset tinggi dulu
+                cards.forEach(card => {
+                    card.style.height = "auto";
+                });
 
-        cards.forEach(card => {
-            card.style.height = maxHeight + "px";
-        });
-    }
+                // Cari tinggi maksimum
+                let maxHeight = 0;
+                cards.forEach(card => {
+                    maxHeight = Math.max(maxHeight, card.offsetHeight);
+                });
+
+                // Set tinggi ke semua card
+                cards.forEach(card => {
+                    card.style.height = maxHeight + "px";
+                });
+            }
+        }
+    });
 }
 
-window.onload = equalizeCardHeight;
-window.onresize = equalizeCardHeight;
+document.addEventListener("DOMContentLoaded", equalizeSelectedRowsCardHeight);
+window.addEventListener("resize", equalizeSelectedRowsCardHeight);
 
-// script untuk demo klik btn sesaat
+// function equalizeCardHeight() {
+//     let firstRow = document.querySelector('.row'); 
+
+//     if (firstRow) {
+//         let cards = firstRow.querySelectorAll('.info-box'); 
+//         let maxHeight = 0;
+
+//         cards.forEach(card => {
+//             card.style.height = "auto"; 
+//         });
+
+//         cards.forEach(card => {
+//             maxHeight = Math.max(maxHeight, card.offsetHeight);
+//         });
+
+//         cards.forEach(card => {
+//             card.style.height = maxHeight + "px";
+//         });
+//     }
+// }
+
+// window.onload = equalizeCardHeight;
+// window.onresize = equalizeCardHeight;
+
+// script untuk demo klik btn (sementara)
 document.addEventListener("DOMContentLoaded", function () {
     let buttons = document.querySelectorAll(".btn-group button");
 
@@ -516,6 +553,64 @@ document.addEventListener("DOMContentLoaded", function () {
         });
     });
 });
+
+window.onload = function () {
+  const sidebar = document.querySelector(".app-sidebar");
+  const mainContent = document.querySelector(".main-content"); // Ganti sesuai elemen utama kamu
+
+  let originalSizes = [];
+
+  // Simpan ukuran asli semua chart
+  Highcharts.charts.forEach((chart, index) => {
+    if (chart) {
+      originalSizes[index] = {
+        width: chart.chartWidth,
+        height: chart.chartHeight
+      };
+    }
+  });
+
+  if (sidebar && mainContent) {
+    sidebar.addEventListener("mouseenter", function () {
+      // Resize Highcharts
+      Highcharts.charts.forEach((chart, index) => {
+        if (chart) {
+          let newWidth = originalSizes[index].width * 0.8;
+          let newHeight = newWidth * 0.5;
+          chart.setSize(newWidth, newHeight, false);
+
+          chart.renderTo.style.margin = '0';
+          chart.renderTo.style.padding = '0';
+          chart.renderTo.style.display = 'block';
+          chart.renderTo.style.marginLeft = 'auto';
+          chart.renderTo.style.marginRight = '0';
+        }
+      });
+
+      // Scale semua konten
+      mainContent.style.transform = 'scale(0.95)';
+      mainContent.style.transformOrigin = 'top center';
+    //   mainContent.style.transition = 'transform 0.3s ease';
+    });
+
+    sidebar.addEventListener("mouseleave", function () {
+      // Reset chart
+      Highcharts.charts.forEach((chart, index) => {
+        if (chart) {
+          chart.setSize(originalSizes[index].width, originalSizes[index].height, false);
+          chart.renderTo.style.margin = '';
+          chart.renderTo.style.padding = '';
+          chart.renderTo.style.display = '';
+          chart.renderTo.style.marginLeft = '';
+          chart.renderTo.style.marginRight = '';
+        }
+      });
+
+      // Reset scale konten
+      mainContent.style.transform = 'scale(1)';
+    });
+  }
+};
 
 </script>
 

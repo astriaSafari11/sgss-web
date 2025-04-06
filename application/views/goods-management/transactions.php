@@ -507,7 +507,7 @@
         });
     });
 
-    window.onload = function () {
+window.onload = function () {
   const sidebar = document.querySelector(".app-sidebar");
   let originalSizes = [];
 

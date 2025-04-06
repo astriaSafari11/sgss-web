@@ -436,7 +436,7 @@
                       <img 
                           src="<?= base_url('assets/dist/images/saving_icon.png'); ?>" 
                           alt="Saving Icon" 
-                          class="brand-image icon me-2" 
+                          class="brand-image icon me-1" 
                           style="width: 33px; height: 33px;"
                       />
                       <p class="mb-0">Savings</p>  
@@ -447,7 +447,7 @@
               <li class="nav-item sidebar">
                 <a href="<?= site_url('auth/logout');?>" class="nav-link sidebar">
                 <i class="bi bi-box-arrow-left text-primary" style="font-size: 1.5rem;"></i>
-                <p class="ms-3">Log Out</p>  
+                <p class="ms-2 mt-1">Log Out</p>  
               </a>
               </li>
               
