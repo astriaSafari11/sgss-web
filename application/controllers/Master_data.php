@@ -107,7 +107,7 @@ class Master_data extends CI_Controller
 		//output dalam format JSON
 		echo json_encode ($output);
 		}
-	
+
 	function get_purchase_reason()
 		{
 		$search = $this->session->userdata ('search');
@@ -396,7 +396,7 @@ class Master_data extends CI_Controller
 			$row = array();
 			$row[] = ++$no;
 			$row[] = $field->factory;
-			$row[] = $field->item_code;
+			$row[] = $field->item_code . "-" . sprintf ("%02d", $field->item_number);
 			$row[] = $field->item_name;
 			$row[] = $field->item_group;
 			$row[] = $field->size;
@@ -607,7 +607,7 @@ class Master_data extends CI_Controller
 			exit ();
 			}
 		}
-		
+
 	public function save_purchase_reason()
 		{
 		if (isset ($_POST['submit']))
@@ -668,22 +668,42 @@ class Master_data extends CI_Controller
 			exit ();
 			}
 		}
-	
+
 	public function save_category()
 		{
-			if (isset ($_POST['submit']))
-				{
-				$category_code = $this->input->post ('category_code');
-				$exist = $this->db->get_where ("m_master_data_category", array(
-					"category_code" => $this->input->post ('category_code'),
-				))->row ();
+		if (isset ($_POST['submit']))
+			{
+			$category_code = $this->input->post ('category_code');
+			$exist = $this->db->get_where ("m_master_data_category", array(
+				"category_code" => $this->input->post ('category_code'),
+			))->row ();
 
-				if ($exist)
+			if ($exist)
+				{
+				$err = array(
+					'show' => true,
+					'type' => 'error',
+					'msg' => 'Add new category failed. Category with code ' . $category_code . ' is already exist.'
+				);
+				$this->session->set_flashdata ('toast', $err);
+				redirect ('master_data/category_list');
+				exit ();
+				}
+			else
+				{
+				$inserted = _add (
+					"m_master_data_category",
+					array(
+						"category_code" => $this->input->post ('category_code'),
+						"category_name" => $this->input->post ('category_name'),
+					)
+				);
+				if ($inserted)
 					{
 					$err = array(
 						'show' => true,
-						'type' => 'error',
-						'msg' => 'Add new category failed. Category with code ' . $category_code . ' is already exist.'
+						'type' => 'success',
+						'msg' => 'Successfully added new category.'
 					);
 					$this->session->set_flashdata ('toast', $err);
 					redirect ('master_data/category_list');
@@ -691,41 +711,21 @@ class Master_data extends CI_Controller
 					}
 				else
 					{
-					$inserted = _add (
-						"m_master_data_category",
-						array(
-							"category_code" => $this->input->post ('category_code'),
-							"category_name" => $this->input->post ('category_name'),
-						)
+					$err = array(
+						'show' => true,
+						'type' => 'error',
+						'msg' => 'Add new category failed.'
 					);
-					if ($inserted)
-						{
-						$err = array(
-							'show' => true,
-							'type' => 'success',
-							'msg' => 'Successfully added new category.'
-						);
-						$this->session->set_flashdata ('toast', $err);
-						redirect ('master_data/category_list');
-						exit ();
-						}
-					else
-						{
-						$err = array(
-							'show' => true,
-							'type' => 'error',
-							'msg' => 'Add new category failed.'
-						);
-						$this->session->set_flashdata ('toast', $err);
-						redirect ('master_data/category_list');
-						exit ();
-						}
+					$this->session->set_flashdata ('toast', $err);
 					redirect ('master_data/category_list');
 					exit ();
 					}
 				redirect ('master_data/category_list');
 				exit ();
 				}
+			redirect ('master_data/category_list');
+			exit ();
+			}
 		}
 
 	public function save_vendor()
@@ -968,7 +968,7 @@ class Master_data extends CI_Controller
 			$itemName = explode (" ", $this->input->post ('item_name'));
 
 			$itemNameCode = '';
-			for ($i = 0; $i < 2; $i++)
+			for ($i = 0; $i < 3; $i++)
 				{
 				$length = $i == 0 ? 3 : 2;
 				$itemNameCode .= substr ($itemName[$i], 0, $length);
@@ -977,8 +977,11 @@ class Master_data extends CI_Controller
 			$itemcode = strtoupper ($itemNameCode . $this->input->post ('size') . $this->input->post ('uom'));
 
 			$material_code = $this->input->post ('material_code');
+
 			$exist = $this->db->get_where ("m_master_data_material", array(
-				"item_code" => $itemcode,
+				"item_name" => $this->input->post ('item_name'),
+				"size" => $this->input->post ('size'),
+				"uom" => $this->input->post ('uom')
 			))->row ();
 
 			$get_group = $this->db->get_where ("m_item_category", array(
@@ -989,6 +992,7 @@ class Master_data extends CI_Controller
 				"nip" => $this->input->post ('pic'),
 			))->row ();
 
+
 			if ($exist)
 				{
 				$err = array(
@@ -997,14 +1001,52 @@ class Master_data extends CI_Controller
 					'msg' => 'Add new material failed. Material with code ' . $material_code . ' is already exist.'
 				);
 				$this->session->set_flashdata ('toast', $err);
-				$this->load->view ('master-data/material/add-form.php');
+				redirect ('master_data/material_list');
 				}
 			else
 				{
+				$itemNumber = 1;
+
+				$checkCode = $this->db->get_where ("m_master_data_material", array(
+					"item_code" => $itemcode,
+				))->row ();
+
+				if ($checkCode)
+					{
+					$itemNumber = $checkCode->item_number + 1;
+
+					$itemcode = $itemcode . sprintf ('%04s', $itemNumber);
+					}
+
 				$total_lead_time = $this->input->post ('lt_pr_to_deliv') + $this->input->post ('lt_pr_po');
 				$standart_safety_stock = ! empty ($this->input->post ('order_cycle')) && ! empty ($this->input->post ('lot_size')) ? ($total_lead_time / $this->input->post ('order_cycle')) * $this->input->post ('lot_size') : NULL;
 				$target_price = ! empty ($this->input->post ('budget_target')) ? str_replace (',', '', $this->input->post ('budget_target')) * $standart_safety_stock : 0;
 				$target_inventory = ! empty ($standart_safety_stock) ? $standart_safety_stock * 2 : NULL;
+
+				$data = array(
+					"item_code" => $itemcode,
+					"item_name" => $this->input->post ('item_name'),
+					"type" => 'goods',
+					"size" => $this->input->post ('size'),
+					"factory" => $this->input->post ('factory'),
+					"size_uom" => $this->input->post ('size_uom'),
+					"uom" => $this->input->post ('uom'),
+					"item_category_id" => $this->input->post ('item_group'),
+					"item_group" => $get_group->item_category_name,
+					"lot_size" => $this->input->post ('lot_size'),
+					"order_cycle" => $this->input->post ('order_cycle'),
+					"initial_stock" => $this->input->post ('initial_stock'),
+					"lt_pr_po" => $this->input->post ('lt_pr_po'),
+					"lt_pr_to_deliv" => $this->input->post ('lt_pr_to_deliv'),
+					"gen_lead_time" => $total_lead_time,
+					"standard_safety_stock" => round ($standart_safety_stock),
+					'average_forecast' => str_replace (',', '', $this->input->post ('average_forecast')),
+					'target_inventory' => $target_price,
+					"pic" => $this->input->post ('pic'),
+					"pic_name" => $get_pic->nama,
+					"item_number" => $itemNumber
+				);
+
 				$inserted = _add (
 					"m_master_data_material",
 					array(
@@ -1085,6 +1127,7 @@ class Master_data extends CI_Controller
 						'msg' => 'Add new material failed.'
 					);
 					$this->session->set_flashdata ('toast', $err);
+					redirect ('master_data/material_list');
 					}
 				}
 			redirect ('master_data/detail_material/' . _encrypt ($last_id));
@@ -2384,7 +2427,7 @@ class Master_data extends CI_Controller
 				$standart_safety_stock = ! empty ($order_cycle) && ! empty ($lot_size) ? ($total_lead_time / $order_cycle) * $lot_size : NULL;
 				$target_price = ! empty ($target) ? $target * $standart_safety_stock : 0;
 
-				if (! empty ($item_name) && ! empty ($uom) && ! empty ($size) && ! empty ($lot_size) && ! empty ($order_cycle) && ! empty ($initial_stock))
+				if (! empty ($item_name) && ! empty ($uom) && ! empty ($size) && ! empty ($lot_size) && ! empty ($order_cycle))
 					{
 					$check = $this->db->query ("SELECT * FROM m_master_data_material WHERE item_name = ? AND size = ? AND uom = ? ", array($item_name, $size, $uom))->row ();
 					$checkUoM = $this->db->query ("SELECT * FROM m_uom WHERE uom_code = ? ", array($uom))->row ();
@@ -2428,6 +2471,15 @@ class Master_data extends CI_Controller
 									"nama" => $pic,
 								))->row ();
 
+								$itemNumber = 1;
+
+								$checkCode = $this->db->query ("SELECT MAX(item_number) as item_number FROM m_master_data_material WHERE item_code = ? ", array($itemcode))->row ();
+
+								if ($checkCode)
+									{
+									$itemNumber = $checkCode->item_number + 1;
+									}
+
 								$inserted = _add (
 									"m_master_data_material",
 									array(
@@ -2450,6 +2502,7 @@ class Master_data extends CI_Controller
 										'target_inventory' => $target_price,
 										"pic" => $get_pic->nip,
 										"pic_name" => $get_pic->nama,
+										"item_number" => $itemNumber
 									)
 								);
 								if ($inserted)

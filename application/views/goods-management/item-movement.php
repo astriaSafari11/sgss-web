@@ -56,8 +56,8 @@
     </div>
     <div class="col-sm-6">
         <div class="d-flex justify-content-end">
-            <a href="#" class="btn btn-sm btn-outline-primary"
-                style="font-weight: 600; border-radius: 50px; width: 150px;margin-right:10px;" id="btnExport">
+            <a href="<?php echo site_url ('goods_management/order_form'); ?>" class="btn btn-sm btn-outline-primary"
+                style="font-weight: 600; border-radius: 50px; width: 150px;margin-right:10px;">
                 <i class="fa-solid fa-add"></i>
                 Request
             </a>
@@ -89,53 +89,10 @@
                 font-weight: 600;
             }
         </style>
-        <!-- <form action="<?php echo site_url ('goods_management/item_movement'); ?>" method="post">
-            <div class="d-flex justify-content-between align-items-center mb-2">
-                <label for="filterBy1" class="small" style="width: 60px;">Search :</label>
-                <input type="text" id="searchInput" class="form-control form-control-sm w-full"
-                    style="margin-left: 10px;"
-                    placeholder="Input transactions number / item code / desc / area to search" name="keyword"
-                    value="<?php echo isset ($param_search['keyword']) ? $param_search['keyword'] : ''; ?>">
-            </div>
-            <div class="d-flex justify-content-between align-items-center mb-2">
-                <div id="searchContainer">
-                    <div class="d-flex align-items-center gap-2 search-row mb-1">
-                        <label for="filterBy1" class="small" style="width: 100px;">Transactions :</label>
-                        <select id="filterBy1" class="form-select form-select-sm" name="column_search"
-                            style="width: 250px;">
-                            <option value="all">-- All Transactions --</option>
-                        </select>
+        <form action="<?php echo site_url ('goods_management/item_movement'); ?>" method="post">
+            <?php $this->load->view ('_partials/search_bar_special.php'); ?>
+        </form>
 
-                        <label for="filterBy1" class="small">Item :</label>
-                        <select id="filterBy1" class="form-select form-select-sm" name="column_search"
-                            style="width: 250px;">
-                            <option value="all">-- All Item --</option>
-                        </select>
-                        <label for="filterBy1" class="small">Area :</label>
-                        <select id="filterBy1" class="form-select form-select-sm" name="column_search"
-                            style="width: 250px;">
-                            <option value="all">-- All Area --</option>
-                        </select>
-                        <label for="filterBy1" class="small">Status :</label>
-                        <select id="filterBy1" class="form-select form-select-sm" name="column_search"
-                            style="width: 250px;">
-                            <option value="all">-- All Status --</option>
-                        </select>
-                        <button class="btn btn-outline-primary btn-sm" type="submit" name="search"
-                            style="width: 100px;">
-                            <i class="fas fa-search"></i>
-                            Search
-                        </button>
-                        <button class="btn btn-outline-primary btn-sm" type="submit" name="reset" style="width: 100px;">
-                            Reset
-                        </button>
-                    </div>
-                </div>
-            </div>
-        </form> -->
-
-        <?php $this->load->view ('_partials/search_bar_special.php'); ?>
-        
         <table id="example" class="table table-sm" style="width:100%" cellspacing="0">
             <thead>
                 <tr>
@@ -502,5 +459,5 @@
             }]
         });
     });
-    
+
 </script>

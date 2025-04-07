@@ -17,8 +17,8 @@
         <div id="searchContainer">
             <div class="d-flex align-items-center gap-2 search-row mb-1">
                 <!-- Filter 1 -->
-                <label for="filterBy1" class="small">Column Search:</label>
-                <select id="filterBy1" class="form-select form-select-sm w-auto" name="column_search">
+                <label for="filterBy1" class="small">Column:</label>
+                <select id="filterBy1" class="form-select form-select-sm w-auto" name="column_search[]">
                     <option value="all">All</option>
                     <?php foreach ($column_search as $k => $v)
                     {
@@ -31,7 +31,7 @@
 
                 <!-- Filter 2 -->
                 <label for="filterBy2" class="small">Filter:</label>
-                <select id="filterBy2" class="form-select form-select-sm w-auto" name="column_filter">
+                <select id="filterBy2" class="form-select form-select-sm w-auto" name="column_filter[]">
                     <option value="like" <?php echo isset ($param_search['column_filter']) && $param_search['column_filter'] == 'like' ? 'selected' : ''; ?>>Contain</option>
                     <option value="=" <?php echo isset ($param_search['column_filter']) && $param_search['column_filter'] == '=' ? 'selected' : ''; ?>>Is</option>
                     <option value="!=" <?php echo isset ($param_search['column_filter']) && $param_search['column_filter'] == '!=' ? 'selected' : ''; ?>>Not</option>
@@ -45,7 +45,7 @@
                 <!-- Filter 3 -->
                 <label for="filterBy3" class="small">Keyword:</label>
                 <input type="text" id="searchInput" class="form-control form-control-sm w-auto" placeholder="Search"
-                    name="keyword"
+                    name="keyword[]"
                     value="<?php echo isset ($param_search['keyword']) ? $param_search['keyword'] : ''; ?>">
 
                 <!-- btn add filter (hanya muncul di baris pertama) -->

@@ -574,6 +574,11 @@ class Goods_management extends CI_Controller
 		INNER JOIN m_master_data_material ON m_master_data_material.item_code = t_order_detail.item_code
 		where t_order_detail.order_id = '$id'
 		")->result ();
+
+		$data['order_approval'] = $this->db->query ("SELECT t_order_approval_track.*, m_employee.nama FROM t_order_approval_track
+		LEFT JOIN m_employee ON t_order_approval_track.approve_by = m_employee.nip
+		where order_id = '$id'")->result ();
+
 		$curr_user = $this->auth_model->current_user ();
 		$data['curr_user'] = $curr_user;
 
@@ -595,6 +600,10 @@ class Goods_management extends CI_Controller
 		INNER JOIN m_master_data_material ON m_master_data_material.item_code = t_order_detail.item_code 
 		where t_order_detail.order_id = '$id'
 		")->result ();
+
+		$data['order_approval'] = $this->db->query ("SELECT t_order_approval_track.*, m_employee.nama FROM t_order_approval_track
+		LEFT JOIN m_employee ON t_order_approval_track.approve_by = m_employee.nip
+		where order_id = '$id'")->result ();
 
 		$this->session->set_flashdata ('page_title', 'FEEDBACK FORM');
 		$this->load->view ('goods-management/order/feedback_form.php', $data);
@@ -812,40 +821,191 @@ class Goods_management extends CI_Controller
 		{
 
 		$data = array();
+		$search = '';
+
 		if (isset ($_POST['search']))
 			{
+			if ($this->input->post ('keyword') != '')
+				{
+				$keyword = "AND (item_code LIKE '%" . $this->input->post ('keyword') . "%' OR item_name LIKE '%" . $this->input->post ('keyword') . "%')";
+				}
+			if ($this->input->post ('item') != '')
+				{
+				$item = "AND id = '" . $this->input->post ('item') . "'";
+				}
+
+			if ($this->input->post ('status') != '')
+				{
+				$status = "AND status = '" . $this->input->post ('status') . "'";
+				}
+
 			$week = date ("W");
+
+			$data['param_search'] = array(
+				'keyword' => $this->input->post ('keyword'),
+				'item' => $this->input->post ('item'),
+				'status' => $this->input->post ('status'),
+				'area' => $this->input->post ('area'),
+			);
+
 			$data['item'] = $this->db->query ("
-				select *,
-				(standard_safety_stock + ((standard_safety_stock /100)* var_stock_card_ok)) as ok,
-				(standard_safety_stock + ((standard_safety_stock /100)* var_stock_card_overstock)) as overstock,
-				(CASE
-				WHEN net_on_hand >= (standard_safety_stock + ((standard_safety_stock /100)* var_stock_card_overstock)) THEN 'overstock'
-				WHEN net_on_hand >= (standard_safety_stock + ((standard_safety_stock /100)* var_stock_card_ok)) 	   THEN 'OK'
-				WHEN net_on_hand = 0 THEN 'understock'
-				WHEN net_on_hand <= standard_safety_stock THEN 'understock'
-				WHEN current_safety_stock <= standard_safety_stock THEN 'understock'
-				END) AS status 
-				from view_stock_card
-				WHERE week = '$week'
+				select * from view_stock_card
+				WHERE week = '$week' $keyword $item $status
 				")->result ();
 
 			}
+
+		$data['item_list'] = $this->db->query ("select * from m_master_data_material")->result ();
+		$data['area_list'] = $this->db->query ("select * from m_area")->result ();
+		$data['transactions_list'] = $this->db->query ("select * from m_area")->result ();
+
 		$this->session->set_flashdata ('page_title', 'INVENTORY');
 		load_view ('goods-management/item-movement.php', $data);
+		}
+
+	public function order_form()
+		{
+		if (isset ($_POST['submit_item']))
+			{
+
+			$order_id = $this->input->post ('order_id');
+
+			$item = $this->db->get_where ("m_master_data_material", array(
+				"id" => $this->input->post ('item'),
+			))->row ();
+
+			$get_recomend_vendor = $this->db->query ("
+						SELECT TOP 1 * from m_vendor_material WHERE item_id = '" . $item->id . "' ORDER BY price_per_uom ASC
+					")->row ();
+
+			$checkExist = $this->db->get_where ("t_order_detail", array(
+				"order_id" => $order_id,
+			))->row ();
+
+			if (! $checkExist)
+				{
+				_add ("t_order_detail", array(
+					"order_id" => $order_id,
+					"item_id" => $item->id,
+					"item_code" => $item->item_code,
+					"item_name" => $item->item_name,
+					"qty" => 0,
+					"uom" => $item->uom,
+					"vendor_code" => $get_recomend_vendor->vendor_code,
+					"uom_price" => $get_recomend_vendor->price_per_uom,
+					"total_price" => 0,
+					"status" => 0
+				));
+				}
+			else
+				{
+				_update ("t_order_detail", array(
+					"item_id" => $item->id,
+					"item_code" => $item->item_code,
+					"item_name" => $item->item_name,
+					"uom" => $item->uom,
+					"vendor_code" => $get_recomend_vendor->vendor_code,
+					"uom_price" => $get_recomend_vendor->price_per_uom,
+				), array(
+					"order_id" => $order_id,
+				));
+				}
+			$data['order'] = $this->db->get_where ("t_order", array(
+				"id" => $order_id,
+			))->row ();
+
+			$data['detail'] = $this->db->get_where ("t_order_detail", array(
+				"order_id" => $order_id,
+			))->row ();
+
+			$data['vendor'] = $this->db->get_where ("m_master_data_vendor", array(
+				"vendor_code" => $get_recomend_vendor->vendor_code,
+			))->row ();
+
+			$data['vendor_list'] = $this->db->query ("select * from m_vendor_material 
+			INNER JOIN m_master_data_vendor ON m_master_data_vendor.vendor_code = m_vendor_material.vendor_code
+			where item_code = '$item->item_code'")->result ();
+			}
+		else if (isset ($_POST['submit_qty']))
+			{
+			$order_id = $this->input->post ('order_id');
+			$qty = $this->input->post ('qty');
+
+			$order = $this->db->get_where ("t_order", array(
+				"id" => $order_id
+			))->row ();
+
+			$order_detail = $this->db->get_where ("t_order_detail", array(
+				"order_id" => $order_id
+			))->row ();
+
+			$threshold = $this->db->get_where ("m_variable_settings", array(
+				"item_id" => $order_detail->item_id
+			))->row ()->min_threshold;
+
+			$data = array(
+				"qty" => $qty,
+				"total_price" => $qty * $order_detail->uom_price,
+			);
+
+			_update ("t_order_detail", $data, array(
+				"id" => $order_detail->id
+			));
+
+			$data['order'] = $this->db->get_where ("t_order", array(
+				"id" => $order_id,
+			))->row ();
+
+			$data['detail'] = $this->db->get_where ("t_order_detail", array(
+				"order_id" => $order_id,
+			))->row ();
+
+			$data['vendor'] = $this->db->get_where ("m_master_data_vendor", array(
+				"vendor_code" => $data['detail']->vendor_code,
+			))->row ();
+
+			$data['vendor_list'] = $this->db->query ("select * from m_vendor_material 
+			INNER JOIN m_master_data_vendor ON m_master_data_vendor.vendor_code = m_vendor_material.vendor_code
+			where item_code = '$order_detail->item_code'")->result ();
+			}
+		else
+			{
+			$reqId = 'REQ' . date ("dmY");
+			$getMax = $this->db->query ("SELECT MAX(id) as max FROM t_order")->row ()->max + 1;
+
+			$request_id = $reqId . $getMax;
+
+			_add (
+				"t_order",
+				array(
+					"date" => date ("Y-m-d"),
+					"request_id" => $request_id,
+					"requestor_nip" => $this->session->userdata ('user_nip'),
+					"requestor" => $this->session->userdata ('user_name'),
+					"status" => 'draft',
+					"approval_category" => 'normal',
+				)
+			);
+			$data['order'] = $this->db->get_where ("t_order", array(
+				"request_id" => $request_id,
+			))->row ();
+			}
+		$data['item'] = $this->db->get_where ("m_master_data_material", array(
+			"is_active" => 1,
+		))->result ();
+		$data['purchase_reason'] = $this->db->get ("m_purchase_reason")->result ();
+		$data['user_list'] = $this->db->get ("m_employee")->result ();
+		$data['area'] = $this->db->get_where ("m_employee_area", array(
+			"nip" => $this->session->userdata ('user_nip'),
+		))->row ();
+
+		$this->session->set_flashdata ('page_title', 'ADD REQUEST ORDER');
+		load_view ('goods-management/item-movement/order-form.php', $data);
 		}
 
 	public function stock_card_detail()
 		{
 		$id = _decrypt ($this->uri->segment (3));
-
-		// $data['vendor'] = $this->db->get_where("view_master_vendor",array(
-		// 	"id"	=> $id,
-		// ))->row();		
-
-		// $data['vendor_detail'] = $this->db->get_where("m_master_data_vendor",array(
-		// 	"vendor_code"	=> $data['vendor']->vendor_code,
-		// ))->row();		
 
 		$data['material'] = $this->db->get_where ("m_master_data_material", array(
 			"id" => $id,

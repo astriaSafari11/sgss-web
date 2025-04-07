@@ -106,7 +106,8 @@ class Ajax extends CI_Controller
 
 	function get_material()
 		{
-		$this->db->order_by ("item_code");
+		$id = $this->input->post ('id');
+		$this->db->order_by ("id");
 
 		$m = $this->db->get_where (
 			"m_master_data_material",
@@ -115,14 +116,29 @@ class Ajax extends CI_Controller
 			)
 		)->result ();
 
+		$html = '<option value="">-- All Item --</option>';
 		foreach ((array) $m as $k => $v)
 			{
-			$html .= "<option value='" . $v->item_code . "'>" . $v->item_code . " (" . $v->item_name . ")</option>";
+			$s = $v->item_id == $id ? 'selected="selected"' : '';
+			$html .= "<option value='" . $v->item_id . "' $s>" . $v->item_code . "-" . sprintf ("%02d", $v->item_number) . " (" . $v->item_name . ")</option>";
 			}
 
 		die ($html);
 		}
+	function get_area()
+		{
+		$m = $this->db->get (
+			"m_area"
+		)->result ();
 
+		$html = '<option value="">-- All Area --</option>';
+		foreach ((array) $m as $k => $v)
+			{
+			$html .= "<option value='" . $v->area_code . "'>" . $v->area_name . "</option>";
+			}
+
+		die ($html);
+		}
 	function add_material_to_vendor()
 		{
 		$vendor_code = $this->input->post ('vendor_code');

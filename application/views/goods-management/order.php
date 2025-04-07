@@ -116,7 +116,7 @@
                   <option></option>
                   <?php foreach ($user_list as $row)
                   { ?>
-                    <option value="<?php echo $row->nip; ?>"><?php echo $row->nama; ?> - <?php echo $row->email; ?>
+                    <option value="<?php echo $row->nama; ?>"><?php echo $row->nama; ?> - <?php echo $row->email; ?>
                     </option>
                   <?php } ?>
 

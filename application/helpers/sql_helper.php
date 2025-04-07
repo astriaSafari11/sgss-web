@@ -515,6 +515,22 @@ function generate_approval_track($order_id, $requestor)
         "nip" => $requestor
     ))->row ();
 
+    $getUserArea = $CI->db->get_where ('m_employee_area', array(
+        "nip" => $getUser->nip
+    ))->row ();
+
+    $get_detail = $CI->db->get_where ('t_order_detail', array(
+        "order_id" => $order_id
+    ))->row ();
+
+    $get_settings = $CI->db->get_where ('m_variable_settings', array(
+        "item_id" => $get_detail->item_id
+    ))->row ();
+
+    $pending_days = $get_settings->var_pending_approval;
+
+    $layer_one_date = date ("Y-m-d H:i:s", strtotime ("+" . $pending_days . " day", strtotime (date ("Y-m-d H:i:s"))));
+
     //add first layer approval - LM - WL 1 - PIC AREA
     _add ('t_order_approval_track', array(
         "order_id" => $order_id,
@@ -523,6 +539,8 @@ function generate_approval_track($order_id, $requestor)
         "approve_title" => 'WL1',
         "approve_status" => 'pending',
         "approve_by" => $getUser->lm_nip,
+        "approve_name" => $getUser->lm_name,
+        "approve_due_date" => $layer_one_date
     ));
 
     //send email to first layer approval - LM - WL 1 - PIC AREA
@@ -534,6 +552,9 @@ function generate_approval_track($order_id, $requestor)
 
     send_email_notification ($getUser->lm_email, 'Request Approval', $email_body);
 
+    $get_WL2 = $CI->db->query ("select * from view_user WHERE area_code = '" . $getUserArea->area_code . "' and role = 'WL2'")->row ();
+    $layer_two_date = date ("Y-m-d H:i:s", strtotime ("+" . $pending_days . " day", strtotime ($layer_one_date)));
+
     //add second layer approval - WL2
     _add ('t_order_approval_track', array(
         "order_id" => $order_id,
@@ -541,7 +562,13 @@ function generate_approval_track($order_id, $requestor)
         "approve_level" => 2,
         "approve_title" => 'WL2',
         "approve_status" => 'inactive',
+        "approve_by" => $get_WL2->nip,
+        "approve_name" => $get_WL2->nama,
+        "approve_due_date" => $layer_two_date
     ));
+
+    $get_WL3 = $CI->db->query ("select * from view_user WHERE area_code = '" . $getUserArea->area_code . "' and role = 'WL3'")->row ();
+    $layer_three_date = date ("Y-m-d H:i:s", strtotime ("+" . $pending_days . " day", strtotime ($layer_two_date)));
 
     //add third layer approval - WL3
     _add ('t_order_approval_track', array(
@@ -550,6 +577,9 @@ function generate_approval_track($order_id, $requestor)
         "approve_level" => 3,
         "approve_title" => 'WL3',
         "approve_status" => 'inactive',
+        "approve_by" => $get_WL3->nip,
+        "approve_name" => $get_WL3->nama,
+        "approve_due_date" => $layer_three_date
     ));
     }
 
