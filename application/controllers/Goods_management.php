@@ -1283,12 +1283,46 @@ class Goods_management extends CI_Controller
 
 	public function transactions()
 		{
+		$data = array();
+		$search = '';
+
+		if (isset ($_POST['search']))
+			{
+			if ($this->input->post ('keyword') != '')
+				{
+				$keyword = "AND (item_code LIKE '%" . $this->input->post ('keyword') . "%' OR item_name LIKE '%" . $this->input->post ('keyword') . "%')";
+				}
+			if ($this->input->post ('item') != '')
+				{
+				$item = "AND id = '" . $this->input->post ('item') . "'";
+				}
+
+			if ($this->input->post ('status') != '')
+				{
+				$status = "AND usage_status = '" . $this->input->post ('status') . "'";
+				}
+
+			$week = date ("W");
+
+			$data['param_search'] = array(
+				'keyword' => $this->input->post ('keyword'),
+				'item' => $this->input->post ('item'),
+				'status' => $this->input->post ('status'),
+				'area' => $this->input->post ('area'),
+			);
+
+			$data['item'] = $this->db->query ("
+					select * from view_average_usage
+					")->result ();
+
+			}
+
 		$data['item_list'] = $this->db->query ("select * from m_master_data_material")->result ();
 		$data['area_list'] = $this->db->query ("select * from m_area")->result ();
 		$data['transactions_list'] = $this->db->query ("select * from m_area")->result ();
 
 		$this->session->set_flashdata ('page_title', 'USAGE');
-		$this->load->view ('goods-management/transactions.php', $data);
+		load_view ('goods-management/transactions.php', $data);
 		}
 
 	public function add_transaction()
@@ -1321,6 +1355,21 @@ class Goods_management extends CI_Controller
 				);
 
 				_add ("t_transactions", $data);
+
+				$get_current_week = date ('W', strtotime (date ('Y-m-d')));
+
+				$usage = $this->db->get_where ("t_material_movement", array(
+					"item_id" => $item[$i],
+					"week" => $get_current_week,
+				))->row ()->usage + $qty[$i];
+
+				_update ('t_material_movement', array(
+					"usage" => $usage,
+				), array(
+					"item_id" => $item[$i],
+					"week" => $get_current_week,
+				));
+
 				}
 			}
 		$err = array(

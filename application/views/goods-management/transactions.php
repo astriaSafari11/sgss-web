@@ -1,4 +1,3 @@
-<?php $this->load->view ('_partials/head.php'); ?>
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
 <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
 <style>
@@ -98,7 +97,9 @@
 </div>
 <!--begin::Row-->
 <div class="row info-box d-flex align-items-stretch ms-1 py-3 rounded-5">
-    <?php $this->load->view ('_partials/search_bar_special.php'); ?>
+    <form action="<?php echo site_url ('goods_management/transactions'); ?>" method="post">
+        <?php $this->load->view ('_partials/search_bar_special.php'); ?>
+    </form>
     <style>
         a.underline-custom {
             color: #001F82;
@@ -128,7 +129,46 @@
             </tr>
         </thead>
         <tbody>
+            <?php if (isset ($item))
+            {
+            foreach ($item as $k => $v)
+                { ?>
+                    <tr>
+                        <td style="vertical-align: middle;text-align: left;"><?php echo $v->transaction_id; ?></td>
+                        <td style="vertical-align: middle;text-align: center;">
+                            <a href="<?= site_url ('goods_management/stock_card_detail/' . _encrypt ($v->id)); ?>"
+                                class="underline-custom">
+                                <?php echo $v->item_code; ?>
+                            </a>
+                        </td>
+                        <td style="vertical-align: middle;text-align: left;"><?php echo $v->item_name; ?></td>
+                        <td style="vertical-align: middle;text-align: center;"><?php echo myNum ($v->qty); ?></td>
+                        <td style="vertical-align: middle;text-align: center;"><?php echo $v->uom; ?></td>
+                        <td style="vertical-align: middle;text-align: center;"><?php echo myNum ($v->ytd_used); ?></td>
+                        <td style="vertical-align: middle;text-align: center;">
+                            <?php if ($v->usage_status == 'OK')
+                            { ?>
+                                <button class="btn btn-sm btn-success" style="font-weight: 600; border-radius: 50px; width: 100%;">
+                                    OK
+                                </button>
+                            <?php } ?>
+                            <?php if ($v->usage_status == 'Fast Moving')
+                            { ?>
+                                <button class="btn btn-sm btn-danger" style="font-weight: 600; border-radius: 50px; width: 100%;">
+                                    Fast Moving
+                                </button>
+                            <?php } ?>
+                            <?php if ($v->usage_status == 'Slow Moving')
+                            { ?>
+                                <button class="btn btn-sm btn-warning" style="font-weight: 600; border-radius: 50px; width: 100%;">
+                                    Slow Moving
+                                </button>
+                            <?php } ?>
+                        </td>
+                    </tr>
 
+                <?php }
+            } ?>
         </tbody>
     </table>
 </div>
