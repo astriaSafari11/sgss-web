@@ -1,5 +1,12 @@
 <?php $this->load->view ('_partials/head.php'); ?>
 
+<style>
+  .unclickable {
+    pointer-events: none;
+    cursor: default;
+}
+</style>
+
 <div class="row mb-2 justify-between">
   <div class="col-sm-6">
     <a class="btn btn-sm btn-primary position-relative" style="font-weight: 600; border-radius: 50px;">
@@ -202,12 +209,12 @@
 <!--end::Row-->
 <div class="row">
   <div class="col-12 mb-2">
-    <span class="btn btn-primary" style="border-radius: 50px;width: 100%;font-weight: 600;">KPI</span>
+    <span class="btn btn-primary unclickable" style="border-radius: 50px;width: 100%;font-weight: 600;">KPI</span>
   </div>
 </div>
 <div class="row">
   <div class="col-md-4 col-sm-12 col-12">
-    <span class="btn mb-2"
+    <span class="btn mb-2 unclickable"
       style="border-radius: 50px;width: 100%;font-weight: 600;color: #001F82;background-color:#DAEAFF;">COST</span>
     <div class="info-box" style="border-radius: 25px;">
       <div class="info-box-content" style="color: #001F82;">
@@ -221,7 +228,7 @@
   </div>
 
   <div class="col-md-4 col-sm-12 col-12">
-    <span class="btn mb-2"
+    <span class="btn mb-2 unclickable"
       style="border-radius: 50px;width: 100%;font-weight: 600;color: #001F82;background-color:#DAEAFF;">SERVICE</span>
     <div class="info-box" style="border-radius: 25px;">
       <div class="info-box-content" style="color: #001F82;">
@@ -235,7 +242,7 @@
   </div>
 
   <div class="col-md-4 col-sm-12 col-12">
-    <span class="btn mb-2"
+    <span class="btn mb-2 unclickable"
       style="border-radius: 50px;width: 100%;font-weight: 600;color: #001F82;background-color:#DAEAFF;">CASH</span>
     <div class="info-box" style="border-radius: 25px;">
       <div class="info-box-content" style="color: #001F82;">

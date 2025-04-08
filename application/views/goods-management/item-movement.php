@@ -1,6 +1,13 @@
+<style>
+  .unclickable {
+    pointer-events: none;
+    cursor: default;
+}
+</style>
+
 <div class="row">
     <div class="col-md-12 col-sm-12 col-12">
-        <span class="btn mb-2"
+        <span class="btn mb-2 unclickable"
             style="border-radius: 50px;width: 100%;font-weight: 600;color: #001F82;background-color:#DAEAFF;">KPI</span>
         <div class="info-box" style="border-radius: 25px;">
             <div class="info-box-content" style="color: #001F82;">
@@ -47,7 +54,7 @@
 
     <!-- /.col -->
 </div>
-<span class="btn mb-2"
+<span class="btn mb-2 unclickable"
     style="border-radius: 50px;width: 100%;font-weight: 600;color: #001F82;background-color:#DAEAFF;">Table of all items
     maintained for inventory management</span>
 <div class="row mb-2 justify-between">
