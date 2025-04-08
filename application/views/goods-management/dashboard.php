@@ -1,5 +1,12 @@
 <?php $this->load->view ('_partials/head.php'); ?>
 
+<style>
+  .unclickable {
+    pointer-events: none;
+    cursor: default;
+}
+</style>
+
 <div class="row mb-2 justify-between">
   <div class="col-sm-6">
     <a class="btn btn-sm btn-primary position-relative" style="font-weight: 600; border-radius: 50px;">
@@ -202,12 +209,12 @@
 <!--end::Row-->
 <div class="row">
   <div class="col-12 mb-2">
-    <span class="btn btn-primary" style="border-radius: 50px;width: 100%;font-weight: 600;">KPI</span>
+    <span class="btn btn-primary unclickable" style="border-radius: 50px;width: 100%;font-weight: 600;">KPI</span>
   </div>
 </div>
 <div class="row">
   <div class="col-md-4 col-sm-12 col-12">
-    <span class="btn mb-2"
+    <span class="btn mb-2 unclickable"
       style="border-radius: 50px;width: 100%;font-weight: 600;color: #001F82;background-color:#DAEAFF;">COST</span>
     <div class="info-box" style="border-radius: 25px;">
       <div class="info-box-content" style="color: #001F82;">
@@ -221,7 +228,7 @@
   </div>
 
   <div class="col-md-4 col-sm-12 col-12">
-    <span class="btn mb-2"
+    <span class="btn mb-2 unclickable"
       style="border-radius: 50px;width: 100%;font-weight: 600;color: #001F82;background-color:#DAEAFF;">SERVICE</span>
     <div class="info-box" style="border-radius: 25px;">
       <div class="info-box-content" style="color: #001F82;">
@@ -235,7 +242,7 @@
   </div>
 
   <div class="col-md-4 col-sm-12 col-12">
-    <span class="btn mb-2"
+    <span class="btn mb-2 unclickable"
       style="border-radius: 50px;width: 100%;font-weight: 600;color: #001F82;background-color:#DAEAFF;">CASH</span>
     <div class="info-box" style="border-radius: 25px;">
       <div class="info-box-content" style="color: #001F82;">
@@ -288,6 +295,75 @@
   </form>
 </div>
 
+<!-- Modal untuk Detail Chart -->
+<div class="modal fade" id="chartDetailModal" tabindex="-1" aria-labelledby="chartDetailLabel" aria-hidden="true">
+  <div class="modal-dialog modal-xl">
+    <div class="modal-content">
+
+      <div class="modal-header">
+        <h5 class="modal-title text-primary" id="chartDetailLabel" style="font-weight:600;">
+          Status: <span id="chart-type-label">To Do</span>
+        </h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+
+      <div class="modal-body">
+        <!-- Tabel -->
+        <div class="table-responsive">
+          <table class="table table-bordered table-striped text-center">
+            <thead class="text-white" style="background-color: #001F82;">
+              <tr>
+                <th style="color: #fff;background-color: #001F82;text-align: center;">No</th>
+                <th style="color: #fff;background-color: #001F82;text-align: center;">Item Name</th>
+                <th style="color: #fff;background-color: #001F82;text-align: center;">Spend 2025</th>
+                <th style="color: #fff;background-color: #001F82;text-align: center;">Budget</th>
+                <th style="color: #fff;background-color: #001F82;text-align: center;">Spend 2024 YTD</th>
+                <th style="color: #fff;background-color: #001F82;text-align: center;">Spend 2024 FY</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>1</td>
+                <td>Masker</td>
+                <td>Rp.15.000.000</td>
+                <td>Rp.50.000.000</td>
+                <td>Rp.20.000.000</td>
+                <td>Rp.49.000.000</td>
+              </tr>
+              <tr>
+                <td>2</td>
+                <td>Sepatu Safety</td>
+                <td>Rp.17.250.000</td>
+                <td>Rp.57.500.000</td>
+                <td>Rp.23.000.000</td>
+                <td>Rp.56.350.000</td>
+              </tr>
+              <tr>
+                <td>3</td>
+                <td>Alkohol</td>
+                <td>Rp.14.550.000</td>
+                <td>Rp.48.500.000</td>
+                <td>Rp.19.400.000</td>
+                <td>Rp.47.530.000</td>
+              </tr>
+            </tbody>
+            <!-- <tfoot>
+              <tr>
+                
+              </tr>
+            </tfoot> -->
+          </table>
+        </div>
+      </div>
+
+      <div class="modal-footer">
+        <button type="button" class="btn btn-outline-primary" data-bs-dismiss="modal">Close</button>
+      </div>
+
+    </div>
+  </div>
+</div>
+
 <div class="modal fade" id="cost-detail" tabindex="-1" aria-labelledby="cost-detail" aria-hidden="true">
   <div class="modal-dialog modal-xl">
     <div class="modal-content">
@@ -297,7 +373,52 @@
         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
       <div class="modal-body">
-
+        <!-- Tabel Contoh -->
+        <div class="table-responsive">
+          <table class="table table-bordered table-striped text-center">
+            <thead>
+              <tr>
+                <th style="color: #fff;background-color: #001F82;text-align: center;">No</th>
+                <th style="color: #fff;background-color: #001F82;text-align: center;">Item Name</th>
+                <th style="color: #fff;background-color: #001F82;text-align: center;">Spend 2025</th>
+                <th style="color: #fff;background-color: #001F82;text-align: center;">Budget</th>
+                <th style="color: #fff;background-color: #001F82;text-align: center;">Spend 2024 YTD</th>
+                <th style="color: #fff;background-color: #001F82;text-align: center;">Spend 2024 FY</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>1</td>
+                <td>Masker</td>
+                <td>Rp.15.000.000</td>
+                <td>Rp.50.000.000</td>
+                <td>Rp.20.000.000</td>
+                <td>Rp.49.000.000</td>
+              </tr>
+              <tr>
+                <td>2</td>
+                <td>Sepatu Safety</td>
+                <td>Rp.17.250.000</td>
+                <td>Rp.57.500.000</td>
+                <td>Rp.23.000.000</td>
+                <td>Rp.56.350.000</td>
+              </tr>
+              <tr>
+                <td>3</td>
+                <td>Alkohol</td>
+                <td>Rp.14.550.000</td>
+                <td>Rp.48.500.000</td>
+                <td>Rp.19.400.000</td>
+                <td>Rp.47.530.000</td>
+              </tr>
+            </tbody>
+            <!-- <tfoot>
+              <tr>
+                
+              </tr>
+            </tfoot> -->
+          </table>
+        </div>
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-outline-primary" data-bs-dismiss="modal">Close</button>
@@ -305,6 +426,7 @@
     </div>
   </div>
 </div>
+
 <?php $this->load->view ('_partials/footer.php'); ?>
 <script>
   $(document).ready(function () {
@@ -439,15 +561,94 @@
       }]
     });
 
-    Highcharts.chart('container1', {
-      chart: {
-        type: 'pie',
-        custom: {},
-        events: {
-          render() {
-            const chart = this,
-              series = chart.series[0];
-            let customLabel = chart.options.chart.custom.label;
+    // update judul
+  function showChartModal(typeName) {
+    document.getElementById('chart-type-label').innerText = typeName;
+    const modal = new bootstrap.Modal(document.getElementById('chartDetailModal'));
+    modal.show();
+  }
+
+  Highcharts.chart('container1', {
+    chart: {
+      type: 'pie',
+    },
+    accessibility: {
+      point: {
+        valueSuffix: '%'
+      }
+    },
+    title: {
+      text: ''
+    },
+    tooltip: {
+      pointFormat: '{series.name}: <b>{point.percentage:.0f}%</b>'
+    },
+    legend: {
+      enabled: false
+    },
+    credits: { enabled: false },
+    plotOptions: {
+      series: {
+        allowPointSelect: true,
+        cursor: 'pointer',
+        borderRadius: 8,
+        dataLabels: [{
+          enabled: true,
+          distance: 20,
+          format: '{point.name}'
+        }, {
+          enabled: true,
+          distance: -15,
+          format: '{point.percentage:.0f}%',
+          style: {
+            fontSize: '0.9em'
+          }
+        }],
+        point: {
+          events: {
+            click: function () {
+              // Panggil modal dan ubah judul
+              showChartModal(this.name);
+            }
+          }
+        }
+      }
+    },
+    series: [{
+      name: 'Item',
+      colorByPoint: true,
+      innerSize: '50%',
+      data: [{
+        name: 'Unnecessary',
+        y: 4.0
+      }, {
+        name: 'Urgent',
+        y: 23.0
+      }, {
+        name: 'To Do',
+        y: 73.0
+      }]
+    }]
+  });
+
+// kembalikan ke ukuran awal saat modal ditutup
+document.getElementById('chartDetailModal').addEventListener('hidden.bs.modal', function () {
+  const chart = Highcharts.charts.find(c => c && c.renderTo.id === 'container1');
+  if (chart) {
+    chart.reflow();
+  }
+});
+
+
+    // Highcharts.chart('container1', {
+    //   chart: {
+    //     type: 'pie',
+    //     custom: {},
+    //     events: {
+    //       render() {
+    //         const chart = this,
+    //           series = chart.series[0];
+    //         let customLabel = chart.options.chart.custom.label;
 
             // if (!customLabel) {
             //     customLabel = chart.options.chart.custom.label =
@@ -474,67 +675,64 @@
             // customLabel.css({
             //     fontSize: `${series.center[2] / 12}px`
             // });
-          }
-        }
-      },
-      accessibility: {
-        point: {
-          valueSuffix: '%'
-        }
-      },
-      title: {
-        text: ''
-      },
-      subtitle: {
-        text: ''
-      },
-      tooltip: {
-        pointFormat: '{series.name}: <b>{point.percentage:.0f}%</b>'
-      },
-      legend: {
-        enabled: false
-      },
-      credits: { enabled: false },
-      plotOptions: {
-        innerSize: '20%',
-        series: {
-          allowPointSelect: true,
-          cursor: 'pointer',
-          borderRadius: 8,
-          dataLabels: [{
-            enabled: true,
-            distance: 20,
-            format: '{point.name}'
-          }, {
-            enabled: true,
-            distance: -15,
-            format: '{point.percentage:.0f}%',
-            style: {
-              fontSize: '0.9em'
-            }
-          }],
-          showInLegend: true
-        }
-      },
-      series: [{
-        name: 'Item',
-        colorByPoint: true,
-        innerSize: '50%',
-        data: [{
-          name: 'Item 1',
-          y: 23.9
-        }, {
-          name: 'Item 2',
-          y: 12.6
-        }, {
-          name: 'Item 3',
-          y: 37.0
-        }, {
-          name: 'Item 4',
-          y: 26.4
-        }]
-      }]
-    });
+    //       }
+    //     }
+    //   },
+    //   accessibility: {
+    //     point: {
+    //       valueSuffix: '%'
+    //     }
+    //   },
+    //   title: {
+    //     text: ''
+    //   },
+    //   subtitle: {
+    //     text: ''
+    //   },
+    //   tooltip: {
+    //     pointFormat: '{series.name}: <b>{point.percentage:.0f}%</b>'
+    //   },
+    //   legend: {
+    //     enabled: false
+    //   },
+    //   credits: { enabled: false },
+    //   plotOptions: {
+    //     innerSize: '20%',
+    //     series: {
+    //       allowPointSelect: true,
+    //       cursor: 'pointer',
+    //       borderRadius: 8,
+    //       dataLabels: [{
+    //         enabled: true,
+    //         distance: 20,
+    //         format: '{point.name}'
+    //       }, {
+    //         enabled: true,
+    //         distance: -15,
+    //         format: '{point.percentage:.0f}%',
+    //         style: {
+    //           fontSize: '0.9em'
+    //         }
+    //       }],
+    //       showInLegend: true
+    //     }
+    //   },
+    //   series: [{
+    //     name: 'Item',
+    //     colorByPoint: true,
+    //     innerSize: '50%',
+    //     data: [{
+    //       name: 'Unnecessary',
+    //       y: 4.0
+    //     }, {
+    //       name: 'Urgent',
+    //       y: 23.0
+    //     }, {
+    //       name: 'To Do',
+    //       y: 73.0
+    //     }]
+    //   }]
+    // });
 
     Highcharts.chart('container2', {
       chart: {

@@ -49,6 +49,11 @@
     left: 54%;
     transform: translateX(-50%);
 }
+
+.unclickable {
+    pointer-events: none;
+    cursor: default;
+}
 </style>
 
 <!-- Welcoming Message -->
@@ -61,7 +66,7 @@
 <div class="row col-12 d-flex flex-wrap">
     <!-- Goods Management Label -->
     <div class="col-md-12">
-        <span class="btn mb-2 fw-bold w-100 d-block text-center" 
+        <span class="btn mb-2 fw-bold w-100 d-block text-center unclickable" 
             style="border-radius: 50px; font-weight: 600; color: #FFFFFF; background-color:#001F82;">
             Goods
         </span>
@@ -74,7 +79,7 @@
                 <div class="row">
                     <!-- Cost Section -->
                     <div class="col-md-4 px-2">
-                        <span class="btn mb-2 fw-bold w-100 text-center" style="border-radius: 50px; font-weight: 600; color: #001F82; background-color:#DAEAFF; border: 1px solid rgb(145, 167, 197);">COST</span>
+                        <span class="btn mb-2 fw-bold w-100 text-center unclickable" style="border-radius: 50px; font-weight: 600; color: #001F82; background-color:#DAEAFF; border: 1px solid rgb(145, 167, 197);">COST</span>
                         <div class="info-box d-flex flex-column align-items-center text-center" style="border-radius: 20px; background-color: #F8F9FA; padding: 15px; min-height: 200px;">
                             <p class="text-primary text-start fs-8 mx-0" style="line-height: 1.2;">Contains the percentage of achievement purchase compared to target</p>
                             <div id="chart-container" style="position: relative; width: 150px; height: 110px; margin: auto;">
@@ -88,7 +93,7 @@
 
                     <!-- Cash Section -->
                     <div class="col-md-4 px-2">
-                        <span class="btn mb-2 fw-bold w-100 text-center" style="border-radius: 50px; font-weight: 600; color: #001F82; background-color:#DAEAFF; border: 1px solid rgb(145, 167, 197);">CASH</span>
+                        <span class="btn mb-2 fw-bold w-100 text-center unclickable" style="border-radius: 50px; font-weight: 600; color: #001F82; background-color:#DAEAFF; border: 1px solid rgb(145, 167, 197);">CASH</span>
                         <div class="info-box d-flex flex-column align-items-center text-center" style="border-radius: 20px; background-color: #F8F9FA; padding: 15px; min-height: 150px;">
                             <p class="text-primary text-start fs-8 mx-0" style="line-height: 1.2;">Contains the percentage of achievement purchase compared to target</p>
                             <div id="chart-container" style="position: relative; width: 150px; height: 110px; margin: auto;">
@@ -102,7 +107,7 @@
 
                     <!-- Service Section -->
                     <div class="col-md-4 px-2">
-                        <span class="btn mb-2 fw-bold w-100 text-center" style="border-radius: 50px; font-weight: 600; color: #001F82; background-color:#DAEAFF; border: 1px solid rgb(145, 167, 197);">SERVICE</span>
+                        <span class="btn mb-2 fw-bold w-100 text-center unclickable" style="border-radius: 50px; font-weight: 600; color: #001F82; background-color:#DAEAFF; border: 1px solid rgb(145, 167, 197);">SERVICE</span>
                         <div class="info-box d-flex flex-column align-items-center text-center" style="border-radius: 20px; background-color: #F8F9FA; padding: 15px; min-height: 150px;">
                             <p class="text-primary text-start fs-8 mx-0" style="line-height: 1.2;">Contains the percentage of achievement purchase compared to target</p>
                             <img src="<?= base_url('assets/dist/service1.png'); ?>" class="img-fluid" style="height: 110px;">
@@ -131,7 +136,7 @@
 
                         <!-- <a href="<?=site_url('goods_management');?>" class="btn mb-2 fw-bold btn-hover-set w-100 text-center" style="border-radius: 50px; font-weight: 600;">ITEM TO DO LIST</a> -->
 
-                        <span class="btn mb-2 fw-bold w-100 text-center" style="border-radius: 50px; font-weight: 600; color: #001F82; background-color:#DAEAFF; border: 1px solid rgb(145, 167, 197);">ITEM TO DO LIST</span>
+                        <span class="btn mb-2 fw-bold w-100 text-center unclickable" style="border-radius: 50px; font-weight: 600; color: #001F82; background-color:#DAEAFF; border: 1px solid rgb(145, 167, 197);">ITEM TO DO LIST</span>
 
                         <div class="info-box d-flex flex-column align-items-center justify-content-center" style="border-radius: 20px; background-color: #F8F9FA;">
                             <h3 class="fw-bold text-primary mb-3">5</h3>
@@ -146,7 +151,7 @@
                     <div class="col-12 px-3 mt-3">
                         <!-- <a href="<?=site_url('goods_management/feedback');?>" class="btn mb-2 fw-bold btn-hover-set w-100 text-center" style="border-radius: 50px; font-weight: 600;">NEED FEEDBACK</a> -->
 
-                        <span class="btn mb-2 fw-bold w-100 text-center" style="border-radius: 50px; font-weight: 600; color: #001F82; background-color:#DAEAFF; border: 1px solid rgb(145, 167, 197);">NEED FEEDBACK</span>
+                        <span class="btn mb-2 fw-bold w-100 text-center unclickable" style="border-radius: 50px; font-weight: 600; color: #001F82; background-color:#DAEAFF; border: 1px solid rgb(145, 167, 197);">NEED FEEDBACK</span>
 
                         <div class="info-box d-flex flex-column align-items-center justify-content-center" style="border-radius: 20px; background-color: #F8F9FA;">
                             <h3 class="fw-bold text-primary mb-3">5</h3>
@@ -169,7 +174,7 @@
 <div class="row col-12 d-flex flex-wrap">
     <!-- Service Management Label -->
     <div class="col-md-12">
-        <span class="btn mb-2 fw-bold w-100 d-block text-center" 
+        <span class="btn mb-2 fw-bold w-100 d-block text-center unclickable" 
             style="border-radius: 50px; font-weight: 600; color: #FFFFFF; background-color:#001F82;">
             Service
         </span>
@@ -186,7 +191,7 @@
                 <div class="row">
                     <!-- Cost -->
                     <div class="col-md-6 px-2">
-                        <span class="btn mb-2 fw-bold" style="border-radius: 50px;width: 100%;font-weight: 600;color: #001F82;background-color:#DAEAFF;border: 1px solid rgb(145, 167, 197);">
+                        <span class="btn mb-2 fw-bold unclickable" style="border-radius: 50px;width: 100%;font-weight: 600;color: #001F82;background-color:#DAEAFF;border: 1px solid rgb(145, 167, 197);">
                             COST
                         </span>
                         <!-- Konten Cost -->
@@ -218,7 +223,7 @@
 
                     <!-- Service -->
                     <div class="col-md-6 px-2">
-                        <span class="btn mb-2 fw-bold" style="border-radius: 50px;width: 100%;font-weight: 600;color: #001F82;background-color:#DAEAFF;border: 1px solid rgb(145, 167, 197);">
+                        <span class="btn mb-2 fw-bold unclickable" style="border-radius: 50px;width: 100%;font-weight: 600;color: #001F82;background-color:#DAEAFF;border: 1px solid rgb(145, 167, 197);">
                             SERVICE
                         </span>
                         <!-- Konten Service -->
@@ -254,7 +259,7 @@
                     <div class="col-12 px-3 mt-0">
                     <!-- <a href="<?=site_url('service_management');?>" class="btn mb-2 fw-bold btn-hover-set" style="border-radius: 50px;width: 100%;font-weight: 600;">ITEM TO DO LIST</a> -->
 
-                    <span class="btn mb-2 fw-bold w-100 text-center" style="border-radius: 50px; font-weight: 600; color: #001F82; background-color:#DAEAFF; border: 1px solid rgb(145, 167, 197);">ITEM TO DO LIST</span>
+                    <span class="btn mb-2 fw-bold w-100 text-center unclickable" style="border-radius: 50px; font-weight: 600; color: #001F82; background-color:#DAEAFF; border: 1px solid rgb(145, 167, 197);">ITEM TO DO LIST</span>
 
                     <div class="info-box d-flex flex-column align-items-center justify-content-center" style="border-radius: 20px; background-color: #F8F9FA;">
                             <h3 class="fw-bold text-primary mb-3">5</h3>
@@ -270,7 +275,7 @@
                     <div class="col-12 px-3 mt-3">
                     <!-- <a href="<?=site_url('goods_management/feedback');?>" class="btn mb-2 fw-bold btn-hover-set" style="border-radius: 50px;width: 100%;font-weight: 600;">NEED FEEDBACK</a> -->
 
-                    <span class="btn mb-2 fw-bold w-100 text-center" style="border-radius: 50px; font-weight: 600; color: #001F82; background-color:#DAEAFF; border: 1px solid rgb(145, 167, 197);">NEED FEEDBACK</span>
+                    <span class="btn mb-2 fw-bold w-100 text-center unclickable" style="border-radius: 50px; font-weight: 600; color: #001F82; background-color:#DAEAFF; border: 1px solid rgb(145, 167, 197);">NEED FEEDBACK</span>
 
                     <div class="info-box d-flex flex-column align-items-center justify-content-center" style="border-radius: 20px; background-color: #F8F9FA;">
                             <h3 class="fw-bold text-primary mb-3">5</h3>
@@ -301,7 +306,7 @@
 
         <!-- card 1 -->
         <div class="col-md-4 col-sm-12 col-12">
-        <span class="btn mb-2 fw-bold" style="border-radius: 50px;width: 100%;font-weight: 600;color: #001F82;background-color:#DAEAFF; border: 1px solid rgb(145, 167, 197);">SAVINGS</span>
+        <span class="btn mb-2 fw-bold unclickable" style="border-radius: 50px;width: 100%;font-weight: 600;color: #001F82;background-color:#DAEAFF; border: 1px solid rgb(145, 167, 197);">SAVINGS</span>
 
         <div class="info-box card-1" style="border-radius: 20px;">
             <div class="info-box-content justify-content-center align-items-center" style="color: #001F82;">
@@ -316,7 +321,7 @@
 
         <!-- card 2 -->
         <div class="col-md-4 col-sm-12 col-12">
-        <span class="btn mb-2 fw-bold" style="border-radius: 50px;width: 100%;font-weight: 600;color: #001F82;background-color:#DAEAFF; border: 1px solid rgb(145, 167, 197);">LOSS/GAIN</span>
+        <span class="btn mb-2 fw-bold unclickable" style="border-radius: 50px;width: 100%;font-weight: 600;color: #001F82;background-color:#DAEAFF; border: 1px solid rgb(145, 167, 197);">LOSS/GAIN</span>
 
         <div class="info-box card-2 align-item-center justify-content-center" style="border-radius: 20px;">
             <div class="info-box-content" style="color: #001F82;">
@@ -351,7 +356,7 @@
 
         <!-- card 3 -->
         <div class="col-md-4 col-sm-12 col-12">
-        <span class="btn mb-2 fw-bold" style="border-radius: 50px;width: 100%;font-weight: 600;color: #001F82;background-color:#DAEAFF; border: 1px solid rgb(145, 167, 197);">MARKET RESEARCH</span>
+        <span class="btn mb-2 fw-bold unclickable" style="border-radius: 50px;width: 100%;font-weight: 600;color: #001F82;background-color:#DAEAFF; border: 1px solid rgb(145, 167, 197);">MARKET RESEARCH</span>
 
         <div class="info-box card-3" style="border-radius: 20px;">
             <div class="info-box-content" style="color: #001F82;">

@@ -2,6 +2,13 @@
 	<?php $this->load->view('_partials/head.php'); ?>
 </head>
 
+<style>
+  .unclickable {
+    pointer-events: none;
+    cursor: default;
+}
+</style>
+
 <div class="main-content"> 
     <!-- row 1 start -->
     <div class="row d-flex align-items-stretch">
@@ -9,7 +16,7 @@
 
         <!-- card 1 -->
         <div class="col-md-4 col-sm-12 col-12">
-        <span class="btn mb-2 fw-bold" style="border-radius: 50px;width: 100%;font-weight: 600;color: #001F82;background-color:#DAEAFF;">Overview of Spend</span>
+        <span class="btn mb-2 fw-bold unclickable" style="border-radius: 50px;width: 100%;font-weight: 600;color: #001F82;background-color:#DAEAFF;">Overview of Spend</span>
 
         <div class="info-box card-1" style="border-radius: 20px;">
             <div class="info-box-content" style="color: #001F82;">
@@ -42,7 +49,7 @@
 
         <!-- card 2 -->
         <div class="col-md-4 col-sm-12 col-12">
-        <span class="btn mb-2 fw-bold" style="border-radius: 50px;width: 100%;font-weight: 600;color: #001F82;background-color:#DAEAFF;">Top Loss</span>
+        <span class="btn mb-2 fw-bold unclickable" style="border-radius: 50px;width: 100%;font-weight: 600;color: #001F82;background-color:#DAEAFF;">Top Loss</span>
 
         <div class="info-box card-2" style="border-radius: 20px;">
             <div class="info-box-content" style="color: #001F82;">
@@ -57,7 +64,7 @@
 
         <!-- card 3 -->
         <div class="col-md-4 col-sm-12 col-12">
-        <span class="btn mb-2 fw-bold" style="border-radius: 50px;width: 100%;font-weight: 600;color: #001F82;background-color:#DAEAFF;">Top Gain</span>
+        <span class="btn mb-2 fw-bold unclickable" style="border-radius: 50px;width: 100%;font-weight: 600;color: #001F82;background-color:#DAEAFF;">Top Gain</span>
 
         <div class="info-box card-3" style="border-radius: 20px;">
             <div class="info-box-content" style="color: #001F82;">
@@ -77,7 +84,7 @@
     <div class="row d-flex align-items-stretch">
         <!-- card 1 -->
         <div class="col-md-4 col-sm-12 col-12">
-        <span class="btn mb-2 fw-bold" style="border-radius: 50px;width: 100%;font-weight: 600;color: #001F82;background-color:#DAEAFF;">Overview of Savings Potential</span>
+        <span class="btn mb-2 fw-bold unclickable" style="border-radius: 50px;width: 100%;font-weight: 600;color: #001F82;background-color:#DAEAFF;">Overview of Savings Potential</span>
 
         <div class="info-box" style="border-radius: 20px;">
             <div class="info-box-content" style="color: #001F82;">
@@ -122,7 +129,7 @@
 
         <!-- card 2 -->
         <div class="col-md-4 col-sm-12 col-12">
-        <span class="btn mb-2 fw-bold" style="border-radius: 50px;width: 100%;font-weight: 600;color: #001F82;background-color:#DAEAFF;">Current Items vs Baseline Graph</span>
+        <span class="btn mb-2 fw-bold unclickable" style="border-radius: 50px;width: 100%;font-weight: 600;color: #001F82;background-color:#DAEAFF;">Current Items vs Baseline Graph</span>
 
         <div class="info-box p-3" style="border-radius: 20px;">
             <div class="info-box-content" style="color: #001F82;">
@@ -148,7 +155,7 @@
 
         <!-- card 3 -->
         <div class="col-md-4 col-sm-12 col-12">
-        <span class="btn mb-2 fw-bold" style="border-radius: 50px;width: 100%;font-weight: 600;color: #001F82;background-color:#DAEAFF;">Vendor of Choice</span>
+        <span class="btn mb-2 fw-bold unclickable unclickable" style="border-radius: 50px;width: 100%;font-weight: 600;color: #001F82;background-color:#DAEAFF;">Vendor of Choice</span>
 
         <div class="info-box" style="border-radius: 20px;">
             <div class="info-box-content" style="color: #001F82;">

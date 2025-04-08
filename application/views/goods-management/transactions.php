@@ -31,10 +31,16 @@
     .flatpickr-monthDropdown-months option:hover {
         background-color: #001F82 !important;
     }
+
+    .unclickable {
+        pointer-events: none;
+        cursor: default;
+    }
 </style>
+
 <div class="row">
     <div class="col-md-8 col-sm-12 col-12">
-        <span class="btn mb-2"
+        <span class="btn mb-2 unclickable"
             style="border-radius: 50px;width: 100%;font-weight: 600;color: #001F82;background-color:#DAEAFF;">KPI</span>
         <div class="info-box" style="border-radius: 25px;">
             <div class="info-box-content" style="color: #001F82;">
@@ -48,7 +54,7 @@
     </div>
 
     <div class="col-md-4 col-sm-12 col-12">
-        <span class="btn mb-2"
+        <span class="btn mb-2 unclickable"
             style="border-radius: 50px;width: 100%;font-weight: 600;color: #001F82;background-color:#DAEAFF;">YoY
             Consumption</span>
         <div class="info-box" style="border-radius: 25px;">
@@ -63,7 +69,7 @@
 
     <!-- /.col -->
 </div>
-<span class="btn mb-2"
+<span class="btn mb-2 unclickable"
     style="border-radius: 50px;width: 100%;font-weight: 600;color: #001F82;background-color:#DAEAFF;">Usage</span>
 <div class="row mb-2 justify-between">
     <div class="col-sm-6">

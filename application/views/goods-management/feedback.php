@@ -37,6 +37,12 @@
     position: relative;
     top: -50px;
   }
+
+.unclickable {
+    pointer-events: none;
+    cursor: default;
+}
+
 </style>
 
 <div class="row mb-2 justify-between">
@@ -199,7 +205,7 @@
 </div>
 <div class="row">
   <div class="col-md-4 col-sm-12 col-12">
-    <span class="btn mb-2"
+    <span class="btn mb-2 unclickable"
       style="border-radius: 50px;width: 100%;font-weight: 600;color: #001F82;background-color:#DAEAFF;">COST</span>
     <div class="info-box" style="border-radius: 25px;">
       <div class="info-box-content" style="color: #001F82;">
@@ -213,7 +219,7 @@
   </div>
 
   <div class="col-md-4 col-sm-12 col-12">
-    <span class="btn mb-2"
+    <span class="btn mb-2 unclickable"
       style="border-radius: 50px;width: 100%;font-weight: 600;color: #001F82;background-color:#DAEAFF;">SERVICE</span>
     <div class="info-box" style="border-radius: 25px;">
       <div class="info-box-content" style="color: #001F82;">
@@ -227,7 +233,7 @@
   </div>
 
   <div class="col-md-4 col-sm-12 col-12">
-    <span class="btn mb-2"
+    <span class="btn mb-2 unclickable"
       style="border-radius: 50px;width: 100%;font-weight: 600;color: #001F82;background-color:#DAEAFF;">CASH</span>
     <div class="info-box" style="border-radius: 25px;">
       <div class="info-box-content" style="color: #001F82;">
