@@ -498,6 +498,10 @@ class Goods_management extends CI_Controller
 			"id" => $order_id
 		))->row ();
 
+		$order_detail = $this->db->get_where ("t_order_detail", array(
+			"order_id" => $order_id
+		))->row ();
+
 		if ($purchase_reason == "Routine Buy")
 			{
 			if ($order->approval_category != 'normal')
@@ -557,6 +561,12 @@ class Goods_management extends CI_Controller
 
 		generate_approval_track ($order_id, $this->session->userdata ('user_nip'));
 
+		_update ("m_master_data_material", array(
+			"recent_transactions" => $request_id
+		), array(
+			"id" => $order_detail->item_id
+		));
+
 		redirect ('goods_management/order_detail/' . _encrypt ($order_id));
 		}
 
@@ -578,6 +588,32 @@ class Goods_management extends CI_Controller
 		$data['order_approval'] = $this->db->query ("SELECT t_order_approval_track.*, m_employee.nama FROM t_order_approval_track
 		LEFT JOIN m_employee ON t_order_approval_track.approve_by = m_employee.nip
 		where order_id = '$id'")->result ();
+
+		$curr_user = $this->auth_model->current_user ();
+		$data['curr_user'] = $curr_user;
+
+		$this->session->set_flashdata ('page_title', 'INPUT ORDER FORM DETAIL');
+		$this->load->view ('goods-management/order/detail.php', $data);
+		}
+
+	public function request_detail()
+		{
+		$id = _decrypt ($this->uri->segment (3));
+
+		$data['order'] = $this->db->get_where ("t_order", array(
+			"request_id" => $id
+		))->row ();
+
+		$data['order_detail'] = $this->db->query ("
+		select * from t_order_detail 
+		INNER JOIN m_master_data_vendor ON m_master_data_vendor.vendor_code = t_order_detail.vendor_code
+		INNER JOIN m_master_data_material ON m_master_data_material.item_code = t_order_detail.item_code
+		where t_order_detail.order_id = '" . $data['order']->id . "'
+		")->result ();
+
+		$data['order_approval'] = $this->db->query ("SELECT t_order_approval_track.*, m_employee.nama FROM t_order_approval_track
+		LEFT JOIN m_employee ON t_order_approval_track.approve_by = m_employee.nip
+		where order_id = '" . $data['order']->id . "'")->result ();
 
 		$curr_user = $this->auth_model->current_user ();
 		$data['curr_user'] = $curr_user;

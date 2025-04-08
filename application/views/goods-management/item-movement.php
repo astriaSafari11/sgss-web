@@ -124,13 +124,19 @@
                                 <a href="<?= site_url ('goods_management/stock_card_detail/' . _encrypt ($v->id)); ?>"
                                     class="underline-custom">
                                     <?php echo $v->item_code; ?>
+                                </a>
                             </td>
-                            </a>
                             <td style="vertical-align: middle;text-align: left;"><?php echo $v->item_name; ?></td>
                             <td style="vertical-align: middle;text-align: center;"><?php echo $v->stock_on_hand; ?></td>
                             <td style="vertical-align: middle;text-align: center;"><?php echo $v->uom; ?></td>
                             <td style="vertical-align: middle;text-align: center;"><?php echo $v->current_safety_stock; ?></td>
-                            <td style="vertical-align: middle;text-align: center;">0</td>
+                            <td style="vertical-align: middle;text-align: center;">
+                                <a href="<?= site_url ('goods_management/request_detail/' . _encrypt ($v->recent_transactions)); ?>"
+                                    target="_blank" class="underline-custom">
+                                    <?php echo $v->recent_transactions; ?>
+                                </a>
+
+                            </td>
                             <td style="vertical-align: middle;text-align: center;">
                                 <?php if ($v->status == 'ok')
                                 { ?>

@@ -84,7 +84,7 @@
                                 <input type="text" class="form-control" id="floatingInputDate" placeholder="dd-mm-yyyy"
                                     name="date" value="<?php echo date ('Y-m-d'); ?>" required>
                                 <label for="floatingInput" class="fw-bold text-primary" style="font-size: 14px;">Action
-                                    Date <?php echo $order->request_id; ?></label>
+                                    Date</label>
                             </div>
                         </div>
                         <div class="col-6">
