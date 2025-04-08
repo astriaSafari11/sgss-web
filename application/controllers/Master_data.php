@@ -1240,7 +1240,73 @@ class Master_data extends CI_Controller
 			redirect ('master_data/detail_material/' . _encrypt ($id));
 			}
 		}
+	public function set_default_price()
+		{
+		$id = $this->input->get ('id');
+		$item_id = $this->input->get ('item_id');
 
+		_update (
+			"m_material_baseline_price",
+			array(
+				"is_default" => 0
+			),
+			array(
+				"item_id" => $item_id
+			)
+		);
+
+		_update (
+			"m_material_baseline_price",
+			array(
+				"is_default" => 1,
+			),
+			array(
+				"id" => $id
+			)
+		);
+
+		$err = array(
+			'show' => true,
+			'type' => 'success',
+			'msg' => 'Successfully changed the default price item.'
+		);
+		$this->session->set_flashdata ('toast', $err);
+		redirect ('master_data/detail_material/' . _encrypt ($item_id));
+		}
+
+	public function set_default_avg_forecast()
+		{
+		$id = $this->input->get ('id');
+		$item_id = $this->input->get ('item_id');
+
+		_update (
+			"m_material_average_forecast",
+			array(
+				"is_default" => 0
+			),
+			array(
+				"item_id" => $item_id
+			)
+		);
+
+		_update (
+			"m_material_average_forecast",
+			array(
+				"is_default" => 1,
+			),
+			array(
+				"id" => $id
+			)
+		);
+
+		$err = array(
+			'show' => true,
+			'type' => 'success',
+			'msg' => 'Successfully changed the default average forecast calculation.'
+		);
+		$this->session->set_flashdata ('toast', $err);
+		redirect ('master_data/detail_material/' . _encrypt ($item_id));
+		}
 	public function edit_annual_budget()
 		{
 		if (isset ($_POST['submit']))

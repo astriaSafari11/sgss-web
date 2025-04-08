@@ -1283,8 +1283,55 @@ class Goods_management extends CI_Controller
 
 	public function transactions()
 		{
+		$data['item_list'] = $this->db->query ("select * from m_master_data_material")->result ();
+		$data['area_list'] = $this->db->query ("select * from m_area")->result ();
+		$data['transactions_list'] = $this->db->query ("select * from m_area")->result ();
+
 		$this->session->set_flashdata ('page_title', 'USAGE');
-		$this->load->view ('goods-management/transactions.php');
+		$this->load->view ('goods-management/transactions.php', $data);
+		}
+
+	public function add_transaction()
+		{
+		if (isset ($_POST['submit']))
+			{
+			$date = $this->input->post ('date');
+			$item = $this->input->post ('item');
+			$qty = $this->input->post ('qty');
+
+			$totalItem = count ($item);
+
+			for ($i = 0; $i < $totalItem; $i++)
+				{
+				$getMat = $this->db->get_where ("m_master_data_material", array(
+					"id" => $item[$i],
+				))->row ();
+				// debugCode ($getMat);
+
+				$trxId = "TRX-" . date ('ymdhis') . $item[$i];
+				$data = array(
+					"transaction_id" => $trxId,
+					"date" => date ("Y-m-d"),
+					"item_id" => $item[$i],
+					"item_code" => $getMat->item_code,
+					"qty" => $qty[$i],
+					"requestor" => $this->session->userdata ('user_name'),
+					"requestor_nip" => $this->session->userdata ('user_nip'),
+
+				);
+
+				_add ("t_transactions", $data);
+				}
+			}
+		$err = array(
+			'show' => true,
+			'type' => 'success',
+			'msg' => 'Successfully add new transactions.'
+		);
+		$this->session->set_flashdata ('toast', $err);
+
+		redirect ('goods_management/transactions');
+
 		}
 
 	public function export_goods_order_request()
