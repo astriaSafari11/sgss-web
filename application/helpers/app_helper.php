@@ -260,20 +260,30 @@ function send_email_notification($to, $subject, $body)
 	$ci = &get_instance ();
 	$ci->load->library ('email');
 
+	// $config = array(
+	// 	'protocol' => 'smtp', // 'mail', 'sendmail', or 'smtp'
+	// 	'smtp_host' => 'ssl://smtp.gmail.com',
+	// 	'smtp_port' => 465,
+	// 	'smtp_user' => 'astria.safari@gmail.com',
+	// 	'smtp_pass' => 'knucmduqxdmidvgm',
+	// 	'mailtype' => 'html'
+	// );
+
 	$config = array(
 		'protocol' => 'smtp', // 'mail', 'sendmail', or 'smtp'
-		'smtp_host' => 'ssl://smtp.gmail.com',
-		'smtp_port' => 465,
-		'smtp_user' => 'astria.safari@gmail.com',
-		'smtp_pass' => 'knucmduqxdmidvgm',
-		'mailtype' => 'html'
+		'smtp_host' => 'smtp.sendgrid.net',
+		'smtp_port' => 587,
+		'smtp_user' => 'apikey',
+		'smtp_crypto' => 'tls',
+		'smtp_pass' => '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',
+		'mailtype' => 'html',
 	);
 
 	$ci->email->initialize ($config);
 
 	$ci->email->set_newline ("\r\n");
 
-	$from = "astria.safari@gmail.com";
+	$from = "sgss.notification@unilever.com";
 
 	$ci->email->from ($from);
 	$ci->email->to ($to);
