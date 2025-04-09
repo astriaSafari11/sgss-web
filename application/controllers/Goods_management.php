@@ -1389,7 +1389,7 @@ class Goods_management extends CI_Controller
 
 		$reader = IOFactory::createReader ('Xlsx');
 		$spreadsheet = $reader->load ('assets/format/template_export_goods_order_request.xlsx');
-		$spreadsheet->setActiveSheetIndexByName ('request_list');
+		$spreadsheet->setActiveSheetIndexByName ('Request');
 		$sheet = $spreadsheet->getActiveSheet ();
 		$index = 2;
 		$getData = $this->db->query ("
@@ -1407,17 +1407,18 @@ class Goods_management extends CI_Controller
 		foreach ((array) $getData as $datas => $list)
 			{
 			// $sheet->insertNewRowBefore($index + 1, 1);
-			$sheet->setCellValue ("A{$index}", trim (date ("Y-m-d", strtotime ($list->due_date))));
-			$sheet->setCellValue ("B{$index}", trim ($list->status));
+			$sheet->setCellValue ("A{$index}", date ("Y-m-d"));
+			$sheet->setCellValue ("B{$index}", trim ($this->session->userdata ('user_name')));
 			// $sheet->setCellValue("C{$index}", trim($list->item_code));
-			$sheet->setCellValue ("D{$index}", trim ($list->item_name));
-			$sheet->setCellValue ("E{$index}", trim ($list->qty));
-			$sheet->setCellValue ("F{$index}", trim ($list->uom));
-			$sheet->setCellValue ("G{$index}", trim ($list->vendor_name));
-			$sheet->setCellValue ("H{$index}", trim ($list->price_per_uom));
-			$sheet->setCellValue ("I{$index}", trim ($list->price_per_uom * $list->moq));
-			$sheet->setCellValue ("J{$index}", trim ($this->session->userdata ('user_email')));
-			$sheet->setCellValue ("L{$index}", trim ($area->area_code));
+			$sheet->setCellValue ("G{$index}", trim ($list->item_name . "-" . $list->vendor_name));
+			$sheet->setCellValue ("H{$index}", trim ($list->item_name));
+			$sheet->setCellValue ("I{$index}", trim ($list->vendor_name));
+			$sheet->setCellValue ("J{$index}", trim ($list->qty));
+			$sheet->setCellValue ("K{$index}", trim ($list->uom));
+			$sheet->setCellValue ("L{$index}", trim ($list->price_per_uom));
+			// $sheet->setCellValue ("I{$index}", trim ($list->price_per_uom * $list->moq));
+			// $sheet->setCellValue ("J{$index}", trim ($this->session->userdata ('user_email')));
+			// $sheet->setCellValue ("L{$index}", trim ($area->area_code));
 
 			$styleArray = [
 				'font' => [
@@ -1434,20 +1435,19 @@ class Goods_management extends CI_Controller
 			$index++;
 			}
 
-		$spreadsheet->setActiveSheetIndexByName ('user_list');
+		$spreadsheet->setActiveSheetIndexByName ('User');
 		$sheet = $spreadsheet->getActiveSheet ();
 		$index = 2;
 		$userlist = $this->db->query ("
-			select nama, email, m_employee_area.area_code from m_employee
-			INNER JOIN m_employee_area ON m_employee_area.nip = m_employee.nip
+			select * FROM view_employee_area
 		")->result ();
 
 		foreach ((array) $userlist as $datas => $list)
 			{
 			// $sheet->insertNewRowBefore($index + 1, 1);
-			$sheet->setCellValue ("A{$index}", trim ($list->nama));
-			$sheet->setCellValue ("B{$index}", trim ($list->email));
-			$sheet->setCellValue ("C{$index}", trim ($list->area_code));
+			$sheet->setCellValue ("A{$index}", trim ($list->nip));
+			$sheet->setCellValue ("B{$index}", trim ($list->nama));
+			$sheet->setCellValue ("C{$index}", trim ($list->area));
 
 			$styleArray = [
 				'font' => [
@@ -1464,12 +1464,48 @@ class Goods_management extends CI_Controller
 			$index++;
 			}
 
+		$spreadsheet->setActiveSheetIndexByName ('Material');
+		$sheet = $spreadsheet->getActiveSheet ();
+		$index = 2;
+		$getVendorMaterial = $this->db->query ("SELECT m_vendor_material.*, m_master_data_vendor.vendor_name, m_master_data_material.item_name,m_master_data_material.uom FROM m_vendor_material 
+			INNER JOIN m_master_data_vendor ON m_master_data_vendor.vendor_code = m_vendor_material.vendor_code
+			INNER JOIN m_master_data_material ON m_master_data_material.item_code = m_vendor_material.item_code
+			WHERE m_vendor_material.is_active = 1")->result ();
+
+		foreach ((array) $getVendorMaterial as $datas => $list)
+			{
+			// $sheet->insertNewRowBefore($index + 1, 1);
+			$sheet->setCellValue ("B{$index}", trim ($list->vendor_code));
+			$sheet->setCellValue ("C{$index}", trim ($list->vendor_name));
+			$sheet->setCellValue ("D{$index}", trim ($list->item_code));
+			$sheet->setCellValue ("E{$index}", trim ($list->item_name));
+			$sheet->setCellValue ("F{$index}", trim ($list->uom));
+			$sheet->setCellValue ("G{$index}", trim ($list->total_spend_ytd));
+			$sheet->setCellValue ("H{$index}", trim ($list->last_year_spend));
+			$sheet->setCellValue ("I{$index}", trim ($list->lt_po_deliv ? $list->lt_po_deliv : 0));
+			$sheet->setCellValue ("J{$index}", trim ($list->price_per_uom ? $list->price_per_uom : 0));
+			$sheet->setCellValue ("K{$index}", trim ($list->moq ? $list->moq : 0));
+
+			$styleArray = [
+				'font' => [
+					'name' => 'Calibri',
+					'size' => 10
+				],
+				'alignment' => [
+					'horizontal' => \PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER,
+					'vertical' => \PhpOffice\PhpSpreadsheet\Style\Alignment::VERTICAL_CENTER
+				]
+			];
+
+			$sheet->getStyle ("A{$index}:Q{$index}")->applyFromArray ($styleArray);
+			$index++;
+			}
 
 		ob_end_clean ();
 		$writer = new Xlsx($spreadsheet); // instantiate Xlsx
 		header ('Content-type: application/vnd.ms-excel');
 		// It will be called file.xls
-		$filename = 'order_request_list' . date ('YmdHis');
+		$filename = 'Request_List_' . date ('Ymd');
 		header ('Content-Disposition: attachment; filename="' . $filename . '.xlsx"');
 		// Write file to the browser
 		$writer->save ('php://output');

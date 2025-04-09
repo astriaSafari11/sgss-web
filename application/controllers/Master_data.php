@@ -1274,6 +1274,20 @@ class Master_data extends CI_Controller
 		redirect ('master_data/detail_material/' . _encrypt ($item_id));
 		}
 
+	/*************  ✨ Windsurf Command ⭐  *************/
+	/**
+	 * Sets the default average forecast calculation for a specific material.
+	 *
+	 * This function updates the "m_material_average_forecast" table, setting the
+	 * "is_default" field to 0 for all records associated with the given item ID,
+	 * and then sets the "is_default" field to 1 for the record with the specified ID.
+	 * After updating, it sets a success message in the session flash data and
+	 * redirects to the material detail page.
+	 *
+	 * @return void
+	 */
+
+	/*******  048d1b9c-e9ef-49cb-9ebb-50e1c17c5f3d  *******/
 	public function set_default_avg_forecast()
 		{
 		$id = $this->input->get ('id');
@@ -2289,6 +2303,33 @@ class Master_data extends CI_Controller
 			$index++;
 			}
 
+		$spreadsheet->setActiveSheetIndexByName ('User');
+		$sheet = $spreadsheet->getActiveSheet ();
+		$index = 2;
+		$getFactory = $this->db->query ("SELECT * FROM view_employee_area")->result ();
+
+		foreach ((array) $getFactory as $datas => $list)
+			{
+			// $sheet->insertNewRowBefore($index + 1, 1);
+			$sheet->setCellValue ("A{$index}", trim ($list->nip));
+			$sheet->setCellValue ("B{$index}", trim ($list->nama));
+			$sheet->setCellValue ("C{$index}", trim ($list->area));
+
+			$styleArray = [
+				'font' => [
+					'name' => 'Calibri',
+					'size' => 10
+				],
+				'alignment' => [
+					'horizontal' => \PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER,
+					'vertical' => \PhpOffice\PhpSpreadsheet\Style\Alignment::VERTICAL_CENTER
+				]
+			];
+
+			$sheet->getStyle ("A{$index}:C{$index}")->applyFromArray ($styleArray);
+			$index++;
+			}
+
 		$spreadsheet->setActiveSheetIndexByName ('Master Material');
 		$sheet = $spreadsheet->getActiveSheet ();
 		$index = 3;
@@ -2338,6 +2379,41 @@ class Master_data extends CI_Controller
 			];
 
 			$sheet->getStyle ("A3:Z{$index}")->applyFromArray ($styleArray);
+			$index++;
+			}
+
+		$spreadsheet->setActiveSheetIndexByName ('Master Vendor');
+		$sheet = $spreadsheet->getActiveSheet ();
+		$index = 2;
+		$getVendor = $this->db->query ("SELECT * FROM m_master_data_vendor WHERE is_active = 1")->result ();
+
+		foreach ((array) $getVendor as $datas => $list)
+			{
+			// $sheet->insertNewRowBefore($index + 1, 1);
+			$sheet->setCellValue ("A{$index}", trim ($list->vendor_code));
+			$sheet->setCellValue ("B{$index}", trim ($list->vendor_name));
+			$sheet->setCellValue ("C{$index}", trim ($list->vendor_location));
+			$sheet->setCellValue ("D{$index}", trim ($list->vendor_channel));
+			$sheet->setCellValue ("E{$index}", trim ($list->additional_margin));
+			$sheet->setCellValue ("F{$index}", trim ($list->last_transaction));
+			$sheet->setCellValue ("G{$index}", trim ($list->validity));
+			$sheet->setCellValue ("H{$index}", trim ($list->category));
+			$sheet->setCellValue ("I{$index}", trim ($list->total_spend_ytd));
+			$sheet->setCellValue ("J{$index}", trim ($list->last_year_spend));
+			$sheet->setCellValue ("K{$index}", trim ($list->est_lead_time));
+
+			$styleArray = [
+				'font' => [
+					'name' => 'Calibri',
+					'size' => 10
+				],
+				'alignment' => [
+					'horizontal' => \PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER,
+					'vertical' => \PhpOffice\PhpSpreadsheet\Style\Alignment::VERTICAL_CENTER
+				]
+			];
+
+			$sheet->getStyle ("A2:K{$index}")->applyFromArray ($styleArray);
 			$index++;
 			}
 
