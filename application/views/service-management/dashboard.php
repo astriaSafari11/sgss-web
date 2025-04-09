@@ -217,7 +217,141 @@
               </div> 
               <!-- /.col -->               
             </div>
-            <!--end::Row-->  
+            <!--end::Row-->
+            
+<!-- Modal Section -->
+<div class="modal fade" id="chartDetailModal" tabindex="-1" aria-labelledby="chartDetailLabel" aria-hidden="true">
+  <div class="modal-dialog modal-xl">
+    <div class="modal-content">
+
+      <div class="modal-header">
+        <h5 class="modal-title text-primary" id="chartDetailLabel" style="font-weight:600;">
+          Status: <span id="chart-type-label">To Do</span>
+        </h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+
+      <div class="modal-body">
+        <!-- Tabel -->
+        <div class="table-responsive">
+          <table class="table table-bordered table-striped text-center">
+            <thead class="text-white" style="background-color: #001F82;">
+              <tr>
+                <th style="color: #fff;background-color: #001F82;text-align: center;">No</th>
+                <th style="color: #fff;background-color: #001F82;text-align: center;">Item Name</th>
+                <th style="color: #fff;background-color: #001F82;text-align: center;">Spend 2025</th>
+                <th style="color: #fff;background-color: #001F82;text-align: center;">Budget</th>
+                <th style="color: #fff;background-color: #001F82;text-align: center;">Spend 2024 YTD</th>
+                <th style="color: #fff;background-color: #001F82;text-align: center;">Spend 2024 FY</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>1</td>
+                <td>Masker</td>
+                <td>Rp.15.000.000</td>
+                <td>Rp.50.000.000</td>
+                <td>Rp.20.000.000</td>
+                <td>Rp.49.000.000</td>
+              </tr>
+              <tr>
+                <td>2</td>
+                <td>Sepatu Safety</td>
+                <td>Rp.17.250.000</td>
+                <td>Rp.57.500.000</td>
+                <td>Rp.23.000.000</td>
+                <td>Rp.56.350.000</td>
+              </tr>
+              <tr>
+                <td>3</td>
+                <td>Alkohol</td>
+                <td>Rp.14.550.000</td>
+                <td>Rp.48.500.000</td>
+                <td>Rp.19.400.000</td>
+                <td>Rp.47.530.000</td>
+              </tr>
+            </tbody>
+            <!-- <tfoot>
+              <tr>
+                
+              </tr>
+            </tfoot> -->
+          </table>
+        </div>
+      </div>
+
+      <div class="modal-footer">
+        <button type="button" class="btn btn-outline-primary" data-bs-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-outline-primary" id="btnExportExcel">Export Excel</button> <!-- logic belum -->
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<div class="modal fade" id="cost-detail" tabindex="-1" aria-labelledby="cost-detail" aria-hidden="true">
+  <div class="modal-dialog modal-xl">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="cost-detail" class="text-primary" style="color: #001F82;font-weight:600;">
+          Cost Detail</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <!-- Tabel Contoh -->
+        <div class="table-responsive">
+          <table class="table table-bordered table-striped text-center">
+            <thead>
+              <tr>
+                <th style="color: #fff;background-color: #001F82;text-align: center;">No</th>
+                <th style="color: #fff;background-color: #001F82;text-align: center;">Item Name</th>
+                <th style="color: #fff;background-color: #001F82;text-align: center;">Spend 2025</th>
+                <th style="color: #fff;background-color: #001F82;text-align: center;">Budget</th>
+                <th style="color: #fff;background-color: #001F82;text-align: center;">Spend 2024 YTD</th>
+                <th style="color: #fff;background-color: #001F82;text-align: center;">Spend 2024 FY</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>1</td>
+                <td>Masker</td>
+                <td>Rp.15.000.000</td>
+                <td>Rp.50.000.000</td>
+                <td>Rp.20.000.000</td>
+                <td>Rp.49.000.000</td>
+              </tr>
+              <tr>
+                <td>2</td>
+                <td>Sepatu Safety</td>
+                <td>Rp.17.250.000</td>
+                <td>Rp.57.500.000</td>
+                <td>Rp.23.000.000</td>
+                <td>Rp.56.350.000</td>
+              </tr>
+              <tr>
+                <td>3</td>
+                <td>Alkohol</td>
+                <td>Rp.14.550.000</td>
+                <td>Rp.48.500.000</td>
+                <td>Rp.19.400.000</td>
+                <td>Rp.47.530.000</td>
+              </tr>
+            </tbody>
+            <!-- <tfoot>
+              <tr>
+                
+              </tr>
+            </tfoot> -->
+          </table>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-outline-primary" data-bs-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-outline-primary" id="btnExportExcel">Export Excel</button> <!-- logic belum -->
+      </div>
+    </div>
+  </div>
+</div>
 
 <?php $this->load->view('_partials/footer.php'); ?>
 
@@ -275,6 +409,17 @@
                 series: {
                     allowPointSelect: true,
                     cursor: 'pointer',
+                    point: {
+                      events: {
+                        click: (e) => {
+                          const myModal = new bootstrap.Modal('#cost-detail', {
+                            keyboard: false
+                          });
+                          myModal.show();
+                          console.log('clicked');
+                        },
+                      }
+                    },
                     borderRadius: 8,
                     dataLabels: [{
                         enabled: true,
@@ -372,6 +517,13 @@
                 series: {
                     allowPointSelect: true,
                     cursor: 'pointer',
+                    point: {
+                      events: {
+                        click: function () {
+                          showChartModal(this.name);
+                        }
+                      }
+                    },
                     borderRadius: 8,
                     dataLabels: [{
                         enabled: true,
@@ -389,24 +541,34 @@
                 }
             },
             series: [{
-                name: 'Item',
-                colorByPoint: true,
-                innerSize: '50%',
-                data: [{
-                    name: 'Item 1',
-                    y: 23.9
-                }, {
-                    name: 'Item 2',
-                    y: 12.6
-                }, {
-                    name: 'Item 3',
-                    y: 37.0
-                }, {
-                    name: 'Item 4',
-                    y: 26.4
-                }]
+              name: 'Item',
+              colorByPoint: true,
+              innerSize: '50%',
+              data: [{
+                name: 'Unnecessary',
+                y: 4.0
+              }, {
+                name: 'Urgent',
+                y: 23.0
+              }, {
+                name: 'To Do',
+                y: 73.0
               }]
-           });      
+            }]
+           });  
+           // update judul
+            function showChartModal(typeName) {
+              document.getElementById('chart-type-label').innerText = typeName;
+              const modal = new bootstrap.Modal(document.getElementById('chartDetailModal'));
+              modal.show();
+            }
+           // kembalikan ke ukuran awal saat modal ditutup
+            document.getElementById('chartDetailModal').addEventListener('hidden.bs.modal', function () {
+              const chart = Highcharts.charts.find(c => c && c.renderTo.id === 'container1');
+              if (chart) {
+                chart.reflow();
+              }
+            });
            
            Highcharts.chart('container2', {
             chart: {

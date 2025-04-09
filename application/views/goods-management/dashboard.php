@@ -609,7 +609,6 @@
         point: {
           events: {
             click: function () {
-              // Panggil modal dan ubah judul
               showChartModal(this.name);
             }
           }
