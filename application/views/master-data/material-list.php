@@ -1,4 +1,4 @@
-<?php $this->load->view('_partials/head.php'); ?>
+<?php $this->load->view ('_partials/head.php'); ?>
 <style>
   div.dt-container {
     width: 100%;
@@ -7,7 +7,7 @@
 </style>
 <div class="row mb-2">
   <div class="col-sm-9">
-    <?php $this->load->view('master-data/_header_parts.php'); ?>
+    <?php $this->load->view ('master-data/_header_parts.php'); ?>
   </div>
   <div class="col-sm-3">
     <ol class="breadcrumb float-sm-end">
@@ -24,7 +24,9 @@
     <div class="card">
       <div class="card-header">
         <div class="card-tools">
-          <a href="<?= site_url('master_data/add_material'); ?>" class="btn btn-sm btn-outline-primary position-relative" style="font-weight: 600; border-radius: 50px; white-space:nowrap">
+          <a href="<?= site_url ('master_data/add_material'); ?>"
+            class="btn btn-sm btn-outline-primary position-relative"
+            style="font-weight: 600; border-radius: 50px; white-space:nowrap">
             <i class="fa-solid fa-circle-plus"></i>
             Add New Material
           </a>
@@ -32,29 +34,74 @@
       </div>
       <div class="card-body">
         <div class="dt-container">
-        <?php $this->load->view ('_partials/search_bar.php'); ?>
-          <table id="table-vendor" class="table table-striped table-bordered" width="100%">
+          <?php $this->load->view ('_partials/search_bar.php'); ?>
+          <table id="table-vendor" class="table table-sm table-striped table-bordered" width="100%">
             <thead style="text-align: center;white-space:nowrap;">
               <tr>
-                <th style="color: #fff;background-color: #001F82;text-align: center;vertical-align:middle;">No.</th>
-                <th style="color: #fff;background-color: #001F82;text-align: center;vertical-align:middle;">Factory</th>
-                <th style="color: #fff;background-color: #001F82;text-align: center;vertical-align:middle;">Item Code</th>
-                <th style="color: #fff;background-color: #001F82;text-align: center;vertical-align:middle;">Item Name</th>
-                <th style="color: #fff;background-color: #001F82;text-align: center;vertical-align:middle;">Item Group</th>
-                <th style="color: #fff;background-color: #001F82;text-align: center;vertical-align:middle;">Size</th>
-                <th style="color: #fff;background-color: #001F82;text-align: center;vertical-align:middle;">Size - UoM</th>
-                <th style="color: #fff;background-color: #001F82;text-align: center;vertical-align:middle;">Item - UoM</th>
-                <th style="color: #fff;background-color: #001F82;text-align: center;vertical-align:middle;">Lot Size</th>
-                <th style="color: #fff;background-color: #001F82;text-align: center;vertical-align:middle;">Initial Stock</th>
-                <th style="color: #fff;background-color: #001F82;text-align: center;vertical-align:middle;">Order Cycle <br />(days)</th>
-                <th style="color: #fff;background-color: #001F82;text-align: center;vertical-align:middle;">Standard Safety Stock</th>
-                <th style="color: #fff;background-color: #001F82;text-align: center;vertical-align:middle;">Lead Time PR to PO <br />(days)</th>
-                <th style="color: #fff;background-color: #001F82;text-align: center;vertical-align:middle;">Lead Time PO to Deliv <br />(days)</th>
-                <th style="color: #fff;background-color: #001F82;text-align: center;vertical-align:middle;">Total Lead Time <br />(days)</th>
-                <th style="color: #fff;background-color: #001F82;text-align: center;vertical-align:middle;">Action</th>
+                <th
+                  style="color: #fff;background-color: #001F82;text-align: center;vertical-align:middle;font-size:12px;">
+                  No.</th>
+                <th
+                  style="color: #fff;background-color: #001F82;text-align: center;vertical-align:middle;font-size:12px;">
+                  Factory</th>
+                <th
+                  style="color: #fff;background-color: #001F82;text-align: center;vertical-align:middle;font-size:12px;">
+                  Item Code
+                </th>
+                <th
+                  style="color: #fff;background-color: #001F82;text-align: center;vertical-align:middle;font-size:12px;">
+                  Item Name
+                </th>
+                <th
+                  style="color: #fff;background-color: #001F82;text-align: center;vertical-align:middle;font-size:12px;">
+                  Item Group
+                </th>
+                <th
+                  style="color: #fff;background-color: #001F82;text-align: center;vertical-align:middle;font-size:12px;">
+                  Size</th>
+                <th
+                  style="color: #fff;background-color: #001F82;text-align: center;vertical-align:middle;font-size:12px;">
+                  Size - UoM
+                </th>
+                <th
+                  style="color: #fff;background-color: #001F82;text-align: center;vertical-align:middle;font-size:12px;">
+                  Item - UoM
+                </th>
+                <th
+                  style="color: #fff;background-color: #001F82;text-align: center;vertical-align:middle;font-size:12px;">
+                  Lot Size
+                </th>
+                <th
+                  style="color: #fff;background-color: #001F82;text-align: center;vertical-align:middle;font-size:12px;">
+                  Initial
+                  Stock</th>
+                <th
+                  style="color: #fff;background-color: #001F82;text-align: center;vertical-align:middle;font-size:12px;">
+                  Order Cycle
+                  <br />(days)
+                </th>
+                <th
+                  style="color: #fff;background-color: #001F82;text-align: center;vertical-align:middle;font-size:12px;">
+                  Standard
+                  Safety Stock</th>
+                <th
+                  style="color: #fff;background-color: #001F82;text-align: center;vertical-align:middle;font-size:12px;">
+                  Lead Time PR
+                  to PO <br />(days)</th>
+                <th
+                  style="color: #fff;background-color: #001F82;text-align: center;vertical-align:middle;font-size:12px;">
+                  Lead Time PO
+                  to Deliv <br />(days)</th>
+                <th
+                  style="color: #fff;background-color: #001F82;text-align: center;vertical-align:middle;font-size:12px;">
+                  Total Lead
+                  Time <br />(days)</th>
+                <th
+                  style="color: #fff;background-color: #001F82;text-align: center;vertical-align:middle;font-size:12px;">
+                  Action</th>
               </tr>
             </thead>
-            <tbody style="text-align: center;vertical-align:center;white-space:nowrap;">
+            <tbody style="text-align: center;vertical-align:center;white-space:nowrap;font-size:12px;">
             </tbody>
           </table>
         </div>
@@ -68,23 +115,23 @@
 </div>
 <!--end::Row-->
 
-<?php $this->load->view('_partials/footer.php'); ?>
+<?php $this->load->view ('_partials/footer.php'); ?>
 
 <script>
-  $(document).ready(function() {
+  $(document).ready(function () {
     $('#table-vendor').DataTable({
       scrollX: true,
       "processing": true,
       "serverSide": true,
       "ordering": false,
       "ajax": {
-        "url": "<?= site_url('master_data/get_master_material'); ?>",
+        "url": "<?= site_url ('master_data/get_master_material'); ?>",
         "type": "POST"
       },
       "order": [],
       "columnDefs": [{
         targets: '_all',
-        createdCell: function(cell) {
+        createdCell: function (cell) {
           $(cell).css('vertical-align', 'middle');
         }
       }],
