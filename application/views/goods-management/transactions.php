@@ -1,10 +1,40 @@
-<?php $this->load->view ('_partials/head.php'); ?>
-
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+<script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
 <style>
-  .unclickable {
-    pointer-events: none;
-    cursor: default;
-}
+    .flatpickr-calendar {
+        background-color: rgb(255, 255, 255) !important;
+    }
+
+    .flatpickr-month {
+        background-color: #001F82 !important;
+        color: white !important;
+        height: 40px !important;
+    }
+
+    .flatpickr-prev-month svg,
+    .flatpickr-next-month svg {
+        fill: white !important;
+    }
+
+    .flatpickr-monthDropdown-months {
+        background-color: #001F82 !important;
+        color: white !important;
+        border: none !important;
+    }
+
+    .flatpickr-monthDropdown-months option {
+        background-color: #001F82 !important;
+        color: white !important;
+    }
+
+    .flatpickr-monthDropdown-months option:hover {
+        background-color: #001F82 !important;
+    }
+
+    .unclickable {
+        pointer-events: none;
+        cursor: default;
+    }
 </style>
 
 <div class="row">
@@ -47,7 +77,8 @@
     <div class="col-sm-6">
         <div class="d-flex justify-content-end">
             <a href="#" class="btn btn-sm btn-outline-primary"
-                style="font-weight: 600; border-radius: 50px; width: 150px;margin-right:10px;" id="btnExport">
+                style="font-weight: 600; border-radius: 50px; width: 150px;margin-right:10px;" data-bs-toggle="modal"
+                data-bs-target="#modal-add">
                 <i class="fa-solid fa-add"></i>
                 Add Usage
             </a>
@@ -66,57 +97,9 @@
 </div>
 <!--begin::Row-->
 <div class="row info-box d-flex align-items-stretch ms-1 py-3 rounded-5">
-    <!-- <div class="col-md-12 col-sm-12 col-12">
-        <form action="<?php echo site_url ('goods_management/item_movement'); ?>" method="post">
-            <div class="d-flex justify-content-between align-items-center mb-2">
-                <label for="filterBy1" class="small" style="width: 60px;">Search :</label>
-                <input type="text" id="searchInput" class="form-control form-control-sm w-full"
-                    style="margin-left: 10px;"
-                    placeholder="Input transactions number / item code / desc / area to search" name="keyword"
-                    value="<?php echo isset ($param_search['keyword']) ? $param_search['keyword'] : ''; ?>">
-            </div>
-            <div class="d-flex justify-content-between align-items-center mb-2">
-                <div id="searchContainer">
-                    <div class="d-flex align-items-center gap-2 search-row mb-1">
-                        <label for="filterBy1" class="small" style="width: 100px;">Transactions :</label>
-                        <select id="filterBy1" class="form-select form-select-sm" name="column_search"
-                            style="width: 250px;">
-                            <option value="all">-- All Transactions --</option>
-                        </select>
-
-                        <label for="filterBy1" class="small">Item :</label>
-                        <select id="filterBy1" class="form-select form-select-sm" name="column_search"
-                            style="width: 250px;">
-                            <option value="all">-- All Item --</option>
-                        </select>
-                        <label for="filterBy1" class="small">Area :</label>
-                        <select id="filterBy1" class="form-select form-select-sm" name="column_search"
-                            style="width: 250px;">
-                            <option value="all">-- All Area --</option>
-                        </select>
-                        <label for="filterBy1" class="small">Status :</label>
-                        <select id="filterBy1" class="form-select form-select-sm" name="column_search"
-                            style="width: 250px;">
-                            <option value="all">-- All Status --</option>
-                        </select>
-                        <button class="btn btn-outline-primary btn-sm" type="submit" name="search"
-                            style="width: 100px;">
-                            <i class="fas fa-search"></i>
-                            Search
-                        </button>
-                        <button class="btn btn-outline-primary btn-sm" type="submit" name="reset" style="width: 100px;">
-                            Reset
-                        </button>
-                    </div>
-                </div>
-            </div>
-        </form>
-
-
-    </div> -->
-
-    <?php $this->load->view ('_partials/search_bar_special.php'); ?>
-
+    <form action="<?php echo site_url ('goods_management/transactions'); ?>" method="post">
+        <?php $this->load->view ('_partials/search_bar_special.php'); ?>
+    </form>
     <style>
         a.underline-custom {
             color: #001F82;
@@ -146,7 +129,46 @@
             </tr>
         </thead>
         <tbody>
+            <?php if (isset ($item))
+            {
+            foreach ($item as $k => $v)
+                { ?>
+                    <tr>
+                        <td style="vertical-align: middle;text-align: left;"><?php echo $v->transaction_id; ?></td>
+                        <td style="vertical-align: middle;text-align: center;">
+                            <a href="<?= site_url ('goods_management/stock_card_detail/' . _encrypt ($v->id)); ?>"
+                                class="underline-custom">
+                                <?php echo $v->item_code; ?>
+                            </a>
+                        </td>
+                        <td style="vertical-align: middle;text-align: left;"><?php echo $v->item_name; ?></td>
+                        <td style="vertical-align: middle;text-align: center;"><?php echo myNum ($v->qty); ?></td>
+                        <td style="vertical-align: middle;text-align: center;"><?php echo $v->uom; ?></td>
+                        <td style="vertical-align: middle;text-align: center;"><?php echo myNum ($v->ytd_used); ?></td>
+                        <td style="vertical-align: middle;text-align: center;">
+                            <?php if ($v->usage_status == 'OK')
+                            { ?>
+                                <button class="btn btn-sm btn-success" style="font-weight: 600; border-radius: 50px; width: 100%;">
+                                    OK
+                                </button>
+                            <?php } ?>
+                            <?php if ($v->usage_status == 'Fast Moving')
+                            { ?>
+                                <button class="btn btn-sm btn-danger" style="font-weight: 600; border-radius: 50px; width: 100%;">
+                                    Fast Moving
+                                </button>
+                            <?php } ?>
+                            <?php if ($v->usage_status == 'Slow Moving')
+                            { ?>
+                                <button class="btn btn-sm btn-warning" style="font-weight: 600; border-radius: 50px; width: 100%;">
+                                    Slow Moving
+                                </button>
+                            <?php } ?>
+                        </td>
+                    </tr>
 
+                <?php }
+            } ?>
         </tbody>
     </table>
 </div>
@@ -158,7 +180,110 @@
 </div>
 </div>
 <!--end::Row-->
+<form action="<?= site_url ('goods_management/add_transaction'); ?>" method="post" class="needs-validation" novalidate>
+    <input type="hidden" name="item_id" value="<?php echo $material->id; ?>">
+    <div class="modal fade" id="modal-add" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel" class="text-primary"
+                        style="color: #001F82;font-weight:600;">
+                        Add New Transactions</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col-12">
+                            <div class="form-floating mb-3">
+                                <input type="text" class="form-control" id="floatingInputDate" placeholder="dd-mm-yyyy"
+                                    name="date" value="<?php echo date ('Y-m-d'); ?>" required>
+                                <label for="floatingInput" class="fw-bold text-primary" style="font-size: 14px;">Action
+                                    Date</label>
+                            </div>
+                        </div>
+                        <div id="addContainer">
+                            <div class="d-flex align-items-center gap-2 search-row mb-1">
+                                <div class="col-6">
+                                    <div class="form-floating mb-3">
+                                        <select id="filterItem" class="form-select" name="item[]">
+                                            <option value="">-- All Item --</option>
+                                            <?php foreach ($item_list as $k => $v)
+                                            {
+                                            $s = isset ($param_search['item']) && $param_search['item'] == $v->id ? 'selected' : '';
+                                            ?>
+                                                <option value="<?php echo $v->id; ?>" <?php echo $s; ?>>
+                                                    <?php echo $v->item_name; ?>
+                                                </option>
+                                            <?php } ?>
+                                        </select>
+                                        <label for="floatingInput" class="fw-bold text-primary"
+                                            style="font-size: 14px;">Item</label>
+                                    </div>
+                                </div>
+                                <div class="col-3">
+                                    <div class="form-floating mb-3">
+                                        <input type="number" class="form-control" id="floatingQty" name="qty[]"
+                                            required>
+                                        <label for="floatingQty" class="fw-bold text-primary"
+                                            style="font-size: 14px;">Qty</label>
+                                    </div>
+                                </div>
 
+                                <!-- btn add filter (hanya muncul di baris pertama) -->
+                                <button class="btn btn-outline-primary add-row" type="button" style="height: 100%;">
+                                    <i class="fas fa-plus"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-outline-danger" data-bs-dismiss="modal">No, Cancel.</button>
+                    <button type="submit" name="submit" class="btn btn-outline-primary">Yes, Submit
+                        Transaction.</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</form>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+<script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+<script>
+    $(document).ready(function () {
+        $(document).on("click", ".add-row", function () {
+            var newRow = $(".search-row:first").clone();
+            newRow.find("input").val(""); // Kosongkan input
+            newRow.find(".add-row").removeClass("add-row btn-outline-primary").addClass("remove-row btn-outline-danger").html('<i class="fas fa-minus"></i>');
+            $("#addContainer").append(newRow);
+        });
+
+        $(document).on("click", ".remove-row", function () {
+            $(this).closest(".search-row").remove();
+        });
+
+        $('#filterItem').select2({
+            theme: "bootstrap-5",
+            width: $(this).data('width') ? $(this).data('width') : $(this).hasClass('w-100') ? '100%' : 'style',
+            placeholder: $(this).data('placeholder'),
+        });
+    });
+
+    flatpickr("#floatingInputDate", {
+        dateFormat: "d-m-Y",
+        defaultDate: null,
+        allowInput: true,
+        onOpen: function (selectedDates, dateStr, instance) {
+            if (instance._input.value === "dd-mm-yyyy") {
+                instance._input.value = "dd-mm-yyyy";
+            }
+        },
+        onChange: function (selectedDates, dateStr, instance) {
+            if (instance._input.value === " ") {
+                instance._input.value = "dd-mm-yyyy";
+            }
+        }
+    });
+</script>
 <script>
 
     $(document).ready(function () {
@@ -514,57 +639,57 @@
         });
     });
 
-window.onload = function () {
-  const sidebar = document.querySelector(".app-sidebar");
-  let originalSizes = [];
+    window.onload = function () {
+        const sidebar = document.querySelector(".app-sidebar");
+        let originalSizes = [];
 
-  if (sidebar) {
-    // Menyimpan ukuran asli dari semua chart
-    Highcharts.charts.forEach((chart, index) => {
-      if (chart) {
-        originalSizes[index] = {
-          width: chart.chartWidth,
-          height: chart.chartHeight
-        };
-      }
-    });
+        if (sidebar) {
+            // Menyimpan ukuran asli dari semua chart
+            Highcharts.charts.forEach((chart, index) => {
+                if (chart) {
+                    originalSizes[index] = {
+                        width: chart.chartWidth,
+                        height: chart.chartHeight
+                    };
+                }
+            });
 
-    sidebar.addEventListener("mouseenter", function () {
-      Highcharts.charts.forEach((chart, index) => {
-        if (chart) {
-          // Kurangi ukuran lebar 20%
-          let newWidth = originalSizes[index].width * 0.8;
-          let newHeight = newWidth * 1;
-          chart.setSize(newWidth, newHeight, false);
+            sidebar.addEventListener("mouseenter", function () {
+                Highcharts.charts.forEach((chart, index) => {
+                    if (chart) {
+                        // Kurangi ukuran lebar 20%
+                        let newWidth = originalSizes[index].width * 0.8;
+                        let newHeight = newWidth * 1;
+                        chart.setSize(newWidth, newHeight, false);
 
-          // Set margin/padding menjadi 0 dan align center
-          chart.renderTo.style.margin = '0';
-          chart.renderTo.style.padding = '0';
-          chart.renderTo.style.display = 'block';
-          chart.renderTo.style.marginLeft = 'auto';
-          chart.renderTo.style.marginRight = 'auto';
+                        // Set margin/padding menjadi 0 dan align center
+                        chart.renderTo.style.margin = '0';
+                        chart.renderTo.style.padding = '0';
+                        chart.renderTo.style.display = 'block';
+                        chart.renderTo.style.marginLeft = 'auto';
+                        chart.renderTo.style.marginRight = 'auto';
+                    }
+                });
+            });
+
+            sidebar.addEventListener("mouseleave", function () {
+                Highcharts.charts.forEach((chart, index) => {
+                    if (chart) {
+                        let newWidth = originalSizes[index].width;
+                        let newHeight = originalSizes[index].height;
+                        chart.setSize(newWidth, newHeight, false);
+
+                        // Set margin/padding kembali ke normal
+                        chart.renderTo.style.margin = '';
+                        chart.renderTo.style.padding = '';
+                        chart.renderTo.style.display = '';
+                        chart.renderTo.style.marginLeft = '';
+                        chart.renderTo.style.marginRight = '';
+                    }
+                });
+            });
         }
-      });
-    });
-
-    sidebar.addEventListener("mouseleave", function () {
-      Highcharts.charts.forEach((chart, index) => {
-        if (chart) {
-          let newWidth = originalSizes[index].width;
-          let newHeight = originalSizes[index].height;
-          chart.setSize(newWidth, newHeight, false);
-
-          // Set margin/padding kembali ke normal
-          chart.renderTo.style.margin = '';
-          chart.renderTo.style.padding = '';
-          chart.renderTo.style.display = '';
-          chart.renderTo.style.marginLeft = '';
-          chart.renderTo.style.marginRight = '';
-        }
-      });
-    });
-  }
-};
+    };
 
 
 </script>

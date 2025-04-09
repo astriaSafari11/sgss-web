@@ -311,7 +311,10 @@
                 data-bs-title="<?php echo baseline_category_desc ($v->baseline_category); ?>"></i>
             </td>
             <td style="vertical-align: middle;text-align: center;">
-              <?php echo $v->is_default == 1 ? '<i class="fa-solid fa-star-of-life" data-bs-toggle="tooltip" data-bs-title="Default Price"></i>' : ''; ?>
+              <?php echo $v->is_default == 1 ? '<i class="fa-solid fa-star-of-life" data-bs-toggle="tooltip" data-bs-title="Default Price"></i>' : '
+              <a href="' . site_url ('master_data/set_default_price?id=' . $v->id . '&item_id=' . $material->id) . '" class="btn btn-sm btn-outline-primary" data-bs-toggle="tooltip" data-bs-title="Set as default">
+                <i class="fa-solid fa-pen-to-square"></i>
+              </a>'; ?>
             </td>
           </tr>
         <?php } ?>
@@ -463,7 +466,10 @@
             <?php } ?>
           </td>
           <td style="vertical-align: middle;text-align: center;">
-            <?php echo $v->is_default == 1 ? '<i class="fa-solid fa-star-of-life" data-bs-toggle="tooltip" data-bs-title="The formula used to calculate the average forecast."></i>' : ''; ?>
+            <?php echo $v->is_default == 1 ? '<i class="fa-solid fa-star-of-life" data-bs-toggle="tooltip" data-bs-title="The formula used to calculate the average forecast."></i>' : '
+            <a href="' . site_url ('master_data/set_default_avg_forecast?id=' . $v->id . '&item_id=' . $material->id) . '" class="btn btn-sm btn-outline-primary" data-bs-toggle="tooltip" data-bs-title="Set as default">
+                <i class="fa-solid fa-pen-to-square"></i>
+              </a>'; ?>
           </td>
         </tr>
         <form action="<?php echo site_url ('master_data/edit_annual_budget'); ?>" method="post"
