@@ -284,8 +284,8 @@
         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
       <div class="modal-body">
-        <label for="exampleDataList" class="form-label">Please choose material you want to add.</label>
-        <select id="selectMaterial" class="form-select">
+        <!-- <label for="selectMaterial" class="form-label">Please choose material you want to add.</label> -->
+        <select id="selectMaterial" class="form-select" name="item">
           <option value="">-- All Item --</option>
           <?php foreach ($item_list as $k => $v)
           {
@@ -312,7 +312,9 @@
       theme: "bootstrap-5",
       width: $(this).data('width') ? $(this).data('width') : $(this).hasClass('w-100') ? '100%' : 'style',
       placeholder: $(this).data('placeholder'),
+      dropdownParent: $("#modal-add-material")
     });
+
     $('#table-item').DataTable({
       scrollX: true,
       "processing": true,
