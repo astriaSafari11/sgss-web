@@ -1,3 +1,42 @@
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" />
+<link rel="stylesheet"
+  href="https://cdn.jsdelivr.net/npm/select2-bootstrap-5-theme@1.3.0/dist/select2-bootstrap-5-theme.min.css" />
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+<style>
+  .select2-container--bootstrap-5 .select2-selection {
+    width: 100%;
+    min-height: calc(1.5em + .75rem + 2px);
+    padding: .375rem .75rem;
+    font-family: inherit;
+    /* font-size: 1rem;
+        font-weight: 400; */
+    /* line-height: 1.5; */
+    color: #212529;
+    background-color: #fff;
+    border: 1px solid #ced4da;
+    border-radius: .25rem;
+    transition: border-color .15sease-in-out, box-shadow .15sease-in-out;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+    /* height: 58px; */
+    padding-top: 0.25rem;
+    padding-bottom: 0.25rem;
+    padding-left: 0.5rem;
+    font-size: 0.875rem;
+  }
+
+  .select2-container .select2-selection--single .select2-selection__rendered {
+    display: block;
+    /* padding-left: 8px;
+      padding-right: 20px; */
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    margin-top: 2px;
+  }
+</style>
 <div class="row mb-2">
   <div class="col-sm-6">
     <a href="<?= site_url ('master_data/vendor_list'); ?>" class="btn btn-sm btn-outline-primary position-relative"
@@ -246,9 +285,16 @@
       </div>
       <div class="modal-body">
         <label for="exampleDataList" class="form-label">Please choose material you want to add.</label>
-        <input class="form-control" list="materialOptions" id="selectMaterial"
-          placeholder="Type item code / material code to search...">
-        <datalist id="materialOptions"></datalist>
+        <select id="selectMaterial" class="form-select">
+          <option value="">-- All Item --</option>
+          <?php foreach ($item_list as $k => $v)
+          {
+          $s = isset ($param_search['item']) && $param_search['item'] == $v->id ? 'selected' : '';
+          ?>
+            <option value="<?php echo $v->item_code; ?>" <?php echo $s; ?>><?php echo $v->item_name; ?>
+            </option>
+          <?php } ?>
+        </select>
 
         <div style="margin-top: 10px;" id="selectedMaterial"></div>
       </div>
@@ -262,6 +308,11 @@
 </div>
 <script>
   $(document).ready(function () {
+    $('#selectMaterial').select2({
+      theme: "bootstrap-5",
+      width: $(this).data('width') ? $(this).data('width') : $(this).hasClass('w-100') ? '100%' : 'style',
+      placeholder: $(this).data('placeholder'),
+    });
     $('#table-item').DataTable({
       scrollX: true,
       "processing": true,

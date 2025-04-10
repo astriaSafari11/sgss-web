@@ -799,6 +799,7 @@ class Master_data extends CI_Controller
 		$data['vendor'] = $this->db->get_where ("m_master_data_vendor", array(
 			"id" => $vendor_code,
 		))->row ();
+		$data['item_list'] = $this->db->query ("select * from m_master_data_material")->result ();
 		// debugCode($data);
 
 		$this->session->set_flashdata ('page_title', 'FORM DETAIL VENDOR');
@@ -2625,7 +2626,7 @@ class Master_data extends CI_Controller
 								$inserted = _add (
 									"m_master_data_material",
 									array(
-										"item_code" => $itemcode,
+										"item_code" => $item_code . "-" . sprintf ("%02d", $itemNumber),
 										"item_name" => $item_name,
 										"type" => 'goods',
 										"size" => $size,
@@ -2769,16 +2770,16 @@ class Master_data extends CI_Controller
 			for ($i = 2; $i <= $cellRow; $i++)
 				{
 				$vendor_code = $sheetData->getCell ('A' . $i)->getValue ();
-				$item_code = $sheetData->getCell ('B' . $i)->getValue ();
-				$moq = $sheetData->getCell ('C' . $i)->getValue ();
-				$lt_pr_po = $sheetData->getCell ('D' . $i)->getValue ();
+				$item_code = $sheetData->getCell ('C' . $i)->getValue ();
+				$lt_pr_po = $sheetData->getCell ('H' . $i)->getValue ();
 				// $lot_size = $sheetData->getCell('E'.$i)->getValue();
 				// $order_cycle = $sheetData->getCell('F'.$i)->getValue();
 				// $initial_stock = $sheetData->getCell('G'.$i)->getValue();
-				$price_per_uom = $sheetData->getCell ('E' . $i)->getValue ();
-				$price_equal_uom = $sheetData->getCell ('G' . $i)->getValue ();
-				$place_to_buy = $sheetData->getCell ('H' . $i)->getValue ();
-				$link = $sheetData->getCell ('I' . $i)->getValue ();
+				$price_per_uom = $sheetData->getCell ('I' . $i)->getValue ();
+				$moq = $sheetData->getCell ('J' . $i)->getValue ();
+				// $price_equal_uom = $sheetData->getCell ('G' . $i)->getValue ();
+				// $place_to_buy = $sheetData->getCell ('H' . $i)->getValue ();
+				// $link = $sheetData->getCell ('I' . $i)->getValue ();
 
 				if (! empty ($vendor_code) && ! empty ($item_code))
 					{
@@ -2821,12 +2822,7 @@ class Master_data extends CI_Controller
 									'vendor_code' => $vendor_code,
 									'item_code' => $item_code,
 									"moq" => $moq,
-									"lt_pr_po" => $lt_pr_po,
-									"lot_size" => $material->lot_size,
-									"initial_stock" => $material->initial_stock,
-									"order_cycle" => $material->order_cycle,
 									"lt_po_deliv" => $lt_po_deliv,
-									"standart_safety_stock" => $standart_safety_stock,
 									"price_per_uom" => $price_per_uom,
 									"price_equal_moq" => $price_equal_uom,
 									"place_to_buy" => $place_to_buy,
