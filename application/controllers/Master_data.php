@@ -274,8 +274,8 @@ class Master_data extends CI_Controller
 			$row[] = myNum ($field->moq);
 			$row[] = myCurr ($field->price_per_uom);
 			$row[] = myCurr ($field->moq * $field->price_per_uom);
-			$row[] = myCurr ($field->price_equal_moq);
-			$row[] = myCurr ($field->price_equal_moq / $field->moq);
+			$row[] = myCurr ($field->moq * $field->price_per_uom);
+			$row[] = ! empty ($field->moq) && $field->moq != 0 ? myCurr (($field->moq * $field->price_per_uom) / $field->moq) : 0;
 			$row[] = myDecimal ($field->saving);
 			$row[] = $field->place_to_buy;
 			$row[] = $link;
