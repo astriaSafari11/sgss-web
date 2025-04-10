@@ -1,4 +1,16 @@
 <?php $this->load->view ('_partials/head.php'); ?>
+
+<!-- efek tambahan untuk widget -->
+<style>
+.step-circle {
+  transition: all 0.3s ease;
+}
+.step-circle:hover {
+  transform: scale(1.1);
+  box-shadow: 0 0 10px rgba(0, 31, 130, 0.4);
+}
+</style>
+
 <!--begin::Row-->
 <div class="row">
   <div class="col-12 mb-4">
@@ -136,6 +148,102 @@
         <h3 class="card-title" style="font-weight: 600;color: #FFF;">Approval History</h3>
       </div>
       <div class="card-body">
+      
+      <!-- start widget -->
+<div class="container-fluid position-relative py-4">
+  <!-- Line (di tengah lingkaran) -->
+  <div class="position-absolute start-0 end-0" style="top: 60px; z-index: 0;">
+    <div class="mx-auto" style="height: 4px; background-color: #001F82; width: calc(100% - 20%);"></div>
+  </div>
+
+  <!-- Step Flow -->
+  <div class="d-flex justify-content-between align-items-start position-relative flex-wrap" style="z-index: 1;">
+    
+    <!-- Step 1 -->
+    <div class="text-center flex-fill">
+      <div class="rounded-circle step-circle bg-secondary-subtle text-primary mx-auto mb-2 d-flex align-items-center justify-content-center fs-4"
+           style="width: 70px; height: 70px; border: 2px solid #001F82;">
+        R
+      </div>
+      <h6 class="fw-bold text-primary mb-1">Deby Yeusy</h6>
+      <div class="d-flex flex-column gap-0">
+        <small>Requestor</small>
+        <h9>
+          <span class="badge text-primary" style="background-color: #DDEEFF;">
+            03/04/2025
+            </h9>
+      </div>
+    </div>
+
+    <!-- Step 2 -->
+    <div class="text-center flex-fill">
+      <div class="rounded-circle step-circle bg-warning text-dark mx-auto mb-2 d-flex align-items-center justify-content-center fs-5"
+           style="width: 70px; height: 70px; border: 2px solid chocolate;">
+        WL1
+      </div>
+      <h6 class="fw-bold text-primary mb-1">Felicia Nathania</h6>
+      <div class="d-flex flex-column gap-0">
+        <small>Waiting for Approval</small>
+        <h9>
+          <span class="badge text-primary" style="background-color: #DDEEFF;">
+            Due Date: 12/04/2025
+            </h9>
+      </div>
+    </div>
+
+    <!-- Step 3 -->
+    <div class="text-center flex-fill">
+      <div class="rounded-circle step-circle bg-secondary-subtle text-primary mx-auto mb-2 d-flex align-items-center justify-content-center fs-5"
+           style="width: 70px; height: 70px; border: 2px solid #001F82;">
+        WL2
+      </div>
+      <h6 class="fw-bold text-primary mb-1">-</h6>
+      <div class="d-flex flex-column gap-0">
+        <small>Inactive</small>
+        <h9>
+          <span class="badge text-primary" style="background-color: #DDEEFF;">
+            Due Date: 14/04/2025
+            </h9>
+      </div>
+    </div>
+
+    <!-- Step 4 -->
+    <div class="text-center flex-fill">
+      <div class="rounded-circle step-circle bg-secondary-subtle text-primary mx-auto mb-2 d-flex align-items-center justify-content-center fs-5"
+           style="width: 70px; height: 70px; border: 2px solid #001F82;">
+        WL3
+      </div>
+      <h6 class="fw-bold text-primary mb-1">-</h6>
+      <div class="d-flex flex-column gap-0">
+        <small>Inactive</small>
+        <h9>
+          <span class="badge text-primary" style="background-color: #DDEEFF;">
+            Due Date: 16/04/2025
+            </h9>
+      </div>
+    </div>
+
+    <!-- Step 5 -->
+    <div class="text-center flex-fill">
+      <div class="rounded-circle step-circle bg-white text-success mx-auto mb-2 d-flex align-items-center justify-content-center"
+           style="width: 70px; height: 70px; border: 2px solid green;">
+        <i class="bi bi-send-check-fill fs-3"></i>
+      </div>
+      <h6 class="fw-bold text-success mb-1">Nama?</h6>
+      <div class="d-flex flex-column gap-0">
+        <small>Approved</small>
+        <h9>
+          <span class="badge text-white" style="background-color: green;">
+            09/04/2025
+            </h9>
+      </div>
+    </div>
+
+  </div>
+</div>
+<!-- end widget -->
+
+
         <table class="table table-bordered" style="width:100%">
           <thead>
             <tr>

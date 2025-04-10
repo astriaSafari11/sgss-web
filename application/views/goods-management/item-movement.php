@@ -258,12 +258,15 @@
 
     $(document).ready(function () {
         var table = $('#example').DataTable({
-            dom: "t<'row'<'col-sm-6'i><'col-sm-6'p>>",
+            dom: "<'row'<'col-sm-6'l><'col-sm-6'f>>" + 
+                "t" +
+                "<'row'<'col-sm-6'i><'col-sm-6'p>>",
+            pageLength: 50,
             lengthMenu: [[10, 25, 50, 100], [10, 25, 50, 100]]
         });
 
-        $('#example_filter').remove();
-        $('#example_length').remove();
+        $('#example_filter').hide();
+        // $('#example_length').remove();
 
         $('#entriesSelect').on('change', function () {
             var length = $(this).val();

@@ -49,7 +49,7 @@ class Master_data extends CI_Controller
 		{
 		$this->session->set_flashdata ('page_title', 'MASTER DATA UoM');
 		$this->load->view ('master-data/uom-list.php');
-		}
+		}z
 
 	public function category_list()
 		{
