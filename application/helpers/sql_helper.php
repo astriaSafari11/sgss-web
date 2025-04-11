@@ -644,7 +644,7 @@ function calculate_savings($vendor_price, $baseline_price)
     {
 
     $diffPrice = $baseline_price - $vendor_price;
-    $calculated = ($diffPrice / $baseline_price) * 100;
+    $calculated = ! empty ($baseline_price) && ! empty ($vendor_price) ? ($diffPrice / $baseline_price) * 100 : 0;
     return $calculated;
     }
 
