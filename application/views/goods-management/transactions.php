@@ -203,6 +203,11 @@
                         </div>
                         <div id="addContainer">
                             <div class="d-flex align-items-center gap-2 search-row mb-1">
+                                <!-- btn add filter (hanya muncul di baris pertama) -->
+                                <button class="btn btn-outline-primary add-row mb-3" type="button" style="height: 100%;">
+                                    <i class="fas fa-plus"></i>
+                                </button>
+                                
                                 <div class="col-6">
                                     <div class="form-floating mb-3">
                                         <select id="filterItem" class="form-select" name="item[]">
@@ -228,11 +233,28 @@
                                             style="font-size: 14px;">Qty</label>
                                     </div>
                                 </div>
+                                <div class="col-2">
+                                    <div class="form-floating mb-3">
+                                        <select id="filterUom" class="form-select" name="uom-list[]">
+                                            <option value="">--</option>
+                                            <!-- <?php foreach ($uom_list as $k => $v)
+                                            {
+                                            $s = isset ($param_search['uom_name']) && $param_search['uom_name'] == $v->id ? 'selected' : '';
+                                            ?>
+                                                <option value="<?php echo $v->id; ?>" <?php echo $s; ?>>
+                                                    <?php echo $v->uom_name; ?>
+                                                </option>
+                                            <?php } ?> -->
+                                        </select>
+                                        <label for="floatingInput" class="fw-bold text-primary"
+                                            style="font-size: 14px;">UoM</label>
+                                    </div>
+                                </div>
 
                                 <!-- btn add filter (hanya muncul di baris pertama) -->
-                                <button class="btn btn-outline-primary add-row" type="button" style="height: 100%;">
+                                <!-- <button class="btn btn-outline-primary add-row" type="button" style="height: 100%;">
                                     <i class="fas fa-plus"></i>
-                                </button>
+                                </button> -->
                             </div>
                         </div>
                     </div>
@@ -333,6 +355,24 @@
             width: $(this).data('width') ? $(this).data('width') : $(this).hasClass('w-100') ? '100%' : 'style',
             placeholder: $(this).data('placeholder'),
         });
+
+        // $('#filterUom').select2({
+        //     theme: "bootstrap-5",
+        //     width: $(this).data('width') ? $(this).data('width') : $(this).hasClass('w-100') ? '100%' : 'style',
+        //     placeholder: $(this).data('placeholder'),
+        // });
+        // function initSelect2(selector) {
+        //     const el = $(selector);
+        //     el.select2({
+        //         theme: "bootstrap-5",
+        //         width: el.data('width') ? el.data('width') : el.hasClass('w-100') ? '100%' : 'style',
+        //         placeholder: el.data('placeholder'),
+        //     });
+        // }
+
+        // initSelect2('#filterItem');
+        // initSelect2('#filterUom');
+
     });
 
     flatpickr("#floatingInputDate", {
