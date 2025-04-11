@@ -1172,6 +1172,7 @@ class Goods_management extends CI_Controller
 				$data = array(
 					'week' => $i,
 					'gross_requirement' => $gross_req,
+					'usage' => $gross_req,
 					'schedules_receipts' => $schedule_receipt,
 					'stock_on_hand' => $stock_on_hand,
 					'current_safety_stock' => round ($current_safety_stock, 0),

@@ -271,6 +271,7 @@ function generate_item_movement($last_id)
                 "year" => $year,
                 "week" => $w,
                 'gross_requirement' => 0,
+                'usage' => 0,
                 'schedules_receipts' => 0,
                 'stock_on_hand' => 0,
                 'current_safety_stock' => 0,

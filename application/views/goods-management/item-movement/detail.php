@@ -191,6 +191,19 @@
             <?php } ?>
           </tr>
           <tr>
+            <td>Actual Usage</td>
+            <td></td>
+            <?php for ($i = $past_week; $i <= $up_week; $i++)
+            { ?>
+              <td style="text-align: center; <?php if ($i == $current_week)
+              {
+              echo 'background-color:#DAEAFF;color: #001F82;';
+              } ?>">
+                <?php echo $item_movement[$i - 1]->usage == 0 ? '-' : myNum ($item_movement[$i - 1]->usage); ?>
+              </td>
+            <?php } ?>
+          </tr>
+          <tr>
             <td>Schedule Receipts</td>
             <td></td>
             <?php for ($i = $past_week; $i <= $up_week; $i++)
