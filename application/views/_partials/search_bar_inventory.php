@@ -41,15 +41,29 @@
     <div class="mb-2 d-flex align-items-center">
         <label for="searchInput" class="small me-2" style="width: 60px;">Search:</label>
         <input type="text" id="searchInput" class="form-control form-control-sm"
-            placeholder="Input transactions number / item code / desc / area to search" name="keyword"
+            placeholder="Input item code / item name / uom / status / stock on hand qty to search" name="keyword"
             value="<?php echo isset ($param_search['keyword']) ? $param_search['keyword'] : ''; ?>">
     </div>
 
     <div class="row g-2 align-items-end mb-2" id="searchContainer">
-        <div class="col-auto col-sm-8" style="width: 20%;">
+        <!-- <div class="col-auto col-sm-8" style="width: 20%;">
             <label for="filterTransactions" class="small">Transactions:</label>
             <select id="filterTransactions" class="form-select" name="transactions" id="filterTransactions">
                 <option value="">-- All Transactions --</option>
+            </select>
+        </div> -->
+        <div class="col-auto col-sm-8" style="width: 20%;">
+            <label for="filterItemGroup" class="small">Item Group:</label>
+            <select class="form-select" name="item_group" id="filterItemGroup">
+                <option value="">-- All Item Group --</option>
+                <?php foreach ($item_group_list as $k => $v)
+                {
+                $s = isset ($param_search['item_group']) && $param_search['item_group'] == $v->item_category_name ? 'selected' : '';
+                ?>
+                    <option value="<?php echo $v->item_category_name; ?>" <?php echo $s; ?>>
+                        <?php echo $v->item_category_name; ?>
+                    </option>
+                <?php } ?>
             </select>
         </div>
         <div class="col-auto col-sm-8" style="width: 20%;">
@@ -66,6 +80,20 @@
             </select>
         </div>
         <div class="col-auto col-sm-8" style="width: 20%;">
+            <label for="filterUom" class="small">UoM:</label>
+            <select class="form-select" name="uom" id="filterUom">
+                <option value="">-- All UoM --</option>
+                <?php foreach ($uom_list as $k => $v)
+                {
+                $s = isset ($param_search['uom']) && $param_search['uom'] == $v->uom_code ? 'selected' : '';
+                ?>
+                    <option value="<?php echo $v->uom_code; ?>" <?php echo $s; ?>>
+                        <?php echo $v->uom_code; ?>
+                    </option>
+                <?php } ?>
+            </select>
+        </div>
+        <!-- <div class="col-auto col-sm-8" style="width: 20%;">
             <label for="filterArea" class="small">Area:</label>
             <select id="filterArea" class="form-select" name=" area" id="filterArea">
                 <option value="">-- All Area --</option>
@@ -77,7 +105,7 @@
                     </option>
                 <?php } ?>
             </select>
-        </div>
+        </div> -->
         <div class="col-auto col-sm-8" style="width: 20%;">
             <label for="filterStatus" class="small">Status:</label>
             <select id="filterStatus" class="form-select" name="status" id="status">
@@ -88,16 +116,15 @@
             </select>
         </div>
         <div class="col-auto col-sm-2 d-flex align-items-center gap-2" style="width: 20%;">
-            <button class="btn btn-outline-primary w-100" type="submit" name="search" id="search"
-                data-bs-toggle="tooltip" data-bs-placement="top" title="Search All">
+            <button class="btn btn-outline-primary w-100" type="submit" name="search" data-bs-toggle="tooltip"
+                data-bs-placement="top" title="Search All">
                 <i class="fas fa-search"></i>
                 Search
             </button>
-            <button class="btn btn-outline-danger w-100" type="submit" name="reset" data-bs-toggle="tooltip"
-                data-bs-placement="top" title="Reset All">
+            <a class="btn btn-outline-danger w-100" href="<?php echo site_url ('goods_management/item_movement'); ?>">
                 <i class="fas fa-sync-alt"></i>
                 Reset
-            </button>
+            </a>
         </div>
     </div>
 </div>
@@ -125,5 +152,17 @@
             width: $(this).data('width') ? $(this).data('width') : $(this).hasClass('w-100') ? '100%' : 'style',
             placeholder: $(this).data('placeholder'),
         });
+
+        $('#filterUom').select2({
+            theme: "bootstrap-5",
+            width: $(this).data('width') ? $(this).data('width') : $(this).hasClass('w-100') ? '100%' : 'style',
+            placeholder: $(this).data('placeholder'),
+        });
+        $('#filterItemGroup').select2({
+            theme: "bootstrap-5",
+            width: $(this).data('width') ? $(this).data('width') : $(this).hasClass('w-100') ? '100%' : 'style',
+            placeholder: $(this).data('placeholder'),
+        });
+
     });
 </script>
