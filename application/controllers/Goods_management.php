@@ -174,7 +174,8 @@ class Goods_management extends CI_Controller
 			_add ("t_order", array(
 				"planned_id" => $id,
 				"approval_category" => 'normal',
-				"is_approval_required" => 0
+				"is_approval_required" => 0,
+				"week" => $data['order']->week
 			));
 			}
 
@@ -663,24 +664,24 @@ class Goods_management extends CI_Controller
 			"id" => $id,
 		))->row ();
 
-		$get_planned = $this->db->get_where ("t_stock_planned_request", array(
-			"id" => $get_order->planned_id
+		$get_order_detail = $this->db->get_where ("t_order_detail", array(
+			"order_id" => $get_order->id
 		))->row ();
 
 		$get_stock_card = $this->db->get_where ("t_material_movement", array(
-			"item_id" => $get_planned->item_id,
-			"week" => $get_planned->week
+			"item_id" => $get_order_detail->item_id,
+			"week" => $get_order->week
 		))->row ();
 
-		$schedule_receipt = $get_stock_card->schedules_receipts + $get_planned->qty;
+		$schedule_receipt = $get_stock_card->schedules_receipts + $get_order_detail->qty;
 
 		calc_sched_receipt ($get_stock_card->id, $schedule_receipt);
 
 		_update ("t_material_movement", array(
 			"schedules_receipts" => $schedule_receipt
 		), array(
-			"item_id" => $get_planned->item_id,
-			"week" => $get_planned->week
+			"item_id" => $get_order_detail->item_id,
+			"week" => $get_order->week
 		));
 
 		redirect ('goods_management/order_detail/' . _encrypt ($id));
@@ -857,43 +858,17 @@ class Goods_management extends CI_Controller
 		{
 
 		$data = array();
-		$search = '';
-
-		if (isset ($_POST['search']))
-			{
-			if ($this->input->post ('keyword') != '')
-				{
-				$keyword = "AND (item_code LIKE '%" . $this->input->post ('keyword') . "%' OR item_name LIKE '%" . $this->input->post ('keyword') . "%')";
-				}
-			if ($this->input->post ('item') != '')
-				{
-				$item = "AND id = '" . $this->input->post ('item') . "'";
-				}
-
-			if ($this->input->post ('status') != '')
-				{
-				$status = "AND status = '" . $this->input->post ('status') . "'";
-				}
-
-			$week = date ("W");
-
-			$data['param_search'] = array(
-				'keyword' => $this->input->post ('keyword'),
-				'item' => $this->input->post ('item'),
-				'status' => $this->input->post ('status'),
-				'area' => $this->input->post ('area'),
-			);
-
-			$data['item'] = $this->db->query ("
-				select * from view_stock_card
-				WHERE week = '$week' $keyword $item $status
-				")->result ();
-
-			}
-
+		$data['item_group_list'] = $this->db->query ("select * from m_item_category")->result ();
+		$data['uom_list'] = $this->db->query ("select * from m_uom")->result ();
 		$data['item_list'] = $this->db->query ("select * from m_master_data_material")->result ();
-		$data['area_list'] = $this->db->query ("select * from m_area")->result ();
-		$data['transactions_list'] = $this->db->query ("select * from m_area")->result ();
+		// $data['area_list'] = $this->db->query ("select * from m_area")->result ();
+		// $data['transactions_list'] = $this->db->query ("select * from m_area")->result ();
+		$week = date ("W");
+		$data['kpi'] = $this->db->query ("select COUNT(status) as total, status from view_stock_card
+		WHERE week = '$week'
+		GROUP BY status")->result ();
+
+		$this->session->unset_userdata ('search');
 
 		$this->session->set_flashdata ('page_title', 'INVENTORY');
 		load_view ('goods-management/item-movement.php', $data);
@@ -1020,6 +995,7 @@ class Goods_management extends CI_Controller
 					"requestor" => $this->session->userdata ('user_name'),
 					"status" => 'draft',
 					"approval_category" => 'normal',
+					"week" => date ('W'),
 				)
 			);
 			$data['order'] = $this->db->get_where ("t_order", array(
@@ -1101,7 +1077,7 @@ class Goods_management extends CI_Controller
 			$gross_req = $this->input->post ('gross_requirement');
 
 			$get_last_week = date ('W', strtotime ('December 28th'));
-			$get_last_week = 20;
+			// $get_last_week = $get_initial_week + 6;
 			$total_data = array();
 
 			for ($i = $get_initial_week; $i <= $get_last_week; $i++)
@@ -1124,22 +1100,27 @@ class Goods_management extends CI_Controller
 					"week" => $i
 				))->row ();
 
-				$schedule_receipt = $get_curr_week_data->schedules_receipts ? $get_curr_week_data->schedules_receipts : 0;
-
-				if ($this->input->post ('stock_on_hand') == 0)
+				if ($i == $get_initial_week)
 					{
-					$stock_on_hand = $get_initial_week == 1 ? ($get_mat_detail->initial_stock + $schedule_receipt) - $gross_req : ($get_prev_week_data->stock_on_hand + $get_prev_week_data->schedules_receipts) - $gross_req;
+					$gross_req = $this->input->post ('gross_requirement');
 					}
 				else
 					{
-					$stock_on_hand = $this->input->post ('stock_on_hand');
+					$gross_req = $get_curr_week_data->gross_requirement;
 					}
 
-				// debugCode(array(
-				// 	$get_mat_detail,
-				// 	$schedule_receipt,
-				// 	$gross_req
-				// ));
+				$actual_usage = empty ($get_curr_week_data->usage) || $get_curr_week_data->usage == 0 ? $gross_req : $get_curr_week_data->usage;
+
+				$schedule_receipt = $get_curr_week_data->schedules_receipts ? $get_curr_week_data->schedules_receipts : 0;
+
+				if ($i == 1)
+					{
+					$stock_on_hand = ($get_mat_detail->initial_stock + $schedule_receipt) - $actual_usage;
+					}
+				else
+					{
+					$stock_on_hand = ($get_prev_week_data->stock_on_hand + $schedule_receipt) - $actual_usage;
+					}
 
 				$current_safety_stock = min ($stock_on_hand, $get_mat_detail->standard_safety_stock);
 				$net_on_hand = $stock_on_hand - $current_safety_stock;
@@ -1161,17 +1142,10 @@ class Goods_management extends CI_Controller
 					$gross_req = get_avg_value ($get_mat_detail->id, $i);
 					}
 
-				// if($i == $get_initial_week){
-				// 	$schedule_receipt = 100;
-				// }else{
-				// 	$schedule_receipt = $get_curr_week_data->schedules_receipts;
-				// }
-
-				$schedule_receipt = $get_curr_week_data->schedules_receipts;
-
 				$data = array(
 					'week' => $i,
 					'gross_requirement' => $gross_req,
+					'usage' => $gross_req,
 					'schedules_receipts' => $schedule_receipt,
 					'stock_on_hand' => $stock_on_hand,
 					'current_safety_stock' => round ($current_safety_stock, 0),
@@ -1180,7 +1154,6 @@ class Goods_management extends CI_Controller
 					'planned_order_receipt' => 0,
 					'planned_order_release' => 0,
 				);
-				// debugCode(array($get_mat_detail, $get_curr_week_data, $get_stock_card, $i, $get_initial_week, $data));
 
 				_update ('t_material_movement', $data, array(
 					"item_id" => $get_data->item_id,

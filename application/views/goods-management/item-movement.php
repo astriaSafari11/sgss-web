@@ -1,8 +1,8 @@
 <style>
-  .unclickable {
-    pointer-events: none;
-    cursor: default;
-}
+    .unclickable {
+        pointer-events: none;
+        cursor: default;
+    }
 </style>
 
 <div class="row">
@@ -19,40 +19,6 @@
         </div>
         <!-- /.info-box -->
     </div>
-
-    <!-- <div class="col-md-3 col-sm-12 col-12">
-                <span class="btn mb-2" style="border-radius: 50px;width: 100%;font-weight: 600;color: #001F82;background-color:#DAEAFF;">SEARCH</span>  
-                <div class="info-box" style="border-radius: 25px;">
-                  <div class="info-box-content" style="color: #001F82;height: 265px;">
-                  <div class="row mb-3">
-                          <div class="col-sm-12 mb-2" style="margin:0px;">
-                            <div class="form-floating">
-                              <select class="form-select" id="floatingSelect">
-                                <option value="" disabled selected>ALL</option>   
-                              </select>
-                              <label for="floatingSelect" class="fw-bold text-primary" style="font-size: 14px;">Search by Item Code</label>
-                            </div>
-                          </div>
-                          <div class="col-sm-12" style="margin:0px;">
-                            <div class="form-floating mb-3">
-                              <input type="email" class="form-control" id="floatingInput" placeholder="name@example.com">
-                              <label for="floatingInput" class="fw-bold text-primary" style="font-size: 14px;">Search by Item Desc</label>
-                            </div>
-                          </div>
-                          <div class="col-sm-12" style="margin:0px;">
-                            <button class="btn btn-sm btn-outline-primary" type="button" style="font-weight: 600; border-radius: 50px;width: 100%;">
-                                Search
-                            </button>
-                          </div>
-                        </div>
-                  </div>
-                  
-                </div>
-                
-              </div> -->
-
-
-    <!-- /.col -->
 </div>
 <span class="btn mb-2 unclickable"
     style="border-radius: 50px;width: 100%;font-weight: 600;color: #001F82;background-color:#DAEAFF;">Table of all items
@@ -68,7 +34,7 @@
                 <i class="fa-solid fa-add"></i>
                 Request
             </a>
-            <a href="#" class="btn btn-sm btn-outline-primary"
+            <a href="<?php echo site_url ('inventory/export'); ?>" class="btn btn-sm btn-outline-primary"
                 style="font-weight: 600; border-radius: 50px; width: 150px;margin-right:10px;" id="btnExport">
                 <i class="fa-solid fa-file-export"></i>
                 Export
@@ -96,87 +62,40 @@
                 font-weight: 600;
             }
         </style>
-        <form action="<?php echo site_url ('goods_management/item_movement'); ?>" method="post">
-            <?php $this->load->view ('_partials/search_bar_special.php'); ?>
+        <form method="post" id="searchInventory">
+            <?php $this->load->view ('_partials/search_bar_inventory.php'); ?>
         </form>
 
-        <table id="example" class="table table-sm" style="width:100%" cellspacing="0">
+        <table id="example" class="table table-sm table-striped table-bordered" style="width:100%" cellspacing="0">
             <thead>
                 <tr>
-                    <th style="color: #fff;background-color: #001F82;text-align: center; vertical-align: middle;">Code
+                    <!-- <th style="color: #fff;background-color: #001F82;text-align: center; vertical-align: middle;">Code
+                    </th> -->
+                    <th
+                        style="color: #fff;background-color: #001F82;text-align: center; vertical-align: middle;width:30%;">
+                        Item
                     </th>
-                    <th style="color: #fff;background-color: #001F82;text-align: center; vertical-align: middle;">Item
+                    <th
+                        style="color: #fff;background-color: #001F82;text-align: center; vertical-align: middle;width:10%;">
+                        Current On-Hand Stock</th>
+                    <th style="color: #fff;background-color: #001F82;text-align: center; vertical-align: middle;">
+                        UoM
                     </th>
                     <th style="color: #fff;background-color: #001F82;text-align: center; vertical-align: middle;">
-                        Current On-Hand Stock</th>
-                    <th style="color: #fff;background-color: #001F82;text-align: center; vertical-align: middle;">UoM
+                        Status
                     </th>
-                    <th style="color: #fff;background-color: #001F82;text-align: center; vertical-align: middle;">Safety
-                        Stock</th>
-                    <th style="color: #fff;background-color: #001F82;text-align: center; vertical-align: middle;">Most
-                        Recent Transactions</th>
-                    <th style="color: #fff;background-color: #001F82;text-align: center; vertical-align: middle;">Status
-                    </th>
-                    <th style="color: #fff;background-color: #001F82;text-align: center; vertical-align: middle;">Action
+                    <th style="color: #fff;background-color: #001F82;text-align: center; vertical-align: middle;">
+                        Latest
+                        Receipt</th>
+                    <th style="color: #fff;background-color: #001F82;text-align: center; vertical-align: middle;">
+                        Latest
+                        Usage</th>
+                    <th style="color: #fff;background-color: #001F82;text-align: center; vertical-align: middle;">
+                        Action
                     </th>
                 </tr>
             </thead>
-            <tbody>
-                <?php if (isset ($item))
-                {
-                foreach ($item as $k => $v)
-                    { ?>
-                        <tr>
-                            <td style="vertical-align: middle;text-align: center;">
-                                <a href="<?= site_url ('goods_management/stock_card_detail/' . _encrypt ($v->id)); ?>"
-                                    class="underline-custom">
-                                    <?php echo $v->item_code; ?>
-                                </a>
-                            </td>
-                            <td style="vertical-align: middle;text-align: left;"><?php echo $v->item_name; ?></td>
-                            <td style="vertical-align: middle;text-align: center;"><?php echo $v->stock_on_hand; ?></td>
-                            <td style="vertical-align: middle;text-align: center;"><?php echo $v->uom; ?></td>
-                            <td style="vertical-align: middle;text-align: center;"><?php echo $v->current_safety_stock; ?></td>
-                            <td style="vertical-align: middle;text-align: center;">
-                                <a href="<?= site_url ('goods_management/request_detail/' . _encrypt ($v->recent_transactions)); ?>"
-                                    target="_blank" class="underline-custom">
-                                    <?php echo $v->recent_transactions; ?>
-                                </a>
-
-                            </td>
-                            <td style="vertical-align: middle;text-align: center;">
-                                <?php if ($v->status == 'ok')
-                                { ?>
-                                    <button class="btn btn-sm btn-success"
-                                        style="font-weight: 600; border-radius: 50px; width: 100%;">
-                                        Ok
-                                    </button>
-                                <?php } ?>
-                                <?php if ($v->status == 'overstock')
-                                { ?>
-                                    <button class="btn btn-sm btn-warning"
-                                        style="font-weight: 600; border-radius: 50px; width: 100%;">
-                                        OVERSTOCK
-                                    </button>
-                                <?php } ?>
-                                <?php if ($v->status == 'understock')
-                                { ?>
-                                    <button class="btn btn-sm btn-danger"
-                                        style="font-weight: 600; border-radius: 50px; width: 100%;">
-                                        UNDERSTOCK
-                                    </button>
-                                <?php } ?>
-                            </td>
-                            <td style="vertical-align: middle;text-align: center;">
-                                <a href="#" class="btn btn-sm btn-outline-primary"
-                                    style="font-weight: 600; border-radius: 50px; width: 150px;">
-                                    EDIT
-                                </a>
-                            </td>
-                        </tr>
-
-                    <?php }
-                } ?>
+            <tbody style="vertical-align: middle;text-align: center;">
             </tbody>
         </table>
     </div>
@@ -191,78 +110,139 @@
 
 <!-- Modal Section -->
 <div class="modal fade" id="cost-detail" tabindex="-1" aria-labelledby="cost-detail" aria-hidden="true">
-  <div class="modal-dialog modal-xl">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title" id="cost-detail" class="text-primary" style="color: #001F82;font-weight:600;">
-          Stock Detail</h5>
-        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-      </div>
-      <div class="modal-body">
-        <!-- Tabel Contoh -->
-        <div class="table-responsive">
-          <table class="table table-bordered table-striped text-center">
-            <thead>
-              <tr>
-                <th style="color: #fff;background-color: #001F82;text-align: center;">No</th>
-                <th style="color: #fff;background-color: #001F82;text-align: center;">Item Name</th>
-                <th style="color: #fff;background-color: #001F82;text-align: center;">Spend 2025</th>
-                <th style="color: #fff;background-color: #001F82;text-align: center;">Budget</th>
-                <th style="color: #fff;background-color: #001F82;text-align: center;">Spend 2024 YTD</th>
-                <th style="color: #fff;background-color: #001F82;text-align: center;">Spend 2024 FY</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr>
-                <td>1</td>
-                <td>Masker</td>
-                <td>Rp.15.000.000</td>
-                <td>Rp.50.000.000</td>
-                <td>Rp.20.000.000</td>
-                <td>Rp.49.000.000</td>
-              </tr>
-              <tr>
-                <td>2</td>
-                <td>Sepatu Safety</td>
-                <td>Rp.17.250.000</td>
-                <td>Rp.57.500.000</td>
-                <td>Rp.23.000.000</td>
-                <td>Rp.56.350.000</td>
-              </tr>
-              <tr>
-                <td>3</td>
-                <td>Alkohol</td>
-                <td>Rp.14.550.000</td>
-                <td>Rp.48.500.000</td>
-                <td>Rp.19.400.000</td>
-                <td>Rp.47.530.000</td>
-              </tr>
-            </tbody>
-            <!-- <tfoot>
+    <div class="modal-dialog modal-xl">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="cost-detail" class="text-primary" style="color: #001F82;font-weight:600;">
+                    Stock Detail</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <!-- Tabel Contoh -->
+                <div class="table-responsive">
+                    <table class="table table-bordered table-striped text-center">
+                        <thead>
+                            <tr>
+                                <th style="color: #fff;background-color: #001F82;text-align: center;">No</th>
+                                <th style="color: #fff;background-color: #001F82;text-align: center;">Item Name</th>
+                                <th style="color: #fff;background-color: #001F82;text-align: center;">Spend 2025</th>
+                                <th style="color: #fff;background-color: #001F82;text-align: center;">Budget</th>
+                                <th style="color: #fff;background-color: #001F82;text-align: center;">Spend 2024 YTD
+                                </th>
+                                <th style="color: #fff;background-color: #001F82;text-align: center;">Spend 2024 FY</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>1</td>
+                                <td>Masker</td>
+                                <td>Rp.15.000.000</td>
+                                <td>Rp.50.000.000</td>
+                                <td>Rp.20.000.000</td>
+                                <td>Rp.49.000.000</td>
+                            </tr>
+                            <tr>
+                                <td>2</td>
+                                <td>Sepatu Safety</td>
+                                <td>Rp.17.250.000</td>
+                                <td>Rp.57.500.000</td>
+                                <td>Rp.23.000.000</td>
+                                <td>Rp.56.350.000</td>
+                            </tr>
+                            <tr>
+                                <td>3</td>
+                                <td>Alkohol</td>
+                                <td>Rp.14.550.000</td>
+                                <td>Rp.48.500.000</td>
+                                <td>Rp.19.400.000</td>
+                                <td>Rp.47.530.000</td>
+                            </tr>
+                        </tbody>
+                        <!-- <tfoot>
               <tr>
                 
               </tr>
             </tfoot> -->
-          </table>
+                    </table>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-outline-primary" data-bs-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-outline-primary" id="btnExportExcel">Export Excel</button>
+                <!-- logic belum -->
+            </div>
         </div>
-      </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-outline-primary" data-bs-dismiss="modal">Close</button>
-        <button type="button" class="btn btn-outline-primary" id="btnExportExcel">Export Excel</button> <!-- logic belum -->
-      </div>
     </div>
-  </div>
 </div>
 
+<div class="modal fade" id="modal-import" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-xl">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel" class="text-primary"
+                    style="color: #001F82;font-weight:600;">
+                    Import Order Request</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <p class="text-danger"><small>Maximum size of each file = 3000000 bytes (3 mb). Allowed File types which
+                        can
+                        be uploaded = .xlsx</small></p>
+                <input type="file" class="custom-file-input" id="file" name="file" data-toggle="custom-file-input"
+                    accept=".csv, application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel">
+                <div class="" style="margin-top: 10px;">
+                    <div class="user-loader text-center" style="display: none;">
+                        <i class="fa fa-spinner fa-spin"></i> <small>Please wait system is processing your
+                            data...</small>
+                    </div>
+                    <div class="alert alert-success alert-dismissable" role="alert" id="success-result"
+                        style="display: none;">
+                        <div class="success-text"></div>
+                    </div>
+                    <div class="alert alert-danger alert-dismissable" role="alert" id="failed-result"
+                        style="display: none;">
+                        <div class="failed-text"></div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-outline-primary" data-bs-dismiss="modal">Cancel</button>
+                <button type="submit" class="btn btn-outline-primary" id="btnUpload">Import Request Order</button>
+            </div>
+        </div>
+    </div>
+</div>
 <script>
 
     $(document).ready(function () {
         var table = $('#example').DataTable({
-            dom: "<'row'<'col-sm-6'l><'col-sm-6'f>>" + 
+            dom: "<'row'<'col-sm-6'l><'col-sm-6'f>>" +
                 "t" +
                 "<'row'<'col-sm-6'i><'col-sm-6'p>>",
             pageLength: 50,
-            lengthMenu: [[10, 25, 50, 100], [10, 25, 50, 100]]
+            lengthMenu: [[10, 25, 50, 100], [10, 25, 50, 100]],
+            ordering: false,
+            scrollCollapse: true,
+            scrollY: '400px',
+            ajax: {
+                url: "<?= site_url ('inventory/load_inventory'); ?>",
+                type: "POST"
+            },
+            processing: true,
+            serverSide: true,
+            "columnDefs": [{
+                targets: [0],
+                createdCell: function (cell) {
+                    $(cell).css('text-align', 'left');
+                    $(cell).css('vertical-align', 'middle');
+                    $(cell).css('white-space', 'nowrap');
+                }
+            }],
+            language: {
+                emptyTable: "Please select data on search bar first",
+                zeroRecords: "Nothing to display here 😢",
+                processing: `<i class="fa fa-spinner fa-spin"></i> Loading data...`
+            }
         });
 
         $('#example_filter').hide();
@@ -271,6 +251,20 @@
         $('#entriesSelect').on('change', function () {
             var length = $(this).val();
             table.page.len(length).draw();
+        });
+
+        // Submit form via AJAX
+        $('#searchInventory').submit(function (e) {
+            e.preventDefault();
+            // table.ajax.reload(); // Reload DataTable            
+            $.ajax({
+                url: '<?= site_url ('inventory/search_inventory'); ?>',
+                type: 'POST',
+                data: $(this).serialize(),
+                success: function (response) {
+                    table.ajax.reload(null, false); // Reload DataTable
+                }
+            });
         });
 
         Highcharts.setOptions({
@@ -306,26 +300,26 @@
                 pointFormat: '{series.name}: <b>{point.percentage:.0f}%</b>'
             },
             legend: {
-                enabled: false
+                enabled: true
             },
             plotOptions: {
                 series: {
                     allowPointSelect: true,
                     cursor: 'pointer',
                     point: {
-                      events: {
-                        click: (e) => {
-                          const myModal = new bootstrap.Modal('#cost-detail', {
-                            keyboard: false
-                          });
-                          myModal.show();
-                          console.log('clicked');
-                        },
-                      }
+                        events: {
+                            click: (e) => {
+                                const myModal = new bootstrap.Modal('#cost-detail', {
+                                    keyboard: false
+                                });
+                                myModal.show();
+                                console.log('clicked');
+                            },
+                        }
                     },
                     borderRadius: 8,
                     dataLabels: [{
-                        enabled: true,
+                        enabled: false,
                         distance: 20,
                         format: '{point.name}'
                     }, {
@@ -340,214 +334,17 @@
                 }
             },
             series: [{
-                name: 'Item',
+                name: 'Total Item (%)',
                 colorByPoint: true,
                 innerSize: '50%',
-                data: [{
-                    name: 'Item 1',
-                    y: 23.9
-                }, {
-                    name: 'Item 2',
-                    y: 12.6
-                }, {
-                    name: 'Item 3',
-                    y: 37.0
-                }, {
-                    name: 'Item 4',
-                    y: 26.4
-                }]
-            }]
-        });
-
-        Highcharts.chart('container1', {
-            chart: {
-                type: 'pie',
-                custom: {},
-                backgroundColor: 'transparent',
-                events: {
-                    render() {
-                        const chart = this,
-                            series = chart.series[0];
-                        let customLabel = chart.options.chart.custom.label;
-
-                        // if (!customLabel) {
-                        //     customLabel = chart.options.chart.custom.label =
-                        //         chart.renderer.label(
-                        //             'Total<br/>' +
-                        //             '<strong>2 877 820</strong>'
-                        //         )
-                        //             .css({
-                        //                 color: '#000',
-                        //                 textAnchor: 'middle'
-                        //             })
-                        //             .add();
-                        // }
-
-                        // const x = series.center[0] + chart.plotLeft,
-                        //     y = series.center[1] + chart.plotTop -
-                        //     (customLabel.attr('height') / 2);
-
-                        // customLabel.attr({
-                        //     x,
-                        //     y
-                        // });
-                        // // Set font size based on chart diameter
-                        // customLabel.css({
-                        //     fontSize: `${series.center[2] / 12}px`
-                        // });
-                    }
-                }
-            },
-            accessibility: {
-                point: {
-                    valueSuffix: '%'
-                }
-            },
-            title: {
-                text: ''
-            },
-            subtitle: {
-                text: ''
-            },
-            tooltip: {
-                pointFormat: '{series.name}: <b>{point.percentage:.0f}%</b>'
-            },
-            legend: {
-                enabled: false
-            },
-            plotOptions: {
-                innerSize: '20%',
-                series: {
-                    allowPointSelect: true,
-                    cursor: 'pointer',
-                    borderRadius: 8,
-                    dataLabels: [{
-                        enabled: true,
-                        distance: 20,
-                        format: '{point.name}'
-                    }, {
-                        enabled: true,
-                        distance: -15,
-                        format: '{point.percentage:.0f}%',
-                        style: {
-                            fontSize: '0.9em'
-                        }
-                    }],
-                    showInLegend: true
-                }
-            },
-            series: [{
-                name: 'Item',
-                colorByPoint: true,
-                innerSize: '50%',
-                data: [{
-                    name: 'Item 1',
-                    y: 23.9
-                }, {
-                    name: 'Item 2',
-                    y: 12.6
-                }, {
-                    name: 'Item 3',
-                    y: 37.0
-                }, {
-                    name: 'Item 4',
-                    y: 26.4
-                }]
-            }]
-        });
-
-        Highcharts.chart('container2', {
-            chart: {
-                type: 'bar',
-                custom: {},
-                events: {
-                    render() {
-                        const chart = this,
-                            series = chart.series[0];
-                        let customLabel = chart.options.chart.custom.label;
-
-                        // if (!customLabel) {
-                        //     customLabel = chart.options.chart.custom.label =
-                        //         chart.renderer.label(
-                        //             'Total<br/>' +
-                        //             '<strong>2 877 820</strong>'
-                        //         )
-                        //             .css({
-                        //                 color: '#000',
-                        //                 textAnchor: 'middle'
-                        //             })
-                        //             .add();
-                        // }
-
-                        const x = series.center[0] + chart.plotLeft,
-                            y = series.center[1] + chart.plotTop -
-                                (customLabel.attr('height') / 2);
-
-                        customLabel.attr({
-                            x,
-                            y
-                        });
-                        // Set font size based on chart diameter
-                        customLabel.css({
-                            fontSize: `${series.center[2] / 12}px`
-                        });
-                    }
-                }
-            },
-            accessibility: {
-                point: {
-                    valueSuffix: '%'
-                }
-            },
-            title: {
-                text: ''
-            },
-            subtitle: {
-                text: ''
-            },
-            tooltip: {
-                pointFormat: '{series.name}: <b>{point.percentage:.0f}%</b>'
-            },
-            legend: {
-                enabled: false
-            },
-            plotOptions: {
-                series: {
-                    allowPointSelect: true,
-                    cursor: 'pointer',
-                    borderRadius: 8,
-                    dataLabels: [{
-                        enabled: true,
-                        distance: 20,
-                        format: '{point.name}'
-                    }, {
-                        enabled: true,
-                        distance: -15,
-                        format: '{point.percentage:.0f}%',
-                        style: {
-                            fontSize: '0.9em'
-                        }
-                    }],
-                    showInLegend: true
-                }
-            },
-            series: [{
-                name: 'Item',
-                colorByPoint: true,
-                innerSize: '50%',
-                data: [{
-                    name: 'Item 1',
-                    y: 23.9
-                }, {
-                    name: 'Item 2',
-                    y: 12.6
-                }, {
-                    name: 'Item 3',
-                    y: 37.0
-                }, {
-                    name: 'Item 4',
-                    y: 26.4
-                }]
+                data: [
+                    <?php foreach ($kpi as $k => $v)
+                    { ?>
+                                                                        {
+                            name: '<?php echo $v->status; ?>',
+                            y: <?php echo $v->total; ?>,
+                        },
+                    <?php } ?>]
             }]
         });
     });

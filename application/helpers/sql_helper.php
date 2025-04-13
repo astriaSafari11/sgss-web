@@ -271,6 +271,7 @@ function generate_item_movement($last_id)
                 "year" => $year,
                 "week" => $w,
                 'gross_requirement' => 0,
+                'usage' => 0,
                 'schedules_receipts' => 0,
                 'stock_on_hand' => 0,
                 'current_safety_stock' => 0,
@@ -314,20 +315,16 @@ function calc_sched_receipt($mat_mov_id, $schedule_receipt)
     $get_data = $CI->db->get_where ("t_material_movement", array(
         "id" => $id,
     ))->row ();
+
     $get_initial_week = $get_data->week;
 
-    $get_material = $CI->db->get_where ("m_vendor_material", array(
-        "id" => $get_data->vendor_material_id,
-    ))->row ();
-
     $get_mat_detail = $CI->db->get_where ("m_master_data_material", array(
-        "item_code" => $get_data->item_code,
+        "id" => $get_data->item_id,
     ))->row ();
 
     $gross_req = $get_data->gross_requirement;
+    // $get_last_week = $get_initial_week + 6;
     $get_last_week = date ('W', strtotime ('December 28th'));
-    $get_last_week = 12;
-    $total_data = array();
 
     for ($i = $get_initial_week; $i <= $get_last_week; $i++)
         {
@@ -346,27 +343,46 @@ function calc_sched_receipt($mat_mov_id, $schedule_receipt)
             "week" => $i
         ))->row ();
 
-        $stock_on_hand = $get_data->week == 1 ? ($get_material->initial_stock + $schedule_receipt) - $gross_req : ($get_prev_week_data->stock_on_hand + $schedule_receipt) - $gross_req;
-        $current_safety_stock = min ($stock_on_hand, $get_material->standart_safety_stock);
-        $net_on_hand = $stock_on_hand - $current_safety_stock;
-        $net_requirement = min ($stock_on_hand, 0);
-
-        if ($get_stock_card->type == 'formula')
+        if ($get_stock_card->type == 'manual')
             {
-            $gross_req = get_avg_value ($get_data->item_id, $get_mat_detail->id, $i);
+            $gross_req = $get_curr_week_data->gross_requirement;
+            }
+        else
+            {
+            $gross_req = get_avg_value ($get_mat_detail->id, $i);
             }
 
-        if ($i != $get_initial_week)
+        $actual_usage = $get_curr_week_data->usage;
+
+        if ($i == $get_initial_week)
+            {
+            $schedule_receipt = $get_curr_week_data->schedules_receipts + $schedule_receipt;
+            }
+        else
             {
             $schedule_receipt = $get_curr_week_data->schedules_receipts;
             }
 
+        if ($i == 1)
+            {
+            $stock_on_hand = ($get_mat_detail->initial_stock + $schedule_receipt) - $actual_usage;
+            }
+        else
+            {
+            $stock_on_hand = ($get_prev_week_data->stock_on_hand + $schedule_receipt) - $actual_usage;
+            }
+
+        $current_safety_stock = min ($stock_on_hand, $get_mat_detail->standard_safety_stock);
+        $net_on_hand = $stock_on_hand - $current_safety_stock;
+        $net_requirement = min ($stock_on_hand, 0);
+
         $data = array(
             'week' => $i,
             'gross_requirement' => $gross_req,
+            'usage' => $actual_usage,
             'schedules_receipts' => $schedule_receipt,
             'stock_on_hand' => $stock_on_hand,
-            'current_safety_stock' => $current_safety_stock,
+            'current_safety_stock' => round ($current_safety_stock, 0),
             'net_on_hand' => $net_on_hand,
             'net_requirement' => $net_requirement,
             'planned_order_receipt' => 0,
@@ -378,47 +394,79 @@ function calc_sched_receipt($mat_mov_id, $schedule_receipt)
             "week" => $i
         ));
 
-        if ($net_on_hand >= 1)
+        if ($net_on_hand <= 0)
+            {
+            $exist = $CI->db->get_where ("t_stock_planned_request", array(
+                "item_id" => $get_data->item_id,
+                "year" => date ('Y'),
+                "week" => $i
+            ))->row ();
+
+            $get_rec_material = $CI->db->query ("
+            SELECT TOP 1 * from m_vendor_material WHERE item_code = '" . $get_mat_detail->item_code . "' ORDER BY price_per_uom ASC
+            ")->row ();
+
+            $planned_order_receipt = MAX ($get_rec_material->moq, $get_mat_detail->lot_size);
+
+            _update ('t_material_movement', array(
+                'planned_order_receipt' => $planned_order_receipt,
+            ), array(
+                "item_id" => $get_data->item_id,
+                "year" => date ('Y'),
+                "week" => $i
+            ));
+
+            $due_date = week_start_date ($i, date ('Y'));
+            $lt_po_deliv = $get_mat_detail->gen_lead_time;
+
+            $until_due_date = date ('Y-m-d', strtotime ($due_date . "+ $lt_po_deliv day"));
+
+            $planned_release = array(
+                'vendor_code' => $get_rec_material->vendor_code,
+                'item_code' => $get_mat_detail->item_code,
+                'item_id' => $get_mat_detail->id,
+                'vendor_material_id' => $get_rec_material->vendor_material_id,
+                'item_name' => $get_mat_detail->item_name,
+                'qty' => $planned_order_receipt,
+                'uom' => $get_mat_detail->uom,
+                'year' => date ('Y'),
+                'week' => $i,
+                'status' => 'urgent',
+                'due_date' => $due_date,
+                'until_due_date' => $until_due_date,
+                'order_status' => 0,
+                'type' => 'goods'
+            );
+
+            if (! $exist)
+                {
+                _add ('t_stock_planned_request', $planned_release);
+                }
+            else
+                {
+                _update ('t_stock_planned_request', $planned_release, array(
+                    "id" => $exist->id,
+                ));
+                }
+            }
+        else
             {
             _hard_delete ('t_stock_planned_request', array(
                 "item_id" => $get_data->item_id,
+                "year" => date ('Y'),
                 "week" => $i,
                 "order_status" => 0
             ));
+
             }
 
-        // if($net_on_hand <= 0){
-        //     $planned_order_receipt = MAX($get_material->moq,$get_material->lot_size);
-        //     _update('t_material_movement',array(
-        //         'planned_order_receipt' => $planned_order_receipt,
-        //     ), array(
-        //         "vendor_material_id"	=> $get_data->vendor_material_id,
-        //         "week" => $i
-        //     ));
-
-        //     $planned_release = array(
-        //         'vendor_code' => $get_data->vendor_code,
-        //         'item_code' => $get_mat_detail->item_code,
-        //         'vendor_material_id' => $get_data->vendor_material_id,
-        //         'item_name' => $get_mat_detail->item_name,
-        //         'qty' => $planned_order_receipt,
-        //         'uom' => $get_mat_detail->uom,
-        //         'year' => date('Y'),
-        //         'week' => $i,
-        //         'status' => 'urgent',
-        //         'due_date' => date("Y-m-d H:i:s"),
-        //         'until_due_date' => date("Y-m-d H:i:s"),
-        //     );
-
-        //     _add('t_stock_planned_request', $planned_release);
-        // }
-
-        // _update('t_material_movement',array(
-        //     'planned_order_release' => $planned_order_receipt,						
-        // ), array(
-        //     "vendor_material_id"	=> $get_data->vendor_material_id,
-        //     "week" => $i-1
-        // ));
+        _update ('t_material_movement', array(
+            'planned_order_release' => $planned_order_receipt,
+        ), array(
+            "item_id" => $get_data->item_id,
+            "year" => date ('Y'),
+            "week" => $i - 1
+        ));
 
         }
     }
@@ -643,7 +691,7 @@ function calculate_savings($vendor_price, $baseline_price)
     {
 
     $diffPrice = $baseline_price - $vendor_price;
-    $calculated = ($diffPrice / $baseline_price) * 100;
+    $calculated = ! empty ($baseline_price) && ! empty ($vendor_price) ? ($diffPrice / $baseline_price) * 100 : 0;
     return $calculated;
     }
 

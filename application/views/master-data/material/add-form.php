@@ -34,6 +34,11 @@
     white-space: nowrap;
     margin-top: 18px;
   }
+
+  .required-asterisk {
+    color: red;
+    margin-left: 4px;
+  }
 </style>
 <form action="<?= site_url ('master_data/save_material'); ?>" method="post" class="needs-validation" novalidate
   id="submit_form">
@@ -64,7 +69,8 @@
               <div class="form-floating mb-3">
                 <input type="text" class="form-control" id="floatingInput" placeholder="material Code" name="item_code"
                   value="auto filled" disabled>
-                <label for="floatingInput" class="fw-bold text-primary">Material Code</label>
+                <label for="floatingInput" class="fw-bold text-primary">Material Code <span
+                    class="required-asterisk">*</span></label>
                 <div class="invalid-feedback">This field is required.</div>
               </div>
             </div>
@@ -73,14 +79,16 @@
             <div class="col-3">
               <div class="form-floating mb-3">
                 <input type="text" class="form-control" id="floatingInput" name="item_name" required>
-                <label for="floatingInput" class="fw-bold text-primary">Material Name</label>
+                <label for="floatingInput" class="fw-bold text-primary">Material Name <span
+                    class="required-asterisk">*</span></label>
                 <div class="invalid-feedback">This field is required.</div>
               </div>
             </div>
             <div class="col-3">
               <div class="form-floating mb-3">
                 <input type="number" class="form-control" id="floatingInput" name="size" required>
-                <label for="floatingInput" class="fw-bold text-primary">Size</label>
+                <label for="floatingInput" class="fw-bold text-primary">Size <span
+                    class="required-asterisk">*</span></label>
                 <div class="invalid-feedback">This field is required.</div>
               </div>
             </div>
@@ -96,7 +104,8 @@
                     <option value="<?php echo $row->id; ?>"><?php echo $row->item_category_name; ?></option>
                   <?php } ?>
                 </select>
-                <label for="uom" class="fw-bold text-primary">Item Category</label>
+                <label for="uom" class="fw-bold text-primary">Item Category <span
+                    class="required-asterisk">*</span></label>
                 <div class="invalid-feedback">This field is required.</div>
               </div>
             </div>
@@ -111,7 +120,7 @@
                       (<?php echo $row->uom_name; ?>)</option>
                   <?php } ?>
                 </select>
-                <label for="uom" class="fw-bold text-primary">Size UoM</label>
+                <label for="uom" class="fw-bold text-primary">Size UoM <span class="required-asterisk">*</span></label>
                 <div class="invalid-feedback">This field is required.</div>
               </div>
             </div>
@@ -126,7 +135,7 @@
                       (<?php echo $row->uom_name; ?>)</option>
                   <?php } ?>
                 </select>
-                <label for="uom" class="fw-bold text-primary">UoM</label>
+                <label for="uom" class="fw-bold text-primary">UoM <span class="required-asterisk">*</span></label>
                 <div class="invalid-feedback">This field is required.</div>
               </div>
             </div>
@@ -142,48 +151,55 @@
                     <option value="<?php echo $row->factory_name; ?>"><?php echo $row->factory_name; ?></option>
                   <?php } ?>
                 </select>
-                <label for="factory" class="fw-bold text-primary">Factory</label>
+                <label for="factory" class="fw-bold text-primary">Factory <span
+                    class="required-asterisk">*</span></label>
                 <div class="invalid-feedback">This field is required.</div>
               </div>
             </div>
             <!--begin::Col-->
             <div class="col-3">
               <div class="form-floating mb-3">
-                <input type="number" class="form-control" id="floatingInput" name="lot_size" value="0">
-                <label for="floatingInput" class="fw-bold text-primary">Lot Size</label>
+                <input type="number" class="form-control" id="floatingInput" name="lot_size" required>
+                <label for="floatingInput" class="fw-bold text-primary">Lot Size <span
+                    class="required-asterisk">*</span></label>
               </div>
             </div>
             <!--end::Col-->
             <!--begin::Col-->
             <div class="col-3">
               <div class="form-floating mb-3">
-                <input type="number" class="form-control" id="floatingInput" name="order_cycle" value="0">
-                <label for="floatingInput" class="fw-bold text-primary">Order Cycle</label>
+                <input type="number" class="form-control" id="floatingInput" name="order_cycle" required>
+                <label for="floatingInput" class="fw-bold text-primary">Order Cycle <span
+                    class="required-asterisk">*</span></label>
               </div>
             </div>
             <div class="col-3">
               <div class="form-floating mb-3">
-                <input type="number" class="form-control" id="floatingInput" name="initial_stock" value="0">
-                <label for="floatingInput" class="fw-bold text-primary">Initial Stock</label>
+                <input type="number" class="form-control" id="floatingInput" name="initial_stock">
+                <label for="floatingInput" class="fw-bold text-primary">Initial Stock <span
+                    class="required-asterisk">*</span></label>
               </div>
             </div>
             <div class="col-3">
               <div class="form-floating mb-3">
-                <input type="number" class="form-control" id="floatingInput" name="lt_pr_po" value="0">
-                <label for="floatingInput" class="fw-bold text-primary">Lead Time PR to PO</label>
+                <input type="number" class="form-control" id="floatingInput" name="lt_pr_po" required>
+                <label for="floatingInput" class="fw-bold text-primary">Lead Time PR to PO <span
+                    class="required-asterisk">*</span></label>
               </div>
             </div>
             <div class="col-3">
               <div class="form-floating mb-3">
-                <input type="number" class="form-control" id="floatingInput" name="lt_pr_to_deliv" value="0">
-                <label for="floatingInput" class="fw-bold text-primary">Lead Time PO to Deliv</label>
+                <input type="number" class="form-control" id="floatingInput" name="lt_pr_to_deliv">
+                <label for="floatingInput" class="fw-bold text-primary">Lead Time PO to Deliv <span
+                    class="required-asterisk">*</span></label>
               </div>
             </div>
             <div class="col-3">
               <div class="form-floating mb-3">
                 <input type="text" class="form-control budgetTarget" id="floatingInput" name="budget_target"
-                  id="budgetTarget" value="0">
-                <label for="floatingInput" class="fw-bold text-primary">Target Price Per Item</label>
+                  id="budgetTarget">
+                <label for="floatingInput" class="fw-bold text-primary">Target Price Per Item <span
+                    class="required-asterisk">*</span></label>
               </div>
             </div>
             <div class="col-3">
@@ -196,7 +212,7 @@
                     <option value="<?php echo $row->nip; ?>"><?php echo $row->nama; ?></option>
                   <?php } ?>
                 </select>
-                <label for="pic" class="fw-bold text-primary">PIC</label>
+                <label for="pic" class="fw-bold text-primary">PIC <span class="required-asterisk">*</span></label>
                 <div class="invalid-feedback">This field is required.</div>
               </div>
             </div>
