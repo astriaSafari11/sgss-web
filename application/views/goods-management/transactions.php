@@ -225,6 +225,13 @@
                                             style="font-size: 14px;">Item</label>
                                     </div>
                                 </div>
+                                <div class="col-2">
+                                    <div class="form-floating mb-3">
+                                        <input type="text" class="form-control" id="filterUom" placeholder="--" name="uom-list[]" value="auto filled" disabled>
+                                        <label for="filterUom" class="fw-bold text-primary">UoM</label>
+                                        <div class="invalid-feedback">This field is required.</div>
+                                    </div>
+                                </div>
                                 <div class="col-3">
                                     <div class="form-floating mb-3">
                                         <input type="number" class="form-control" id="floatingQty" name="qty[]"
@@ -233,23 +240,7 @@
                                             style="font-size: 14px;">Qty</label>
                                     </div>
                                 </div>
-                                <div class="col-2">
-                                    <div class="form-floating mb-3">
-                                        <select id="filterUom" class="form-select" name="uom-list[]">
-                                            <option value="">--</option>
-                                            <!-- <?php foreach ($uom_list as $k => $v)
-                                            {
-                                            $s = isset ($param_search['uom_name']) && $param_search['uom_name'] == $v->id ? 'selected' : '';
-                                            ?>
-                                                <option value="<?php echo $v->id; ?>" <?php echo $s; ?>>
-                                                    <?php echo $v->uom_name; ?>
-                                                </option>
-                                            <?php } ?> -->
-                                        </select>
-                                        <label for="floatingInput" class="fw-bold text-primary"
-                                            style="font-size: 14px;">UoM</label>
-                                    </div>
-                                </div>
+                                
 
                                 <!-- btn add filter (hanya muncul di baris pertama) -->
                                 <!-- <button class="btn btn-outline-primary add-row" type="button" style="height: 100%;">

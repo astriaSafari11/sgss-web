@@ -66,8 +66,8 @@
         <form action="<?php echo site_url ('goods_management'); ?>" method="post">
           <?php $this->load->view ('_partials/search_bar.php', $data); ?>
         </form>
-        <table id="example" class="table table-sm" style="width:100%" cellspacing="0">
-          <thead>
+        <table id="example" class="table table-sm align-middle" style="width:100%" cellspacing="0">
+          <thead class="align-middle">
             <tr>
               <th style="color: #fff;background-color: #001F82;text-align: center;">Status</th>
               <th style="color: #fff;background-color: #001F82;text-align: center;">Requested Item</th>
