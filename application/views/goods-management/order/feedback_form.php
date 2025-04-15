@@ -151,18 +151,25 @@
       
       <!-- start widget -->
 <div class="container-fluid position-relative py-4">
-  <!-- Line (di tengah lingkaran) -->
+    
+<!-- Line start -->
   <div class="position-absolute start-0 end-0" style="top: 60px; z-index: 0;">
-    <div class="mx-auto" style="height: 4px; background-color: #001F82; width: calc(100% - 20%);"></div>
+    <!-- Garis dasar -->
+    <div class="mx-auto position-relative" style="height: 4px; background-color: #ccc; width: calc(100% - 20%); border-radius: 2px;">
+    <!-- Garis isi/progress -->
+    <div id="progress-fill" style="height: 100%; width: 0%; background-color: gold; position: absolute; top: 0; left: 0; border-radius: 2px; transition: width 0.5s ease;"></div>
+    </div>
   </div>
+  <!-- Line end -->
 
   <!-- Step Flow -->
   <div class="d-flex justify-content-between align-items-start position-relative flex-wrap" style="z-index: 1;">
     
     <!-- Step 1 -->
     <div class="text-center flex-fill">
-      <div class="rounded-circle step-circle bg-secondary-subtle text-primary mx-auto mb-2 d-flex align-items-center justify-content-center fs-4"
-           style="width: 70px; height: 70px; border: 2px solid #001F82;">
+      <div class="fw-bold rounded-circle step-circle bg-secondary-subtle text-primary mx-auto mb-2 d-flex align-items-center justify-content-center fs-5"
+           style="width: 70px; height: 70px; border: 2px solid #001F82;"
+           onclick="updateProgress(0)">
         R
       </div>
       <h6 class="fw-bold text-primary mb-1">Deby Yeusy</h6>
@@ -177,8 +184,9 @@
 
     <!-- Step 2 -->
     <div class="text-center flex-fill">
-      <div class="rounded-circle step-circle bg-warning text-dark mx-auto mb-2 d-flex align-items-center justify-content-center fs-5"
-           style="width: 70px; height: 70px; border: 2px solid chocolate;">
+      <div class="fw-bold rounded-circle step-circle text-dark mx-auto mb-2 d-flex align-items-center justify-content-center fs-5"
+           style="width: 70px; height: 70px; border: 2px solid chocolate; background-color:rgb(238, 226, 56)"
+           onclick="updateProgress(1)">
         WL1
       </div>
       <h6 class="fw-bold text-primary mb-1">Felicia Nathania</h6>
@@ -193,11 +201,12 @@
 
     <!-- Step 3 -->
     <div class="text-center flex-fill">
-      <div class="rounded-circle step-circle bg-secondary-subtle text-primary mx-auto mb-2 d-flex align-items-center justify-content-center fs-5"
-           style="width: 70px; height: 70px; border: 2px solid #001F82;">
+      <div class="fw-bold rounded-circle step-circle bg-secondary-subtle text-primary mx-auto mb-2 d-flex align-items-center justify-content-center fs-5"
+           style="width: 70px; height: 70px; border: 2px solid #001F82;"
+           onclick="updateProgress(2)">
         WL2
       </div>
-      <h6 class="fw-bold text-primary mb-1">-</h6>
+      <h6 class="fw-bold text-primary mb-1">Triyanto Wibowo</h6>
       <div class="d-flex flex-column gap-0">
         <small>Inactive</small>
         <h9>
@@ -209,11 +218,12 @@
 
     <!-- Step 4 -->
     <div class="text-center flex-fill">
-      <div class="rounded-circle step-circle bg-secondary-subtle text-primary mx-auto mb-2 d-flex align-items-center justify-content-center fs-5"
-           style="width: 70px; height: 70px; border: 2px solid #001F82;">
+      <div class="fw-bold rounded-circle step-circle bg-secondary-subtle text-primary mx-auto mb-2 d-flex align-items-center justify-content-center fs-5"
+           style="width: 70px; height: 70px; border: 2px solid #001F82;"
+           onclick="updateProgress(3)">
         WL3
       </div>
-      <h6 class="fw-bold text-primary mb-1">-</h6>
+      <h6 class="fw-bold text-primary mb-1">Zulfakar Ali</h6>
       <div class="d-flex flex-column gap-0">
         <small>Inactive</small>
         <h9>
@@ -226,7 +236,8 @@
     <!-- Step 5 -->
     <div class="text-center flex-fill">
       <div class="rounded-circle step-circle bg-white text-success mx-auto mb-2 d-flex align-items-center justify-content-center"
-           style="width: 70px; height: 70px; border: 2px solid green;">
+           style="width: 70px; height: 70px; border: 2px solid green;"
+           onclick="updateProgress(4)">
         <i class="bi bi-send-check-fill fs-3"></i>
       </div>
       <h6 class="fw-bold text-success mb-1">Nama?</h6>
@@ -359,6 +370,40 @@
 <?php $this->load->view ('_partials/footer.php'); ?>
 
 <script>
+  // Function to update the progress bar based on the step (sementara)
+  function updateProgress(step) {
+  const fill = document.getElementById("progress-fill");
+  let width = "0%";
+  let color = "#ccc";
+
+  switch(step) {
+    case 0: // Requestor
+      width = "0%";
+      color = "#ccc";
+      break;
+    case 1: // WL1
+      width = "25%";
+      color = "gold";
+      break;
+    case 2: // WL2
+      width = "50%";
+      color = "#001F82";
+      break;
+    case 3: // WL3
+      width = "75%";
+      color = "#001F82";
+      break;
+    case 4: // Approved
+      width = "100%";
+      color = "green";
+      break;
+  }
+
+  fill.style.width = width;
+  fill.style.backgroundColor = color;
+}
+//end function
+
   $(document).ready(function () {
     $('#example').DataTable();
 
