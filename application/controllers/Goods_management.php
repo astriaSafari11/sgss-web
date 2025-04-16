@@ -101,7 +101,7 @@ class Goods_management extends CI_Controller
 
 			$query = $this->db->query ("select planned.*, material.item_group, material.size, material.uom, vendor.vendor_name from t_stock_planned_request as planned
 			INNER JOIN m_master_data_material as material ON planned.item_id = material.id
-			INNER JOIN m_master_data_vendor as vendor ON planned.vendor_code = vendor.vendor_code
+			LEFT JOIN m_master_data_vendor as vendor ON planned.vendor_code = vendor.vendor_code
 			$fSearch")->result ();
 
 			$count = $this->db->get_where ('t_stock_planned_request', array("order_status" => 0, "type" => 'goods', "status !=" => "ignored"))->num_rows ();
@@ -1048,7 +1048,7 @@ class Goods_management extends CI_Controller
 		else
 			{
 			$get_past_week = $get_current_week - 5;
-			$get_up_week = $get_current_week + 6;
+			$get_up_week = $get_current_week + 5;
 
 			}
 
@@ -1065,9 +1065,11 @@ class Goods_management extends CI_Controller
 		if (isset ($_POST['submit']))
 			{
 			$id = $this->input->post ('material_movement_id');
+
 			$get_data = $this->db->get_where ("t_material_movement", array(
 				"id" => $id,
 			))->row ();
+
 			$get_initial_week = $get_data->week;
 
 			$get_mat_detail = $this->db->get_where ("m_master_data_material", array(
@@ -1076,8 +1078,8 @@ class Goods_management extends CI_Controller
 
 			$gross_req = $this->input->post ('gross_requirement');
 
-			$get_last_week = date ('W', strtotime ('December 28th'));
-			// $get_last_week = $get_initial_week + 6;
+			// $get_last_week = date ('W', strtotime ('December 28th'));
+			$get_last_week = $get_initial_week + 6;
 			$total_data = array();
 
 			for ($i = $get_initial_week; $i <= $get_last_week; $i++)
@@ -1145,7 +1147,7 @@ class Goods_management extends CI_Controller
 				$data = array(
 					'week' => $i,
 					'gross_requirement' => $gross_req,
-					'usage' => $gross_req,
+					'usage' => $get_curr_week_data->usage,
 					'schedules_receipts' => $schedule_receipt,
 					'stock_on_hand' => $stock_on_hand,
 					'current_safety_stock' => round ($current_safety_stock, 0),
@@ -1331,13 +1333,27 @@ class Goods_management extends CI_Controller
 
 				$get_current_week = date ('W', strtotime (date ('Y-m-d')));
 
-				$usage = $this->db->get_where ("t_material_movement", array(
+				$getStockOnHand = $this->db->get_where ("t_material_movement", array(
 					"item_id" => $item[$i],
 					"week" => $get_current_week,
-				))->row ()->usage + $qty[$i];
+				))->row ();
+
+				$usage = $getStockOnHand->usage + $qty[$i];
+
+				$prevUsage = $this->db->get_where ("t_material_movement", array(
+					"item_id" => $item[$i],
+					"week" => $get_current_week - 1,
+				))->row ();
+
+				$stock_on_hand = ($prevUsage->stock_on_hand + $getStockOnHand->schedules_receipts) - $usage;
+				$current_safety_stock = min ($stock_on_hand, $getMat->standard_safety_stock);
+				$net_on_hand = $stock_on_hand - $current_safety_stock;
 
 				_update ('t_material_movement', array(
 					"usage" => $usage,
+					"stock_on_hand" => $stock_on_hand,
+					"current_safety_stock" => $current_safety_stock,
+					"net_on_hand" => $net_on_hand
 				), array(
 					"item_id" => $item[$i],
 					"week" => $get_current_week,
