@@ -323,8 +323,8 @@ function calc_sched_receipt($mat_mov_id, $schedule_receipt)
     ))->row ();
 
     $gross_req = $get_data->gross_requirement;
-    // $get_last_week = $get_initial_week + 6;
-    $get_last_week = date ('W', strtotime ('December 28th'));
+    // $get_last_week = date ('W', strtotime ('December 28th'));
+    $get_last_week = $get_initial_week + 6;
 
     for ($i = $get_initial_week; $i <= $get_last_week; $i++)
         {

@@ -8,6 +8,18 @@
     </a>
   </div>
   <div class="col-sm-6">
+    <div class="d-flex justify-content-end">
+      <a href="#" class="btn btn-sm btn-outline-primary"
+        style="font-weight: 600; border-radius: 50px;margin-right:5px;">
+        <i class="fa-solid fa-database"></i>
+        Stock Adjustment Log
+      </a>
+      <a href="#" class="btn btn-sm btn-outline-primary"
+        style="font-weight: 600; border-radius: 50px;margin-right:5px;">
+        <i class="fa-solid fa-database"></i>
+        Log History
+      </a>
+    </div>
   </div>
 </div>
 <!--begin::Row-->
@@ -186,7 +198,7 @@
               {
               echo 'background-color:#DAEAFF;color: #001F82;';
               } ?>">
-                <?php echo $item_movement[$i - 1]->gross_requirement == 0 ? '-' : myNum ($item_movement[$i - 1]->gross_requirement); ?>
+                <?php echo $item_movement[$i]->gross_requirement == 0 ? '-' : myNum ($item_movement[$i]->gross_requirement); ?>
               </td>
             <?php } ?>
           </tr>
@@ -199,7 +211,14 @@
               {
               echo 'background-color:#DAEAFF;color: #001F82;';
               } ?>">
-                <?php echo $item_movement[$i - 1]->usage == 0 ? '-' : myNum ($item_movement[$i - 1]->usage); ?>
+                <?php if ($i <= $current_week)
+                { ?>
+                  <?php echo $item_movement[$i]->usage == 0 ? '-' : myNum ($item_movement[$i]->usage); ?>
+                <?php } ?>
+                <?php if ($i > $current_week)
+                { ?>
+                  <?php echo $item_movement[$i]->gross_requirement == 0 ? '-' : myNum ($item_movement[$i]->gross_requirement); ?>
+                <?php } ?>
               </td>
             <?php } ?>
           </tr>
@@ -212,7 +231,7 @@
               {
               echo 'background-color:#DAEAFF;color: #001F82;';
               } ?>">
-                <?php echo $item_movement[$i - 1]->schedules_receipts == 0 ? '-' : myNum ($item_movement[$i - 1]->schedules_receipts); ?>
+                <?php echo $item_movement[$i]->schedules_receipts == 0 ? '-' : myNum ($item_movement[$i]->schedules_receipts); ?>
               </td>
             <?php } ?>
           </tr>
@@ -228,7 +247,7 @@
               {
               echo 'background-color:#DAEAFF;color: #001F82;';
               } ?>">
-                <?php echo $item_movement[$i - 1]->stock_on_hand == 0 ? '-' : myNum ($item_movement[$i - 1]->stock_on_hand); ?>
+                <?php echo $item_movement[$i]->stock_on_hand == 0 ? '-' : myNum ($item_movement[$i]->stock_on_hand); ?>
               </td>
             <?php } ?>
           </tr>
@@ -246,7 +265,7 @@
               {
               echo 'background-color:#DAEAFF;color: #001F82;';
               } ?>">
-                <?php echo $item_movement[$i - 1]->current_safety_stock == 0 ? '-' : myNum ($item_movement[$i - 1]->current_safety_stock); ?>
+                <?php echo $item_movement[$i]->current_safety_stock == 0 ? '-' : myNum ($item_movement[$i]->current_safety_stock); ?>
               </td>
             <?php } ?>
           </tr>
@@ -264,7 +283,7 @@
               {
               echo 'background-color:#DAEAFF;color: #001F82;';
               } ?>">
-                <?php echo $item_movement[$i - 1]->net_on_hand == 0 ? '-' : myNum ($item_movement[$i - 1]->net_on_hand); ?>
+                <?php echo $item_movement[$i]->net_on_hand == 0 ? '-' : myNum ($item_movement[$i]->net_on_hand); ?>
               </td>
             <?php } ?>
           </tr>
@@ -277,7 +296,7 @@
               {
               echo 'background-color:#DAEAFF;color: #001F82;';
               } ?>">
-                <?php echo $item_movement[$i - 1]->net_requirement == 0 ? '-' : myNum ($item_movement[$i - 1]->net_requirement); ?>
+                <?php echo $item_movement[$i]->net_requirement == 0 ? '-' : myNum ($item_movement[$i]->net_requirement); ?>
               </td>
             <?php } ?>
           </tr>
@@ -290,7 +309,7 @@
               {
               echo 'background-color:#DAEAFF;color: #001F82;';
               } ?>">
-                <?php echo $item_movement[$i - 1]->planned_order_receipt == 0 ? '-' : myNum ($item_movement[$i - 1]->planned_order_receipt); ?>
+                <?php echo $item_movement[$i]->planned_order_receipt == 0 ? '-' : myNum ($item_movement[$i]->planned_order_receipt); ?>
               </td>
             <?php } ?>
           </tr>
@@ -303,7 +322,7 @@
               {
               echo 'background-color:#DAEAFF;color: #001F82;';
               } ?>">
-                <?php echo $item_movement[$i - 1]->planned_order_release == 0 ? '-' : myNum ($item_movement[$i - 1]->planned_order_release); ?>
+                <?php echo $item_movement[$i]->planned_order_release == 0 ? '-' : myNum ($item_movement[$i]->planned_order_release); ?>
               </td>
             <?php } ?>
           </tr>
@@ -319,7 +338,7 @@
   <form action="<?php echo site_url ('goods_management/update_item_movement'); ?>" method="post">
     <div class="modal fade" id="modal-edit-value-<?php echo $i; ?>" tabindex="-1" aria-labelledby="exampleModalLabel"
       aria-hidden="true">
-      <input type="hidden" name="material_movement_id" value="<?php echo $item_movement[$i - 1]->id; ?>">
+      <input type="hidden" name="material_movement_id" value="<?php echo $item_movement[$i]->id; ?>">
       <div class="modal-dialog modal-lg">
         <div class="modal-content">
           <div class="modal-header">
@@ -335,7 +354,7 @@
                   <div class="col-6">
                     <div class="form-floating mb-3">
                       <input type="number" class="form-control" id="floatingInput" name="gross_requirement"
-                        value="<?php echo $item_movement[$i - 1]->gross_requirement; ?>" <?php echo $gross_req[$i - 1]->type == 'formula' ? 'disabled' : ''; ?>>
+                        value="<?php echo $item_movement[$i]->gross_requirement; ?>" <?php echo $gross_req[$i - 1]->type == 'formula' ? 'disabled' : ''; ?>>
                       <label for="floatingInput" class="fw-bold text-primary">Gross Requirements</label>
                     </div>
                   </div>
@@ -345,6 +364,12 @@
                     <div class="form-floating mb-3">
                       <input type="number" class="form-control" id="floatingInput" name="stock_on_hand" value="">
                       <label for="floatingInput" class="fw-bold text-primary">Stock On Hand</label>
+                    </div>
+                  </div>
+                  <div class="col-12">
+                    <div class="form-floating mb-3">
+                      <input type="text" class="form-control" id="floatingInput" name="adjustment_reason" value="">
+                      <label for="floatingInput" class="fw-bold text-primary">Stock Adjustment Reason</label>
                     </div>
                   </div>
                   <!--end::Col-->

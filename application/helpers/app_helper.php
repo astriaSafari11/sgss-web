@@ -259,6 +259,7 @@ function send_email_notification($to, $subject, $body)
 	{
 	$ci = &get_instance ();
 	$ci->load->library ('email');
+	$ci->config->load ('env');
 
 	// $config = array(
 	// 	'protocol' => 'smtp', // 'mail', 'sendmail', or 'smtp'
@@ -271,11 +272,11 @@ function send_email_notification($to, $subject, $body)
 
 	$config = array(
 		'protocol' => 'smtp', // 'mail', 'sendmail', or 'smtp'
-		'smtp_host' => 'smtp.sendgrid.net',
-		'smtp_port' => 587,
-		'smtp_user' => 'apikey',
+		'smtp_host' => $ci->config->item ('smtp_host'),
+		'smtp_port' => $ci->config->item ('smtp_port'),
+		'smtp_user' => $ci->config->item ('smtp_user'),
 		'smtp_crypto' => 'tls',
-		'smtp_pass' => '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',
+		'smtp_pass' => $ci->config->item ('smtp_pass'),
 		'mailtype' => 'html',
 	);
 
@@ -472,5 +473,16 @@ function email_body($subject, $body)
 	';
 
 	return $html;
+	}
+
+function num2alpha($n)
+	{
+	$r = '';
+	for ($i = 1; $n >= 0 && $i < 10; $i++)
+		{
+		$r = chr (0x41 + ($n % pow (26, $i) / pow (26, $i - 1))) . $r;
+		$n -= pow (26, $i);
+		}
+	return $r;
 	}
 ?>
