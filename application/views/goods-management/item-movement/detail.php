@@ -8,6 +8,18 @@
     </a>
   </div>
   <div class="col-sm-6">
+    <div class="d-flex justify-content-end">
+      <a href="#" class="btn btn-sm btn-outline-primary"
+        style="font-weight: 600; border-radius: 50px;margin-right:5px;">
+        <i class="fa-solid fa-database"></i>
+        Stock Adjustment Log
+      </a>
+      <a href="#" class="btn btn-sm btn-outline-primary"
+        style="font-weight: 600; border-radius: 50px;margin-right:5px;">
+        <i class="fa-solid fa-database"></i>
+        Log History
+      </a>
+    </div>
   </div>
 </div>
 <!--begin::Row-->
@@ -111,7 +123,7 @@
               <option value="all">-- Wk Number --</option>
               <?php for ($i = 0; $i < 52; $i++)
               { ?>
-                <option value="<?php echo $i + 1; ?>" <?php echo $i == $past_week ? 'selected' : ''; ?>>
+                <option value="<?php echo $i + 1; ?>" <?php echo $i == $past_week - 1 ? 'selected' : ''; ?>>
                   <?php echo $i + 1; ?>
                 </option>
               <?php } ?>
@@ -122,7 +134,7 @@
               <option value="all">-- Wk Number --</option>
               <?php for ($i = 0; $i < 52; $i++)
               { ?>
-                <option value="<?php echo $i + 1; ?>" <?php echo $i == $up_week ? 'selected' : ''; ?>>
+                <option value="<?php echo $i + 1; ?>" <?php echo $i == $up_week - 1 ? 'selected' : ''; ?>>
                   <?php echo $i + 1; ?>
                 </option>
               <?php } ?>
@@ -352,6 +364,12 @@
                     <div class="form-floating mb-3">
                       <input type="number" class="form-control" id="floatingInput" name="stock_on_hand" value="">
                       <label for="floatingInput" class="fw-bold text-primary">Stock On Hand</label>
+                    </div>
+                  </div>
+                  <div class="col-12">
+                    <div class="form-floating mb-3">
+                      <input type="text" class="form-control" id="floatingInput" name="adjustment_reason" value="">
+                      <label for="floatingInput" class="fw-bold text-primary">Stock Adjustment Reason</label>
                     </div>
                   </div>
                   <!--end::Col-->

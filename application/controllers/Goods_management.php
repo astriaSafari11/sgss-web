@@ -1115,13 +1115,20 @@ class Goods_management extends CI_Controller
 
 				$schedule_receipt = $get_curr_week_data->schedules_receipts ? $get_curr_week_data->schedules_receipts : 0;
 
-				if ($i == 1)
+				if ($i == $get_initial_week)
 					{
-					$stock_on_hand = ($get_mat_detail->initial_stock + $schedule_receipt) - $actual_usage;
+					$stock_on_hand = $this->input->post ('stock_on_hand');
 					}
 				else
 					{
-					$stock_on_hand = ($get_prev_week_data->stock_on_hand + $schedule_receipt) - $actual_usage;
+					if ($i == 1)
+						{
+						$stock_on_hand = ($get_mat_detail->initial_stock + $schedule_receipt) - $actual_usage;
+						}
+					else
+						{
+						$stock_on_hand = ($get_prev_week_data->stock_on_hand + $schedule_receipt) - $actual_usage;
+						}
 					}
 
 				$current_safety_stock = min ($stock_on_hand, $get_mat_detail->standard_safety_stock);
@@ -1142,6 +1149,28 @@ class Goods_management extends CI_Controller
 				else
 					{
 					$gross_req = get_avg_value ($get_mat_detail->id, $i);
+					}
+
+				if ($i == $get_initial_week)
+					{
+					if (! empty ($this->input->post ('stock_on_hand')))
+						{
+						$adjusted_qty = $this->input->post ('stock_on_hand') - $get_curr_week_data->stock_on_hand;
+						$adjusted = $adjusted_qty / $get_curr_week_data->stock_on_hand * 100;
+						$adjustment = array(
+							"item_id" => $get_mat_detail->id,
+							"item_code" => $get_mat_detail->item_code,
+							"item_desc" => $get_mat_detail->item_name,
+							"current_on_hand" => $get_curr_week_data->stock_on_hand,
+							"adjustment" => $this->input->post ('stock_on_hand'),
+							"reason_for_adjustment" => $this->input->post ('adjustment_reason'),
+							"adjusted_qty" => $adjusted_qty,
+							"adjusted" => $adjusted,
+							"adjustment_date" => date ("Y-m-d H:i:s")
+						);
+
+						_add ('t_stock_adjustment', $adjustment);
+						}
 					}
 
 				$data = array(
@@ -1315,7 +1344,6 @@ class Goods_management extends CI_Controller
 				$getMat = $this->db->get_where ("m_master_data_material", array(
 					"id" => $item[$i],
 				))->row ();
-				// debugCode ($getMat);
 
 				$trxId = "TRX-" . date ('ymdhis') . $item[$i];
 				$data = array(
@@ -1328,6 +1356,12 @@ class Goods_management extends CI_Controller
 					"requestor_nip" => $this->session->userdata ('user_nip'),
 
 				);
+
+				_update ('m_master_data_material', array(
+					"recent_usage" => $trxId,
+				), array(
+					"id" => $item[$i],
+				));
 
 				_add ("t_transactions", $data);
 
