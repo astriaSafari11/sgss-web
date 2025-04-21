@@ -1031,10 +1031,6 @@ class Goods_management extends CI_Controller
 			"item_id" => $id,
 		))->result ();
 
-		$data['item_movement'] = $this->db->get_where ("t_material_movement", array(
-			"item_id" => $id,
-		))->result ();
-
 		$data['total_gross_req'] = count ($data['gross_req']);
 
 		$get_current_week = date ('W', strtotime (date ('Y-m-d')));
@@ -1055,6 +1051,8 @@ class Goods_management extends CI_Controller
 		$data['current_week'] = $get_current_week;
 		$data['past_week'] = $get_past_week;
 		$data['up_week'] = $get_up_week;
+
+		$data['item_movement'] = $this->db->query ("Select * from t_material_movement where item_id = '" . $data['material']->id . "' order by week ASC")->result ();
 
 		$this->session->set_flashdata ('page_title', 'INVENTORY');
 		load_view ('goods-management/item-movement/detail.php', $data);
@@ -1156,7 +1154,7 @@ class Goods_management extends CI_Controller
 					if (! empty ($this->input->post ('stock_on_hand')))
 						{
 						$adjusted_qty = $this->input->post ('stock_on_hand') - $get_curr_week_data->stock_on_hand;
-						$adjusted = $adjusted_qty / $get_curr_week_data->stock_on_hand * 100;
+						$adjusted = $get_curr_week_data->stock_on_hand > 0 ? $adjusted_qty / $get_curr_week_data->stock_on_hand * 100 : 100;
 						$adjustment = array(
 							"item_id" => $get_mat_detail->id,
 							"item_code" => $get_mat_detail->item_code,

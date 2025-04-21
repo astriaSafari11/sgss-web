@@ -70,4 +70,46 @@ class Inventory_model extends CI_Model
         $this->db->where ('week', $week);
         return $this->db->count_all_results ();
         }
+
+    private function _get_datatables_log_query($id = null)
+        {
+        $column_order = array(null, 'week', 'type');
+        $table = 't_stock_adjustment';
+
+        $this->db->where ('item_id', $id);
+        $this->db->from ($table);
+
+        $i = 0;
+        if (isset ($_POST['order']))
+            {
+            $this->db->order_by ($column_order[$_POST['order']['0']['column']], $_POST['order']['0']['dir']);
+            }
+        else if (isset ($order))
+            {
+            $this->db->order_by (key ($order), $order[key ($order)]);
+            }
+        }
+
+    function get_log_datatables($id = null)
+        {
+        $this->_get_datatables_log_query ($id);
+        if ($_POST['length'] != -1)
+            $this->db->limit ($_POST['length'], $_POST['start']);
+        $query = $this->db->get ();
+        return $query->result ();
+        }
+
+    function count_log_filtered($id = null)
+        {
+        $this->_get_datatables_log_query ($id);
+        $query = $this->db->get ();
+        return $query->num_rows ();
+        }
+
+    public function count_log_all($id = null)
+        {
+        $this->db->from ('t_stock_adjustment');
+        $this->db->where ('item_id', $id);
+        return $this->db->count_all_results ();
+        }
     }

@@ -213,43 +213,48 @@
         </div>
     </div>
 </div>
-
-<div class="modal fade" id="modal-import" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-    <div class="modal-dialog modal-xl">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="exampleModalLabel" class="text-primary"
-                    style="color: #001F82;font-weight:600;">
-                    Import Stock Take Adjustment</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-            </div>
-            <div class="modal-body">
-                <p class="text-danger"><small>Maximum size of each file = 3000000 bytes (3 mb). Allowed File types which
-                        can
-                        be uploaded = .xlsx</small></p>
-                <input type="file" class="custom-file-input" id="file" name="file" data-toggle="custom-file-input"
-                    accept=".csv, application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel">
-                <div class="" style="margin-top: 10px;">
-                    <div class="user-loader text-center" style="display: none;">
-                        <i class="fa fa-spinner fa-spin"></i> <small>Please wait system is processing your
-                            data...</small>
+<div id="popup">
+    <!--end::Row-->
+    <form id="form-upload-user" method="post" autocomplete="off" enctype="multipart/form-data">
+        <div class="modal fade" id="modal-import" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+            <div class="modal-dialog modal-xl">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="exampleModalLabel" class="text-primary"
+                            style="color: #001F82;font-weight:600;">
+                            Import Stock Take</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
-                    <div class="alert alert-success alert-dismissable" role="alert" id="success-result"
-                        style="display: none;">
-                        <div class="success-text"></div>
+                    <div class="modal-body">
+                        <p class="text-danger"><small>Maximum size of each file = 3000000 bytes (3 mb). Allowed File
+                                types which can
+                                be uploaded = .xlsx</small></p>
+                        <input type="file" class="custom-file-input" id="file" name="file"
+                            data-toggle="custom-file-input"
+                            accept=".csv, application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel">
+                        <div class="" style="margin-top: 10px;">
+                            <div class="user-loader text-center" style="display: none;">
+                                <i class="fa fa-spinner fa-spin"></i> <small>Please wait system is processing your
+                                    data...</small>
+                            </div>
+                            <div class="alert alert-success alert-dismissable" role="alert" id="success-result"
+                                style="display: none;">
+                                <div class="success-text"></div>
+                            </div>
+                            <div class="alert alert-danger alert-dismissable" role="alert" id="failed-result"
+                                style="display: none;">
+                                <div class="failed-text"></div>
+                            </div>
+                        </div>
                     </div>
-                    <div class="alert alert-danger alert-dismissable" role="alert" id="failed-result"
-                        style="display: none;">
-                        <div class="failed-text"></div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-outline-danger" data-bs-dismiss="modal">Cancel</button>
+                        <button type="submit" class="btn btn-outline-primary" id="btnUpload">Import Data</button>
                     </div>
                 </div>
             </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-outline-danger" data-bs-dismiss="modal">Cancel</button>
-                <button type="submit" class="btn btn-outline-primary" id="btnUpload">Import Data</button>
-            </div>
         </div>
-    </div>
+    </form>
 </div>
 
 <form method="post" action="<?= site_url ('inventory/inventory_export'); ?>" id="export-form">
@@ -333,6 +338,36 @@
 <script>
 
     $(document).ready(function () {
+        $("body").on("submit", "#form-upload-user", function (e) {
+            e.preventDefault();
+            var data = new FormData(this);
+            $.ajax({
+                type: 'POST',
+                url: "<?php echo site_url ('inventory/import_stock_take') ?>",
+                data: data,
+                dataType: 'json',
+                contentType: false,
+                cache: false,
+                processData: false,
+                beforeSend: function () {
+                    $("#btnUpload").prop('disabled', true);
+                    $(".user-loader").show();
+                    $("#success-result").hide();
+                    $("#failed-result").hide();
+                },
+                success: function (result) {
+                    $("#btnUpload").prop('disabled', false);
+                    if ($.isEmptyObject(result.error_message)) {
+                        $("#success-result").show();
+                        $(".success-text").html(result.success_message);
+                    } else {
+                        $("#failed-result").show();
+                        $(".failed-text").html(result.error_message);
+                    }
+                    $(".user-loader").hide();
+                }
+            });
+        });
         var table = $('#example').DataTable({
             dom: "<'row'<'col-sm-6'l><'col-sm-6'f>>" +
                 "t" +
@@ -458,7 +493,7 @@
                 data: [
                     <?php foreach ($kpi as $k => $v)
                     { ?>
-                                                                                                                                                                                                                                                                            {
+                                                                                                                                                                                                                                                                                                        {
                             name: '<?php echo $v->status; ?>',
                             y: <?php echo $v->total; ?>,
                         },

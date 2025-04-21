@@ -9,8 +9,8 @@
   </div>
   <div class="col-sm-6">
     <div class="d-flex justify-content-end">
-      <a href="#" class="btn btn-sm btn-outline-primary"
-        style="font-weight: 600; border-radius: 50px;margin-right:5px;">
+      <a href="#" class="btn btn-sm btn-outline-primary" style="font-weight: 600; border-radius: 50px;margin-right:5px;"
+        data-bs-toggle="modal" data-bs-target="#modal-stock-adjustment">
         <i class="fa-solid fa-database"></i>
         Stock Adjustment Log
       </a>
@@ -198,7 +198,7 @@
               {
               echo 'background-color:#DAEAFF;color: #001F82;';
               } ?>">
-                <?php echo $item_movement[$i]->gross_requirement == 0 ? '-' : myNum ($item_movement[$i]->gross_requirement); ?>
+                <?php echo $item_movement[$i - 1]->gross_requirement == 0 ? '-' : myNum ($item_movement[$i - 1]->gross_requirement); ?>
               </td>
             <?php } ?>
           </tr>
@@ -213,11 +213,11 @@
               } ?>">
                 <?php if ($i <= $current_week)
                 { ?>
-                  <?php echo $item_movement[$i]->usage == 0 ? '-' : myNum ($item_movement[$i]->usage); ?>
+                  <?php echo $item_movement[$i - 1]->usage == 0 ? '-' : myNum ($item_movement[$i - 1]->usage); ?>
                 <?php } ?>
                 <?php if ($i > $current_week)
                 { ?>
-                  <?php echo $item_movement[$i]->gross_requirement == 0 ? '-' : myNum ($item_movement[$i]->gross_requirement); ?>
+                  <?php echo $item_movement[$i - 1]->gross_requirement == 0 ? '-' : myNum ($item_movement[$i - 1]->gross_requirement); ?>
                 <?php } ?>
               </td>
             <?php } ?>
@@ -231,7 +231,7 @@
               {
               echo 'background-color:#DAEAFF;color: #001F82;';
               } ?>">
-                <?php echo $item_movement[$i]->schedules_receipts == 0 ? '-' : myNum ($item_movement[$i]->schedules_receipts); ?>
+                <?php echo $item_movement[$i - 1]->schedules_receipts == 0 ? '-' : myNum ($item_movement[$i - 1]->schedules_receipts); ?>
               </td>
             <?php } ?>
           </tr>
@@ -247,7 +247,7 @@
               {
               echo 'background-color:#DAEAFF;color: #001F82;';
               } ?>">
-                <?php echo $item_movement[$i]->stock_on_hand == 0 ? '-' : myNum ($item_movement[$i]->stock_on_hand); ?>
+                <?php echo $item_movement[$i - 1]->stock_on_hand == 0 ? '-' : myNum ($item_movement[$i - 1]->stock_on_hand); ?>
               </td>
             <?php } ?>
           </tr>
@@ -260,12 +260,13 @@
               <?php echo myNum (min ($material->initial_stock, $material->standard_safety_stock)); ?>
             </td>
             <?php for ($i = $past_week; $i <= $up_week; $i++)
-            { ?>
+            {
+            ?>
               <td style="text-align: center; <?php if ($i == $current_week)
               {
               echo 'background-color:#DAEAFF;color: #001F82;';
               } ?>">
-                <?php echo $item_movement[$i]->current_safety_stock == 0 ? '-' : myNum ($item_movement[$i]->current_safety_stock); ?>
+                <?php echo $item_movement[$i - 1]->current_safety_stock == 0 ? '-' : myNum ($item_movement[$i - 1]->current_safety_stock); ?>
               </td>
             <?php } ?>
           </tr>
@@ -283,7 +284,7 @@
               {
               echo 'background-color:#DAEAFF;color: #001F82;';
               } ?>">
-                <?php echo $item_movement[$i]->net_on_hand == 0 ? '-' : myNum ($item_movement[$i]->net_on_hand); ?>
+                <?php echo $item_movement[$i - 1]->net_on_hand == 0 ? '-' : myNum ($item_movement[$i - 1]->net_on_hand); ?>
               </td>
             <?php } ?>
           </tr>
@@ -296,7 +297,7 @@
               {
               echo 'background-color:#DAEAFF;color: #001F82;';
               } ?>">
-                <?php echo $item_movement[$i]->net_requirement == 0 ? '-' : myNum ($item_movement[$i]->net_requirement); ?>
+                <?php echo $item_movement[$i - 1]->net_requirement == 0 ? '-' : myNum ($item_movement[$i - 1]->net_requirement); ?>
               </td>
             <?php } ?>
           </tr>
@@ -309,7 +310,7 @@
               {
               echo 'background-color:#DAEAFF;color: #001F82;';
               } ?>">
-                <?php echo $item_movement[$i]->planned_order_receipt == 0 ? '-' : myNum ($item_movement[$i]->planned_order_receipt); ?>
+                <?php echo $item_movement[$i - 1]->planned_order_receipt == 0 ? '-' : myNum ($item_movement[$i - 1]->planned_order_receipt); ?>
               </td>
             <?php } ?>
           </tr>
@@ -322,7 +323,7 @@
               {
               echo 'background-color:#DAEAFF;color: #001F82;';
               } ?>">
-                <?php echo $item_movement[$i]->planned_order_release == 0 ? '-' : myNum ($item_movement[$i]->planned_order_release); ?>
+                <?php echo $item_movement[$i - 1]->planned_order_release == 0 ? '-' : myNum ($item_movement[$i - 1]->planned_order_release); ?>
               </td>
             <?php } ?>
           </tr>
@@ -338,12 +339,12 @@
   <form action="<?php echo site_url ('goods_management/update_item_movement'); ?>" method="post">
     <div class="modal fade" id="modal-edit-value-<?php echo $i; ?>" tabindex="-1" aria-labelledby="exampleModalLabel"
       aria-hidden="true">
-      <input type="hidden" name="material_movement_id" value="<?php echo $item_movement[$i]->id; ?>">
+      <input type="hidden" name="material_movement_id" value="<?php echo $item_movement[$i - 1]->id; ?>">
       <div class="modal-dialog modal-lg">
         <div class="modal-content">
           <div class="modal-header">
             <h5 class="modal-title" id="exampleModalLabel" class="text-primary" style="color: #001F82;font-weight:600;">
-              Week <?php echo $i; ?> - <?php echo date ('Y'); ?></h5>
+              Week <?php echo $i; ?> - <?php echo date ('Y'); ?>   <?php echo $item_movement[$i - 1]->id; ?></h5>
             <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
           </div>
           <div class="modal-body">
@@ -354,7 +355,7 @@
                   <div class="col-6">
                     <div class="form-floating mb-3">
                       <input type="number" class="form-control" id="floatingInput" name="gross_requirement"
-                        value="<?php echo $item_movement[$i]->gross_requirement; ?>" <?php echo $gross_req[$i - 1]->type == 'formula' ? 'disabled' : ''; ?>>
+                        value="<?php echo $item_movement[$i - 1]->gross_requirement; ?>" <?php echo $gross_req[$i - 1]->type == 'formula' ? 'disabled' : ''; ?>>
                       <label for="floatingInput" class="fw-bold text-primary">Gross Requirements</label>
                     </div>
                   </div>
@@ -386,3 +387,80 @@
     </div>
   </form>
 <?php } ?>
+
+<div class="modal fade" id="modal-stock-adjustment" tabindex="-1" aria-labelledby="exampleModalLabel"
+  aria-hidden="true">
+  <div class="modal-dialog modal-xl">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel" class="text-primary" style="color: #001F82;font-weight:600;">
+          Stock Adjustment</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <div class="row">
+          <div class="col-12">
+            <div class="row">
+              <div class="col-12">
+                <table id="example" class="table table-sm table-striped table-bordered" style="width:100%"
+                  cellspacing="0">
+                  <thead>
+                    <tr>
+                      <!-- <th style="color: #fff;background-color: #001F82;text-align: center; vertical-align: middle;">Code
+                    </th> -->
+                      <th
+                        style="color: #fff;background-color: #001F82;text-align: center; vertical-align: middle;width:30%;">
+                        Adjustment Date
+                      </th>
+                      <th style="color: #fff;background-color: #001F82;text-align: center; vertical-align: middle;">
+                        Stock On Hand
+                      </th>
+                      <th style="color: #fff;background-color: #001F82;text-align: center; vertical-align: middle;">
+                        Adjustment
+                      </th>
+                      <th style="color: #fff;background-color: #001F82;text-align: center; vertical-align: middle;">
+                        Reason</th>
+                      <th style="color: #fff;background-color: #001F82;text-align: center; vertical-align: middle;">
+                        Adjusted Qty</th>
+                      <th style="color: #fff;background-color: #001F82;text-align: center; vertical-align: middle;">
+                        Adjusted (%)
+                      </th>
+                    </tr>
+                  </thead>
+                  <tbody style="vertical-align: middle;text-align: center;">
+                  </tbody>
+                </table>
+              </div>
+              <!--end::Col-->
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-outline-warning" data-bs-dismiss="modal">Cancel</button>
+        <button type="submit" name="submit" class="btn btn-outline-primary">Update Data</button>
+      </div>
+    </div>
+  </div>
+</div>
+<script>
+  $(document).ready(function () {
+    var table = $('#example').DataTable({
+      pageLength: 50,
+      lengthMenu: [[10, 25, 50, 100], [10, 25, 50, 100]],
+      ordering: false,
+      scrollCollapse: true,
+      scrollY: '400px',
+      ajax: {
+        url: "<?= site_url ('inventory/load_stock_take_log?id=' . $material->id); ?>",
+        type: "POST"
+      },
+      processing: true,
+      serverSide: true,
+      language: {
+        zeroRecords: "Nothing to display here 😢",
+        processing: `<i class="fa fa-spinner fa-spin"></i> Loading data...`
+      }
+    });
+  });
+</script>

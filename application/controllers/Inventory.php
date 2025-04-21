@@ -169,6 +169,32 @@ class Inventory extends CI_Controller
         //output dalam format JSON
         echo json_encode ($output);
         }
+    public function load_stock_take_log()
+        {
+        $id = $this->input->get ('id');
+        $list = $this->inventory_model->get_log_datatables ($id);
+        $data = array();
+        foreach ($list as $field)
+            {
+            $row = array();
+
+            $row[] = myDate ($field->adjustment_date);
+            $row[] = $field->current_on_hand;
+            $row[] = $field->adjustment;
+            $row[] = $field->reason_for_adjustment;
+            $row[] = $field->adjusted_qty;
+            $row[] = myDecimal ($field->adjusted) . " %";
+            $data[] = $row;
+            }
+        $output = array(
+            "draw" => $_POST['draw'],
+            "recordsTotal" => $this->inventory_model->count_log_all ($id),
+            "recordsFiltered" => $this->inventory_model->count_log_filtered ($id),
+            "data" => $data,
+        );
+        //output dalam format JSON
+        echo json_encode ($output);
+        }
 
     public function export()
         {
@@ -310,5 +336,190 @@ class Inventory extends CI_Controller
         header ('Content-Disposition: attachment; filename="' . $filename . '.xlsx"');
         // Write file to the browser
         $writer->save ('php://output');
+        }
+    public function upload_config($path)
+        {
+        if (! is_dir ($path))
+            mkdir ($path, 0777, TRUE);
+        $config['upload_path'] = './' . $path;
+        $config['allowed_types'] = 'csv|CSV|xlsx|XLSX|xls|XLS';
+        $config['max_filename'] = '255';
+        $config['encrypt_name'] = TRUE;
+        $config['max_size'] = 4096;
+        $this->load->library ('upload', $config);
+        }
+    public function import_stock_take()
+        {
+        ini_set ("max_execution_time", 0);
+        $path = 'assets/upload/inventory/';
+        $json = [];
+        $this->upload_config ($path);
+        if (! $this->upload->do_upload ('file'))
+            {
+            $json = [
+                'error_message' => $this->upload->display_errors (),
+            ];
+            }
+        else
+            {
+            $file_data = $this->upload->data ();
+            $file_name = $path . $file_data['file_name'];
+            $arr_file = explode ('.', $file_name);
+            $extension = end ($arr_file);
+            if ('csv' == $extension)
+                {
+                $reader = new \PhpOffice\PhpSpreadsheet\Reader\Csv();
+                }
+            else
+                {
+                $reader = new \PhpOffice\PhpSpreadsheet\Reader\Xlsx();
+                }
+            $spreadsheet = $reader->load ($file_name);
+            $count_success = 0;
+            $count_failed = 0;
+            $list = [];
+
+            $sheetData = $spreadsheet->getSheetbyName ('STOCK TAKE');
+            $cellRow = $spreadsheet->getSheetbyName ('STOCK TAKE')->getHighestRow ();
+            for ($i = 4; $i <= $cellRow; $i++)
+                {
+                $item_code = $sheetData->getCell ('A' . $i)->getValue ();
+                $item_desc = $sheetData->getCell ('B' . $i)->getValue ();
+                $stock_on_hand = $sheetData->getCell ('C' . $i)->getValue ();
+                $adjustment = $sheetData->getCell ('D' . $i)->getValue ();
+                $reason = $sheetData->getCell ('E' . $i)->getValue ();
+
+                if (! empty ($adjustment) && ! empty ($reason))
+                    {
+
+                    $get_mat_detail = $this->db->get_where ("m_master_data_material", array(
+                        "item_code" => $item_code,
+                    ))->row ();
+
+                    $get_curr_week_data = $this->db->get_where ("t_material_movement", array(
+                        "item_id" => $get_mat_detail->id,
+                        "year" => date ('Y'),
+                        "week" => date ('W')
+                    ))->row ();
+
+                    $stock_on_hand = ($adjustment + $get_curr_week_data->schedule_receipt) - $get_curr_week_data->actual_usage;
+                    $current_safety_stock = min ($stock_on_hand, $get_mat_detail->standard_safety_stock);
+                    $net_on_hand = $stock_on_hand - $current_safety_stock;
+                    $net_requirement = min ($stock_on_hand, 0);
+
+                    if ($get_curr_week_data->stock_on_hand > 0)
+                        {
+                        $adjusted_percentage = $adjustment / $get_curr_week_data->stock_on_hand * 100;
+                        }
+                    else
+                        {
+                        $adjusted_percentage = 100;
+                        }
+                    $adjusted_qty = $adjustment - $get_curr_week_data->stock_on_hand;
+
+                    $adjustment_data = array(
+                        "item_id" => $get_mat_detail->id,
+                        "item_code" => $get_mat_detail->item_code,
+                        "item_desc" => $get_mat_detail->item_name,
+                        "current_on_hand" => $get_curr_week_data->stock_on_hand,
+                        "adjustment" => $adjustment,
+                        "reason_for_adjustment" => $reason,
+                        "adjusted_qty" => $adjusted_qty,
+                        "adjusted" => $adjusted_percentage,
+                        "adjustment_date" => date ("Y-m-d H:i:s")
+                    );
+
+                    _add ('t_stock_adjustment', $adjustment_data);
+
+                    $data = array(
+                        'stock_on_hand' => $stock_on_hand,
+                        'current_safety_stock' => round ($current_safety_stock, 0),
+                        'net_on_hand' => $net_on_hand,
+                        'net_requirement' => $net_requirement,
+                    );
+
+                    _update ('t_material_movement', $data, array(
+                        "item_id" => $get_mat_detail->id,
+                        "year" => date ('Y'),
+                        "week" => date ('W')
+                    ));
+
+                    $list[] = [
+                        "item_id" => $get_mat_detail->id,
+                        "item_code" => $get_mat_detail->item_code,
+                        "item_desc" => $get_mat_detail->item_name,
+                        "current_on_hand" => $get_curr_week_data->stock_on_hand,
+                        "adjustment" => $adjustment,
+                        "reason_for_adjustment" => $reason,
+                        "adjusted_qty" => $adjusted_qty,
+                        "adjusted" => $adjusted_percentage,
+                        "adjustment_date" => date ("Y-m-d H:i:s")
+                    ];
+                    }
+                }
+
+            $html = 'Processing file finished.<br>';
+            $html .= '
+			<table id="example" class="table table-sm" cellspacing="0">
+                      <thead>
+                          <tr >
+                              <th style="color: #fff;background-color: #001F82;text-align: center;font-size:12px;">Item Code</th>
+                              <th style="color: #fff;background-color: #001F82;text-align: center;font-size:12px;">Item Desc</th>
+                              <th style="color: #fff;background-color: #001F82;text-align: center;font-size:12px;">Current On Hand</th>
+                              <th style="color: #fff;background-color: #001F82;text-align: center;font-size:12px;">Adjustment</th>
+                              <th style="color: #fff;background-color: #001F82;text-align: center;font-size:12px;">Reason for Adjustment</th>
+                              <th style="color: #fff;background-color: #001F82;text-align: center;font-size:12px;">Adjusted Qty</th>
+                              <th style="color: #fff;background-color: #001F82;text-align: center;font-size:12px;">Adjusted (%)</th>
+                              <th style="color: #fff;background-color: #001F82;text-align: center;font-size:12px;">Adjustment Date</th>
+                          </tr>
+                      </thead>
+					  <tbody>			
+			';
+            foreach ($list as $k => $v)
+                {
+                $html .= '
+					<tr>
+						<td style="text-align: center;font-size:12px;">' . $v['item_code'] . '</td>
+						<td style="text-align: center;font-size:12px;">' . $v['item_desc'] . '</td>
+						<td style="text-align: center;font-size:12px;">' . $v['current_on_hand'] . '</td>
+						<td style="text-align: center;font-size:12px;">' . $v['adjustment'] . '</td>
+						<td style="text-align: center;font-size:12px;">' . $v['reason_for_adjustment'] . '</td>
+						<td style="text-align: center;font-size:12px;">' . $v['adjusted_qty'] . '</td>
+						<td style="text-align: center;font-size:12px;">' . myDecimal ($v['adjusted']) . ' %</td>
+						<td style="text-align: center;font-size:12px;">' . $v['adjustment_date'] . '</td>
+					</tr>
+					';
+                }
+            $html .= '<tbody></table>';
+
+            $msg = $html;
+
+            if (file_exists ($file_name))
+                unlink ($file_name);
+            if (count ($list) > 0)
+                {
+                $result = true;
+                if ($result)
+                    {
+                    $json = [
+                        'success_message' => $msg,
+                        'list' => $list,
+                    ];
+                    }
+                else
+                    {
+                    $json = [
+                        'error_message' => "Something went wrong while importing the data. Please check your excel file and try again.",
+                    ];
+                    }
+                }
+            else
+                {
+                $json = [
+                    'success_message' => "Import completed. No new record is found on uploaded file.",
+                ];
+                }
+            }
+        echo json_encode ($json);
         }
     }
