@@ -1888,7 +1888,7 @@ class Master_data extends CI_Controller
 				);
 				$this->session->set_flashdata ('toast', $err);
 				}
-			redirect ('master_data/edit_material/' . _encrypt ($get_data->item_id));
+			redirect ('master_data/detail_material/' . _encrypt ($get_data->item_id));
 			}
 		else
 			{

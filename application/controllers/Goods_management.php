@@ -159,6 +159,7 @@ class Goods_management extends CI_Controller
 		where t_stock_planned_request.id = '$id'
 		")->result ();
 
+
 		$data['purchase_reason'] = $this->db->get ("m_purchase_reason")->result ();
 		$data['user_list'] = $this->db->get ("m_employee")->result ();
 		$data['area'] = $this->db->get_where ("m_employee_area", array(
@@ -169,13 +170,17 @@ class Goods_management extends CI_Controller
 			"planned_id" => $id,
 		))->row ();
 
+		$detail = $this->db->get_where ("t_stock_planned_request", array(
+			"id" => $id,
+		))->row ();
+
 		if (! $exist)
 			{
 			_add ("t_order", array(
 				"planned_id" => $id,
 				"approval_category" => 'normal',
 				"is_approval_required" => 0,
-				"week" => $data['order']->week
+				"week" => $detail->week
 			));
 			}
 
@@ -560,7 +565,7 @@ class Goods_management extends CI_Controller
 			"order_status" => 1
 		), array("id" => $planned_id));
 
-		generate_approval_track ($order_id, $this->session->userdata ('user_nip'));
+		generate_approval_track ($order_id, $this->session->userdata ('user_nip'), $status);
 
 		_update ("m_master_data_material", array(
 			"recent_transactions" => $request_id
@@ -1031,10 +1036,6 @@ class Goods_management extends CI_Controller
 			"item_id" => $id,
 		))->result ();
 
-		$data['item_movement'] = $this->db->get_where ("t_material_movement", array(
-			"item_id" => $id,
-		))->result ();
-
 		$data['total_gross_req'] = count ($data['gross_req']);
 
 		$get_current_week = date ('W', strtotime (date ('Y-m-d')));
@@ -1055,6 +1056,8 @@ class Goods_management extends CI_Controller
 		$data['current_week'] = $get_current_week;
 		$data['past_week'] = $get_past_week;
 		$data['up_week'] = $get_up_week;
+
+		$data['item_movement'] = $this->db->query ("Select * from t_material_movement where item_id = '" . $data['material']->id . "' order by week ASC")->result ();
 
 		$this->session->set_flashdata ('page_title', 'INVENTORY');
 		load_view ('goods-management/item-movement/detail.php', $data);
@@ -1079,7 +1082,7 @@ class Goods_management extends CI_Controller
 			$gross_req = $this->input->post ('gross_requirement');
 
 			// $get_last_week = date ('W', strtotime ('December 28th'));
-			$get_last_week = $get_initial_week + 6;
+			$get_last_week = $get_initial_week + 2;
 			$total_data = array();
 
 			for ($i = $get_initial_week; $i <= $get_last_week; $i++)
@@ -1156,7 +1159,7 @@ class Goods_management extends CI_Controller
 					if (! empty ($this->input->post ('stock_on_hand')))
 						{
 						$adjusted_qty = $this->input->post ('stock_on_hand') - $get_curr_week_data->stock_on_hand;
-						$adjusted = $adjusted_qty / $get_curr_week_data->stock_on_hand * 100;
+						$adjusted = $get_curr_week_data->stock_on_hand > 0 ? $adjusted_qty / $get_curr_week_data->stock_on_hand * 100 : 100;
 						$adjustment = array(
 							"item_id" => $get_mat_detail->id,
 							"item_code" => $get_mat_detail->item_code,

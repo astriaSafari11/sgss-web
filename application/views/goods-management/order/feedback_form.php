@@ -2,13 +2,14 @@
 
 <!-- efek tambahan untuk widget -->
 <style>
-.step-circle {
-  transition: all 0.3s ease;
-}
-.step-circle:hover {
-  transform: scale(1.1);
-  box-shadow: 0 0 10px rgba(0, 31, 130, 0.4);
-}
+  .step-circle {
+    transition: all 0.3s ease;
+  }
+
+  .step-circle:hover {
+    transform: scale(1.1);
+    box-shadow: 0 0 10px rgba(0, 31, 130, 0.4);
+  }
 </style>
 
 <!--begin::Row-->
@@ -148,111 +149,115 @@
         <h3 class="card-title" style="font-weight: 600;color: #FFF;">Approval History</h3>
       </div>
       <div class="card-body">
-      
-      <!-- start widget -->
-<div class="container-fluid position-relative py-4">
-    
-<!-- Line start -->
-  <div class="position-absolute start-0 end-0" style="top: 60px; z-index: 0;">
-    <!-- Garis dasar -->
-    <div class="mx-auto position-relative" style="height: 4px; background-color: #ccc; width: calc(100% - 20%); border-radius: 2px;">
-    <!-- Garis isi/progress -->
-    <div id="progress-fill" style="height: 100%; width: 0%; background-color: gold; position: absolute; top: 0; left: 0; border-radius: 2px; transition: width 0.5s ease;"></div>
-    </div>
-  </div>
-  <!-- Line end -->
 
-  <!-- Step Flow -->
-  <div class="d-flex justify-content-between align-items-start position-relative flex-wrap" style="z-index: 1;">
-    
-    <!-- Step 1 -->
-    <div class="text-center flex-fill">
-      <div class="fw-bold rounded-circle step-circle bg-secondary-subtle text-primary mx-auto mb-2 d-flex align-items-center justify-content-center fs-5"
-           style="width: 70px; height: 70px; border: 2px solid #001F82;"
-           onclick="updateProgress(0)">
-        R
-      </div>
-      <h6 class="fw-bold text-primary mb-1">Deby Yeusy</h6>
-      <div class="d-flex flex-column gap-0">
-        <small>Requestor</small>
-        <h9>
-          <span class="badge text-primary" style="background-color: #DDEEFF;">
-            03/04/2025
-            </h9>
-      </div>
-    </div>
+        <!-- start widget -->
+        <div class="container-fluid position-relative py-4">
 
-    <!-- Step 2 -->
-    <div class="text-center flex-fill">
-      <div class="fw-bold rounded-circle step-circle text-dark mx-auto mb-2 d-flex align-items-center justify-content-center fs-5"
-           style="width: 70px; height: 70px; border: 2px solid chocolate; background-color:rgb(238, 226, 56)"
-           onclick="updateProgress(1)">
-        WL1
-      </div>
-      <h6 class="fw-bold text-primary mb-1">Felicia Nathania</h6>
-      <div class="d-flex flex-column gap-0">
-        <small>Waiting for Approval</small>
-        <h9>
-          <span class="badge text-primary" style="background-color: #DDEEFF;">
-            Due Date: 12/04/2025
-            </h9>
-      </div>
-    </div>
+          <!-- Line start -->
+          <div class="position-absolute start-0 end-0" style="top: 60px; z-index: 0;">
+            <!-- Garis dasar -->
+            <div class="mx-auto position-relative"
+              style="height: 4px; background-color: #ccc; width: calc(100% - 20%); border-radius: 2px;">
+              <!-- Garis isi/progress -->
+              <div id="progress-fill"
+                style="height: 100%; width: 0%; background-color: gold; position: absolute; top: 0; left: 0; border-radius: 2px; transition: width 0.5s ease;">
+              </div>
+            </div>
+          </div>
+          <!-- Line end -->
 
-    <!-- Step 3 -->
-    <div class="text-center flex-fill">
-      <div class="fw-bold rounded-circle step-circle bg-secondary-subtle text-primary mx-auto mb-2 d-flex align-items-center justify-content-center fs-5"
-           style="width: 70px; height: 70px; border: 2px solid #001F82;"
-           onclick="updateProgress(2)">
-        WL2
-      </div>
-      <h6 class="fw-bold text-primary mb-1">Triyanto Wibowo</h6>
-      <div class="d-flex flex-column gap-0">
-        <small>Inactive</small>
-        <h9>
-          <span class="badge text-primary" style="background-color: #DDEEFF;">
-            Due Date: 14/04/2025
-            </h9>
-      </div>
-    </div>
+          <!-- Step Flow -->
+          <div class="d-flex justify-content-between align-items-start position-relative flex-wrap" style="z-index: 1;">
 
-    <!-- Step 4 -->
-    <div class="text-center flex-fill">
-      <div class="fw-bold rounded-circle step-circle bg-secondary-subtle text-primary mx-auto mb-2 d-flex align-items-center justify-content-center fs-5"
-           style="width: 70px; height: 70px; border: 2px solid #001F82;"
-           onclick="updateProgress(3)">
-        WL3
-      </div>
-      <h6 class="fw-bold text-primary mb-1">Zulfakar Ali</h6>
-      <div class="d-flex flex-column gap-0">
-        <small>Inactive</small>
-        <h9>
-          <span class="badge text-primary" style="background-color: #DDEEFF;">
-            Due Date: 16/04/2025
-            </h9>
-      </div>
-    </div>
+            <!-- Step 1 -->
+            <div class="text-center flex-fill">
+              <div
+                class="fw-bold rounded-circle step-circle bg-secondary-subtle text-primary mx-auto mb-2 d-flex align-items-center justify-content-center fs-5"
+                style="width: 70px; height: 70px; border: 2px solid #001F82;" onclick="updateProgress(0)">
+                R
+              </div>
+              <h6 class="fw-bold text-primary mb-1">Deby Yeusy</h6>
+              <div class="d-flex flex-column gap-0">
+                <small>Requestor</small>
+                <h9>
+                  <span class="badge text-primary" style="background-color: #DDEEFF;">
+                    03/04/2025
+                </h9>
+              </div>
+            </div>
 
-    <!-- Step 5 -->
-    <div class="text-center flex-fill">
-      <div class="rounded-circle step-circle bg-white text-success mx-auto mb-2 d-flex align-items-center justify-content-center"
-           style="width: 70px; height: 70px; border: 2px solid green;"
-           onclick="updateProgress(4)">
-        <i class="bi bi-send-check-fill fs-3"></i>
-      </div>
-      <h6 class="fw-bold text-success mb-1">Nama?</h6>
-      <div class="d-flex flex-column gap-0">
-        <small>Approved</small>
-        <h9>
-          <span class="badge text-white" style="background-color: green;">
-            09/04/2025
-            </h9>
-      </div>
-    </div>
+            <!-- Step 2 -->
+            <div class="text-center flex-fill">
+              <div
+                class="fw-bold rounded-circle step-circle text-dark mx-auto mb-2 d-flex align-items-center justify-content-center fs-5"
+                style="width: 70px; height: 70px; border: 2px solid chocolate; background-color:rgb(238, 226, 56)"
+                onclick="updateProgress(1)">
+                WL1
+              </div>
+              <h6 class="fw-bold text-primary mb-1">Felicia Nathania</h6>
+              <div class="d-flex flex-column gap-0">
+                <small>Waiting for Approval</small>
+                <h9>
+                  <span class="badge text-primary" style="background-color: #DDEEFF;">
+                    Due Date: 12/04/2025
+                </h9>
+              </div>
+            </div>
 
-  </div>
-</div>
-<!-- end widget -->
+            <!-- Step 3 -->
+            <div class="text-center flex-fill">
+              <div
+                class="fw-bold rounded-circle step-circle bg-secondary-subtle text-primary mx-auto mb-2 d-flex align-items-center justify-content-center fs-5"
+                style="width: 70px; height: 70px; border: 2px solid #001F82;" onclick="updateProgress(2)">
+                WL2
+              </div>
+              <h6 class="fw-bold text-primary mb-1">Triyanto Wibowo</h6>
+              <div class="d-flex flex-column gap-0">
+                <small>Inactive</small>
+                <h9>
+                  <span class="badge text-primary" style="background-color: #DDEEFF;">
+                    Due Date: 14/04/2025
+                </h9>
+              </div>
+            </div>
+
+            <!-- Step 4 -->
+            <div class="text-center flex-fill">
+              <div
+                class="fw-bold rounded-circle step-circle bg-secondary-subtle text-primary mx-auto mb-2 d-flex align-items-center justify-content-center fs-5"
+                style="width: 70px; height: 70px; border: 2px solid #001F82;" onclick="updateProgress(3)">
+                WL3
+              </div>
+              <h6 class="fw-bold text-primary mb-1">Zulfakar Ali</h6>
+              <div class="d-flex flex-column gap-0">
+                <small>Inactive</small>
+                <h9>
+                  <span class="badge text-primary" style="background-color: #DDEEFF;">
+                    Due Date: 16/04/2025
+                </h9>
+              </div>
+            </div>
+
+            <!-- Step 5 -->
+            <div class="text-center flex-fill">
+              <div
+                class="rounded-circle step-circle bg-white text-success mx-auto mb-2 d-flex align-items-center justify-content-center"
+                style="width: 70px; height: 70px; border: 2px solid green;" onclick="updateProgress(4)">
+                <i class="bi bi-send-check-fill fs-3"></i>
+              </div>
+              <h6 class="fw-bold text-success mb-1">Nama?</h6>
+              <div class="d-flex flex-column gap-0">
+                <small>Approved</small>
+                <h9>
+                  <span class="badge text-white" style="background-color: green;">
+                    09/04/2025
+                </h9>
+              </div>
+            </div>
+
+          </div>
+        </div>
+        <!-- end widget -->
 
 
         <table class="table table-bordered" style="width:100%">
@@ -323,7 +328,7 @@
                 <div class="col-6">
                   <div class="form-floating mb-3">
                     <input type="text" class="form-control" id="floatingInput" placeholder="input PO GR Number"
-                      name="po_gr" value="">
+                      name="po_gr" value="" <?php echo $order->status == 'rejected' ? 'disabled' : 'required'; ?>>
                     <label for="floatingInput">PO GR:</label>
                   </div>
                 </div>
@@ -355,7 +360,7 @@
           </div>
         </div>
         <div class="card-footer text-end text-white">
-          <button class="btn btn-sm btn-outline-primary custom-btn" type="submit" name="submit"
+          <button class="btn btn-sm btn-outline-primary custom-btn" type="submit" name="submit" <?php echo $order->status == 'rejected' ? 'disabled' : ''; ?>
             style="font-weight: 600; border-radius: 50px; width: 150px;">
             Submit Feedback
           </button>
@@ -372,37 +377,37 @@
 <script>
   // Function to update the progress bar based on the step (sementara)
   function updateProgress(step) {
-  const fill = document.getElementById("progress-fill");
-  let width = "0%";
-  let color = "#ccc";
+    const fill = document.getElementById("progress-fill");
+    let width = "0%";
+    let color = "#ccc";
 
-  switch(step) {
-    case 0: // Requestor
-      width = "0%";
-      color = "#ccc";
-      break;
-    case 1: // WL1
-      width = "25%";
-      color = "gold";
-      break;
-    case 2: // WL2
-      width = "50%";
-      color = "#001F82";
-      break;
-    case 3: // WL3
-      width = "75%";
-      color = "#001F82";
-      break;
-    case 4: // Approved
-      width = "100%";
-      color = "green";
-      break;
+    switch (step) {
+      case 0: // Requestor
+        width = "0%";
+        color = "#ccc";
+        break;
+      case 1: // WL1
+        width = "25%";
+        color = "gold";
+        break;
+      case 2: // WL2
+        width = "50%";
+        color = "#001F82";
+        break;
+      case 3: // WL3
+        width = "75%";
+        color = "#001F82";
+        break;
+      case 4: // Approved
+        width = "100%";
+        color = "green";
+        break;
+    }
+
+    fill.style.width = width;
+    fill.style.backgroundColor = color;
   }
-
-  fill.style.width = width;
-  fill.style.backgroundColor = color;
-}
-//end function
+  //end function
 
   $(document).ready(function () {
     $('#example').DataTable();
