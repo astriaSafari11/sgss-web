@@ -324,7 +324,7 @@ function calc_sched_receipt($mat_mov_id, $schedule_receipt)
 
     $gross_req = $get_data->gross_requirement;
     // $get_last_week = date ('W', strtotime ('December 28th'));
-    $get_last_week = $get_initial_week + 6;
+    $get_last_week = $get_initial_week + 2;
 
     for ($i = $get_initial_week; $i <= $get_last_week; $i++)
         {
@@ -556,79 +556,99 @@ function generate_average_forecast($item_id)
         }
     }
 
-function generate_approval_track($order_id, $requestor)
+function generate_approval_track($order_id, $requestor, $status)
     {
     $CI = getCI ();
-    $getUser = $CI->db->get_where ('m_employee', array(
-        "nip" => $requestor
-    ))->row ();
 
-    $getUserArea = $CI->db->get_where ('m_employee_area', array(
-        "nip" => $getUser->nip
-    ))->row ();
+    if ($status == "auto_approved")
+        {
+        //add first layer approval - LM - WL 1 - PIC AREA
+        _add ('t_order_approval_track', array(
+            "order_id" => $order_id,
+            "approve_order" => 1,
+            "approve_level" => 1,
+            "approve_title" => 'SGSS System',
+            "approve_status" => 'approved',
+            "approve_by" => 'SGSS System',
+            "approve_name" => 'SGSS System',
+            "approve_due_date" => date ("Y-m-d H:i:s"),
+            "approve_date" => date ("Y-m-d H:i:s"),
+        ));
+        }
+    else
+        {
+        $getUser = $CI->db->get_where ('m_employee', array(
+            "nip" => $requestor
+        ))->row ();
 
-    $get_detail = $CI->db->get_where ('t_order_detail', array(
-        "order_id" => $order_id
-    ))->row ();
+        $getUserArea = $CI->db->get_where ('m_employee_area', array(
+            "nip" => $getUser->nip
+        ))->row ();
 
-    $get_settings = $CI->db->get_where ('m_variable_settings', array(
-        "item_id" => $get_detail->item_id
-    ))->row ();
+        $get_detail = $CI->db->get_where ('t_order_detail', array(
+            "order_id" => $order_id
+        ))->row ();
 
-    $pending_days = $get_settings->var_pending_approval;
+        $get_settings = $CI->db->get_where ('m_variable_settings', array(
+            "item_id" => $get_detail->item_id
+        ))->row ();
 
-    $layer_one_date = date ("Y-m-d H:i:s", strtotime ("+" . $pending_days . " day", strtotime (date ("Y-m-d H:i:s"))));
+        $pending_days = $get_settings->var_pending_approval;
 
-    //add first layer approval - LM - WL 1 - PIC AREA
-    _add ('t_order_approval_track', array(
-        "order_id" => $order_id,
-        "approve_order" => 1,
-        "approve_level" => 1,
-        "approve_title" => 'WL1',
-        "approve_status" => 'pending',
-        "approve_by" => $getUser->lm_nip,
-        "approve_name" => $getUser->lm_name,
-        "approve_due_date" => $layer_one_date
-    ));
+        $layer_one_date = date ("Y-m-d H:i:s", strtotime ("+" . $pending_days . " day", strtotime (date ("Y-m-d H:i:s"))));
 
-    //send email to first layer approval - LM - WL 1 - PIC AREA
-    $email_body = email_body ('Request Approval', "
+        //add first layer approval - LM - WL 1 - PIC AREA
+        _add ('t_order_approval_track', array(
+            "order_id" => $order_id,
+            "approve_order" => 1,
+            "approve_level" => 1,
+            "approve_title" => 'WL1',
+            "approve_status" => 'pending',
+            "approve_by" => $getUser->lm_nip,
+            "approve_name" => $getUser->lm_name,
+            "approve_due_date" => $layer_one_date
+        ));
+
+        //send email to first layer approval - LM - WL 1 - PIC AREA
+        $email_body = email_body ('Request Approval', "
     Hi, " . $getUser->lm_name . "<br>
 
     An order is requesting your approval
     ");
 
-    send_email_notification ($getUser->lm_email, 'Request Approval', $email_body);
+        send_email_notification ($getUser->lm_email, 'Request Approval', $email_body);
 
-    $get_WL2 = $CI->db->query ("select * from view_user WHERE area_code = '" . $getUserArea->area_code . "' and role = 'WL2'")->row ();
-    $layer_two_date = date ("Y-m-d H:i:s", strtotime ("+" . $pending_days . " day", strtotime ($layer_one_date)));
+        $get_WL2 = $CI->db->query ("select * from view_user WHERE area_code = '" . $getUserArea->area_code . "' and role = 'WL2'")->row ();
+        $layer_two_date = date ("Y-m-d H:i:s", strtotime ("+" . $pending_days . " day", strtotime ($layer_one_date)));
 
-    //add second layer approval - WL2
-    _add ('t_order_approval_track', array(
-        "order_id" => $order_id,
-        "approve_order" => 2,
-        "approve_level" => 2,
-        "approve_title" => 'WL2',
-        "approve_status" => 'inactive',
-        "approve_by" => $get_WL2->nip,
-        "approve_name" => $get_WL2->nama,
-        "approve_due_date" => $layer_two_date
-    ));
+        //add second layer approval - WL2
+        _add ('t_order_approval_track', array(
+            "order_id" => $order_id,
+            "approve_order" => 2,
+            "approve_level" => 2,
+            "approve_title" => 'WL2',
+            "approve_status" => 'inactive',
+            "approve_by" => $get_WL2->nip,
+            "approve_name" => $get_WL2->nama,
+            "approve_due_date" => $layer_two_date
+        ));
 
-    $get_WL3 = $CI->db->query ("select * from view_user WHERE area_code = '" . $getUserArea->area_code . "' and role = 'WL3'")->row ();
-    $layer_three_date = date ("Y-m-d H:i:s", strtotime ("+" . $pending_days . " day", strtotime ($layer_two_date)));
+        $get_WL3 = $CI->db->query ("select * from view_user WHERE area_code = '" . $getUserArea->area_code . "' and role = 'WL3'")->row ();
+        $layer_three_date = date ("Y-m-d H:i:s", strtotime ("+" . $pending_days . " day", strtotime ($layer_two_date)));
 
-    //add third layer approval - WL3
-    _add ('t_order_approval_track', array(
-        "order_id" => $order_id,
-        "approve_order" => 3,
-        "approve_level" => 3,
-        "approve_title" => 'WL3',
-        "approve_status" => 'inactive',
-        "approve_by" => $get_WL3->nip,
-        "approve_name" => $get_WL3->nama,
-        "approve_due_date" => $layer_three_date
-    ));
+        //add third layer approval - WL3
+        _add ('t_order_approval_track', array(
+            "order_id" => $order_id,
+            "approve_order" => 3,
+            "approve_level" => 3,
+            "approve_title" => 'WL3',
+            "approve_status" => 'inactive',
+            "approve_by" => $get_WL3->nip,
+            "approve_name" => $get_WL3->nama,
+            "approve_due_date" => $layer_three_date
+        ));
+        }
+
     }
 
 function get_vendor_name($vendor_code)

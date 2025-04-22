@@ -136,6 +136,117 @@
         <h3 class="card-title" style="font-weight: 600;color: #FFF;">Approval History</h3>
       </div>
       <div class="card-body">
+        <!-- start widget -->
+        <div class="container-fluid position-relative py-4">
+
+          <!-- Line start -->
+          <div class="position-absolute start-0 end-0" style="top: 60px; z-index: 0;">
+            <!-- Garis dasar -->
+            <div class="mx-auto position-relative"
+              style="height: 4px; background-color: #ccc; width: calc(100% - 20%); border-radius: 2px;">
+              <!-- Garis isi/progress -->
+              <div id="progress-fill"
+                style="height: 100%; width: 0%; background-color: gold; position: absolute; top: 0; left: 0; border-radius: 2px; transition: width 0.5s ease;">
+              </div>
+            </div>
+          </div>
+          <!-- Line end -->
+
+          <!-- Step Flow -->
+          <div class="d-flex justify-content-between align-items-start position-relative flex-wrap" style="z-index: 1;">
+
+            <!-- Step 1 -->
+            <div class="text-center flex-fill">
+              <div
+                class="fw-bold rounded-circle step-circle bg-secondary-subtle text-primary mx-auto mb-2 d-flex align-items-center justify-content-center fs-5"
+                style="width: 70px; height: 70px; border: 2px solid #001F82;" onclick="updateProgress(0)">
+                R
+              </div>
+              <h6 class="fw-bold text-primary mb-1"><?php echo $order->requestor; ?></h6>
+              <div class="d-flex flex-column gap-0">
+                <small>Requestor</small>
+                <h9>
+                  <span class="badge text-primary" style="background-color: #DDEEFF;">
+                    <?php echo myDate ($order->time_add); ?>
+                </h9>
+              </div>
+            </div>
+
+            <!-- Step 2 -->
+            <div class="text-center flex-fill">
+              <div
+                class="fw-bold rounded-circle step-circle text-dark mx-auto mb-2 d-flex align-items-center justify-content-center fs-5"
+                style="width: 70px; height: 70px; border: 2px solid chocolate; background-color:rgb(238, 226, 56)"
+                onclick="updateProgress(1)">
+                WL1
+              </div>
+              <h6 class="fw-bold text-primary mb-1">
+                <?php echo $order->status == 'auto_approved' ? 'SGSS System' : ' '; ?>
+              </h6>
+              <div class="d-flex flex-column gap-0">
+                <small><?php echo $order->status == 'auto_approved' ? 'Auto Approved' : ' '; ?></small>
+                <h9>
+                  <span class="badge text-primary" style="background-color: #DDEEFF;">
+                    <?php echo myDate ($order->time_add); ?>
+                </h9>
+              </div>
+            </div>
+
+            <!-- Step 3 -->
+            <div class="text-center flex-fill">
+              <div
+                class="fw-bold rounded-circle step-circle bg-secondary-subtle text-primary mx-auto mb-2 d-flex align-items-center justify-content-center fs-5"
+                style="width: 70px; height: 70px; border: 2px solid #001F82;" onclick="updateProgress(2)">
+                WL2
+              </div>
+              <h6 class="fw-bold text-primary mb-1">
+                <?php echo $order->status != 'auto_approved' ? 'Auto Approved' : ' '; ?></h6>
+              <div class="d-flex flex-column gap-0">
+                <small>Inactive</small>
+                <h9>
+                  <span class="badge text-primary" style="background-color: #DDEEFF;">
+                    Due Date: 14/04/2025
+                </h9>
+              </div>
+            </div>
+
+            <!-- Step 4 -->
+            <div class="text-center flex-fill">
+              <div
+                class="fw-bold rounded-circle step-circle bg-secondary-subtle text-primary mx-auto mb-2 d-flex align-items-center justify-content-center fs-5"
+                style="width: 70px; height: 70px; border: 2px solid #001F82;" onclick="updateProgress(3)">
+                WL3
+              </div>
+              <h6 class="fw-bold text-primary mb-1">Zulfakar Ali</h6>
+              <div class="d-flex flex-column gap-0">
+                <small>Inactive</small>
+                <h9>
+                  <span class="badge text-primary" style="background-color: #DDEEFF;">
+                    Due Date: 16/04/2025
+                </h9>
+              </div>
+            </div>
+
+            <!-- Step 5 -->
+            <div class="text-center flex-fill">
+              <div
+                class="rounded-circle step-circle bg-white text-success mx-auto mb-2 d-flex align-items-center justify-content-center"
+                style="width: 70px; height: 70px; border: 2px solid green;" onclick="updateProgress(4)">
+                <i class="bi bi-send-check-fill fs-3"></i>
+              </div>
+              <h6 class="fw-bold text-success mb-1">Nama?</h6>
+              <div class="d-flex flex-column gap-0">
+                <small>Approved</small>
+                <h9>
+                  <span class="badge text-white" style="background-color: green;">
+                    09/04/2025
+                </h9>
+              </div>
+            </div>
+
+          </div>
+        </div>
+        <!-- end widget -->
         <table class="table table-bordered" style="width:100%">
           <thead>
             <tr>
@@ -151,7 +262,8 @@
             { ?>
               <tr>
                 <td style="vertical-align: middle;text-align: center;">
-                  <?php echo $row->approve_title == "WL1" ? "WL1 / Line Manager" : $row->approve_title; ?></td>
+                  <?php echo $row->approve_title == "WL1" ? "WL1 / Line Manager" : $row->approve_title; ?>
+                </td>
                 <td style="vertical-align: middle;text-align: center;"><?php echo $row->nama; ?></td>
                 <td style="vertical-align: middle;text-align: center;">
                   <?php echo $row->approve_status == 'pending' ? 'Waiting for Approval' : $row->approve_status; ?>

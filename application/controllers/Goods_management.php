@@ -159,6 +159,7 @@ class Goods_management extends CI_Controller
 		where t_stock_planned_request.id = '$id'
 		")->result ();
 
+
 		$data['purchase_reason'] = $this->db->get ("m_purchase_reason")->result ();
 		$data['user_list'] = $this->db->get ("m_employee")->result ();
 		$data['area'] = $this->db->get_where ("m_employee_area", array(
@@ -169,13 +170,17 @@ class Goods_management extends CI_Controller
 			"planned_id" => $id,
 		))->row ();
 
+		$detail = $this->db->get_where ("t_stock_planned_request", array(
+			"id" => $id,
+		))->row ();
+
 		if (! $exist)
 			{
 			_add ("t_order", array(
 				"planned_id" => $id,
 				"approval_category" => 'normal',
 				"is_approval_required" => 0,
-				"week" => $data['order']->week
+				"week" => $detail->week
 			));
 			}
 
@@ -560,7 +565,7 @@ class Goods_management extends CI_Controller
 			"order_status" => 1
 		), array("id" => $planned_id));
 
-		generate_approval_track ($order_id, $this->session->userdata ('user_nip'));
+		generate_approval_track ($order_id, $this->session->userdata ('user_nip'), $status);
 
 		_update ("m_master_data_material", array(
 			"recent_transactions" => $request_id
@@ -1077,7 +1082,7 @@ class Goods_management extends CI_Controller
 			$gross_req = $this->input->post ('gross_requirement');
 
 			// $get_last_week = date ('W', strtotime ('December 28th'));
-			$get_last_week = $get_initial_week + 6;
+			$get_last_week = $get_initial_week + 2;
 			$total_data = array();
 
 			for ($i = $get_initial_week; $i <= $get_last_week; $i++)
