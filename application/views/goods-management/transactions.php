@@ -1,6 +1,36 @@
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
 <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+<link rel="stylesheet"
+  href="https://cdn.jsdelivr.net/npm/select2-bootstrap-5-theme@1.3.0/dist/select2-bootstrap-5-theme.min.css" />
 <style>
+    
+    #modal-add .select2-container--bootstrap-5 .select2-selection {
+        width: 100%;
+        min-height: calc(1.5em + .75rem + 2px);
+        padding: .375rem .75rem;
+        font-family: inherit;
+        font-size: 1rem;
+        font-weight: 400;
+        line-height: 1.5;
+        color: #212529;
+        background-color: #fff;
+        border: 1px solid #ced4da;
+        border-radius: .25rem;
+        transition: border-color .15s ease-in-out, box-shadow .15s ease-in-out;
+        -webkit-appearance: none;
+        -moz-appearance: none;
+        appearance: none;
+        height: 58px;
+    }
+
+    #modal-add .select2-container--bootstrap-5 .select2-selection--single .select2-selection__rendered {
+        display: block;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+        margin-top: 18px;
+    }
+
     .flatpickr-calendar {
         background-color: rgb(255, 255, 255) !important;
     }
@@ -208,9 +238,21 @@
                                     <i class="fas fa-plus"></i>
                                 </button>
                                 
+                                <!-- <div class="col-6">
+                                    <div class="form-floating mb-3">
+                                        <select class="form-select item-select" name="item[]">
+                                            <option value="">-- All Item --</option>
+                                            <?php foreach ($item_list as $k => $v) { ?>
+                                                <option value="<?= $v->id ?>"><?= $v->item_name ?></option>
+                                            <?php } ?>
+                                        </select>
+                                        <label class="fw-bold text-primary" style="font-size: 14px;">Item</label>
+                                    </div>
+                                </div> -->
+                                
                                 <div class="col-6">
                                     <div class="form-floating mb-3">
-                                        <select id="filterItem" class="form-select" name="item[]">
+                                        <select id="filterItem" class="form-select item-select modal-select" name="item[]">
                                             <option value="">-- All Item --</option>
                                             <?php foreach ($item_list as $k => $v)
                                             {
@@ -341,10 +383,26 @@
             $(this).closest(".search-row").remove();
         });
 
+        // $('#filterItem').select2({
+        //     theme: "bootstrap-5",
+        //     width: $(this).data('width') ? $(this).data('width') : $(this).hasClass('w-100') ? '100%' : 'style',
+        //     placeholder: $(this).data('placeholder'),
+        // });
+
         $('#filterItem').select2({
             theme: "bootstrap-5",
             width: $(this).data('width') ? $(this).data('width') : $(this).hasClass('w-100') ? '100%' : 'style',
             placeholder: $(this).data('placeholder'),
+            dropdownParent: $('#addContainer')
+        });
+
+        $('#modal-add').on('shown.bs.modal', function () {
+            $('.modal-select').select2({
+                theme: 'bootstrap-5',
+                dropdownParent: $('#modal-add'),
+                placeholder: "-- All Item --",
+                width: '100%',
+            });
         });
 
         // $('#filterUom').select2({
