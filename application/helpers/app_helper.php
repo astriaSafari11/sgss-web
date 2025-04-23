@@ -438,7 +438,9 @@ function email_body($subject, $body)
 										<h3 style="font-family: Arial, Helvetica, sans-serif; font-size:18px; color:#000;">
 										' . $subject . '</h3>
 										' . $body . '
-										</br></br>										
+										</br></br>			
+										
+										<a href="http://ivs-dev1.southeastasia.cloudapp.azure.com:8080/sgss-web/" style="font-family:Arial, Helvetica, sans-serif; color:#fff; font-size:12px;">SGSS LINK</a>
 									</p>
 									</td>
 									<td width="50" valign="top" align="top">&nbsp;</td>
