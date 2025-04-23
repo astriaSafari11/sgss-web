@@ -139,7 +139,7 @@ class Goods_management extends CI_Controller
 
 		// $query =  $this->db->get_where('t_stock_planned_request',array("order_status" => NULL))->result();
 
-		$count = $this->db->get_where ('t_stock_planned_request', array("order_status" => 0, "type" => 'goods'))->num_rows ();
+		$count = $this->db->get_where ('t_stock_planned_request', array("order_status" => 0, "type" => 'goods', "status !=" => "ignored"))->num_rows ();
 		$feedback = $this->db->get_where ('t_order', array("is_approved" => 1, "is_feedback" => 0))->num_rows ();
 
 		$data['feedback_list'] = $query;
@@ -456,7 +456,7 @@ class Goods_management extends CI_Controller
 				"status" => 'ignored'
 			), array("id" => $id));
 
-			generate_approval_track ($data['order_detail']->id, $this->session->userdata ('user_nip'));
+			generate_approval_track ($data['order_detail']->id, $this->session->userdata ('user_nip'), 'rejected');
 			}
 
 		$data['detail'] = $this->db->get_where ("t_order_detail", array(
@@ -984,6 +984,67 @@ class Goods_management extends CI_Controller
 			INNER JOIN m_master_data_vendor ON m_master_data_vendor.vendor_code = m_vendor_material.vendor_code
 			where item_code = '$order_detail->item_code'")->result ();
 			}
+		else if (isset ($_POST['submit_vendor']))
+			{
+			$order_id = $this->input->post ('order_id');
+			$id = $this->input->post ('vendor');
+
+			$order = $this->db->get_where ("t_order", array(
+				"id" => $order_id
+			))->row ();
+
+			$order_detail = $this->db->get_where ("t_order_detail", array(
+				"order_id" => $order_id
+			))->row ();
+
+			$threshold = $this->db->get_where ("m_variable_settings", array(
+				"item_id" => $order_detail->item_id
+			))->row ()->min_threshold;
+
+			$planned = $this->db->get_where ("t_stock_planned_request", array(
+				"id" => $order->planned_id
+			))->row ();
+
+			$planned_price = $this->db->get_where ("m_vendor_material", array(
+				"vendor_code" => $planned->vendor_code,
+				"item_code" => $planned->item_code
+			))->row ();
+
+
+			$vendor = $this->db->get_where ("m_vendor_material", array(
+				"vendor_code" => $id,
+				"item_code" => $order_detail->item_code
+			))->row ();
+
+			$total_price = $vendor->price_per_uom * $order_detail->qty;
+
+			$data = array(
+				"vendor_code" => $vendor->vendor_code,
+				"uom_price" => $vendor->price_per_uom,
+				"total_price" => $total_price,
+				"adjustment" => 'vendor'
+			);
+
+			_update ("t_order_detail", $data, array(
+				"id" => $order_detail->id
+			));
+
+			$data['order'] = $this->db->get_where ("t_order", array(
+				"id" => $order_id,
+			))->row ();
+
+			$data['detail'] = $this->db->get_where ("t_order_detail", array(
+				"order_id" => $order_id,
+			))->row ();
+
+			$data['vendor'] = $this->db->get_where ("m_master_data_vendor", array(
+				"vendor_code" => $data['detail']->vendor_code,
+			))->row ();
+
+			$data['vendor_list'] = $this->db->query ("select * from m_vendor_material 
+			INNER JOIN m_master_data_vendor ON m_master_data_vendor.vendor_code = m_vendor_material.vendor_code
+			where item_code = '$order_detail->item_code'")->result ();
+			}
 		else
 			{
 			$reqId = 'REQ' . date ("dmY");
@@ -1297,19 +1358,44 @@ class Goods_management extends CI_Controller
 			{
 			if ($this->input->post ('keyword') != '')
 				{
-				$keyword = "AND (item_code LIKE '%" . $this->input->post ('keyword') . "%' OR item_name LIKE '%" . $this->input->post ('keyword') . "%')";
+				$keyword = "(item_code LIKE '%" . $this->input->post ('keyword') . "%' OR item_name LIKE '%" . $this->input->post ('keyword') . "%')";
 				}
 			if ($this->input->post ('item') != '')
 				{
-				$item = "AND id = '" . $this->input->post ('item') . "'";
+				$item_list = implode (",", $this->input->post ('item'));
+				if (! empty ($keyword))
+					{
+					$item = "AND id IN (" . $item_list . ")";
+					}
+				else
+					{
+					$item = "id IN (" . $item_list . ")";
+					}
 				}
 
 			if ($this->input->post ('status') != '')
 				{
-				$status = "AND usage_status = '" . $this->input->post ('status') . "'";
+				if (! empty ($keyword) || ! empty ($item))
+					{
+					$status = "AND usage_status = '" . $this->input->post ('status') . "'";
+					}
+				else
+					{
+					$status = "usage_status = '" . $this->input->post ('status') . "'";
+					}
 				}
 
-			$week = date ("W");
+			if ($this->input->post ('transactions') != '')
+				{
+				if (! empty ($keyword) || ! empty ($item) || ! empty ($status))
+					{
+					$trx = "AND transaction_id = '" . $this->input->post ('transactions') . "'";
+					}
+				else
+					{
+					$trx = "transaction_id = '" . $this->input->post ('transactions') . "'";
+					}
+				}
 
 			$data['param_search'] = array(
 				'keyword' => $this->input->post ('keyword'),
@@ -1318,15 +1404,20 @@ class Goods_management extends CI_Controller
 				'area' => $this->input->post ('area'),
 			);
 
-			$data['item'] = $this->db->query ("
-					select * from view_average_usage
-					")->result ();
+			if (! empty ($keyword) || ! empty ($item) || ! empty ($status) || ! empty ($trx))
+				{
+				$search = 'WHERE ' . $keyword . ' ' . $item . ' ' . $status . ' ' . $trx;
+				}
 
+			$data['item'] = $this->db->query ("
+					select * from view_average_usage $search
+					")->result ();
 			}
+
 
 		$data['item_list'] = $this->db->query ("select * from m_master_data_material")->result ();
 		$data['area_list'] = $this->db->query ("select * from m_area")->result ();
-		$data['transactions_list'] = $this->db->query ("select * from m_area")->result ();
+		$data['transactions_list'] = $this->db->query ("select * from t_transactions")->result ();
 
 		$this->session->set_flashdata ('page_title', 'USAGE');
 		load_view ('goods-management/transactions.php', $data);
@@ -1387,9 +1478,9 @@ class Goods_management extends CI_Controller
 				$net_on_hand = $stock_on_hand - $current_safety_stock;
 
 				_update ('t_material_movement', array(
-					"usage" => $usage,
+					"usage" => str_replace (",", "", myNum ($usage)),
 					"stock_on_hand" => $stock_on_hand,
-					"current_safety_stock" => $current_safety_stock,
+					"current_safety_stock" => str_replace (",", "", myNum ($current_safety_stock)),
 					"net_on_hand" => $net_on_hand
 				), array(
 					"item_id" => $item[$i],
@@ -1419,10 +1510,10 @@ class Goods_management extends CI_Controller
 		$sheet = $spreadsheet->getActiveSheet ();
 		$index = 2;
 		$getData = $this->db->query ("
-		SELECT * FROM t_stock_planned_request 
-		INNER JOIN m_vendor_material ON m_vendor_material.item_code = t_stock_planned_request.item_code
-		INNER JOIN m_master_data_vendor ON m_master_data_vendor.vendor_code = t_stock_planned_request.vendor_code
-		WHERE order_status = 0 and type = 'goods'
+		select planned.*, material.item_group, material.size, material.uom, vendor.vendor_name from t_stock_planned_request as planned
+			INNER JOIN m_master_data_material as material ON planned.item_id = material.id
+			LEFT JOIN m_master_data_vendor as vendor ON planned.vendor_code = vendor.vendor_code
+		WHERE order_status = 0 and planned.type = 'goods' and planned.status != 'ignored'
 		")->result ();
 		$userlist = $this->db->get ("m_employee")->result ();
 
