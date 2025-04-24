@@ -202,7 +202,7 @@
                     $saving_value = myNum (($detail->qty * get_baseline_price ($detail->item_id, 'target')) - $detail->total_price);
                     $lead_time_impact = myNum ($detail->est_lead_time - $detail->lt_pr_po);
 
-                    $bg = $savings < 1 ? '#FBE2D5' : '#80f578';
+                    $bg = $savings >= 0 ? '#80f578' : '#FBE2D5';
 
                     $bg_lead_time = $lead_time_impact < 1 ? '#FBE2D5' : '#80f578';
                     ?>

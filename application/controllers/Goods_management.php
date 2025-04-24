@@ -657,6 +657,7 @@ class Goods_management extends CI_Controller
 
 		$po_gr = $this->input->post ('po_gr');
 		$is_feedback = 1;
+		$week = date ('W');
 
 		_update ("t_order", array(
 			"is_feedback" => $is_feedback,
@@ -675,7 +676,7 @@ class Goods_management extends CI_Controller
 
 		$get_stock_card = $this->db->get_where ("t_material_movement", array(
 			"item_id" => $get_order_detail->item_id,
-			"week" => $get_order->week
+			"week" => $week
 		))->row ();
 
 		$schedule_receipt = $get_stock_card->schedules_receipts + $get_order_detail->qty;
@@ -686,7 +687,7 @@ class Goods_management extends CI_Controller
 			"schedules_receipts" => $schedule_receipt
 		), array(
 			"item_id" => $get_order_detail->item_id,
-			"week" => $get_order->week
+			"week" => $week
 		));
 
 		redirect ('goods_management/order_detail/' . _encrypt ($id));
@@ -756,13 +757,40 @@ class Goods_management extends CI_Controller
 		);
 		$this->session->set_flashdata ('toast', $err);
 
-		$email_body = email_body ('Approved Order', "
-		Hi, " . $get_requestor->name . "<br>
+		if ($order->order_category == 'ignore')
+			{
+			$subject = '[SGSS - APPROVAL NEEDED] - IGNORE REQUEST APPROVED';
+			$email_body = email_body ($subject, "
+					Dear " . $get_requestor->name . ",<br>
+			
+					Your ignore order request with request Number " . $order->request_id . " is approved by your Line Manager " . $this->session->userdata ('user_name') . " <br><br>
+	
+					Check your order request status through this link : <a href=\"" . base_url () . "\">SGSS Link</a><br>
+	
+					<br><br>
+	
+					Best Regards,<br>
+					SGSS Team
+					");
+			}
+		else
+			{
+			$subject = '[SGSS - APPROVAL NEEDED] - ORDER REQUEST APPROVED';
+			$email_body = email_body ($subject, "
+				Dear " . $get_requestor->name . ",<br>
+		
+				Your order request with request Number " . $order->request_id . " is approved by your Line Manager " . $this->session->userdata ('user_name') . " <br><br>
 
-		Your order request is approved by Line Manager
-		");
+				Check your order request status through this link : <a href=\"" . base_url () . "\">SGSS Link</a><br>
 
-		send_email_notification ($get_requestor->email, 'Approved Order', $email_body);
+				<br><br>
+
+				Best Regards,<br>
+				SGSS Team
+				");
+			}
+
+		send_email_notification ($get_requestor->email, $subject, $email_body);
 
 		redirect ('goods_management/order_detail/' . _encrypt ($id));
 		}
@@ -823,13 +851,21 @@ class Goods_management extends CI_Controller
 		);
 		$this->session->set_flashdata ('toast', $err);
 
-		$email_body = email_body ('Rejected Order', "
-		Hi, " . $get_requestor->name . "<br>
+		$subject = '[SGSS - APPROVAL NEEDED] - REQUEST REJECTED';
+		$email_body = email_body ($subject, "
+				Dear " . $get_requestor->name . ",<br>
+		
+				Your order request with request number " . $order->request_id . " is rejected by your Line Manager " . $this->session->userdata ('user_name') . " <br><br>
 
-		Your order request is rejected by Line Manager
-		");
+				Check your order request status through this link : <a href=\"" . base_url () . "\">SGSS Link</a><br>
 
-		send_email_notification ($get_requestor->email, 'Rejected Order', $email_body);
+				<br><br>
+
+				Best Regards,<br>
+				SGSS Team
+				");
+
+		send_email_notification ($get_requestor->email, $subject, $email_body);
 
 		redirect ('goods_management/order_detail/' . _encrypt ($id));
 		}
@@ -1181,7 +1217,14 @@ class Goods_management extends CI_Controller
 
 				if ($i == $get_initial_week)
 					{
-					$stock_on_hand = $this->input->post ('stock_on_hand');
+					if (! empty ($this->input->post ('stock_on_hand')))
+						{
+						$stock_on_hand = $this->input->post ('stock_on_hand');
+						}
+					else
+						{
+						$stock_on_hand = $get_curr_week_data->stock_on_hand;
+						}
 					}
 				else
 					{
@@ -1197,7 +1240,17 @@ class Goods_management extends CI_Controller
 
 				$current_safety_stock = min ($stock_on_hand, $get_mat_detail->standard_safety_stock);
 				$net_on_hand = $stock_on_hand - $current_safety_stock;
-				$net_requirement = min ($stock_on_hand, 0);
+
+				if ($i == 1)
+					{
+					$check_oh = ($get_mat_detail->initial_stock + $schedule_receipt) - $actual_usage;
+					}
+				else
+					{
+					$check_oh = ($get_prev_week_data->stock_on_hand + $schedule_receipt) - $actual_usage;
+					}
+
+				$net_requirement = min ($check_oh, 0);
 
 				if ($get_stock_card->type == 'manual')
 					{
@@ -1214,6 +1267,19 @@ class Goods_management extends CI_Controller
 					{
 					$gross_req = get_avg_value ($get_mat_detail->id, $i);
 					}
+
+				$data = array(
+					'week' => $i,
+					'gross_requirement' => $gross_req,
+					'usage' => $get_curr_week_data->usage,
+					'schedules_receipts' => $schedule_receipt,
+					'stock_on_hand' => $stock_on_hand,
+					'current_safety_stock' => round ($current_safety_stock, 0),
+					'net_on_hand' => $net_on_hand,
+					'net_requirement' => $net_requirement,
+					'planned_order_receipt' => 0,
+					'planned_order_release' => 0,
+				);
 
 				if ($i == $get_initial_week)
 					{
@@ -1236,19 +1302,6 @@ class Goods_management extends CI_Controller
 						_add ('t_stock_adjustment', $adjustment);
 						}
 					}
-
-				$data = array(
-					'week' => $i,
-					'gross_requirement' => $gross_req,
-					'usage' => $get_curr_week_data->usage,
-					'schedules_receipts' => $schedule_receipt,
-					'stock_on_hand' => $stock_on_hand,
-					'current_safety_stock' => round ($current_safety_stock, 0),
-					'net_on_hand' => $net_on_hand,
-					'net_requirement' => $net_requirement,
-					'planned_order_receipt' => 0,
-					'planned_order_release' => 0,
-				);
 
 				_update ('t_material_movement', $data, array(
 					"item_id" => $get_data->item_id,
@@ -1303,12 +1356,12 @@ class Goods_management extends CI_Controller
 					if (! $exist)
 						{
 						_add ('t_stock_planned_request', $planned_release);
-						}
-					else
-						{
-						_update ('t_stock_planned_request', $planned_release, array(
-							"id" => $exist->id,
-						));
+						// 	}
+						// else
+						// 	{
+						// 	_update ('t_stock_planned_request', $planned_release, array(
+						// 		"id" => $exist->id,
+						// 	));
 						}
 					}
 				else
@@ -1486,6 +1539,13 @@ class Goods_management extends CI_Controller
 					"item_id" => $item[$i],
 					"week" => $get_current_week,
 				));
+
+				$get_stock_card = $this->db->get_where ("t_material_movement", array(
+					"item_id" => $item[$i],
+					"week" => $get_current_week + 1,
+				))->row ();
+
+				calc_usage ($get_stock_card->id);
 
 				}
 			}
