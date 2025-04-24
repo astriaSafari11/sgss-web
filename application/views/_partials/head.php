@@ -430,8 +430,37 @@
                     </a>
                   </li>
                 </ul>
-              </li>              
-              <li class="nav-item sidebar">
+              </li>
+              <li class="nav-item has-treeview">
+                <a href="#" class="nav-link sidebar">
+                  <img 
+                    src="<?= base_url('assets/dist/images/saving_icon.png'); ?>" 
+                    alt="Saving Icon" 
+                    class="brand-image icon" 
+                    style="width:30px; height:30px"
+                  />
+                  <p class="ms-1">
+                    Saving Simulator
+                    <i class="nav-arrow bi bi-chevron-right"></i>
+                  </p>
+                </a>
+                <ul class="nav nav-treeview">
+                  <li class="nav-item sidebar">
+                    <a href="<?= site_url('saving_simulator/summary'); ?>" class="nav-link">
+                      <i class="nav-icon fa-solid fa-chart-area icon"></i>
+                      <p>Saving Summary</p>
+                    </a>
+                  </li>
+                  <li class="nav-item sidebar">
+                    <a href="<?= site_url('saving_simulator/table'); ?>" class="nav-link">
+                      <i class="nav-icon fa-solid fa-table icon"></i>
+                      <p>Saving Table</p>
+                    </a>
+                  </li>
+                </ul>
+              </li>
+              
+              <!-- <li class="nav-item sidebar">
                   <a href="<?= site_url('saving_simulator'); ?>" class="nav-link d-flex align-items-center">
                       <img 
                           src="<?= base_url('assets/dist/images/saving_icon.png'); ?>" 
@@ -441,7 +470,7 @@
                       />
                       <p class="mb-0">Savings</p>  
                   </a>
-              </li>
+              </li> -->
 
 
               <li class="nav-item sidebar">
