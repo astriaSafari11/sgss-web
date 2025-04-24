@@ -440,7 +440,7 @@
                     style="width:30px; height:30px"
                   />
                   <p class="ms-1">
-                    Saving Simulator
+                    Saving Dashboard
                     <i class="nav-arrow bi bi-chevron-right"></i>
                   </p>
                 </a>
