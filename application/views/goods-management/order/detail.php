@@ -55,6 +55,16 @@
                   <label for="floatingInput">Remarks</label>
                 </div>
               </div>
+              <?php if ($order->is_feedback == 1)
+              { ?>
+                <div class="col-6">
+                  <div class="form-floating mb-3">
+                    <input type="text" class="form-control" id="floatingInput" value="<?php echo $order->po_gr_number; ?>"
+                      disabled>
+                    <label for="floatingInput">PO GR</label>
+                  </div>
+                </div>
+              <?php } ?>
               <!--end::Col-->
               <div class="col-6">
                 <div class="form-floating mb-3">
@@ -138,15 +148,32 @@
       <div class="card-body">
         <!-- start widget -->
         <div class="container-fluid position-relative py-4">
+          <?php
+          if ($order->status == 'approved' || $order->status == 'auto_approved')
+            {
+            $width = "100%";
+            $color = "#008000";
+            }
+          else if ($order->status == 'rejected')
+            {
+            $width = "100%";
+            $color = "red";
+            }
+          else
+            {
+            $width = "0%";
+            $color = "#ccc";
+            }
+          ?>
 
           <!-- Line start -->
           <div class="position-absolute start-0 end-0" style="top: 60px; z-index: 0;">
             <!-- Garis dasar -->
             <div class="mx-auto position-relative"
-              style="height: 4px; background-color: #ccc; width: calc(100% - 20%); border-radius: 2px;">
+              style="height: 4px; background-color: <?php echo $color; ?>; width: calc(100% - 20%); border-radius: 2px;opacity:50%;">
               <!-- Garis isi/progress -->
               <div id="progress-fill"
-                style="height: 100%; width: 0%; background-color: gold; position: absolute; top: 0; left: 0; border-radius: 2px; transition: width 0.5s ease;">
+                style="height: 100%; width: <?php echo $width; ?>; background-color:  <?php echo $color; ?>; position: absolute; top: 0; left: 0; border-radius: 2px; transition: width 0.5s ease;opacity:75%;">
               </div>
             </div>
           </div>
@@ -154,92 +181,207 @@
 
           <!-- Step Flow -->
           <div class="d-flex justify-content-between align-items-start position-relative flex-wrap" style="z-index: 1;">
-
             <!-- Step 1 -->
             <div class="text-center flex-fill">
               <div
-                class="fw-bold rounded-circle step-circle bg-secondary-subtle text-primary mx-auto mb-2 d-flex align-items-center justify-content-center fs-5"
-                style="width: 70px; height: 70px; border: 2px solid #001F82;" onclick="updateProgress(0)">
+                class="fw-bold rounded-circle step-circle text-primary mx-auto mb-2 d-flex align-items-center justify-content-center fs-5"
+                style="width: 70px; height: 70px; border: 1px solidrgb(116, 199, 165);background-color:#DAEAFF;"
+                onclick="updateProgress(0)">
                 R
               </div>
               <h6 class="fw-bold text-primary mb-1"><?php echo $order->requestor; ?></h6>
               <div class="d-flex flex-column gap-0">
-                <small>Requestor</small>
+                <small>requested</small>
                 <h9>
-                  <span class="badge text-primary" style="background-color: #DDEEFF;">
-                    <?php echo myDate ($order->time_add); ?>
+                  <span class="badge text-primary" style="background-color: #DAEAFF;">
+                    <?php echo mDate ($order->time_add); ?>
                 </h9>
               </div>
             </div>
 
             <!-- Step 2 -->
             <div class="text-center flex-fill">
+              <?php
+              if ($order_approval[0]->approve_status == 'approved' || $order_approval[0]->approve_status == 'auto_approved')
+                {
+                $bgcolor = "#FFF";
+                $bordercolor = "green";
+                $badge = 'text-success';
+                }
+              else if ($order_approval[0]->approve_status == 'rejected')
+                {
+                $bgcolor = "#FFF";
+                $bordercolor = "#FFA896";
+                $badge = 'text-danger';
+                }
+              else if ($order_approval[0]->approve_status == 'inactive')
+                {
+                $bgcolor = "#FFF";
+                $bordercolor = "#fa9f1d";
+                $badge = 'text-warning';
+                }
+              else
+                {
+                $bgcolor = "#DAEAFF";
+                $bordercolor = "#001F82";
+                $badge = 'text-primary';
+                }
+              ?>
               <div
-                class="fw-bold rounded-circle step-circle text-dark mx-auto mb-2 d-flex align-items-center justify-content-center fs-5"
-                style="width: 70px; height: 70px; border: 2px solid chocolate; background-color:rgb(238, 226, 56)"
+                class="fw-bold rounded-circle step-circle <?php echo $badge; ?> mx-auto mb-2 d-flex align-items-center justify-content-center fs-5"
+                style="width: 70px; height: 70px; border: 2px solid <?php echo $bordercolor; ?>; background-color:<?php echo $bgcolor; ?>"
                 onclick="updateProgress(1)">
-                WL1
+                WL 1
               </div>
-              <h6 class="fw-bold text-primary mb-1">
-                <?php echo $order->status == 'auto_approved' ? 'SGSS System' : ' '; ?>
+              <h6 class="fw-bold <?php echo $badge; ?> mb-1">
+                <?php echo $order->status == 'auto_approved' ? 'SGSS System' : $order_approval[0]->nama; ?>
               </h6>
               <div class="d-flex flex-column gap-0">
-                <small><?php echo $order->status == 'auto_approved' ? 'Auto Approved' : ' '; ?></small>
+                <small><?php echo $order->status != 'auto_approved' ? $order_approval[0]->approve_status == 'pending' ? 'Waiting for Approval' : $order_approval[0]->approve_status : 'Auto Approved'; ?></small>
                 <h9>
-                  <span class="badge text-primary" style="background-color: #DDEEFF;">
-                    <?php echo myDate ($order->time_add); ?>
+                  <span class="badge <?php echo $badge; ?>">
+                    <?php echo $order_approval[0]->approve_status == 'pending' ? mDate ($order_approval[0]->approve_due_date) : mDate ($order_approval[0]->approve_date); ?>
                 </h9>
               </div>
             </div>
 
             <!-- Step 3 -->
             <div class="text-center flex-fill">
+              <?php
+              if ($order_approval[1]->approve_status == 'approved' || $order->status == 'auto_approved')
+                {
+                $bgcolor = "#FFF";
+                $bordercolor = "green";
+                $badge = 'text-success';
+                }
+              else if ($order_approval[1]->approve_status == 'rejected')
+                {
+                $bgcolor = "#FFF";
+                $bordercolor = "#FFA896";
+                $badge = 'text-danger';
+                }
+              else if ($order_approval[1]->approve_status == 'inactive')
+                {
+                $bgcolor = "#FFF";
+                $bordercolor = "#fa9f1d";
+                $badge = 'text-warning';
+                }
+              else
+                {
+                $bgcolor = "#DAEAFF";
+                $bordercolor = "#001F82";
+                $badge = 'text-primary';
+                }
+              ?>
               <div
-                class="fw-bold rounded-circle step-circle bg-secondary-subtle text-primary mx-auto mb-2 d-flex align-items-center justify-content-center fs-5"
-                style="width: 70px; height: 70px; border: 2px solid #001F82;" onclick="updateProgress(2)">
-                WL2
+                class="fw-bold rounded-circle step-circle <?php echo $badge; ?> mx-auto mb-2 d-flex align-items-center justify-content-center fs-5"
+                style="width: 70px; height: 70px; border: 2px solid <?php echo $bordercolor; ?>; background-color:<?php echo $bgcolor; ?>"
+                onclick="updateProgress(2)">
+                WL 2
               </div>
-              <h6 class="fw-bold text-primary mb-1">
-                <?php echo $order->status != 'auto_approved' ? 'Auto Approved' : ' '; ?></h6>
+              <h6 class="fw-bold <?php echo $badge; ?> mb-1">
+                <?php echo $order->status == 'auto_approved' ? 'SGSS System' : $order_approval[1]->nama; ?>
+              </h6>
               <div class="d-flex flex-column gap-0">
-                <small>Inactive</small>
-                <h9>
-                  <span class="badge text-primary" style="background-color: #DDEEFF;">
-                    Due Date: 14/04/2025
-                </h9>
+                <small><?php echo $order->status != 'auto_approved' ? $order_approval[0]->approve_status == 'pending' ? 'Waiting for Approval' : $order_approval[0]->approve_status : 'Auto Approved'; ?></small>
+                <?php if ($order_approval[1]->approve_status != 'inactive')
+                { ?>
+                  <h9>
+                    <span class="badge <?php echo $badge; ?>">
+                      <?php echo $order_approval[1]->approve_status == 'pending' ? mDate ($order_approval[1]->approve_due_date) : mDate ($order_approval[1]->approve_date); ?>
+                  </h9>
+                <?php }
+              ?>
               </div>
             </div>
 
             <!-- Step 4 -->
             <div class="text-center flex-fill">
+              <?php
+              if ($order_approval[2]->approve_status == 'approved' || $order->status == 'auto_approved')
+                {
+                $bgcolor = "#FFF";
+                $bordercolor = "green";
+                $badge = 'text-success';
+                }
+              else if ($order_approval[2]->approve_status == 'rejected')
+                {
+                $bgcolor = "#FFF";
+                $bordercolor = "#FFA896";
+                $badge = 'text-danger';
+                }
+              else if ($order_approval[2]->approve_status == 'inactive')
+                {
+                $bgcolor = "#FFF";
+                $bordercolor = "#fa9f1d";
+                $badge = 'text-warning';
+                }
+              else
+                {
+                $bgcolor = "#DAEAFF";
+                $bordercolor = "#001F82";
+                $badge = 'text-primary';
+                }
+              ?>
               <div
-                class="fw-bold rounded-circle step-circle bg-secondary-subtle text-primary mx-auto mb-2 d-flex align-items-center justify-content-center fs-5"
-                style="width: 70px; height: 70px; border: 2px solid #001F82;" onclick="updateProgress(3)">
+                class="fw-bold rounded-circle step-circle <?php echo $badge; ?> mx-auto mb-2 d-flex align-items-center justify-content-center fs-5"
+                style="width: 70px; height: 70px; border: 2px solid <?php echo $bordercolor; ?>; background-color:<?php echo $bgcolor; ?>"
+                onclick="updateProgress(2)">
                 WL3
               </div>
-              <h6 class="fw-bold text-primary mb-1">Zulfakar Ali</h6>
+              <h6 class="fw-bold <?php echo $badge; ?> mb-1">
+                <?php echo $order->status == 'auto_approved' ? 'SGSS System' : $order_approval[2]->nama; ?>
+              </h6>
               <div class="d-flex flex-column gap-0">
-                <small>Inactive</small>
-                <h9>
-                  <span class="badge text-primary" style="background-color: #DDEEFF;">
-                    Due Date: 16/04/2025
-                </h9>
+                <small><?php echo $order->status != 'auto_approved' ? $order_approval[0]->approve_status == 'pending' ? 'Waiting for Approval' : $order_approval[0]->approve_status : 'Auto Approved'; ?></small>
+                <?php if ($order_approval[2]->approve_status != 'inactive')
+                { ?>
+                  <h9>
+                    <span class="badge <?php echo $badge; ?>">
+                      <?php echo $order_approval[2]->approve_status == 'pending' ? mDate ($order_approval[2]->approve_due_date) : mDate ($order_approval[2]->approve_date); ?>
+                  </h9>
+                <?php } ?>
               </div>
             </div>
 
             <!-- Step 5 -->
             <div class="text-center flex-fill">
+              <?php
+              if ($order->status == 'approved' || $order->status == 'auto_approved')
+                {
+                $bgcolor = "#FFF";
+                $bordercolor = "green";
+                $badge = 'text-success';
+                }
+              else if ($order->status == 'rejected')
+                {
+                $bgcolor = "#FFF";
+                $bordercolor = "#FFA896";
+                $badge = 'text-danger';
+                }
+              else
+                {
+                $bgcolor = "#DAEAFF";
+                $bordercolor = "#001F82";
+                $badge = 'text-primary';
+                }
+              ?>
               <div
-                class="rounded-circle step-circle bg-white text-success mx-auto mb-2 d-flex align-items-center justify-content-center"
-                style="width: 70px; height: 70px; border: 2px solid green;" onclick="updateProgress(4)">
+                class="fw-bold rounded-circle step-circle <?php echo $badge; ?> mx-auto mb-2 d-flex align-items-center justify-content-center fs-5"
+                style="width: 70px; height: 70px; border: 2px solid <?php echo $bordercolor; ?>; background-color:<?php echo $bgcolor; ?>"
+                onclick="updateProgress(2)">
                 <i class="bi bi-send-check-fill fs-3"></i>
               </div>
-              <h6 class="fw-bold text-success mb-1">Nama?</h6>
+              <h6 class="fw-bold <?php echo $badge; ?> mb-1">Approval Finished</h6>
               <div class="d-flex flex-column gap-0">
-                <small>Approved</small>
+                <small><?php echo $order->status != 'auto_approved' ? $order_approval[0]->approve_status == 'pending' ? 'Waiting for Approval' : $order_approval[0]->approve_status : 'Auto Approved'; ?></small>
                 <h9>
-                  <span class="badge text-white" style="background-color: green;">
-                    09/04/2025
+                  <?php if ($order->status != 'waiting_approval')
+                  { ?>
+                    <span class="badge <?php echo $badge; ?>">
+                      <?php echo $order->status != 'waiting_approval' ? $order->status == 'rejected' ? mDate ($order->rejected_date) : mDate ($order->approved_date) : '-'; ?>
+                    </span>
+                  <?php } ?>
                 </h9>
               </div>
             </div>
@@ -264,7 +406,9 @@
                 <td style="vertical-align: middle;text-align: center;">
                   <?php echo $row->approve_title == "WL1" ? "WL1 / Line Manager" : $row->approve_title; ?>
                 </td>
-                <td style="vertical-align: middle;text-align: center;"><?php echo $row->nama; ?></td>
+                <td style="vertical-align: middle;text-align: center;">
+                  <?php echo $order->status == 'auto_approved' ? 'SGSS System' : $row->nama; ?>
+                </td>
                 <td style="vertical-align: middle;text-align: center;">
                   <?php echo $row->approve_status == 'pending' ? 'Waiting for Approval' : $row->approve_status; ?>
                 </td>

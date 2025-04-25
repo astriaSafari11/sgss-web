@@ -34,7 +34,9 @@
       </div>
       <div class="card-body">
         <div class="dt-container">
-          <?php $this->load->view ('_partials/search_bar.php'); ?>
+          <form method="post" id="searchMaterial">
+            <?php $this->load->view ('_partials/search_bar.php'); ?>
+          </form>
           <table id="table-vendor" class="table table-sm table-striped table-bordered" width="100%">
             <thead style="text-align: center;white-space:nowrap;">
               <tr>
@@ -119,7 +121,7 @@
 
 <script>
   $(document).ready(function () {
-    $('#table-vendor').DataTable({
+    var table = $('#table-vendor').DataTable({
       scrollX: true,
       "processing": true,
       "serverSide": true,
@@ -137,6 +139,20 @@
       }],
       "searching": false,
       "lengthChange": false
+    });
+
+    // Submit form via AJAX
+    $('#searchMaterial').submit(function (e) {
+      e.preventDefault();
+      // table.ajax.reload(); // Reload DataTable            
+      $.ajax({
+        url: '<?= site_url ('master_data/search_material'); ?>',
+        type: 'POST',
+        data: $(this).serialize(),
+        success: function (response) {
+          table.ajax.reload(null, false); // Reload DataTable
+        }
+      });
     });
   });
 </script>

@@ -19,7 +19,7 @@
                 <!-- Filter 1 -->
                 <label for="filterBy1" class="small">Column:</label>
                 <select id="filterBy1" class="form-select form-select-sm w-auto" name="column_search[]">
-                    <option value="all">All</option>
+                    <option value="">-- select column --</option>
                     <?php foreach ($column_search as $k => $v)
                     {
                     $s = isset ($param_search['column_search']) && $param_search['column_search'] == $v ? 'selected' : '';
@@ -32,6 +32,7 @@
                 <!-- Filter 2 -->
                 <label for="filterBy2" class="small">Filter:</label>
                 <select id="filterBy2" class="form-select form-select-sm w-auto" name="column_filter[]">
+                    <option value="">-- select filter --</option>
                     <option value="like" <?php echo isset ($param_search['column_filter']) && $param_search['column_filter'] == 'like' ? 'selected' : ''; ?>>Contain</option>
                     <option value="=" <?php echo isset ($param_search['column_filter']) && $param_search['column_filter'] == '=' ? 'selected' : ''; ?>>Is</option>
                     <option value="!=" <?php echo isset ($param_search['column_filter']) && $param_search['column_filter'] == '!=' ? 'selected' : ''; ?>>Not</option>
@@ -60,9 +61,9 @@
             <button class="btn btn-outline-primary btn-sm" type="submit" name="search">
                 <i class="fas fa-search"></i>
             </button>
-            <button class="btn btn-outline-primary btn-sm" type="submit" name="reset">
+            <a href="<?php echo site_url ('master_data/material_list'); ?>" class="btn btn-outline-primary btn-sm">
                 Reset
-            </button>
+            </a>
         </div>
     </div>
     <!-- End Search Bar -->

@@ -38,10 +38,26 @@ class Master_data extends CI_Controller
 		$this->session->set_flashdata ('page_title', 'MASTER DATA VENDOR');
 		$this->load->view ('master-data/vendor-list.php');
 		}
+	public function search_material()
+		{
 
+		if (isset ($_POST['reset']))
+			{
+			$this->session->set_userdata ('search_material', array());
+			}
+		else
+			{
+			$search = array(
+				'column_search' => $this->input->post ('column_search'),
+				'column_filter' => $this->input->post ('column_filter'),
+				'keyword' => $this->input->post ('keyword'),
+			);
+			$this->session->set_userdata ('search_material', $search);
+			}
+		}
 	public function material_list()
 		{
-		$this->session->set_flashdata ('page_title', 'MASTER DATA ITEM');
+		$this->session->set_flashdata ('page_title', 'MASTER DATA MATERIAL');
 		$this->load->view ('master-data/material-list.php');
 		}
 
@@ -363,7 +379,7 @@ class Master_data extends CI_Controller
 
 	function get_master_material()
 		{
-		$search = $this->session->userdata ('search');
+		$search = $this->session->userdata ('search_material');
 		$list = $this->master_model->get_datatables ($search, 'material');
 		$data = array();
 		$no = $_POST['start'];

@@ -414,7 +414,7 @@ function email_body($subject, $body)
 										&nbsp;
 									</td>
 									<td width="640" valign="top" align="left">
-										<span style="font-family:Arial, Helvetica, sans-serif; color:#fff; font-size:12px;">SGSS NOTIFICATION</span>
+										<span style="font-family:Arial, Helvetica, sans-serif; color:#fff; font-size:12px;">' . $subject . '</span>
 									</td>
 									<td width="30" valign="top" align="center">
 										&nbsp;
@@ -435,12 +435,8 @@ function email_body($subject, $body)
 								<tr>
 									<td width="50" valign="top" align="top">&nbsp;</td>
 									<td width="600" valign="top" align="top">
-										<h3 style="font-family: Arial, Helvetica, sans-serif; font-size:18px; color:#000;">
-										' . $subject . '</h3>
 										' . $body . '
 										</br></br>			
-										
-										<a href="http://ivs-dev1.southeastasia.cloudapp.azure.com:8080/sgss-web/" style="font-family:Arial, Helvetica, sans-serif; color:#fff; font-size:12px;">SGSS LINK</a>
 									</p>
 									</td>
 									<td width="50" valign="top" align="top">&nbsp;</td>

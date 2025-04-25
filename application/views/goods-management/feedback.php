@@ -38,11 +38,10 @@
     top: -50px;
   }
 
-.unclickable {
+  .unclickable {
     pointer-events: none;
     cursor: default;
-}
-
+  }
 </style>
 
 <div class="row mb-2 justify-between">
@@ -138,7 +137,8 @@
                 <td style="vertical-align: middle;text-align: center;font-size: 14px;"><?php echo $v->qty; ?></td>
                 <td style="vertical-align: middle;text-align: center;font-size: 14px;"><?php echo $v->uom; ?></td>
                 <td style="vertical-align: middle;text-align: center;font-size: 14px;">
-                  <?php echo empty ($v->adjustment) ? 'none' : $v->adjustment; ?></td>
+                  <?php echo empty ($v->adjustment) ? 'none' : $v->adjustment; ?>
+                </td>
                 <td style="vertical-align: middle;text-align: center;font-size: 14px;">
                   <?php if ($v->order_status == 'rejected')
                   { ?>
@@ -312,7 +312,8 @@
 
       <div class="modal-footer">
         <button type="button" class="btn btn-outline-primary" data-bs-dismiss="modal">Close</button>
-        <button type="button" class="btn btn-outline-primary" id="btnExportExcel">Export Excel</button> <!-- logic belum -->
+        <button type="button" class="btn btn-outline-primary" id="btnExportExcel">Export Excel</button>
+        <!-- logic belum -->
       </div>
 
     </div>
@@ -377,7 +378,8 @@
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-outline-primary" data-bs-dismiss="modal">Close</button>
-        <button type="button" class="btn btn-outline-primary" id="btnExportExcel">Export Excel</button> <!-- logic belum -->
+        <button type="button" class="btn btn-outline-primary" id="btnExportExcel">Export Excel</button>
+        <!-- logic belum -->
       </div>
     </div>
   </div>
@@ -386,71 +388,71 @@
 <?php $this->load->view ('_partials/footer.php'); ?>
 
 <script>
-   document.addEventListener("DOMContentLoaded", function () {
-          document.querySelectorAll(".download-btn").forEach(function (btn) {
-            let fileName = btn.getAttribute("data-file");
-            let icon = btn.querySelector(".file-icon");
+  document.addEventListener("DOMContentLoaded", function () {
+    document.querySelectorAll(".download-btn").forEach(function (btn) {
+      let fileName = btn.getAttribute("data-file");
+      let icon = btn.querySelector(".file-icon");
 
-            if (localStorage.getItem(fileName) === "downloaded") {
-              icon.className = "fas fa-file-circle-check text-success";
-            }
+      if (localStorage.getItem(fileName) === "downloaded") {
+        icon.className = "fas fa-file-circle-check text-success";
+      }
 
-            btn.addEventListener("click", function () {
-              setTimeout(() => {
-                icon.className = "fas fa-file-circle-check text-success";
-                localStorage.setItem(fileName, "downloaded");
-              }, 500);
-            });
-          });
-        });
+      btn.addEventListener("click", function () {
+        setTimeout(() => {
+          icon.className = "fas fa-file-circle-check text-success";
+          localStorage.setItem(fileName, "downloaded");
+        }, 500);
+      });
+    });
+  });
 
-        function DownloadAll() {
-          let downloadLinks = document.querySelectorAll('.download-btn');
+  function DownloadAll() {
+    let downloadLinks = document.querySelectorAll('.download-btn');
 
-          downloadLinks.forEach((link, index) => {
-            setTimeout(() => {
-              let url = link.getAttribute('href');
-              let fileName = link.getAttribute('data-file');
+    downloadLinks.forEach((link, index) => {
+      setTimeout(() => {
+        let url = link.getAttribute('href');
+        let fileName = link.getAttribute('data-file');
 
-              let a = document.createElement('a');
-              a.href = url;
-              a.download = fileName;
-              document.body.appendChild(a);
-              a.click();
-              document.body.removeChild(a);
+        let a = document.createElement('a');
+        a.href = url;
+        a.download = fileName;
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
 
-              // Ubah ikon setelah download
-              let icon = link.querySelector(".file-icon");
-              icon.className = "fas fa-file-circle-check text-success";
-              localStorage.setItem(fileName, "downloaded");
-            }, index * 200);
-          });
-        }
+        // Ubah ikon setelah download
+        let icon = link.querySelector(".file-icon");
+        icon.className = "fas fa-file-circle-check text-success";
+        localStorage.setItem(fileName, "downloaded");
+      }, index * 200);
+    });
+  }
 
-        // Fungsi untuk mereset status download dan ikon
-        function resetIcons() {
-          localStorage.clear();
-          document.querySelectorAll(".download-btn .file-icon").forEach(function (icon) {
-            icon.className = "fas fa-file-pdf text-primary";
-          });
-          alert("Status download telah di-reset!");
-          location.reload();
-        }
+  // Fungsi untuk mereset status download dan ikon
+  function resetIcons() {
+    localStorage.clear();
+    document.querySelectorAll(".download-btn .file-icon").forEach(function (icon) {
+      icon.className = "fas fa-file-pdf text-primary";
+    });
+    alert("Status download telah di-reset!");
+    location.reload();
+  }
 
-        // supaya card tidak kepanjangan
-        function adjustCardHeight() {
-          document.querySelectorAll(".adjusted-card-body").forEach(cardBody => {
-            let parentCard = cardBody.closest(".card");
+  // supaya card tidak kepanjangan
+  function adjustCardHeight() {
+    document.querySelectorAll(".adjusted-card-body").forEach(cardBody => {
+      let parentCard = cardBody.closest(".card");
 
-            if (parentCard) {
-              let newHeight = parentCard.scrollHeight - 60;
-              cardBody.style.height = newHeight + "px";
-            }
-          });
-        }
+      if (parentCard) {
+        let newHeight = parentCard.scrollHeight - 60;
+        cardBody.style.height = newHeight + "px";
+      }
+    });
+  }
 
-        window.addEventListener("load", adjustCardHeight);
-        window.addEventListener("resize", adjustCardHeight);
+  window.addEventListener("load", adjustCardHeight);
+  window.addEventListener("resize", adjustCardHeight);
 
   $(document).ready(function () {
     var table = $('#example').DataTable({
@@ -505,16 +507,16 @@
           allowPointSelect: true,
           cursor: 'pointer',
           point: {
-                      events: {
-                        click: (e) => {
-                          const myModal = new bootstrap.Modal('#cost-detail', {
-                            keyboard: false
-                          });
-                          myModal.show();
-                          console.log('clicked');
-                        },
-                      }
-                    },
+            events: {
+              click: (e) => {
+                const myModal = new bootstrap.Modal('#cost-detail', {
+                  keyboard: false
+                });
+                myModal.show();
+                console.log('clicked');
+              },
+            }
+          },
           borderRadius: 8,
           dataLabels: [{
             enabled: true,
@@ -764,54 +766,54 @@
   });
 
   window.onload = function () {
-  const sidebar = document.querySelector(".app-sidebar");
-  let originalSizes = [];
+    const sidebar = document.querySelector(".app-sidebar");
+    let originalSizes = [];
 
-  if (sidebar) {
-    // Menyimpan ukuran asli dari semua chart
-    Highcharts.charts.forEach((chart, index) => {
-      if (chart) {
-        originalSizes[index] = {
-          width: chart.chartWidth,
-          height: chart.chartHeight
-        };
-      }
-    });
-
-    sidebar.addEventListener("mouseenter", function () {
+    if (sidebar) {
+      // Menyimpan ukuran asli dari semua chart
       Highcharts.charts.forEach((chart, index) => {
         if (chart) {
-          // Kurangi ukuran lebar 25%
-          let newWidth = originalSizes[index].width * 0.75;
-          let newHeight = newWidth * 1;
-          chart.setSize(newWidth, newHeight, false);
-
-          // Set margin/padding menjadi 0 dan align center
-          chart.renderTo.style.margin = '0';
-          chart.renderTo.style.padding = '0';
-          chart.renderTo.style.display = 'block';
-          chart.renderTo.style.marginLeft = 'auto';
-          chart.renderTo.style.marginRight = 'auto';
+          originalSizes[index] = {
+            width: chart.chartWidth,
+            height: chart.chartHeight
+          };
         }
       });
-    });
 
-    sidebar.addEventListener("mouseleave", function () {
-      Highcharts.charts.forEach((chart, index) => {
-        if (chart) {
-          let newWidth = originalSizes[index].width;
-          let newHeight = originalSizes[index].height;
-          chart.setSize(newWidth, newHeight, false);
+      sidebar.addEventListener("mouseenter", function () {
+        Highcharts.charts.forEach((chart, index) => {
+          if (chart) {
+            // Kurangi ukuran lebar 25%
+            let newWidth = originalSizes[index].width * 0.75;
+            let newHeight = newWidth * 1;
+            chart.setSize(newWidth, newHeight, false);
 
-          // Set margin/padding kembali ke normal
-          chart.renderTo.style.margin = '';
-          chart.renderTo.style.padding = '';
-          chart.renderTo.style.display = '';
-          chart.renderTo.style.marginLeft = '';
-          chart.renderTo.style.marginRight = '';
-        }
+            // Set margin/padding menjadi 0 dan align center
+            chart.renderTo.style.margin = '0';
+            chart.renderTo.style.padding = '0';
+            chart.renderTo.style.display = 'block';
+            chart.renderTo.style.marginLeft = 'auto';
+            chart.renderTo.style.marginRight = 'auto';
+          }
+        });
       });
-    });
-  }
-};
+
+      sidebar.addEventListener("mouseleave", function () {
+        Highcharts.charts.forEach((chart, index) => {
+          if (chart) {
+            let newWidth = originalSizes[index].width;
+            let newHeight = originalSizes[index].height;
+            chart.setSize(newWidth, newHeight, false);
+
+            // Set margin/padding kembali ke normal
+            chart.renderTo.style.margin = '';
+            chart.renderTo.style.padding = '';
+            chart.renderTo.style.display = '';
+            chart.renderTo.style.marginLeft = '';
+            chart.renderTo.style.marginRight = '';
+          }
+        });
+      });
+    }
+  };
 </script>

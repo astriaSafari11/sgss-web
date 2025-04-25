@@ -26,6 +26,30 @@ class Master_model extends CI_Model
 			$table = 'm_master_data_material';
 			$this->db->where ('type', 'goods');
 			$this->db->where ('is_active', 1);
+
+			if (isset ($p['column_search']) && $p['column_search'] != null)
+				{
+				$count = count ($p['column_search']);
+				for ($i = 0; $i < $count; $i++)
+					{
+					$column_search = $p['column_search'][$i];
+					$search = $p['keyword'][$i];
+					$filter = $p['column_filter'][$i];
+
+					if (! empty ($search) && ! empty ($column_search) && ! empty ($filter))
+						{
+						if ($filter == 'like')
+							{
+							$this->db->like ($column_search, $search);
+							}
+						else
+							{
+							$this->db->where ($column_search . " " . $filter, $search);
+							}
+						}
+
+					}
+				}
 			}
 		elseif ($type == "service")
 			{
@@ -50,61 +74,61 @@ class Master_model extends CI_Model
 				$this->db->where ('vendor_material_id', $p['vendor_material_id']);
 				}
 			}
-
 		elseif ($type == "uom_list")
-		{
+			{
 			$table = 'm_uom';
-			
-			if (!empty($_POST['id'])) { 
-				$this->db->where('id', $_POST['id']);
-				
+
+			if (! empty ($_POST['id']))
+				{
+				$this->db->where ('id', $_POST['id']);
+
+				}
+
 			}
-			
-		}
-		
 		elseif ($type == "category_list")
-		{
+			{
 			$table = 'm_category';
-			
-			if (!empty($_POST['id'])) { 
-				$this->db->where('id', $_POST['id']);
-				
-			}
-			
-		}
 
+			if (! empty ($_POST['id']))
+				{
+				$this->db->where ('id', $_POST['id']);
+
+				}
+
+			}
 		elseif ($type == "factory_list")
-		{
+			{
 			$table = 'm_factory';
-			
-			if (!empty($_POST['id'])) { 
-				$this->db->where('id', $_POST['id']);
-				
-			}
-			
-		}
 
+			if (! empty ($_POST['id']))
+				{
+				$this->db->where ('id', $_POST['id']);
+
+				}
+
+			}
 		elseif ($type == "purchase_reason")
-		{
+			{
 			$table = 'm_purchase_reason';
-			
-			if (!empty($_POST['id'])) { 
-				$this->db->where('id', $_POST['id']);
-				
-			}
-			
-		}
 
-		elseif ($type == "item_group")
-		{
-			$table = 'm_item_category';
-			
-			if (!empty($_POST['id'])) { 
-				$this->db->where('id', $_POST['id']);
-				
+			if (! empty ($_POST['id']))
+				{
+				$this->db->where ('id', $_POST['id']);
+
+				}
+
 			}
-			
-		}
+		elseif ($type == "item_group")
+			{
+			$table = 'm_item_category';
+
+			if (! empty ($_POST['id']))
+				{
+				$this->db->where ('id', $_POST['id']);
+
+				}
+
+			}
 
 		$this->db->from ($table);
 
