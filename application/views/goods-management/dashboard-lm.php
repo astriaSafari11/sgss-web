@@ -73,14 +73,18 @@
                   <?php echo approval_category ($v->approval_category, $v->order_category, $v->purchase_reason, $v->remarks); ?>
                 </td>
                 <td style="vertical-align: middle;text-align: center;">
-                  <a href="<?= site_url ('goods_management/order_detail/' . _encrypt ($v->order_id)); ?>"
+                <a href="<?= site_url ('goods_management/order_detail/' . _encrypt ($v->order_id)); ?>"
+                    class="btn btn-sm btn-outline-primary" style="font-weight: 600; border-radius: 50px; width: 200px;">
+                    FEEDBACK
+                  </a>  
+                <!-- <a href="<?= site_url ('goods_management/order_detail/' . _encrypt ($v->order_id)); ?>"
                     class="btn btn-sm btn-outline-primary" style="font-weight: 600; border-radius: 50px; width: 150px;">
                     APPROVE
                   </a>
                   <a class="btn btn-sm btn-outline-danger" style="font-weight: 600; border-radius: 50px; width: 150px;"
                     data-bs-toggle="modal" data-bs-target="#modal-reject-value-<?php echo $v->id; ?>">
                     REJECT
-                  </a>
+                  </a> -->
                 </td>
               </tr>
               <div class="modal fade" id="modal-reject-value-<?php echo $v->id; ?>" tabindex="-1"

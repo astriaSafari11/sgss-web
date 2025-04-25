@@ -54,7 +54,7 @@
       <ol class="breadcrumb float-sm-end">
         <li class="breadcrumb-item"><a href="#">Home</a></li>
         <li class="breadcrumb-item" aria-current="page">Master Data</li>
-        <li class="breadcrumb-item active" aria-current="page">Add Material</li>
+        <li class="breadcrumb-item active" aria-current="page">Add Item</li>
       </ol>
     </div>
   </div>
@@ -69,7 +69,7 @@
               <div class="form-floating mb-3">
                 <input type="text" class="form-control" id="floatingInput" placeholder="material Code" name="item_code"
                   value="auto filled" disabled>
-                <label for="floatingInput" class="fw-bold text-primary">Material Code <span
+                <label for="floatingInput" class="fw-bold text-primary">Item Code <span
                     class="required-asterisk">*</span></label>
                 <div class="invalid-feedback">This field is required.</div>
               </div>
@@ -79,7 +79,7 @@
             <div class="col-3">
               <div class="form-floating mb-3">
                 <input type="text" class="form-control" id="floatingInput" name="item_name" required>
-                <label for="floatingInput" class="fw-bold text-primary">Material Name <span
+                <label for="floatingInput" class="fw-bold text-primary">Item Name <span
                     class="required-asterisk">*</span></label>
                 <div class="invalid-feedback">This field is required.</div>
               </div>
@@ -183,14 +183,14 @@
             <div class="col-3">
               <div class="form-floating mb-3">
                 <input type="number" class="form-control" id="floatingInput" name="lt_pr_po" required>
-                <label for="floatingInput" class="fw-bold text-primary">Lead Time PR to PO <span
+                <label for="floatingInput" class="fw-bold text-primary">Lead Time PR to PO (days) <span
                     class="required-asterisk">*</span></label>
               </div>
             </div>
             <div class="col-3">
               <div class="form-floating mb-3">
                 <input type="number" class="form-control" id="floatingInput" name="lt_pr_to_deliv">
-                <label for="floatingInput" class="fw-bold text-primary">Lead Time PO to Deliv <span
+                <label for="floatingInput" class="fw-bold text-primary">Lead Time PO to Deliv (days) <span
                     class="required-asterisk">*</span></label>
               </div>
             </div>
@@ -303,7 +303,7 @@
               Cancel
             </a>
             <button type="submit" name="submit" class="btn btn-outline-primary"
-              style="font-weight: 600; border-radius: 50px;width:200px;" id="submitMat">Submit New Material</button>
+              style="font-weight: 600; border-radius: 50px;width:200px;" id="submitMat">Submit New Item</button>
           </div>
         </div>
         <!-- /.card-footer-->

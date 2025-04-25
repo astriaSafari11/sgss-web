@@ -41,7 +41,7 @@ class Master_data extends CI_Controller
 
 	public function material_list()
 		{
-		$this->session->set_flashdata ('page_title', 'MASTER DATA MATERIAL');
+		$this->session->set_flashdata ('page_title', 'MASTER DATA ITEM');
 		$this->load->view ('master-data/material-list.php');
 		}
 

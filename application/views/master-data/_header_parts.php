@@ -30,7 +30,7 @@
     </li>
     <li><a class="dropdown-item" href="<?= site_url ('master_data/material_list'); ?>">
         <i class="fa-solid fa-box-archive" style="margin-right:5px; margin-left: 5px;"></i>
-        Material
+        Item
       </a></li>
     <li><a class="dropdown-item" href="<?= site_url ('master_data/vendor_list'); ?>">
         <i class="fa-solid fa-address-card" style="margin-right:5px; margin-left: 5px;"></i>

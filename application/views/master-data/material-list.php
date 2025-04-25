@@ -13,7 +13,7 @@
     <ol class="breadcrumb float-sm-end">
       <li class="breadcrumb-item"><a href="#">Home</a></li>
       <li class="breadcrumb-item" aria-current="page">Master Data</li>
-      <li class="breadcrumb-item active" aria-current="page">Material List</li>
+      <li class="breadcrumb-item active" aria-current="page">Item List</li>
     </ol>
   </div>
 </div>
@@ -28,7 +28,7 @@
             class="btn btn-sm btn-outline-primary position-relative"
             style="font-weight: 600; border-radius: 50px; white-space:nowrap">
             <i class="fa-solid fa-circle-plus"></i>
-            Add New Material
+            Add New Item
           </a>
         </div>
       </div>

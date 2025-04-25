@@ -47,12 +47,12 @@
   </div>
   <div class="col-sm-6">
     <div class="d-flex justify-content-end">
-      <button type="button" class="btn btn-sm btn-outline-primary"
+      <!-- <button type="button" class="btn btn-sm btn-outline-primary"
         style="font-weight: 600; border-radius: 50px;margin-right:5px;" data-bs-toggle="modal"
         data-bs-target="#modal-add-material">
         <i class="fa-solid fa-plus"></i>
         Add Material to Vendor
-      </button>
+      </button> -->
       <a href="<?= site_url ('master_data/edit_vendor/' . _encrypt ($vendor->id)); ?>"
         class="btn btn-sm btn-outline-primary"
         style="font-weight: 600; border-radius: 50px; width: 150px;margin-right:5px;">
@@ -215,11 +215,21 @@
   </div>
 </div>
 <div class="row mb-2">
-  <div class="col-sm-3">
-    <a href="<?= site_url ('master_data/vendor_list'); ?>" class="btn btn-primary position-relative"
-      style="font-weight: 600; white-space:nowrap;">
-      Item List
-    </a>
+  <div class="d-flex justify-content-between align-items-center">
+    <div>
+      <a href="<?= site_url('master_data/vendor_list'); ?>" class="btn btn-primary position-relative"
+        style="font-weight: 600; white-space: nowrap;">
+        Item List
+      </a>
+    </div>
+    <div>
+      <button type="button" class="btn btn-sm btn-outline-primary"
+        style="font-weight: 600; border-radius: 50px; margin-left: 5px;" data-bs-toggle="modal"
+        data-bs-target="#modal-add-material">
+        <i class="fa-solid fa-plus"></i>
+        Add Material to Vendor
+      </button>
+    </div>
   </div>
 </div>
 <!--begin::Row-->
