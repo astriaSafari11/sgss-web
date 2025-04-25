@@ -277,15 +277,15 @@
       <!--begin::Sidebar-->
       <aside class="app-sidebar bg-white shadow" data-bs-theme="light">
         <!--begin::Sidebar Brand-->
-        <div class="sidebar-brand">
+        <div class="sidebar-brand" style="cursor: none;">
           <!--begin::Brand Link-->
-          <a href="#" class="brand-link">
+          <a href="#" class="brand-link" style="cursor: none;">
             <!--begin::Brand Image-->
             <img
               src="<?= base_url('assets/dist/images/logos/unilever-logo.png');?>"
               alt="Unilever Logo"
               class="brand-image"
-              style="margin-left: 20px;"
+              style="margin-left: 20px; cursor: none;"
             />
             <!--end::Brand Image-->
             <!--begin::Brand Text-->
@@ -296,7 +296,7 @@
                 style="display: inline-block;
                 vertical-align: middle;
                 height: 24px;
-                margin-left:21px;">
+                margin-left:21px; cursor: none;">
             </span>
 
             <!--end::Brand Text-->

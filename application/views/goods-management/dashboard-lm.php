@@ -74,9 +74,9 @@
                 </td>
                 <td style="vertical-align: middle;text-align: center;">
                 <a href="<?= site_url ('goods_management/order_detail/' . _encrypt ($v->order_id)); ?>"
-                    class="btn btn-sm btn-outline-primary" style="font-weight: 600; border-radius: 50px; width: 200px;">
+                    class="btn btn-sm btn-outline-primary" style="font-weight: 600; border-radius: 50px; width: 150px;">
                     FEEDBACK
-                  </a>  
+                  </a>
                 <!-- <a href="<?= site_url ('goods_management/order_detail/' . _encrypt ($v->order_id)); ?>"
                     class="btn btn-sm btn-outline-primary" style="font-weight: 600; border-radius: 50px; width: 150px;">
                     APPROVE

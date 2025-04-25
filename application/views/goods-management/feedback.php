@@ -32,7 +32,7 @@
   .resetDownload {
     font-size: 12px;
     padding: 5px 10px;
-    margin-left: 70%;
+    margin-left: calc(100% - 30%);
     margin-bottom: 10px;
     position: relative;
     top: -50px;
@@ -101,10 +101,10 @@
                       </button>                       
                     </div>
                   </div> -->
-      <div class="card-body adjusted-card-body">
+      <div class="card-body adjusted-card-body" style="table-layout: auto;">
         <?php $this->load->view ('_partials/search_bar.php'); ?>
 
-        <table id="example" class="table table-sm" style="width:100%" cellspacing="0">
+        <table id="example" class="table table-sm" style="width:100%;" cellspacing="0">
           <thead>
             <tr>
               <th style="color: #fff;background-color: #001F82;text-align: center;">Requested Date</th>
@@ -410,6 +410,10 @@
     let downloadLinks = document.querySelectorAll('.download-btn');
 
     downloadLinks.forEach((link, index) => {
+      let fileName = link.getAttribute('data-file');
+      let isDownloaded = localStorage.getItem(fileName);
+      
+      if (!isDownloaded) {
       setTimeout(() => {
         let url = link.getAttribute('href');
         let fileName = link.getAttribute('data-file');
@@ -426,6 +430,7 @@
         icon.className = "fas fa-file-circle-check text-success";
         localStorage.setItem(fileName, "downloaded");
       }, index * 200);
+    }
     });
   }
 
