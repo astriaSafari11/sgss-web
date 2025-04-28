@@ -158,20 +158,11 @@
                       Auto Approved
                     </button>
                   <?php } ?>
-                  <?php if ($v->order_status == 'approved')
+                  <?php if ($v->order_status == 'finished')
                   { ?>
-                    <?php if ($v->is_feedback == 1)
-                    { ?>
-                      <button class="btn btn-sm btn-warning" style="font-weight: 600; border-radius: 50px; width: 100%;">
-                        Finished
-                      </button>
-                    <?php }
-                  else
-                    { ?>
-                      <button class="btn btn-sm btn-success" style="font-weight: 600; border-radius: 50px; width: 100%;">
-                        Approved
-                      </button>
-                    <?php } ?>
+                    <button class="btn btn-sm btn-warning" style="font-weight: 600; border-radius: 50px; width: 100%;">
+                      Finished
+                    </button>
                   <?php } ?>
                 </td>
                 <td style="vertical-align: middle; text-align: center;">

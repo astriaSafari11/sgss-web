@@ -324,7 +324,7 @@ function calc_sched_receipt($mat_mov_id, $schedule_receipt)
 
     $gross_req = $get_data->gross_requirement;
     // $get_last_week = date ('W', strtotime ('December 28th'));
-    $get_last_week = $get_initial_week + 2;
+    $get_last_week = $get_initial_week + 5;
 
     for ($i = $get_initial_week; $i <= $get_last_week; $i++)
         {
@@ -352,7 +352,7 @@ function calc_sched_receipt($mat_mov_id, $schedule_receipt)
             $gross_req = get_avg_value ($get_mat_detail->id, $i);
             }
 
-        $actual_usage = $get_curr_week_data->usage;
+        $actual_usage = $i > $get_initial_week ? $get_curr_week_data->gross_requirement : $get_curr_week_data->usage;
 
         if ($i == $get_initial_week)
             {
@@ -487,7 +487,7 @@ function calc_usage($mat_mov_id)
 
     $gross_req = $get_data->gross_requirement;
     // $get_last_week = date ('W', strtotime ('December 28th'));
-    $get_last_week = $get_initial_week + 2;
+    $get_last_week = $get_initial_week + 5;
 
     for ($i = $get_initial_week; $i <= $get_last_week; $i++)
         {
@@ -515,7 +515,7 @@ function calc_usage($mat_mov_id)
             $gross_req = get_avg_value ($get_mat_detail->id, $i);
             }
 
-        $actual_usage = $get_curr_week_data->gross_requirement;
+        $actual_usage = $i > $get_initial_week ? $get_curr_week_data->gross_requirement : $get_curr_week_data->usage;
 
         $schedule_receipt = $get_curr_week_data->schedules_receipts;
 

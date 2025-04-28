@@ -1181,7 +1181,7 @@ class Goods_management extends CI_Controller
 			$gross_req = $this->input->post ('gross_requirement');
 
 			// $get_last_week = date ('W', strtotime ('December 28th'));
-			$get_last_week = $get_initial_week + 2;
+			$get_last_week = $get_initial_week + 5;
 			$total_data = array();
 
 			for ($i = $get_initial_week; $i <= $get_last_week; $i++)
@@ -1213,7 +1213,7 @@ class Goods_management extends CI_Controller
 					$gross_req = $get_curr_week_data->gross_requirement;
 					}
 
-				$actual_usage = empty ($get_curr_week_data->usage) || $get_curr_week_data->usage == 0 ? $gross_req : $get_curr_week_data->usage;
+				$actual_usage = $i > $get_initial_week ? $gross_req : $get_curr_week_data->usage;
 
 				$schedule_receipt = $get_curr_week_data->schedules_receipts ? $get_curr_week_data->schedules_receipts : 0;
 
@@ -1475,77 +1475,72 @@ class Goods_management extends CI_Controller
 
 	public function add_transaction()
 		{
-		if (isset ($_POST['submit']))
+		$date = $this->input->post ('transactions_date');
+		$item = $this->input->post ('item');
+
+		$totalItem = count ($item);
+		foreach ($item as $k => $v)
 			{
-			$date = $this->input->post ('date');
-			$item = $this->input->post ('item');
-			$qty = $this->input->post ('qty');
+			$getMat = $this->db->get_where ("m_master_data_material", array(
+				"id" => $v['item_id'],
+			))->row ();
 
-			$totalItem = count ($item);
+			$trxId = "TRX-" . date ('ymdhis') . $v['item_id'];
+			$data = array(
+				"transaction_id" => $trxId,
+				"date" => date ("Y-m-d"),
+				"item_id" => $v['item_id'],
+				"item_code" => $getMat->item_code,
+				"qty" => $v['qty'],
+				"requestor" => $this->session->userdata ('user_name'),
+				"requestor_nip" => $this->session->userdata ('user_nip'),
 
-			for ($i = 0; $i < $totalItem; $i++)
-				{
-				$getMat = $this->db->get_where ("m_master_data_material", array(
-					"id" => $item[$i],
-				))->row ();
+			);
 
-				$trxId = "TRX-" . date ('ymdhis') . $item[$i];
-				$data = array(
-					"transaction_id" => $trxId,
-					"date" => date ("Y-m-d"),
-					"item_id" => $item[$i],
-					"item_code" => $getMat->item_code,
-					"qty" => $qty[$i],
-					"requestor" => $this->session->userdata ('user_name'),
-					"requestor_nip" => $this->session->userdata ('user_nip'),
+			_update ('m_master_data_material', array(
+				"recent_usage" => $trxId,
+			), array(
+				"id" => $v['item_id'],
+			));
 
-				);
+			_add ("t_transactions", $data);
 
-				_update ('m_master_data_material', array(
-					"recent_usage" => $trxId,
-				), array(
-					"id" => $item[$i],
-				));
+			$get_current_week = date ('W', strtotime (date ('Y-m-d')));
 
-				_add ("t_transactions", $data);
+			$getStockOnHand = $this->db->get_where ("t_material_movement", array(
+				"item_id" => $v['item_id'],
+				"week" => $get_current_week,
+			))->row ();
 
-				$get_current_week = date ('W', strtotime (date ('Y-m-d')));
+			$usage = $getStockOnHand->usage + $v['qty'];
 
-				$getStockOnHand = $this->db->get_where ("t_material_movement", array(
-					"item_id" => $item[$i],
-					"week" => $get_current_week,
-				))->row ();
+			$prevUsage = $this->db->get_where ("t_material_movement", array(
+				"item_id" => $v['item_id'],
+				"week" => $get_current_week - 1,
+			))->row ();
 
-				$usage = $getStockOnHand->usage + $qty[$i];
+			$stock_on_hand = ($prevUsage->stock_on_hand + $getStockOnHand->schedules_receipts) - $usage;
+			$current_safety_stock = min ($stock_on_hand, $getMat->standard_safety_stock);
+			$net_on_hand = $stock_on_hand - $current_safety_stock;
 
-				$prevUsage = $this->db->get_where ("t_material_movement", array(
-					"item_id" => $item[$i],
-					"week" => $get_current_week - 1,
-				))->row ();
+			_update ('t_material_movement', array(
+				"usage" => str_replace (",", "", myNum ($usage)),
+				"stock_on_hand" => $stock_on_hand,
+				"current_safety_stock" => str_replace (",", "", myNum ($current_safety_stock)),
+				"net_on_hand" => $net_on_hand
+			), array(
+				"item_id" => $v['item_id'],
+				"week" => $get_current_week,
+			));
 
-				$stock_on_hand = ($prevUsage->stock_on_hand + $getStockOnHand->schedules_receipts) - $usage;
-				$current_safety_stock = min ($stock_on_hand, $getMat->standard_safety_stock);
-				$net_on_hand = $stock_on_hand - $current_safety_stock;
+			$get_stock_card = $this->db->get_where ("t_material_movement", array(
+				"item_id" => $v['item_id'],
+				"week" => $get_current_week + 1,
+			))->row ();
 
-				_update ('t_material_movement', array(
-					"usage" => str_replace (",", "", myNum ($usage)),
-					"stock_on_hand" => $stock_on_hand,
-					"current_safety_stock" => str_replace (",", "", myNum ($current_safety_stock)),
-					"net_on_hand" => $net_on_hand
-				), array(
-					"item_id" => $item[$i],
-					"week" => $get_current_week,
-				));
-
-				$get_stock_card = $this->db->get_where ("t_material_movement", array(
-					"item_id" => $item[$i],
-					"week" => $get_current_week + 1,
-				))->row ();
-
-				calc_usage ($get_stock_card->id);
-
-				}
+			calc_usage ($get_stock_card->id);
 			}
+
 		$err = array(
 			'show' => true,
 			'type' => 'success',
@@ -1553,8 +1548,7 @@ class Goods_management extends CI_Controller
 		);
 		$this->session->set_flashdata ('toast', $err);
 
-		redirect ('goods_management/transactions');
-
+		echo 1;
 		}
 
 	public function export_goods_order_request()

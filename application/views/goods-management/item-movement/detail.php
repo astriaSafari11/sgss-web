@@ -194,11 +194,9 @@
             <td></td>
             <?php for ($i = $past_week; $i <= $up_week; $i++)
             { ?>
-              <td style="text-align: center; <?php if ($i == $current_week)
-              {
-              echo 'background-color:#DAEAFF;color: #001F82;';
-              } ?>">
-                <?php echo $item_movement[$i - 1]->gross_requirement == 0 ? '-' : myNum ($item_movement[$i - 1]->gross_requirement); ?>
+              <td
+                style="text-align: center; <?php echo $i == $current_week ? 'background-color:#DAEAFF;color: #001F82;' : ''; ?>">
+                <?php echo myNum ($item_movement[$i - 1]->gross_requirement); ?>
               </td>
             <?php } ?>
           </tr>
@@ -207,18 +205,9 @@
             <td></td>
             <?php for ($i = $past_week; $i <= $up_week; $i++)
             { ?>
-              <td style="text-align: center; <?php if ($i == $current_week)
-              {
-              echo 'background-color:#DAEAFF;color: #001F82;';
-              } ?>">
-                <?php if ($i <= $current_week)
-                { ?>
-                  <?php echo $item_movement[$i - 1]->usage == 0 ? '-' : myNum ($item_movement[$i - 1]->usage); ?>
-                <?php } ?>
-                <?php if ($i > $current_week)
-                { ?>
-                  <?php echo $item_movement[$i - 1]->gross_requirement == 0 ? '-' : myNum ($item_movement[$i - 1]->gross_requirement); ?>
-                <?php } ?>
+              <td
+                style="text-align: center; <?php echo $i == $current_week ? 'background-color:#DAEAFF;color: #001F82;' : ''; ?>">
+                <?php echo $i <= $current_week ? myNum ($item_movement[$i - 1]->usage) : myNum ($item_movement[$i - 1]->gross_requirement); ?>
               </td>
             <?php } ?>
           </tr>
@@ -227,64 +216,51 @@
             <td></td>
             <?php for ($i = $past_week; $i <= $up_week; $i++)
             { ?>
-              <td style="text-align: center; <?php if ($i == $current_week)
-              {
-              echo 'background-color:#DAEAFF;color: #001F82;';
-              } ?>">
-                <?php echo $item_movement[$i - 1]->schedules_receipts == 0 ? '-' : myNum ($item_movement[$i - 1]->schedules_receipts); ?>
+              <td
+                style=" text-align: center; <?php echo $i == $current_week ? 'background-color:#DAEAFF;color: #001F82;' : ''; ?>">
+                <?php echo myNum ($item_movement[$i - 1]->schedules_receipts); ?>
               </td>
             <?php } ?>
           </tr>
           <tr>
             <td>Stock on Hand</td>
-            <td style="text-align: center; <?php if ($i == $current_week)
-            {
-            echo 'background-color:#DAEAFF;color: #001F82;';
-            } ?>"><?php echo myNum ($material->initial_stock); ?></td>
+            <td style="text-align: center;">
+              <?php echo myNum ($material->initial_stock); ?>
+            </td>
             <?php for ($i = $past_week; $i <= $up_week; $i++)
             { ?>
-              <td style="text-align: center; <?php if ($i == $current_week)
-              {
-              echo 'background-color:#DAEAFF;color: #001F82;';
-              } ?>">
-                <?php echo $item_movement[$i - 1]->stock_on_hand == 0 ? '-' : myNum ($item_movement[$i - 1]->stock_on_hand); ?>
+              <td
+                style="text-align: center; <?php echo $i == $current_week ? 'background-color:#DAEAFF;color: #001F82;' : ''; ?>">
+                <?php echo $i <= $current_week ? myNum ($item_movement[$i - 1]->stock_on_hand)
+                  : myNum (($item_movement[$i - 2]->stock_on_hand + $item_movement[$i - 1]->schedules_receipts) - $item_movement[$i - 1]->gross_requirement); ?>
               </td>
             <?php } ?>
           </tr>
           <tr>
             <td>Current Safety Stock</td>
-            <td style="text-align: center; <?php if ($i == $current_week)
-            {
-            echo 'background-color:#DAEAFF;color: #001F82;';
-            } ?>">
+            <td style="text-align: center;">
               <?php echo myNum (min ($material->initial_stock, $material->standard_safety_stock)); ?>
             </td>
             <?php for ($i = $past_week; $i <= $up_week; $i++)
             {
             ?>
-              <td style="text-align: center; <?php if ($i == $current_week)
-              {
-              echo 'background-color:#DAEAFF;color: #001F82;';
-              } ?>">
-                <?php echo $item_movement[$i - 1]->current_safety_stock == 0 ? '-' : myNum ($item_movement[$i - 1]->current_safety_stock); ?>
+              <td
+                style="text-align: center; <?php echo $i == $current_week ? 'background-color:#DAEAFF;color: #001F82;' : ''; ?>">
+                <?php echo $i <= $current_week ? myNum ($item_movement[$i - 1]->current_safety_stock) : min ((($item_movement[$i - 2]->stock_on_hand + $item_movement[$i - 1]->schedules_receipts) - $item_movement[$i - 1]->gross_requirement), $item_movement[$i - 1]->current_safety_stock); ?>
               </td>
             <?php } ?>
           </tr>
           <tr>
             <td>Net On Hand</td>
-            <td style="text-align: center; <?php if ($i == $current_week)
-            {
-            echo 'background-color:#DAEAFF;color: #001F82;';
-            } ?>">
+            <td style="text-align: center;">
               <?php echo myNum ($material->initial_stock - $material->standard_safety_stock); ?>
             </td>
             <?php for ($i = $past_week; $i <= $up_week; $i++)
             { ?>
-              <td style="text-align: center; <?php if ($i == $current_week)
-              {
-              echo 'background-color:#DAEAFF;color: #001F82;';
-              } ?>">
-                <?php echo $item_movement[$i - 1]->net_on_hand == 0 ? '-' : myNum ($item_movement[$i - 1]->net_on_hand); ?>
+              <td
+                style="text-align: center; <?php echo $i == $current_week ? 'background-color:#DAEAFF;color: #001F82;' : ''; ?>">
+                <?php echo $i <= $current_week ? myNum ($item_movement[$i - 1]->net_on_hand)
+                  : myNum ((($item_movement[$i - 2]->stock_on_hand + $item_movement[$i - 1]->schedules_receipts) - $item_movement[$i - 1]->gross_requirement) - min ((($item_movement[$i - 2]->stock_on_hand + $item_movement[$i - 1]->schedules_receipts) - $item_movement[$i - 1]->gross_requirement), $item_movement[$i - 1]->current_safety_stock)); ?>
               </td>
             <?php } ?>
           </tr>
@@ -293,11 +269,10 @@
             <td></td>
             <?php for ($i = $past_week; $i <= $up_week; $i++)
             { ?>
-              <td style="text-align: center; <?php if ($i == $current_week)
-              {
-              echo 'background-color:#DAEAFF;color: #001F82;';
-              } ?>">
-                <?php echo $item_movement[$i - 1]->net_requirement == 0 ? '-' : myNum ($item_movement[$i - 1]->net_requirement); ?>
+              <td
+                style="text-align: center; <?php echo $i == $current_week ? 'background-color:#DAEAFF;color: #001F82;' : ''; ?>">
+                <?php echo $i <= $current_week ? myNum ($item_movement[$i - 1]->net_requirement)
+                  : myNum (min ((($item_movement[$i - 2]->stock_on_hand + $item_movement[$i - 1]->schedules_receipts) - $item_movement[$i - 1]->gross_requirement), 0)); ?>
               </td>
             <?php } ?>
           </tr>
@@ -310,7 +285,7 @@
               {
               echo 'background-color:#DAEAFF;color: #001F82;';
               } ?>">
-                <?php echo $item_movement[$i - 1]->planned_order_receipt == 0 ? '-' : myNum ($item_movement[$i - 1]->planned_order_receipt); ?>
+                <?php echo $item_movement[$i - 1]->planned_order_receipt == 0 ? '0' : myNum ($item_movement[$i - 1]->planned_order_receipt); ?>
               </td>
             <?php } ?>
           </tr>
@@ -323,7 +298,7 @@
               {
               echo 'background-color:#DAEAFF;color: #001F82;';
               } ?>">
-                <?php echo $item_movement[$i - 1]->planned_order_release == 0 ? '-' : myNum ($item_movement[$i - 1]->planned_order_release); ?>
+                <?php echo $item_movement[$i - 1]->planned_order_release == 0 ? '0' : myNum ($item_movement[$i - 1]->planned_order_release); ?>
               </td>
             <?php } ?>
           </tr>

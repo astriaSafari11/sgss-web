@@ -149,7 +149,7 @@
         <!-- start widget -->
         <div class="container-fluid position-relative py-4">
           <?php
-          if ($order->status == 'approved' || $order->status == 'auto_approved')
+          if ($order->status == 'approved' || $order->status == 'finished' || $order->status == 'auto_approved')
             {
             $width = "100%";
             $color = "#008000";
@@ -202,7 +202,7 @@
             <!-- Step 2 -->
             <div class="text-center flex-fill">
               <?php
-              if ($order_approval[0]->approve_status == 'approved' || $order_approval[0]->approve_status == 'auto_approved')
+              if ($order->status == 'finished' || $order_approval[0]->approve_status == 'approved' || $order_approval[0]->approve_status == 'auto_approved')
                 {
                 $bgcolor = "#FFF";
                 $bordercolor = "green";
@@ -252,7 +252,7 @@
             <!-- Step 3 -->
             <div class="text-center flex-fill">
               <?php
-              if ($order_approval[1]->approve_status == 'approved' || $order->status == 'auto_approved')
+              if ($order->status == 'finished' || $order_approval[1]->approve_status == 'approved' || $order->status == 'auto_approved')
                 {
                 $bgcolor = "#FFF";
                 $bordercolor = "green";
@@ -302,7 +302,7 @@
             <!-- Step 4 -->
             <div class="text-center flex-fill">
               <?php
-              if ($order_approval[2]->approve_status == 'approved' || $order->status == 'auto_approved')
+              if ($order->status == 'finished' || $order_approval[2]->approve_status == 'approved' || $order->status == 'auto_approved')
                 {
                 $bgcolor = "#FFF";
                 $bordercolor = "green";
@@ -351,7 +351,7 @@
             <!-- Step 5 -->
             <div class="text-center flex-fill">
               <?php
-              if ($order->status == 'approved' || $order->status == 'auto_approved')
+              if ($order->status == 'finished' || $order->status == 'approved' || $order->status == 'auto_approved')
                 {
                 $bgcolor = "#FFF";
                 $bordercolor = "green";

@@ -209,88 +209,98 @@
 </div>
 </div>
 <!--end::Row-->
-<form action="<?= site_url ('goods_management/add_transaction'); ?>" method="post" class="needs-validation" novalidate>
-    <input type="hidden" name="item_id" value="<?php echo $material->id; ?>">
-    <div class="modal fade" id="modal-add" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-        <div class="modal-dialog modal-lg">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="exampleModalLabel" class="text-primary"
-                        style="color: #001F82;font-weight:600;">
-                        Add New Transactions</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
-                <div class="modal-body">
-                    <div class="row">
-                        <div class="col-12">
-                            <div class="form-floating mb-3">
-                                <input type="text" class="form-control" id="floatingInputDate" placeholder="dd-mm-yyyy"
-                                    name="date" value="<?php echo date ('Y-m-d'); ?>" required>
-                                <label for="floatingInput" class="fw-bold text-primary" style="font-size: 14px;">Action
-                                    Date</label>
-                            </div>
-                        </div>
-                        <div id="addContainer">
-                            <div class="d-flex align-items-center gap-2 search-row mb-1">
-                                <!-- btn add filter (hanya muncul di baris pertama) -->
-                                <button class="btn btn-outline-primary add-row mb-3" type="button"
-                                    style="height: 100%;">
-                                    <i class="fas fa-plus"></i>
-                                </button>
-
-                                <div class="col-6">
-                                    <div class="form-floating mb-3">
-                                        <select id="filterItem" class="form-select item-select modal-select"
-                                            name="item[]">
-                                            <option value="">-- All Item --</option>
-                                            <?php foreach ($item_list as $k => $v)
-                                            {
-                                            $s = isset ($param_search['item']) && $param_search['item'] == $v->id ? 'selected' : '';
-                                            ?>
-                                                <option value="<?php echo $v->id; ?>" <?php echo $s; ?>>
-                                                    <?php echo $v->item_name; ?>
-                                                </option>
-                                            <?php } ?>
-                                        </select>
-                                        <label for="floatingInput" class="fw-bold text-primary"
-                                            style="font-size: 14px;">Item</label>
-                                    </div>
-                                </div>
-                                <div class="col-2">
-                                    <div class="form-floating mb-3">
-                                        <input type="text" class="form-control" id="filterUom" placeholder="--"
-                                            name="uom-list[]" value="auto filled" disabled>
-                                        <label for="filterUom" class="fw-bold text-primary">UoM</label>
-                                        <div class="invalid-feedback">This field is required.</div>
-                                    </div>
-                                </div>
-                                <div class="col-3">
-                                    <div class="form-floating mb-3">
-                                        <input type="number" class="form-control" id="floatingQty" name="qty[]"
-                                            required>
-                                        <label for="floatingQty" class="fw-bold text-primary"
-                                            style="font-size: 14px;">Qty</label>
-                                    </div>
-                                </div>
-
-
-                                <!-- btn add filter (hanya muncul di baris pertama) -->
-                                <!-- <button class="btn btn-outline-primary add-row" type="button" style="height: 100%;">
-                                    <i class="fas fa-plus"></i>
-                                </button> -->
-                            </div>
+<input type="hidden" name="item_id" value="<?php echo $material->id; ?>">
+<div class="modal fade" id="modal-add" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel" class="text-primary"
+                    style="color: #001F82;font-weight:600;">
+                    Add New Transactions</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-12">
+                        <div class="form-floating mb-3">
+                            <input type="text" class="form-control" id="floatingInputDate" placeholder="dd-mm-yyyy"
+                                name="date" value="<?php echo date ('Y-m-d'); ?>" required>
+                            <label for="floatingInput" class="fw-bold text-primary" style="font-size: 14px;">Action
+                                Date</label>
                         </div>
                     </div>
+                    <div id="addContainer">
+                        <div class="d-flex align-items-center gap-2 search-row mb-1">
+                            <!-- btn add filter (hanya muncul di baris pertama) -->
+                            <div class="col-6">
+                                <div class="form-floating mb-3">
+                                    <select class="form-select item-select" name="item" id="item">
+                                        <option value="">-- All Item --</option>
+                                        <?php foreach ($item_list as $k => $v)
+                                        {
+                                        $s = isset ($param_search['item']) && $param_search['item'] == $v->id ? 'selected' : '';
+                                        ?>
+                                            <option value="<?php echo $v->id; ?>" <?php echo $s; ?>>
+                                                <?php echo $v->item_name; ?>
+                                            </option>
+                                        <?php } ?>
+                                    </select>
+                                    <label for="floatingInput" class="fw-bold text-primary"
+                                        style="font-size: 14px;">Item</label>
+                                </div>
+                            </div>
+                            <div class="col-2">
+                                <div class="form-floating mb-3">
+                                    <input type="text" class="form-control" placeholder="--" name="uom" id="uom"
+                                        value="" readonly>
+                                    <label for="filterUom" class="fw-bold text-primary">UoM</label>
+                                    <div class="invalid-feedback">This field is required.</div>
+                                </div>
+                            </div>
+                            <div class="col-3">
+                                <div class="form-floating mb-3">
+                                    <input type="number" class="form-control" name="qty" id="qty" required>
+                                    <label for="qty" class="fw-bold text-primary" style="font-size: 14px;">Qty</label>
+                                </div>
+                            </div>
+                            <button class="btn btn-outline-primary add-row mb-3" type="button" style="height: 100%;">
+                                <i class="fas fa-plus"></i>
+                            </button>
+                        </div>
+                    </div>
+                    <div class="col-12">
+                        <table id="usageDataTable" class="table table-sm table-bordered" style="width:100%"
+                            cellspacing="0">
+                            <thead>
+                                <th
+                                    style="color: #fff;background-color: #001F82;text-align: center; vertical-align: middle;">
+                                    Item Name</th>
+                                <th
+                                    style="color: #fff;background-color: #001F82;text-align: center; vertical-align: middle;">
+                                    UoM</th>
+                                <th
+                                    style="color: #fff;background-color: #001F82;text-align: center; vertical-align: middle;">
+                                    QTY</th>
+                                <th
+                                    style="color: #fff;background-color: #001F82;text-align: center; vertical-align: middle;">
+                                </th>
+                            </thead>
+                            <tbody>
+
+                            </tbody>
+                        </table>
+                    </div>
                 </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-outline-danger" data-bs-dismiss="modal">No, Cancel.</button>
-                    <button type="submit" name="submit" class="btn btn-outline-primary">Yes, Submit
-                        Transaction.</button>
-                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-outline-danger" data-bs-dismiss="modal">No,
+                    Cancel.</button>
+                <button type="button" class="btn btn-outline-primary" id="submitMat" onclick="submit_usage()">Yes,
+                    Submit Transactions</button>
             </div>
         </div>
     </div>
-</form>
+</div>
 
 <!-- Modal Section -->
 <div class="modal fade" id="cost-detail" tabindex="-1" aria-labelledby="cost-detail" aria-hidden="true">
@@ -363,37 +373,60 @@
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
 <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
 <script>
+    var URL_AJAX = '<?php echo base_url (); ?>index.php/ajax';
+    var addUsageData = [];
+    var item_list = <?php echo json_encode ($item_list); ?>;
+
     $(document).ready(function () {
         $(document).on("click", ".add-row", function () {
-            var newRow = $(".search-row:first").clone();
-            newRow.find("input").val(""); // Kosongkan input
-            newRow.find(".add-row").removeClass("add-row btn-outline-primary").addClass("remove-row btn-outline-danger").html('<i class="fas fa-minus"></i>');
-            $("#addContainer").append(newRow);
+            // var newRow = $(".search-row:first").clone();
+            // newRow.find("input").val(""); // Kosongkan input
+            // newRow.find(".add-row").removeClass("add-row btn-outline-primary").addClass("remove-row btn-outline-danger").html('<i class="fas fa-minus"></i>');
+            // $("#addContainer").append(newRow);
 
-            $newRow.find('select[name*=item]')
-                .val('')
-                .attr('name', 'items[' + index + ']')
-                .attr('id', 'filterItem-' + index);
+            addUsageData.push({
+                item_id: $("#item").val(),
+                qty: $("#qty").val(),
+                uom: $("#uom").val(),
+            })
+            const $tableBody = $("#usageDataTable tbody");
 
-            $('.search-row').find("select").select2({
-                theme: "bootstrap-5",
-                width: $(this).data('width') ? $(this).data('width') : $(this).hasClass('w-100') ? '100%' : 'style',
-                placeholder: $(this).data('placeholder'),
-                dropdownParent: $('#addContainer')
+            $tableBody.empty(); // Clear the tbody
+
+            $.each(addUsageData, function (index, item) {
+                var data = item_list.find((data) => String(data.id) == item.item_id);
+
+                let $row = $("<tr>");
+                $row.append($("<td style='vertical-align: middle;text-align: center;'>").text(data.item_name));
+                $row.append($("<td style='vertical-align: middle;text-align: center;'>").text(item.uom));
+                $row.append($("<td style='vertical-align: middle;text-align: center;'>").text(item.qty));
+                $row.append($("<td style='vertical-align: middle;text-align: center;'>").html("<button class= 'btn btn-sm btn-outline-danger remove-row' type = 'button' style = 'height: 100%;' onclick='removeUsage(" + item.item_id + ")'><i class='fas fa-minus'></i></button>")); // Tambahkan ikon minus
+                $tableBody.append($row);
             });
         });
 
         $(document).on("click", ".remove-row", function () {
             $(this).closest(".search-row").remove();
         });
+        $('#item').on('change', function () {
+            $.ajax({
+                url: URL_AJAX + "/get_uom_material",
+                method: "POST",
+                data: {
+                    id: $(this).val()
+                },
+                dataType: "json",
+                success: function (data) {
+                    $('#uom').val(data.uom);
+                }
+            })
+        });
 
-        $('select[name="item[]"]').each(function () {
-            $(this).select2({
-                theme: "bootstrap-5",
-                width: $(this).data('width') ? $(this).data('width') : $(this).hasClass('w-100') ? '100%' : 'style',
-                placeholder: $(this).data('placeholder'),
-                dropdownParent: $('#addContainer')
-            });
+        $('select').select2({
+            theme: "bootstrap-5",
+            width: $(this).data('width') ? $(this).data('width') : $(this).hasClass('w-100') ? '100%' : 'style',
+            placeholder: $(this).data('placeholder'),
+            dropdownParent: $('#modal-add'),
         });
 
         $('#modal-add').on('shown.bs.modal', function () {
@@ -404,24 +437,6 @@
                 width: '100%',
             });
         });
-
-        // $('#filterUom').select2({
-        //     theme: "bootstrap-5",
-        //     width: $(this).data('width') ? $(this).data('width') : $(this).hasClass('w-100') ? '100%' : 'style',
-        //     placeholder: $(this).data('placeholder'),
-        // });
-        // function initSelect2(selector) {
-        //     const el = $(selector);
-        //     el.select2({
-        //         theme: "bootstrap-5",
-        //         width: el.data('width') ? el.data('width') : el.hasClass('w-100') ? '100%' : 'style',
-        //         placeholder: el.data('placeholder'),
-        //     });
-        // }
-
-        // initSelect2('#filterItem');
-        // initSelect2('#filterUom');
-
     });
 
     flatpickr("#floatingInputDate", {
@@ -439,6 +454,50 @@
             }
         }
     });
+
+    function removeUsage(item_id) {
+        addUsageData = addUsageData.filter(item => String(item.item_id) != String(item_id));
+
+        const $tableBody = $("#usageDataTable tbody");
+        $tableBody.empty(); // Clear the tbody
+
+        $.each(addUsageData, function (index, item) {
+            var data = item_list.find((data) => String(data.id) == item.item_id);
+
+            let $row = $("<tr>");
+            $row.append($("<td style='vertical-align: middle;text-align: center;'>").text(data.item_name));
+            $row.append($("<td style='vertical-align: middle;text-align: center;'>").text(item.uom));
+            $row.append($("<td style='vertical-align: middle;text-align: center;'>").text(item.qty));
+            $row.append($("<td style='vertical-align: middle;text-align: center;'>").html("<button class= 'btn btn-sm btn-outline-danger remove-row' type = 'button' style = 'height: 100%;' onclick='removeUsage(" + item.item_id + ")'><i class='fas fa-minus'></i></button>")); // Tambahkan ikon minus
+            $tableBody.append($row);
+        })
+    }
+
+    function submit_usage() {
+        $('#submitUsage').attr('disabled', true);
+        $('#submitUsage').text('Processing...');
+
+        var values = {
+            "transactions_date": $('#floatingInputDate').val(),
+            "item": addUsageData
+        };
+
+        console.log(values);
+
+        $.ajax({
+            url: '<?php echo site_url ('goods_management/add_transaction'); ?>',
+            type: "post",
+            data: values,
+            success: function (response) {
+                if (response == 1) {
+                    location.reload();
+                }
+            },
+            error: function (jqXHR, textStatus, errorThrown) {
+                console.log(textStatus, errorThrown);
+            }
+        });
+    }
 </script>
 <script>
 
