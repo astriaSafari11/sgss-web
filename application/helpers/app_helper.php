@@ -86,8 +86,16 @@ function myDate($dt, $f = "d/m/Y H:i", $s = true)
 
 function mDate($date = "", $v = "+1 day", $format = 'Y-m-d')
 	{
+	date_default_timezone_set ('Asia/Jakarta');
 	$date = (trim ($date) == "") ? date ("Y-m-d") : $date;
 	$nd = strtotime (date ("Y-m-d", strtotime ($date)) . $v);
+	return date ($format, $nd);
+	}
+
+function formatDate($date = "", $format = 'd M Y')
+	{
+	date_default_timezone_set ('Asia/Jakarta');
+	$nd = strtotime (date ("Y-m-d", strtotime ($date)));
 	return date ($format, $nd);
 	}
 
@@ -482,5 +490,32 @@ function num2alpha($n)
 		$n -= pow (26, $i);
 		}
 	return $r;
+	}
+
+function approval_status($status = "")
+	{
+	switch ($status)
+		{
+		case "auto_approved":
+			$desc = 'Auto Approved';
+			break;
+		case "approved":
+			$desc = 'Approved';
+			break;
+		case "inactive":
+			$desc = 'Approval Not Required';
+			break;
+		case "waiting_approval":
+			$desc = 'Waiting For Approval';
+			break;
+		case "rejected":
+			$desc = 'Rejected';
+			break;
+		default:
+			$desc = 'Waiting For Approval';
+			break;
+		}
+
+	return $desc;
 	}
 ?>

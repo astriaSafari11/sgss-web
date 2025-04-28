@@ -140,25 +140,40 @@
                   <?php echo empty ($v->adjustment) ? 'none' : $v->adjustment; ?>
                 </td>
                 <td style="vertical-align: middle;text-align: center;font-size: 14px;">
+                  <?php if ($v->order_status == 'waiting_approval')
+                  { ?>
+                    <button class="btn btn-sm btn-default" style="font-weight: 600; border-radius: 50px; width: 100%;">
+                      Waiting Approval
+                    </button>
+                  <?php } ?>
                   <?php if ($v->order_status == 'rejected')
                   { ?>
                     <button class="btn btn-sm btn-danger" style="font-weight: 600; border-radius: 50px; width: 100%;">
                       Rejected
                     </button>
                   <?php } ?>
-                  <?php if ($v->order_status == 'auto_approved' || $v->order_status == 'approved')
+                  <?php if ($v->order_status == 'auto_approved')
                   { ?>
-                    <button class="btn btn-sm btn-success" style="font-weight: 600; border-radius: 50px; width: 100%;">
-                      Approved
+                    <button class="btn btn-sm btn-success " style="font-weight: 600; border-radius: 50px; width: 100%;">
+                      Auto Approved
                     </button>
                   <?php } ?>
+                  <?php if ($v->order_status == 'approved')
+                  { ?>
+                    <?php if ($v->is_feedback == 1)
+                    { ?>
+                      <button class="btn btn-sm btn-warning" style="font-weight: 600; border-radius: 50px; width: 100%;">
+                        Finished
+                      </button>
+                    <?php }
+                  else
+                    { ?>
+                      <button class="btn btn-sm btn-success" style="font-weight: 600; border-radius: 50px; width: 100%;">
+                        Approved
+                      </button>
+                    <?php } ?>
+                  <?php } ?>
                 </td>
-                <!-- <td style="vertical-align: middle;text-align: center;">
-                                <a href="path/to/pdf/file.pdf" class="btn btn-sm btn-outline-primary" style="border-radius: 50px;" download>
-                                <i class="fas fa-file-pdf"></i>
-                                </a>
-                              </td> -->
-
                 <td style="vertical-align: middle; text-align: center;">
                   <a href="<?= site_url ('goods_management/export_pdf/' . $v->order_id); ?>"
                     class="btn btn-sm btn-outline-primary download-btn btn-custom-download" style="border-radius: 50px;"
@@ -175,10 +190,20 @@
                 </td>
 
                 <td style="vertical-align: middle;text-align: center;">
-                  <a href="<?= site_url ('goods_management/feedback_form/' . _encrypt ($v->order_id)); ?>"
-                    class="btn btn-sm btn-outline-primary" style="font-weight: 600; border-radius: 50px; width: 250px;">
-                    Feedback
-                  </a>
+                  <?php if ($v->order_status == 'finished' || $v->order_status == 'waiting_approval')
+                  { ?>
+                    <a href="<?= site_url ('goods_management/order_detail/' . _encrypt ($v->order_id)); ?>"
+                      class="btn btn-sm btn-outline-primary" style="font-weight: 600; border-radius: 50px; width: 250px;">
+                      Detail
+                    </a>
+                  <?php }
+                else
+                  { ?>
+                    <a href="<?= site_url ('goods_management/feedback_form/' . _encrypt ($v->order_id)); ?>"
+                      class="btn btn-sm btn-outline-primary" style="font-weight: 600; border-radius: 50px; width: 250px;">
+                      Feedback
+                    </a>
+                  <?php } ?>
                 </td>
               </tr>
             <?php } ?>
@@ -412,25 +437,25 @@
     downloadLinks.forEach((link, index) => {
       let fileName = link.getAttribute('data-file');
       let isDownloaded = localStorage.getItem(fileName);
-      
+
       if (!isDownloaded) {
-      setTimeout(() => {
-        let url = link.getAttribute('href');
-        let fileName = link.getAttribute('data-file');
+        setTimeout(() => {
+          let url = link.getAttribute('href');
+          let fileName = link.getAttribute('data-file');
 
-        let a = document.createElement('a');
-        a.href = url;
-        a.download = fileName;
-        document.body.appendChild(a);
-        a.click();
-        document.body.removeChild(a);
+          let a = document.createElement('a');
+          a.href = url;
+          a.download = fileName;
+          document.body.appendChild(a);
+          a.click();
+          document.body.removeChild(a);
 
-        // Ubah ikon setelah download
-        let icon = link.querySelector(".file-icon");
-        icon.className = "fas fa-file-circle-check text-success";
-        localStorage.setItem(fileName, "downloaded");
-      }, index * 200);
-    }
+          // Ubah ikon setelah download
+          let icon = link.querySelector(".file-icon");
+          icon.className = "fas fa-file-circle-check text-success";
+          localStorage.setItem(fileName, "downloaded");
+        }, index * 200);
+      }
     });
   }
 

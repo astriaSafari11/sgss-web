@@ -238,19 +238,6 @@
                                     <i class="fas fa-plus"></i>
                                 </button>
 
-                                <!-- <div class="col-6">
-                                    <div class="form-floating mb-3">
-                                        <select class="form-select item-select" name="item[]">
-                                            <option value="">-- All Item --</option>
-                                            <?php foreach ($item_list as $k => $v)
-                                            { ?>
-                                                <option value="<?= $v->id ?>"><?= $v->item_name ?></option>
-                                            <?php } ?>
-                                        </select>
-                                        <label class="fw-bold text-primary" style="font-size: 14px;">Item</label>
-                                    </div>
-                                </div> -->
-
                                 <div class="col-6">
                                     <div class="form-floating mb-3">
                                         <select id="filterItem" class="form-select item-select modal-select"
@@ -382,23 +369,31 @@
             newRow.find("input").val(""); // Kosongkan input
             newRow.find(".add-row").removeClass("add-row btn-outline-primary").addClass("remove-row btn-outline-danger").html('<i class="fas fa-minus"></i>');
             $("#addContainer").append(newRow);
+
+            $newRow.find('select[name*=item]')
+                .val('')
+                .attr('name', 'items[' + index + ']')
+                .attr('id', 'filterItem-' + index);
+
+            $('.search-row').find("select").select2({
+                theme: "bootstrap-5",
+                width: $(this).data('width') ? $(this).data('width') : $(this).hasClass('w-100') ? '100%' : 'style',
+                placeholder: $(this).data('placeholder'),
+                dropdownParent: $('#addContainer')
+            });
         });
 
         $(document).on("click", ".remove-row", function () {
             $(this).closest(".search-row").remove();
         });
 
-        // $('#filterItem').select2({
-        //     theme: "bootstrap-5",
-        //     width: $(this).data('width') ? $(this).data('width') : $(this).hasClass('w-100') ? '100%' : 'style',
-        //     placeholder: $(this).data('placeholder'),
-        // });
-
-        $('#filterItem').select2({
-            theme: "bootstrap-5",
-            width: $(this).data('width') ? $(this).data('width') : $(this).hasClass('w-100') ? '100%' : 'style',
-            placeholder: $(this).data('placeholder'),
-            dropdownParent: $('#addContainer')
+        $('select[name="item[]"]').each(function () {
+            $(this).select2({
+                theme: "bootstrap-5",
+                width: $(this).data('width') ? $(this).data('width') : $(this).hasClass('w-100') ? '100%' : 'style',
+                placeholder: $(this).data('placeholder'),
+                dropdownParent: $('#addContainer')
+            });
         });
 
         $('#modal-add').on('shown.bs.modal', function () {
@@ -550,236 +545,46 @@
             }]
         });
 
-        Highcharts.chart('container1', {
+        Highcharts.chart('yoy-consumption-chart', {
             chart: {
-                type: 'pie',
-                custom: {},
-                events: {
-                    render() {
-                        const chart = this,
-                            series = chart.series[0];
-                        let customLabel = chart.options.chart.custom.label;
-
-                        // if (!customLabel) {
-                        //     customLabel = chart.options.chart.custom.label =
-                        //         chart.renderer.label(
-                        //             'Total<br/>' +
-                        //             '<strong>2 877 820</strong>'
-                        //         )
-                        //             .css({
-                        //                 color: '#000',
-                        //                 textAnchor: 'middle'
-                        //             })
-                        //             .add();
-                        // }
-
-                        // const x = series.center[0] + chart.plotLeft,
-                        //     y = series.center[1] + chart.plotTop -
-                        //     (customLabel.attr('height') / 2);
-
-                        // customLabel.attr({
-                        //     x,
-                        //     y
-                        // });
-                        // // Set font size based on chart diameter
-                        // customLabel.css({
-                        //     fontSize: `${series.center[2] / 12}px`
-                        // });
-                    }
-                }
-            },
-            accessibility: {
-                point: {
-                    valueSuffix: '%'
-                }
+                type: 'column',
+                backgroundColor: 'transparent'
             },
             title: {
-                text: ''
+                text: 'YoY Consumption',
+                align: 'center',
+                style: { fontSize: '16px', fontWeight: 'bold' }
             },
-            subtitle: {
-                text: ''
+            xAxis: {
+                categories: ['2024', '2025']
             },
-            tooltip: {
-                pointFormat: '{series.name}: <b>{point.percentage:.0f}%</b>'
+            yAxis: {
+                title: { text: '' },
+                min: 0
             },
-            legend: {
+            legend: { enabled: false },
+            credits: {
                 enabled: false
             },
-            plotOptions: {
-                innerSize: '20%',
-                series: {
-                    allowPointSelect: true,
-                    cursor: 'pointer',
-                    borderRadius: 8,
-                    dataLabels: [{
-                        enabled: true,
-                        distance: 20,
-                        format: '{point.name}'
-                    }, {
-                        enabled: true,
-                        distance: -15,
-                        format: '{point.percentage:.0f}%',
-                        style: {
-                            fontSize: '0.9em'
-                        }
-                    }],
-                    showInLegend: true
-                }
-            },
             series: [{
-                name: 'Item',
-                colorByPoint: true,
-                innerSize: '50%',
-                data: [{
-                    name: 'Item 1',
-                    y: 23.9
-                }, {
-                    name: 'Item 2',
-                    y: 12.6
-                }, {
-                    name: 'Item 3',
-                    y: 37.0
-                }, {
-                    name: 'Item 4',
-                    y: 26.4
-                }]
-            }]
-        });
-
-        Highcharts.chart('container2', {
-            chart: {
-                type: 'bar',
-                custom: {},
-                events: {
-                    render() {
-                        const chart = this,
-                            series = chart.series[0];
-                        let customLabel = chart.options.chart.custom.label;
-
-                        // if (!customLabel) {
-                        //     customLabel = chart.options.chart.custom.label =
-                        //         chart.renderer.label(
-                        //             'Total<br/>' +
-                        //             '<strong>2 877 820</strong>'
-                        //         )
-                        //             .css({
-                        //                 color: '#000',
-                        //                 textAnchor: 'middle'
-                        //             })
-                        //             .add();
-                        // }
-
-                        const x = series.center[0] + chart.plotLeft,
-                            y = series.center[1] + chart.plotTop -
-                                (customLabel.attr('height') / 2);
-
-                        customLabel.attr({
-                            x,
-                            y
-                        });
-                        // Set font size based on chart diameter
-                        customLabel.css({
-                            fontSize: `${series.center[2] / 12}px`
-                        });
-                    }
+                name: 'Consumption',
+                type: 'column',
+                data: [500000, 200000],
+                color: '#001F82',
+                dataLabels: {
+                    enabled: true,
+                    format: '{y:,.0f}'
                 }
-            },
-            accessibility: {
-                point: {
-                    valueSuffix: '%'
-                }
-            },
-            title: {
-                text: ''
-            },
-            subtitle: {
-                text: ''
-            },
-            tooltip: {
-                pointFormat: '{series.name}: <b>{point.percentage:.0f}%</b>'
-            },
-            legend: {
-                enabled: false
-            },
-            plotOptions: {
-                series: {
-                    allowPointSelect: true,
-                    cursor: 'pointer',
-                    borderRadius: 8,
-                    dataLabels: [{
-                        enabled: true,
-                        distance: 20,
-                        format: '{point.name}'
-                    }, {
-                        enabled: true,
-                        distance: -15,
-                        format: '{point.percentage:.0f}%',
-                        style: {
-                            fontSize: '0.9em'
-                        }
-                    }],
-                    showInLegend: true
-                }
-            },
-            series: [{
-                name: 'Item',
-                colorByPoint: true,
-                innerSize: '50%',
-                data: [{
-                    name: 'Item 1',
-                    y: 23.9
-                }, {
-                    name: 'Item 2',
-                    y: 12.6
-                }, {
-                    name: 'Item 3',
-                    y: 37.0
-                }, {
-                    name: 'Item 4',
-                    y: 26.4
-                }]
+            }, {
+                name: 'Trend',
+                type: 'line',
+                data: [500000, 200000],
+                color: 'orange',
+                marker: { enabled: false }
             }]
         });
     });
 
-    Highcharts.chart('yoy-consumption-chart', {
-        chart: {
-            type: 'column',
-            backgroundColor: 'transparent'
-        },
-        title: {
-            text: 'YoY Consumption',
-            align: 'center',
-            style: { fontSize: '16px', fontWeight: 'bold' }
-        },
-        xAxis: {
-            categories: ['2024', '2025']
-        },
-        yAxis: {
-            title: { text: '' },
-            min: 0
-        },
-        legend: { enabled: false },
-        credits: {
-            enabled: false
-        },
-        series: [{
-            name: 'Consumption',
-            type: 'column',
-            data: [500000, 200000],
-            color: '#001F82',
-            dataLabels: {
-                enabled: true,
-                format: '{y:,.0f}'
-            }
-        }, {
-            name: 'Trend',
-            type: 'line',
-            data: [500000, 200000],
-            color: 'orange',
-            marker: { enabled: false }
-        }]
-    });
 
     // logic untuk tinggi card tertentu
     document.addEventListener("DOMContentLoaded", function () {

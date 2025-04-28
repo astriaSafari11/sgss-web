@@ -57,8 +57,20 @@ class Master_data extends CI_Controller
 		}
 	public function material_list()
 		{
-		$this->session->set_flashdata ('page_title', 'MASTER DATA MATERIAL');
-		$this->load->view ('master-data/material-list.php');
+		$data['column_search'] = array(
+			'factory',
+			'item_code',
+			'item_name',
+			'item_group',
+			'size',
+			'uom',
+			'lot_size',
+			'order_cycle',
+		);
+
+		$this->session->unset_userdata ('search_material');
+		$this->session->set_flashdata ('page_title', 'MASTER DATA ITEM');
+		$this->load->view ('master-data/material-list.php', $data);
 		}
 
 	public function uom_list()

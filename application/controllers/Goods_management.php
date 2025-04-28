@@ -134,7 +134,7 @@ class Goods_management extends CI_Controller
 			INNER JOIN t_order_detail as detail ON t_order.id = detail.order_id
 			INNER JOIN m_master_data_material as material on detail.item_id = material.id
 			INNER JOIN m_master_data_vendor as vendor on detail.vendor_code = vendor.vendor_code
-			 WHERE t_order.is_approved = 1 and t_order.is_feedback = 0"
+			ORDER by t_order.time_update DESC"
 		)->result ();
 
 		// $query =  $this->db->get_where('t_stock_planned_request',array("order_status" => NULL))->result();
@@ -390,6 +390,7 @@ class Goods_management extends CI_Controller
 				"remarks" => 'Request to remove and ignore this order',
 				"status" => 'waiting_approval',
 				"order_category" => 'ignore',
+				'approval_category' => 'ignore',
 				"is_approval_required" => 1,
 				"is_approved" => 0,
 				"is_feedback" => 0,
@@ -661,6 +662,7 @@ class Goods_management extends CI_Controller
 
 		_update ("t_order", array(
 			"is_feedback" => $is_feedback,
+			"status" => 'finished',
 			"po_gr_number" => $po_gr,
 			"feedback_date" => date ("Y-m-d"),
 			"feedback_by" => $this->session->userdata ('user_name')
@@ -1314,7 +1316,8 @@ class Goods_management extends CI_Controller
 					$exist = $this->db->get_where ("t_stock_planned_request", array(
 						"item_id" => $get_data->item_id,
 						"year" => date ('Y'),
-						"week" => $i
+						"week" => $i,
+						"order_status" => 0,
 					))->row ();
 
 					$get_rec_material = $this->db->query ("
@@ -1356,12 +1359,6 @@ class Goods_management extends CI_Controller
 					if (! $exist)
 						{
 						_add ('t_stock_planned_request', $planned_release);
-						// 	}
-						// else
-						// 	{
-						// 	_update ('t_stock_planned_request', $planned_release, array(
-						// 		"id" => $exist->id,
-						// 	));
 						}
 					}
 				else

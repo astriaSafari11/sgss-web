@@ -195,10 +195,10 @@
               </div>
               <h6 class="fw-bold text-primary mb-1"><?php echo $order->requestor; ?></h6>
               <div class="d-flex flex-column gap-0">
-                <small>requested</small>
+                <small>Order Requested</small>
                 <h9>
                   <span class="badge text-primary" style="background-color: #DAEAFF;">
-                    <?php echo mDate ($order->time_add); ?>
+                    <?php echo formatDate ($order->time_add); ?>
                 </h9>
               </div>
             </div>
@@ -241,11 +241,15 @@
                 <?php echo $order->status == 'auto_approved' ? 'SGSS System' : $order_approval[0]->nama; ?>
               </h6>
               <div class="d-flex flex-column gap-0">
-                <small><?php echo $order->status != 'auto_approved' ? $order_approval[0]->approve_status == 'pending' ? 'Waiting for Approval' : $order_approval[0]->approve_status : 'Auto Approved'; ?></small>
-                <h9>
-                  <span class="badge <?php echo $badge; ?>">
-                    <?php echo $order_approval[0]->approve_status == 'pending' ? mDate ($order_approval[0]->approve_due_date) : mDate ($order_approval[0]->approve_date); ?>
-                </h9>
+                <small><?php echo $order->status == 'auto_approved' ? 'Not Required' : approval_status ($order_approval[0]->approve_status); ?></small>
+                <?php if ($order->status != 'auto_approved')
+                { ?>
+                  <h9>
+                    <span class="badge <?php echo $badge; ?>">
+                      <?php echo $order_approval[0]->approve_status == 'pending' ? formatDate ($order_approval[0]->approve_due_date) : formatDate ($order_approval[0]->approve_date); ?>
+                  </h9>
+                <?php }
+              ?>
               </div>
             </div>
 
@@ -287,12 +291,12 @@
                 <?php echo $order->status == 'auto_approved' ? 'SGSS System' : $order_approval[1]->nama; ?>
               </h6>
               <div class="d-flex flex-column gap-0">
-                <small><?php echo $order->status != 'auto_approved' ? $order_approval[0]->approve_status == 'pending' ? 'Waiting for Approval' : $order_approval[0]->approve_status : 'Auto Approved'; ?></small>
-                <?php if ($order_approval[1]->approve_status != 'inactive')
+                <small><?php echo $order->status == 'auto_approved' ? 'Not Required' : approval_status ($order_approval[1]->approve_status); ?></small>
+                <?php if (! empty ($order_approval[1]->approve_status) && $order_approval[1]->approve_status != 'inactive')
                 { ?>
                   <h9>
                     <span class="badge <?php echo $badge; ?>">
-                      <?php echo $order_approval[1]->approve_status == 'pending' ? mDate ($order_approval[1]->approve_due_date) : mDate ($order_approval[1]->approve_date); ?>
+                      <?php echo $order_approval[1]->approve_status == 'pending' ? formatDate ($order_approval[1]->approve_due_date) : formatDate ($order_approval[1]->approve_date); ?>
                   </h9>
                 <?php }
               ?>
@@ -337,12 +341,12 @@
                 <?php echo $order->status == 'auto_approved' ? 'SGSS System' : $order_approval[2]->nama; ?>
               </h6>
               <div class="d-flex flex-column gap-0">
-                <small><?php echo $order->status != 'auto_approved' ? $order_approval[0]->approve_status == 'pending' ? 'Waiting for Approval' : $order_approval[0]->approve_status : 'Auto Approved'; ?></small>
-                <?php if ($order_approval[2]->approve_status != 'inactive')
+                <small><?php echo $order->status == 'auto_approved' ? 'Not Required' : approval_status ($order_approval[2]->approve_status); ?></small>
+                <?php if (! empty ($order_approval[2]->approve_status) && $order_approval[2]->approve_status != 'inactive')
                 { ?>
                   <h9>
                     <span class="badge <?php echo $badge; ?>">
-                      <?php echo $order_approval[2]->approve_status == 'pending' ? mDate ($order_approval[2]->approve_due_date) : mDate ($order_approval[2]->approve_date); ?>
+                      <?php echo $order_approval[2]->approve_status == 'pending' ? formatDate ($order_approval[2]->approve_due_date) : formatDate ($order_approval[2]->approve_date); ?>
                   </h9>
                 <?php } ?>
               </div>
@@ -378,12 +382,12 @@
               </div>
               <h6 class="fw-bold <?php echo $badge; ?> mb-1">Approval Finished</h6>
               <div class="d-flex flex-column gap-0">
-                <small><?php echo $order->status != 'auto_approved' ? $order_approval[0]->approve_status == 'pending' ? 'Waiting for Approval' : $order_approval[0]->approve_status : 'Auto Approved'; ?></small>
+                <small><?php echo approval_status ($order->status); ?></small>
                 <h9>
                   <?php if ($order->status != 'waiting_approval')
                   { ?>
                     <span class="badge <?php echo $badge; ?>">
-                      <?php echo $order->status != 'waiting_approval' ? $order->status == 'rejected' ? mDate ($order->rejected_date) : mDate ($order->approved_date) : '-'; ?>
+                      <?php echo $order->status != 'waiting_approval' ? $order->status == 'rejected' ? formatDate ($order->rejected_date) : formatDate ($order->approved_date) : '-'; ?>
                     </span>
                   <?php } ?>
                 </h9>
@@ -410,9 +414,11 @@
             { ?>
               <tr>
                 <td style="vertical-align: middle;text-align: center;"><?php echo $row->approve_title; ?></td>
-                <td style="vertical-align: middle;text-align: center;"><?php echo $row->nama; ?></td>
                 <td style="vertical-align: middle;text-align: center;">
-                  <?php echo $row->approve_status == 'pending' ? 'Waiting for Approval' : $row->approve_status; ?>
+                  <?php echo $order->status == 'auto_approved' ? 'SGSS System' : $row->nama; ?>
+                </td>
+                <td style="vertical-align: middle;text-align: center;">
+                  <?php echo approval_status ($row->approve_status); ?>
                 </td>
                 <td style="vertical-align: middle;text-align: center;"> <?php echo mDate ($row->approve_due_date); ?>
                 </td>
