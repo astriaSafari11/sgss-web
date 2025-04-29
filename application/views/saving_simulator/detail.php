@@ -7,6 +7,30 @@
     .dropdown, .dropdown * {
         pointer-events: auto !important;
     }
+
+    .form-box {
+      position: relative;
+      margin-bottom: 1rem;
+    }
+    .form-box label {
+      position: absolute;
+      top: -0.6rem;
+      left: 0.75rem;
+      background: #fff;
+      padding: 0 0.25rem;
+      font-size: 0.8rem;
+      color: #6c757d;
+    }
+    .form-control[readonly] {
+      background-color: #f8f9fa;
+      border-color: #ced4da;
+      cursor: default;
+    }
+    .edit-icon {
+      cursor: pointer;
+      color: #003366;
+      margin-left: 0.5rem;
+    }
 </style>
 
 <div class="main-content">
@@ -345,10 +369,10 @@
 
     <div class="row d-flex align-items-stretch mt-3">
     
-    <div class="d-flex align-items-center gap-2">
+    <div class="d-flex align-items-center gap-2 mb-1">
         <h4 class="fw-bold text-primary mb-0">Chosen Vendor Based On</h4>
         <div class="d-flex align-items-center border rounded-4 px-4 py-2" style="border-color:rgb(175, 175, 175) !important; position: relative;">
-            <span class="text-primary" style="font-size: 20px;" id="vendortext">Choose Item Status</span>
+            <span class="text-primary fw-bold" style="font-size: 20px;" id="vendortext">Item Status</span>
             <div class="dropdown ms-4">
                 <a href="#" class="text-decoration-none" id="statusDropdown" data-bs-toggle="dropdown" aria-expanded="false">
                     <i class="bi bi-chevron-down border rounded-5 btn btn-sm btn-outline-primary"></i>
@@ -361,13 +385,474 @@
             </div>
         </div>
     </div>
-
     </div>
+    
+    <div class="table-responsive">
+        <table class="table table-sm text-center align-middle">
+        <thead class="table-primary text-white bg-primary">
+            <tr>
+            <th style="color: #fff;background-color: #001F82;text-align: center; border: 1px solid #ccc;">Item Code</th>
+            <th style="color: #fff;background-color: #001F82;text-align: center; border: 1px solid #ccc;">Item</th>
+            <th style="color: #fff;background-color: #001F82;text-align: center; border: 1px solid #ccc;">UoM</th>
+            <th style="color: #fff;background-color: #001F82;text-align: center; border: 1px solid #ccc;">Winner Vendor</th>
+            <th style="color: #fff;background-color: #001F82;text-align: center; border: 1px solid #ccc;">Channel</th>
+            <th style="color: #fff;background-color: #001F82;text-align: center; border: 1px solid #ccc;">Current Purchase</th>
+            <th style="color: #fff;background-color: #001F82;text-align: center; border: 1px solid #ccc;">Target Savings</th>
+            <th style="color: #fff;background-color: #001F82;text-align: center; border: 1px solid #ccc;">YoY Savings</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+            <td class="fw-bold" style="text-align: center; border: 1px solid #ccc;">Vendor 4</td>
+            <td style="text-align: center; border: 1px solid #ccc;">COUPA</td>
+            <td style="text-align: center; border: 1px solid #ccc;">12,000</td>
+            <td style="text-align: center; border: 1px solid #ccc;">3</td>
+            <td style="text-align: center; border: 1px solid #ccc;">1,000</td>
+            <td style="text-align: center; border: 1px solid #ccc;">1,500</td>
+            <td class="text-success fw-semibold" style="text-align: center; border: 1px solid #ccc;">Valid</td>
+            <td class="text-danger fw-semibold" style="text-align: center; border: 1px solid #ccc;">-1500</td>
+            </tr>
+        </tbody>
+        </table>
+    </div>
+
 
     </div>
     <!-- end row result saving -->
 
 </div>
+
+<div class="row d-flex align-items-stretch mt-3">
+    <h4 class="fw-bold text-primary mb-1">Chosen Vendor Based On Price</h4>
+
+    <div class="table-responsive">
+    <table class="table table-sm text-center align-middle">
+      <thead class="table-primary text-white bg-primary">
+        <tr>
+          <th style="color: #fff;background-color: #001F82;text-align: center; border: 1px solid #ccc;">Item Code</th>
+          <th style="color: #fff;background-color: #001F82;text-align: center; border: 1px solid #ccc;">Item</th>
+          <th style="color: #fff;background-color: #001F82;text-align: center; border: 1px solid #ccc;">UoM</th>
+          <th style="color: #fff;background-color: #001F82;text-align: center; border: 1px solid #ccc;">Winner Vendor</th>
+          <th style="color: #fff;background-color: #001F82;text-align: center; border: 1px solid #ccc;">Channel</th>
+          <th style="color: #fff;background-color: #001F82;text-align: center; border: 1px solid #ccc;">Current Purchase</th>
+          <th style="color: #fff;background-color: #001F82;text-align: center; border: 1px solid #ccc;">Target Savings</th>
+          <th style="color: #fff;background-color: #001F82;text-align: center; border: 1px solid #ccc;">YoY Savings</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td class="fw-bold" style="text-align: center; border: 1px solid #ccc;">Vendor 4</td>
+          <td style="text-align: center; border: 1px solid #ccc;">COUPA</td>
+          <td style="text-align: center; border: 1px solid #ccc;">12,000</td>
+          <td style="text-align: center; border: 1px solid #ccc;">3</td>
+          <td style="text-align: center; border: 1px solid #ccc;">1,000</td>
+          <td style="text-align: center; border: 1px solid #ccc;">1,500</td>
+          <td class="text-success fw-semibold" style="text-align: center; border: 1px solid #ccc;">Valid</td>
+          <td class="text-danger fw-semibold" style="text-align: center; border: 1px solid #ccc;">-1500</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+</div>
+
+<div class="row d-flex align-items-stretch mt-3">
+    <h4 class="fw-bold text-primary mb-1">Chosen Vendor Based On Lead Time</h4>
+
+<div class="table-responsive">
+    <table class="table table-sm text-center align-middle">
+      <thead class="table-primary text-white bg-primary">
+        <tr>
+          <th style="color: #fff;background-color: #001F82;text-align: center; border: 1px solid #ccc;">Item Code</th>
+          <th style="color: #fff;background-color: #001F82;text-align: center; border: 1px solid #ccc;">Item</th>
+          <th style="color: #fff;background-color: #001F82;text-align: center; border: 1px solid #ccc;">UoM</th>
+          <th style="color: #fff;background-color: #001F82;text-align: center; border: 1px solid #ccc;">Winner Vendor</th>
+          <th style="color: #fff;background-color: #001F82;text-align: center; border: 1px solid #ccc;">Channel</th>
+          <th style="color: #fff;background-color: #001F82;text-align: center; border: 1px solid #ccc;">Current Purchase</th>
+          <th style="color: #fff;background-color: #001F82;text-align: center; border: 1px solid #ccc;">Target Savings</th>
+          <th style="color: #fff;background-color: #001F82;text-align: center; border: 1px solid #ccc;">YoY Savings</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td class="fw-bold" style="text-align: center; border: 1px solid #ccc;">Vendor 4</td>
+          <td style="text-align: center; border: 1px solid #ccc;">COUPA</td>
+          <td style="text-align: center; border: 1px solid #ccc;">12,000</td>
+          <td style="text-align: center; border: 1px solid #ccc;">3</td>
+          <td style="text-align: center; border: 1px solid #ccc;">1,000</td>
+          <td style="text-align: center; border: 1px solid #ccc;">1,500</td>
+          <td class="text-success fw-semibold" style="text-align: center; border: 1px solid #ccc;">Valid</td>
+          <td class="text-danger fw-semibold" style="text-align: center; border: 1px solid #ccc;">-1500</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+</div>
+
+<div class="row d-flex align-items-stretch mt-3">
+  <!-- Baris Tahun, Vendor, Target -->
+    <div class="row text-center fw-semibold">
+    <!-- Year -->
+    <div class="col-3">
+        <div class="form-box position-relative">
+        <label for="year" class="bg-transparent text-primary">Year</label>
+        <input type="text" class="form-control text-center pe-5 rounded-pill bg-white" id="year" value="2025" readonly style="border-color: #001F82 !important;">
+        <button type="button" class="btn btn-primary btn-sm rounded-circle position-absolute top-50 end-0 translate-middle-y me-2"
+                onclick="enableEdit('year')">
+            <i class="fa-solid fa-pen text-white"></i>
+        </button>
+        </div>
+    </div>
+
+    <!-- Vendor -->
+    <div class="col-3">
+        <div class="form-box position-relative">
+        <label for="vendor" class="bg-transparent text-primary">Vendor</label>
+        <input type="text" class="form-control text-center pe-5 rounded-pill bg-white" id="vendor" value="Vendor 4" readonly style="border-color: #001F82 !important;">
+        <button type="button" class="btn btn-primary btn-sm rounded-circle position-absolute top-50 end-0 translate-middle-y me-2"
+                onclick="enableEdit('vendor')">
+            <i class="fa-solid fa-pen text-white"></i>
+        </button>
+        </div>
+    </div>
+
+    <!-- Target -->
+    <div class="col-3">
+        <div class="form-box position-relative">
+        <label for="target" class="bg-transparent text-primary">Target</label>
+        <input type="text" class="form-control text-center pe-5 rounded-pill bg-white" id="target" value="Rp2.000,00" readonly style="border-color: #001F82 !important;">
+        <button type="button" class="btn btn-primary btn-sm rounded-circle position-absolute top-50 end-0 translate-middle-y me-2"
+                onclick="enableEdit('target')">
+            <i class="fa-solid fa-pen text-white"></i>
+        </button>
+        </div>
+    </div>
+    </div>
+
+
+  <!-- Grid Informasi -->
+  <div class="row text-center g-2">
+  <!-- Kolom Kiri -->
+  <div class="col-md-6 d-flex flex-column">
+    <span class="btn mb-2 fw-bold w-100 d-block text-center unclickable"
+          style="border-radius: 50px;
+                 font-weight: 600;
+                 color: #FFFFFF;
+                 background-color:#001F82;">
+      Item Code
+    </span>
+    <span class="btn mb-2 w-100 d-block text-center unclickable"
+          style="border-radius: 50px;
+                 font-weight: 600;
+                 color: #001F82;
+                 background-color: #FFFFFF;
+                 border: 1px solid #001F82;">
+      MSK01
+    </span>
+
+    <span class="btn mb-2 fw-bold w-100 d-block text-center unclickable"
+          style="border-radius: 50px;
+                 font-weight: 600;
+                 color: #FFFFFF;
+                 background-color:#001F82;">
+      Item
+    </span>
+    <span class="btn mb-2 w-100 d-block text-center unclickable"
+          style="border-radius: 50px;
+                 font-weight: 600;
+                 color: #001F82;
+                 background-color: #FFFFFF;
+                 border: 1px solid #001F82;">
+      Masker
+    </span>
+
+    <span class="btn mb-2 fw-bold w-100 d-block text-center unclickable"
+          style="border-radius: 50px;
+                 font-weight: 600;
+                 color: #FFFFFF;
+                 background-color:#001F82;">
+      UoM
+    </span>
+    <span class="btn mb-2 w-100 d-block text-center unclickable"
+          style="border-radius: 50px;
+                 font-weight: 600;
+                 color: #001F82;
+                 background-color: #FFFFFF;
+                 border: 1px solid #001F82;">
+      Pcs
+    </span>
+
+    <span class="btn mb-2 fw-bold w-100 d-block text-center unclickable"
+          style="border-radius: 50px;
+                 font-weight: 600;
+                 color: #FFFFFF;
+                 background-color:#001F82;">
+      Avg Purchase Price
+    </span>
+    <span class="btn mb-2 w-100 d-block text-center unclickable"
+          style="border-radius: 50px;
+                 font-weight: 600;
+                 color: #001F82;
+                 background-color: #FFFFFF;
+                 border: 1px solid #001F82;">
+      Rp9.000
+    </span>
+  </div>
+
+  <!-- Kolom Kanan -->
+  <div class="col-md-6 d-flex flex-column">
+        <span class="btn mb-2 fw-bold w-100 d-block text-center unclickable"
+            style="border-radius: 50px;
+                    font-weight: 600;
+                    color: #FFFFFF;
+                    background-color:#001F82;">
+        FY Volume
+        </span>
+        <span class="btn mb-2 w-100 d-block text-center unclickable"
+                style="border-radius: 50px;
+                        font-weight: 600;
+                        color: #001F82;
+                        background-color: #FFFFFF;
+                        border: 1px solid #001F82;">
+            100
+            <button type="button" class="btn btn-primary btn-sm rounded-circle p-2"
+                    style="margin-left: 5px; vertical-align: middle;"
+                    data-bs-toggle="modal" data-bs-target="#modal-edit-qty">
+                <i class="fa-solid fa-pen text-white"></i>
+            </button>
+            </span>
+
+
+        <span class="btn mb-2 fw-bold w-100 d-block text-center unclickable"
+            style="border-radius: 50px;
+                    font-weight: 600;
+                    color: #FFFFFF;
+                    background-color:#001F82;">
+        FY Spend
+        </span>
+        <span class="btn mb-2 w-100 d-block text-center unclickable"
+            style="border-radius: 50px;
+                    font-weight: 600;
+                    color: #001F82;
+                    background-color: #FFFFFF;
+                    border: 1px solid #001F82;">
+        Rp900.000,00
+        <button type="button" class="btn btn-primary btn-sm rounded-circle p-2"
+                style="margin-left: 5px; vertical-align: middle;"
+                data-bs-toggle="modal" data-bs-target="#modal-edit-spend">
+            <i class="fa-solid fa-pen text-white"></i>
+        </button>
+        </span>
+
+        <span class="btn mb-2 fw-bold w-100 d-block text-center unclickable"
+            style="border-radius: 50px;
+                    font-weight: 600;
+                    color: #FFFFFF;
+                    background-color:#001F82;">
+        FY Budget
+        </span>
+        <span class="btn mb-2 w-100 d-block text-center unclickable"
+            style="border-radius: 50px;
+                    font-weight: 600;
+                    color: #001F82;
+                    background-color: #FFFFFF;
+                    border: 1px solid #001F82;">
+        Rp900.000,00
+        </span>
+
+        <span class="btn mb-2 fw-bold w-100 d-block text-center unclickable"
+            style="border-radius: 50px;
+                    font-weight: 600;
+                    color: #FFFFFF;
+                    background-color:#001F82;">
+        Savings
+        </span>
+        <span class="btn mb-2 w-100 d-block text-center unclickable"
+            style="border-radius: 50px;
+                    font-weight: 600;
+                    color: #001F82;
+                    background-color: #FFFFFF;
+                    border: 1px solid #001F82;">
+        Rp0,-
+        </span>
+    </div>
+    </div>
+
+
+  <!-- Status Box -->
+    <div id="statusAlert" onclick="toggleStatus()"
+        class="alert alert-danger text-center fw-bold mt-4 border border-danger rounded-pill fs-5 text-danger"
+        role="alert" style="cursor: pointer;">
+    Need More Savings!
+    </div>
+</div>
+
+
+<div class="row d-flex align-items-stretch mt-3">
+    <h4 class="fw-bold text-primary mb-1">Savings Forecasts</h4>
+
+    <div class="row mb-3">
+
+    <div class="col-md-6 d-flex gap-2">
+        <input type="text" class="form-control" placeholder="Input item code">
+        <button class="btn btn-outline-primary px-4">
+        <i class="bi bi-search me-1"></i> Search
+        </button>
+    </div>
+
+    <div class="col-md-6 d-flex gap-2">
+        <input type="text" class="form-control" placeholder="Input item code">
+        <button class="btn btn-outline-primary">
+        <i class="bi bi-person-check me-1"></i> Choose Vendor to Forecast
+        </button>
+    </div>
+    </div>
+
+    <!-- Table -->
+    <div class="table-responsive">
+    <table class="table table-sm text-center align-middle">
+    <thead>
+        <tr class="text-white fw-bold">
+            <th class="align-middle bg-primary text-white" rowspan="2">2025 FY Spend</th>
+            <th class="bg-info text-primary" colspan="3">Actualized</th>
+            <th class="bg-primary text-white" colspan="9">Forecast</th>
+            <th class="align-middle bg-primary text-white" rowspan="2">TOTAL</th>
+        </tr>
+        <tr class="text-white">
+            <th class="bg-info">Jan</th>
+            <th class="bg-info">Feb</th>
+            <th class="bg-info">Mar</th>
+
+            <!-- Forecast months with replaced buttons -->
+            <th class="bg-warning text-dark">
+            Apr
+            <button type="button" class="btn btn-primary btn-sm rounded-circle p-2"
+                    style="margin-left: 4px;" data-bs-toggle="modal" data-bs-target="#modal-edit-apr">
+                <i class="fa-solid fa-pen text-white"></i>
+            </button>
+            </th>
+            <th class="bg-warning text-dark">
+            May
+            <button type="button" class="btn btn-primary btn-sm rounded-circle p-2"
+                    style="margin-left: 4px;" data-bs-toggle="modal" data-bs-target="#modal-edit-may">
+                <i class="fa-solid fa-pen text-white"></i>
+            </button>
+            </th>
+            <th class="bg-warning text-dark">
+            Jun
+            <button type="button" class="btn btn-primary btn-sm rounded-circle p-2"
+                    style="margin-left: 4px;" data-bs-toggle="modal" data-bs-target="#modal-edit-jun">
+                <i class="fa-solid fa-pen text-white"></i>
+            </button>
+            </th>
+            <th class="bg-warning text-dark">
+            Jul
+            <button type="button" class="btn btn-primary btn-sm rounded-circle p-2"
+                    style="margin-left: 4px;" data-bs-toggle="modal" data-bs-target="#modal-edit-jul">
+                <i class="fa-solid fa-pen text-white"></i>
+            </button>
+            </th>
+            <th class="bg-warning text-dark">
+            Aug
+            <button type="button" class="btn btn-primary btn-sm rounded-circle p-2"
+                    style="margin-left: 4px;" data-bs-toggle="modal" data-bs-target="#modal-edit-aug">
+                <i class="fa-solid fa-pen text-white"></i>
+            </button>
+            </th>
+            <th class="bg-warning text-dark">
+            Sep
+            <button type="button" class="btn btn-primary btn-sm rounded-circle p-2"
+                    style="margin-left: 4px;" data-bs-toggle="modal" data-bs-target="#modal-edit-sep">
+                <i class="fa-solid fa-pen text-white"></i>
+            </button>
+            </th>
+            <th class="bg-warning text-dark">
+            Oct
+            <button type="button" class="btn btn-primary btn-sm rounded-circle p-2"
+                    style="margin-left: 4px;" data-bs-toggle="modal" data-bs-target="#modal-edit-oct">
+                <i class="fa-solid fa-pen text-white"></i>
+            </button>
+            </th>
+            <th class="bg-warning text-dark">
+            Nov
+            <button type="button" class="btn btn-primary btn-sm rounded-circle p-2"
+                    style="margin-left: 4px;" data-bs-toggle="modal" data-bs-target="#modal-edit-nov">
+                <i class="fa-solid fa-pen text-white"></i>
+            </button>
+            </th>
+            <th class="bg-warning text-dark">
+            Dec
+            <button type="button" class="btn btn-primary btn-sm rounded-circle p-2"
+                    style="margin-left: 4px;" data-bs-toggle="modal" data-bs-target="#modal-edit-dec">
+                <i class="fa-solid fa-pen text-white"></i>
+            </button>
+            </th>
+
+            <th class="bg-dark"> </th>
+        </tr>
+        </thead>
+
+        <tbody>
+        <!-- Volume -->
+        <tr>
+            <th>Volume</th>
+            <td>8</td>
+            <td>7</td>
+            <td>8.5</td>
+            <td>8.5</td>
+            <td>8.5</td>
+            <td>8.5</td>
+            <td>8.5</td>
+            <td>8.5</td>
+            <td>8.5</td>
+            <td>8.5</td>
+            <td>8.5</td>
+            <td>8.5</td>
+        </tr>
+
+        <!-- Spend -->
+        <tr>
+            <th>Spend</th>
+            <td>100,000</td>
+            <td>95,000</td>
+            <td>110,500</td>
+            <td>110,500</td>
+            <td>110,500</td>
+            <td>110,500</td>
+            <td>110,500</td>
+            <td>110,500</td>
+            <td>110,500</td>
+            <td>110,500</td>
+            <td>110,500</td>
+            <td>110,500</td>
+            <td></td>
+        </tr>
+
+        <!-- Avg Unit Price -->
+        <tr>
+            <th>Avg Unit Price</th>
+            <td>12,500</td>
+            <td>13,571</td>
+            <td>13,000</td>
+            <td>13,000</td>
+            <td>13,000</td>
+            <td>13,000</td>
+            <td>13,000</td>
+            <td>13,000</td>
+            <td>13,000</td>
+            <td>13,000</td>
+            <td>13,000</td>
+            <td>13,000</td>
+            <td></td>
+        </tr>
+        </tbody>
+    </table>
+    </div>
+</div>
+</body>
+</div>
+
 
 <script>
 function changeTargetText(newText) {
@@ -393,12 +878,11 @@ function changeStatus(event, status) {
     event.preventDefault();
     
     const vendorText = document.getElementById('vendortext');
-    vendorText.textContent = 'Status: ' + status;
+    vendorText.textContent = 'Item Status: ' + status;
     
-    // Hapus semua class warna terlebih dahulu
-    vendorText.classList.remove('text-danger', 'text-warning', 'text-success', 'text-primary');
-    
-    // Tambahkan class warna sesuai pilihan
+    vendorText.classList.remove('text-danger', 'text-warning', 'text-success', 'text-primary', 'fw-bold');
+    vendorText.classList.add('fw-bold');
+
     switch(status) {
         case 'Red':
             vendorText.classList.add('text-danger');
@@ -487,4 +971,27 @@ window.onload = function () {
             window.addEventListener('resize', checkSidebarState);
         }
     };
+
+    function enableEdit(id) {
+    const input = document.getElementById(id);
+    input.removeAttribute('readonly');
+    input.focus();
+  }
+
+  function toggleStatus() {
+    const alertBox = document.getElementById("statusAlert");
+    const isWarning = alertBox.classList.contains("alert-danger");
+
+    if (isWarning) {
+      // Ganti jadi "Target Achieved!"
+      alertBox.classList.remove("alert-danger", "border-danger", "text-danger");
+      alertBox.classList.add("alert-success", "border-success", "text-success");
+      alertBox.innerHTML = "<strong>Target Achieved!</strong>";
+    } else {
+      // Ganti balik jadi "Need More Savings!"
+      alertBox.classList.remove("alert-success", "border-success", "text-success");
+      alertBox.classList.add("alert-danger", "border-danger", "text-danger");
+      alertBox.innerHTML = "<strong>Need More Savings!<strong>";
+    }
+  }
 </script>

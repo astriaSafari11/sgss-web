@@ -251,7 +251,6 @@
     var sidebar = document.querySelector(".app-sidebar");
     var dropdowns = document.querySelectorAll(".nav-treeview");
 
-    // Jika klik di luar sidebar, tutup semua submenu
     if (!sidebar.contains(event.target)) {
       dropdowns.forEach(function (dropdown) {
         dropdown.style.display = "none"; 
@@ -503,16 +502,20 @@
           <div class="container-fluid">
 
           <script>
-            document.getElementById('logo-unilever').addEventListener('click', function (e) {
-              e.preventDefault();
+            const logo = document.getElementById('logo-unilever');
+            const sidebar = document.querySelector('.app-sidebar');
 
-              if (document.body.classList.contains('sidebar-collapse')) {
+            if (logo && sidebar) {
+              logo.addEventListener('mouseenter', function () {
                 document.body.classList.remove('sidebar-collapse');
                 document.body.classList.add('sidebar-open');
-              } else {
+              });
+
+              sidebar.addEventListener('mouseleave', function () {
                 document.body.classList.remove('sidebar-open');
                 document.body.classList.add('sidebar-collapse');
-              }
-            });
+              });
+            }
           </script>
+
 

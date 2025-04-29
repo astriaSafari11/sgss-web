@@ -215,7 +215,7 @@
   </div>
 </div>
 <div class="row mb-2">
-  <div class="d-flex justify-content-between align-items-center">
+  <div class="d-flex justify-content-start align-items-center">
     <div>
       <a href="<?= site_url('master_data/vendor_list'); ?>" class="btn btn-primary position-relative"
         style="font-weight: 600; white-space: nowrap;">
@@ -223,8 +223,8 @@
       </a>
     </div>
     <div>
-      <button type="button" class="btn btn-sm btn-outline-primary"
-        style="font-weight: 600; border-radius: 50px; margin-left: 5px;" data-bs-toggle="modal"
+      <button type="button" class="btn btn-sm btn-outline-primary ms-3"
+        style="font-weight: 600; border-radius: 50px;" data-bs-toggle="modal"
         data-bs-target="#modal-add-material">
         <i class="fa-solid fa-plus"></i>
         Add Material to Vendor
