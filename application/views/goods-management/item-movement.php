@@ -502,4 +502,72 @@
         });
     });
 
+    window.onload = function () {
+        const sidebar = document.querySelector(".app-sidebar");
+        const mainContent = document.querySelector(".main-content");
+        let originalSizes = [];
+        let isSidebarOpen = false;
+
+        Highcharts.charts.forEach((chart, index) => {
+            if (chart) {
+                originalSizes[index] = {
+                    width: chart.chartWidth,
+                    height: chart.chartHeight
+                };
+            }
+        });
+
+        function checkSidebarState() {
+            const currentState = !sidebar.classList.contains('collapsed') && sidebar.offsetWidth >= 100;
+            
+            if (currentState !== isSidebarOpen) {
+                isSidebarOpen = currentState;
+                handleSidebarStateChange();
+            }
+        }
+
+        function handleSidebarStateChange() {
+            if (isSidebarOpen) {
+                Highcharts.charts.forEach((chart, index) => {
+                    if (chart && originalSizes[index]) {
+                        let newWidth = originalSizes[index].width * 0.8;
+                        let newHeight = originalSizes[index].height * 0.8;
+                        chart.setSize(newWidth, newHeight, false);
+
+                        chart.renderTo.style.margin = '0 auto';
+                        chart.renderTo.style.padding = '0';
+                    }
+                });
+
+                mainContent.style.transform = 'scale(0.95)';
+                mainContent.style.transformOrigin = 'top center';
+            } else {
+                Highcharts.charts.forEach((chart, index) => {
+                    if (chart && originalSizes[index]) {
+                        chart.setSize(originalSizes[index].width, originalSizes[index].height, false);
+                        chart.renderTo.style.margin = '';
+                        chart.renderTo.style.padding = '';
+                    }
+                });
+
+                mainContent.style.transform = 'scale(1)';
+            }
+        }
+
+        if (sidebar && mainContent) {
+            checkSidebarState();
+
+            const mutationObserver = new MutationObserver(checkSidebarState);
+            mutationObserver.observe(sidebar, {
+                attributes: true,
+                attributeFilter: ['class']
+            });
+
+            const resizeObserver = new ResizeObserver(checkSidebarState);
+            resizeObserver.observe(sidebar);
+
+            window.addEventListener('resize', checkSidebarState);
+        }
+    };
+
 </script>

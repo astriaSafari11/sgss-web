@@ -32,6 +32,12 @@ class Saving_simulator extends CI_Controller
 		$this->session->set_flashdata ('page_title', 'SAVING DETAIL');
 		load_view ('saving_simulator/detail.php', []);
 		}
+    
+    public function detail_old()
+		{
+		$this->session->set_flashdata ('page_title', 'SAVING DETAIL OLD');
+		load_view ('saving_simulator/detail_old.php', []);
+		}
 }
 
 

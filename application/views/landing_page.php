@@ -669,11 +669,12 @@ document.addEventListener("DOMContentLoaded", function () {
 });
 
 
-document.addEventListener("DOMContentLoaded", function () {
-    const sidebar = document.querySelector(".app-sidebar");
-    let originalSizes = [];
+window.onload = function () {
+        const sidebar = document.querySelector(".app-sidebar");
+        const mainContent = document.querySelector(".main-content");
+        let originalSizes = [];
+        let isSidebarOpen = false;
 
-    if (sidebar) {
         Highcharts.charts.forEach((chart, index) => {
             if (chart) {
                 originalSizes[index] = {
@@ -683,49 +684,58 @@ document.addEventListener("DOMContentLoaded", function () {
             }
         });
 
-        sidebar.addEventListener("mouseenter", function () {
-            Highcharts.charts.forEach((chart, index) => {
-                if (chart) {
-                    // Pilih chart berdasarkan ID
-                    if (chart.renderTo.id === 'savingcharts' || chart.renderTo.id === 'cost-service-chart') {
-                        // Kurangi ukuran lebar 20%
+        function checkSidebarState() {
+            const currentState = !sidebar.classList.contains('collapsed') && sidebar.offsetWidth >= 100;
+            
+            if (currentState !== isSidebarOpen) {
+                isSidebarOpen = currentState;
+                handleSidebarStateChange();
+            }
+        }
+
+        function handleSidebarStateChange() {
+            if (isSidebarOpen) {
+                Highcharts.charts.forEach((chart, index) => {
+                    if (chart && originalSizes[index]) {
                         let newWidth = originalSizes[index].width * 0.8;
-                        let newHeight = newWidth * (originalSizes[index].height / originalSizes[index].width);
+                        let newHeight = originalSizes[index].height * 0.8;
                         chart.setSize(newWidth, newHeight, false);
 
-                        // Set margin/padding menjadi 0 dan align center
-                        chart.renderTo.style.margin = '0';
+                        chart.renderTo.style.margin = '0 auto';
                         chart.renderTo.style.padding = '0';
-                        chart.renderTo.style.display = 'block';
-                        chart.renderTo.style.marginLeft = 'auto';
-                        chart.renderTo.style.marginRight = 'auto';
                     }
-                }
-            });
-        });
+                });
 
-        sidebar.addEventListener("mouseleave", function () {
-            Highcharts.charts.forEach((chart, index) => {
-                if (chart) {
-                    // Pilih chart berdasarkan ID
-                    if (chart.renderTo.id === 'savingcharts' || chart.renderTo.id === 'cost-service-chart') {
-                        let newWidth = originalSizes[index].width;
-                        let newHeight = originalSizes[index].height;
-                        chart.setSize(newWidth, newHeight, false);
-
-                        // Set margin/padding kembali ke normal
+                mainContent.style.transform = 'scale(0.95)';
+                mainContent.style.transformOrigin = 'top center';
+            } else {
+                Highcharts.charts.forEach((chart, index) => {
+                    if (chart && originalSizes[index]) {
+                        chart.setSize(originalSizes[index].width, originalSizes[index].height, false);
                         chart.renderTo.style.margin = '';
                         chart.renderTo.style.padding = '';
-                        chart.renderTo.style.display = '';
-                        chart.renderTo.style.marginLeft = '';
-                        chart.renderTo.style.marginRight = '';
                     }
-                }
-            });
-        });
-    }
-});
+                });
 
+                mainContent.style.transform = 'scale(1)';
+            }
+        }
+
+        if (sidebar && mainContent) {
+            checkSidebarState();
+
+            const mutationObserver = new MutationObserver(checkSidebarState);
+            mutationObserver.observe(sidebar, {
+                attributes: true,
+                attributeFilter: ['class']
+            });
+
+            const resizeObserver = new ResizeObserver(checkSidebarState);
+            resizeObserver.observe(sidebar);
+
+            window.addEventListener('resize', checkSidebarState);
+        }
+    };
 
     </script>
 

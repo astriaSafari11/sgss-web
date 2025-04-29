@@ -138,6 +138,63 @@
     <!-- /.card -->
   </div>
 </div>
+<?php if ($order->status == "waiting_approval" && $curr_user->role == "line_manager")
+    { ?>
+  <div class="row">
+    <div class="col-12 mb-4">
+      <div class="card">
+        <div class="card-header" style="background-color: #001F82;">
+          <h3 class="card-title" style="font-weight: 600;color: #FFF;">Approval Needed</h3>
+        </div>
+        <div class="card-body">
+          <h4 class="text-center" style="font-weight: 600; color:#001F82;">Do you want to approve this order?</h4>
+          <div class="text-center">
+            <a href="<?= site_url ('goods_management/approval_approve/' . _encrypt ($order->id)); ?>"
+              class="btn btn-lg btn-outline-primary text-center" type="button"
+              style="font-weight: 600; border-radius: 50px;width: 150px;">APPROVE</a>
+            <a class="btn btn-lg btn-outline-danger text-center" type="button"
+              style="font-weight: 600; border-radius: 50px;width: 150px;" data-bs-toggle="modal"
+              data-bs-target="#modal-reject">REJECT</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+<?php } ?>
+</div>
+<div class="modal fade" id="modal-reject" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <form action="<?= site_url ('goods_management/approval_reject'); ?>" method="post" id="modal-reject">
+    <input type="hidden" name="id" value="<?php echo _encrypt ($order->id); ?>">
+    <div class="modal-dialog modal-lg">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="exampleModalLabel" class="text-primary" style="color: #001F82;font-weight:600;">
+            Reject Order Request</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <div class="row">
+            <div class="col-12">
+              <div class="row">
+                <!--begin::Col-->
+                <div class="col-12">
+                  <label>Please fill your reason, to reject this order request</label>
+                  <div class="form-floating mb-3">
+                    <input type="text" class="form-control" id="floatingInput" name="remarks" value="">
+                    <label for="floatingInput" class="fw-bold text-primary">Reason</label>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="submit" name="submit" class="btn btn-outline-primary">Reject Request</button>
+        </div>
+      </div>
+    </div>
+  </form>
+</div>
 <div class="row">
   <div class="col-12 mb-4">
     <!-- Default box -->
@@ -698,63 +755,7 @@
     </div>
   </div>
 <?php } ?>
-<?php if ($order->status == "waiting_approval" && $curr_user->role == "line_manager")
-    { ?>
-  <div class="row">
-    <div class="col-12 mb-4">
-      <div class="card">
-        <div class="card-header" style="background-color: #001F82;">
-          <h3 class="card-title" style="font-weight: 600;color: #FFF;">Approval Needed</h3>
-        </div>
-        <div class="card-body">
-          <h4 class="text-center" style="font-weight: 600; color:#001F82;">Do you want to approve this order?</h4>
-          <div class="text-center">
-            <a href="<?= site_url ('goods_management/approval_approve/' . _encrypt ($order->id)); ?>"
-              class="btn btn-lg btn-outline-primary text-center" type="button"
-              style="font-weight: 600; border-radius: 50px;width: 150px;">APPROVE</a>
-            <a class="btn btn-lg btn-outline-danger text-center" type="button"
-              style="font-weight: 600; border-radius: 50px;width: 150px;" data-bs-toggle="modal"
-              data-bs-target="#modal-reject">REJECT</a>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
-<?php } ?>
-</div>
-<div class="modal fade" id="modal-reject" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-  <form action="<?= site_url ('goods_management/approval_reject'); ?>" method="post" id="modal-reject">
-    <input type="hidden" name="id" value="<?php echo _encrypt ($order->id); ?>">
-    <div class="modal-dialog modal-lg">
-      <div class="modal-content">
-        <div class="modal-header">
-          <h5 class="modal-title" id="exampleModalLabel" class="text-primary" style="color: #001F82;font-weight:600;">
-            Reject Order Request</h5>
-          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-        </div>
-        <div class="modal-body">
-          <div class="row">
-            <div class="col-12">
-              <div class="row">
-                <!--begin::Col-->
-                <div class="col-12">
-                  <label>Please fill your reason, to reject this order request</label>
-                  <div class="form-floating mb-3">
-                    <input type="text" class="form-control" id="floatingInput" name="remarks" value="">
-                    <label for="floatingInput" class="fw-bold text-primary">Reason</label>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-        <div class="modal-footer">
-          <button type="submit" name="submit" class="btn btn-outline-primary">Reject Request</button>
-        </div>
-      </div>
-    </div>
-  </form>
-</div>
+
 <?php $this->load->view ('_partials/footer.php'); ?>
 
 <script>

@@ -677,67 +677,69 @@
 
     window.onload = function () {
         const sidebar = document.querySelector(".app-sidebar");
+        const mainContent = document.querySelector(".main-content");
         let originalSizes = [];
+        let isSidebarOpen = false;
 
-        if (sidebar) {
-            // Menyimpan ukuran asli dari semua chart
-            Highcharts.charts.forEach((chart, index) => {
-                if (chart) {
-                    originalSizes[index] = {
-                        width: chart.chartWidth,
-                        height: chart.chartHeight
-                    };
-                }
-            });
+        Highcharts.charts.forEach((chart, index) => {
+            if (chart) {
+                originalSizes[index] = {
+                    width: chart.chartWidth,
+                    height: chart.chartHeight
+                };
+            }
+        });
 
-            sidebar.addEventListener("mouseenter", function () {
+        function checkSidebarState() {
+            const currentState = !sidebar.classList.contains('collapsed') && sidebar.offsetWidth >= 100;
+            
+            if (currentState !== isSidebarOpen) {
+                isSidebarOpen = currentState;
+                handleSidebarStateChange();
+            }
+        }
+
+        function handleSidebarStateChange() {
+            if (isSidebarOpen) {
                 Highcharts.charts.forEach((chart, index) => {
-                    if (chart) {
-                        const chartId = chart.renderTo.id;
-
-                        // Gunakan originalSizes berdasarkan ID chart
+                    if (chart && originalSizes[index]) {
                         let newWidth = originalSizes[index].width * 0.8;
-                        let newHeight;
-
-                        // Atur tinggi khusus berdasarkan ID chart
-                        if (chartId === 'container') {
-                            newHeight = originalSizes[index].height * 1;
-                        } else if (chartId === 'yoy-consumption-chart') {
-                            newHeight = originalSizes[index].height * 1;
-                        } else {
-                            newHeight = newWidth * 1; // default jika tidak cocok
-                        }
-
+                        let newHeight = originalSizes[index].height * 0.8;
                         chart.setSize(newWidth, newHeight, false);
 
-                        // Atur tampilan agar rapi di tengah
-                        chart.renderTo.style.margin = '0';
+                        chart.renderTo.style.margin = '0 auto';
                         chart.renderTo.style.padding = '0';
-                        chart.renderTo.style.display = 'block';
-                        chart.renderTo.style.marginLeft = 'auto';
-                        chart.renderTo.style.marginRight = 'auto';
                     }
                 });
-            });
 
-            sidebar.addEventListener("mouseleave", function () {
+                mainContent.style.transform = 'scale(0.95)';
+                mainContent.style.transformOrigin = 'top center';
+            } else {
                 Highcharts.charts.forEach((chart, index) => {
-                    if (chart) {
-                        let newWidth = originalSizes[index].width;
-                        let newHeight = originalSizes[index].height;
-                        chart.setSize(newWidth, newHeight, false);
-
-                        // Set margin/padding kembali ke normal
+                    if (chart && originalSizes[index]) {
+                        chart.setSize(originalSizes[index].width, originalSizes[index].height, false);
                         chart.renderTo.style.margin = '';
                         chart.renderTo.style.padding = '';
-                        chart.renderTo.style.display = '';
-                        chart.renderTo.style.marginLeft = '';
-                        chart.renderTo.style.marginRight = '';
                     }
                 });
+
+                mainContent.style.transform = 'scale(1)';
+            }
+        }
+
+        if (sidebar && mainContent) {
+            checkSidebarState();
+
+            const mutationObserver = new MutationObserver(checkSidebarState);
+            mutationObserver.observe(sidebar, {
+                attributes: true,
+                attributeFilter: ['class']
             });
+
+            const resizeObserver = new ResizeObserver(checkSidebarState);
+            resizeObserver.observe(sidebar);
+
+            window.addEventListener('resize', checkSidebarState);
         }
     };
-
-
 </script>

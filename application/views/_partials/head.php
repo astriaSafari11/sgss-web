@@ -277,15 +277,15 @@
       <!--begin::Sidebar-->
       <aside class="app-sidebar bg-white shadow" data-bs-theme="light">
         <!--begin::Sidebar Brand-->
-        <div class="sidebar-brand" style="cursor: none;">
+        <div class="sidebar-brand">
           <!--begin::Brand Link-->
-          <a href="#" class="brand-link" style="cursor: none;">
+          <a href="#" class="brand-link" id="logo-unilever">
             <!--begin::Brand Image-->
             <img
               src="<?= base_url('assets/dist/images/logos/unilever-logo.png');?>"
               alt="Unilever Logo"
               class="brand-image"
-              style="margin-left: 20px; cursor: none;"
+              style="margin-left: 20px;"
             />
             <!--end::Brand Image-->
             <!--begin::Brand Text-->
@@ -296,7 +296,7 @@
                 style="display: inline-block;
                 vertical-align: middle;
                 height: 24px;
-                margin-left:21px; cursor: none;">
+                margin-left:21px;">
             </span>
 
             <!--end::Brand Text-->
@@ -501,3 +501,18 @@
         <div class="app-content mt-3">
           <!--begin::Container-->
           <div class="container-fluid">
+
+          <script>
+            document.getElementById('logo-unilever').addEventListener('click', function (e) {
+              e.preventDefault();
+
+              if (document.body.classList.contains('sidebar-collapse')) {
+                document.body.classList.remove('sidebar-collapse');
+                document.body.classList.add('sidebar-open');
+              } else {
+                document.body.classList.remove('sidebar-open');
+                document.body.classList.add('sidebar-collapse');
+              }
+            });
+          </script>
+

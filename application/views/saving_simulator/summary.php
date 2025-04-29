@@ -22,7 +22,7 @@
 
             <div class="info-box card-1" style="border-radius: 20px;">
                 <div class="info-box-content" style="color: #001F82;">
-                    <h10 class="mb-3">KPI-spend vs baseline (budget/YoY)</h10>
+                    <h10 class="mb-2">KPI-spend vs baseline (budget/YoY)</h10>
 
                     <div class="d-flex justify-content-between align-items-center rounded me-1">
 
@@ -40,7 +40,7 @@
                             <div class="text-primary small">vs 2024 YoY</div>
                         </div>
                     </div>
-                    <a href="#" class="btn btn-sm btn-outline-primary fw-bold mt-2 py-2" style="border-radius: 30px">
+                    <a href="#" class="btn btn-sm btn-outline-primary fw-bold py-2" style="border-radius: 30px">
                         See Details...
                     </a>
                 </div>
@@ -509,12 +509,12 @@
         });
     });
 
-    window.onload = function () {
+        window.onload = function () {
         const sidebar = document.querySelector(".app-sidebar");
         const mainContent = document.querySelector(".main-content");
         let originalSizes = [];
+        let isSidebarOpen = false;
 
-        // Simpan ukuran asli semua chart
         Highcharts.charts.forEach((chart, index) => {
             if (chart) {
                 originalSizes[index] = {
@@ -524,45 +524,56 @@
             }
         });
 
-        if (sidebar && mainContent) {
-            sidebar.addEventListener("mouseenter", function () {
-                // Resize Highcharts
+        function checkSidebarState() {
+            const currentState = !sidebar.classList.contains('collapsed') && sidebar.offsetWidth >= 100;
+            
+            if (currentState !== isSidebarOpen) {
+                isSidebarOpen = currentState;
+                handleSidebarStateChange();
+            }
+        }
+
+        function handleSidebarStateChange() {
+            if (isSidebarOpen) {
                 Highcharts.charts.forEach((chart, index) => {
-                    if (chart) {
+                    if (chart && originalSizes[index]) {
                         let newWidth = originalSizes[index].width * 0.8;
-                        let newHeight = newWidth * 0.8;
+                        let newHeight = originalSizes[index].height * 0.8;
                         chart.setSize(newWidth, newHeight, false);
 
-                        chart.renderTo.style.margin = '0';
+                        chart.renderTo.style.margin = '0 auto';
                         chart.renderTo.style.padding = '0';
-                        chart.renderTo.style.display = 'block';
-                        chart.renderTo.style.marginLeft = 'auto';
-                        chart.renderTo.style.marginRight = '0';
                     }
                 });
 
-                // Scale semua konten
-                mainContent.style.transform = 'scale(0.95)';
+                mainContent.style.transform = 'scale(0.90)';
                 mainContent.style.transformOrigin = 'top center';
-                //   mainContent.style.transition = 'transform 0.3s ease';
-            });
-
-            sidebar.addEventListener("mouseleave", function () {
-                // Reset chart
+            } else {
                 Highcharts.charts.forEach((chart, index) => {
-                    if (chart) {
+                    if (chart && originalSizes[index]) {
                         chart.setSize(originalSizes[index].width, originalSizes[index].height, false);
                         chart.renderTo.style.margin = '';
                         chart.renderTo.style.padding = '';
-                        chart.renderTo.style.display = '';
-                        chart.renderTo.style.marginLeft = '';
-                        chart.renderTo.style.marginRight = '';
                     }
                 });
 
-                // Reset scale konten
                 mainContent.style.transform = 'scale(1)';
+            }
+        }
+
+        if (sidebar && mainContent) {
+            checkSidebarState();
+
+            const mutationObserver = new MutationObserver(checkSidebarState);
+            mutationObserver.observe(sidebar, {
+                attributes: true,
+                attributeFilter: ['class']
             });
+
+            const resizeObserver = new ResizeObserver(checkSidebarState);
+            resizeObserver.observe(sidebar);
+
+            window.addEventListener('resize', checkSidebarState);
         }
     };
 

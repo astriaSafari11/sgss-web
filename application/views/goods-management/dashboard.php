@@ -833,55 +833,71 @@ document.getElementById('chartDetailModal').addEventListener('hidden.bs.modal', 
   });
 
   window.onload = function () {
-  const sidebar = document.querySelector(".app-sidebar");
-  let originalSizes = [];
+        const sidebar = document.querySelector(".app-sidebar");
+        const mainContent = document.querySelector(".main-content");
+        let originalSizes = [];
+        let isSidebarOpen = false;
 
-  if (sidebar) {
-    // Menyimpan ukuran asli dari semua chart
-    Highcharts.charts.forEach((chart, index) => {
-      if (chart) {
-        originalSizes[index] = {
-          width: chart.chartWidth,
-          height: chart.chartHeight
-        };
-      }
-    });
+        Highcharts.charts.forEach((chart, index) => {
+            if (chart) {
+                originalSizes[index] = {
+                    width: chart.chartWidth,
+                    height: chart.chartHeight
+                };
+            }
+        });
 
-    sidebar.addEventListener("mouseenter", function () {
-      Highcharts.charts.forEach((chart, index) => {
-        if (chart) {
-          // Kurangi ukuran lebar 25%
-          let newWidth = originalSizes[index].width * 0.75;
-          let newHeight = newWidth * 1;
-          chart.setSize(newWidth, newHeight, false);
-
-          // Set margin/padding menjadi 0 dan align center
-          chart.renderTo.style.margin = '0';
-          chart.renderTo.style.padding = '0';
-          chart.renderTo.style.display = 'block';
-          chart.renderTo.style.marginLeft = 'auto';
-          chart.renderTo.style.marginRight = 'auto';
+        function checkSidebarState() {
+            const currentState = !sidebar.classList.contains('collapsed') && sidebar.offsetWidth >= 100;
+            
+            if (currentState !== isSidebarOpen) {
+                isSidebarOpen = currentState;
+                handleSidebarStateChange();
+            }
         }
-      });
-    });
 
-    sidebar.addEventListener("mouseleave", function () {
-      Highcharts.charts.forEach((chart, index) => {
-        if (chart) {
-          let newWidth = originalSizes[index].width;
-          let newHeight = originalSizes[index].height;
-          chart.setSize(newWidth, newHeight, false);
+        function handleSidebarStateChange() {
+            if (isSidebarOpen) {
+                Highcharts.charts.forEach((chart, index) => {
+                    if (chart && originalSizes[index]) {
+                        let newWidth = originalSizes[index].width * 0.8;
+                        let newHeight = originalSizes[index].height * 0.8;
+                        chart.setSize(newWidth, newHeight, false);
 
-          // Set margin/padding kembali ke normal
-          chart.renderTo.style.margin = '';
-          chart.renderTo.style.padding = '';
-          chart.renderTo.style.display = '';
-          chart.renderTo.style.marginLeft = '';
-          chart.renderTo.style.marginRight = '';
+                        chart.renderTo.style.margin = '0 auto';
+                        chart.renderTo.style.padding = '0';
+                    }
+                });
+
+                mainContent.style.transform = 'scale(0.95)';
+                mainContent.style.transformOrigin = 'top center';
+            } else {
+                Highcharts.charts.forEach((chart, index) => {
+                    if (chart && originalSizes[index]) {
+                        chart.setSize(originalSizes[index].width, originalSizes[index].height, false);
+                        chart.renderTo.style.margin = '';
+                        chart.renderTo.style.padding = '';
+                    }
+                });
+
+                mainContent.style.transform = 'scale(1)';
+            }
         }
-      });
-    });
-  }
-};
+
+        if (sidebar && mainContent) {
+            checkSidebarState();
+
+            const mutationObserver = new MutationObserver(checkSidebarState);
+            mutationObserver.observe(sidebar, {
+                attributes: true,
+                attributeFilter: ['class']
+            });
+
+            const resizeObserver = new ResizeObserver(checkSidebarState);
+            resizeObserver.observe(sidebar);
+
+            window.addEventListener('resize', checkSidebarState);
+        }
+    };
 
 </script>
