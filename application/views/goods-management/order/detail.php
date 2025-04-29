@@ -344,7 +344,7 @@
                 <?php echo $order->status == 'auto_approved' ? 'SGSS System' : $order_approval[1]->nama; ?>
               </h6>
               <div class="d-flex flex-column gap-0">
-                <small><?php echo $order->status == 'auto_approved' ? 'Not Required' : approval_status ($order_approval[1]->approve_status); ?></small>
+                <small><?php echo $order_approval[1]->approve_status == 'inactive' ? 'Not Required' : approval_status ($order_approval[1]->approve_status); ?></small>
                 <?php if (! empty ($order_approval[1]->approve_status) && $order_approval[1]->approve_status != 'inactive')
                 { ?>
                   <h9>
@@ -394,7 +394,7 @@
                 <?php echo $order->status == 'auto_approved' ? 'SGSS System' : $order_approval[2]->nama; ?>
               </h6>
               <div class="d-flex flex-column gap-0">
-                <small><?php echo $order->status == 'auto_approved' ? 'Not Required' : approval_status ($order_approval[2]->approve_status); ?></small>
+                <small><?php echo $order_approval[2]->approve_status != 'inactive' ? approval_status ($order_approval[2]->approve_status) : 'Not Required'; ?></small>
                 <?php if (! empty ($order_approval[2]->approve_status) && $order_approval[2]->approve_status != 'inactive')
                 { ?>
                   <h9>

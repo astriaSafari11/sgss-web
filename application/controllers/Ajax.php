@@ -143,6 +143,25 @@ class Ajax extends CI_Controller
 		];
 		echo json_encode ($json);
 		}
+
+	function get_service_type()
+		{
+		$id = $this->input->post ('id');
+		$this->db->order_by ("id");
+
+		$m = $this->db->get_where (
+			"m_master_data_material",
+			array(
+				"id" => $id
+			)
+		)->row ();
+		$json = [
+			'success_message' => "data found",
+			'item_name' => $m->item_name,
+			'service_category' => $m->service_category
+		];
+		echo json_encode ($json);
+		}
 	function get_area()
 		{
 		$m = $this->db->get (

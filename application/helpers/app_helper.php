@@ -511,6 +511,9 @@ function approval_status($status = "")
 		case "rejected":
 			$desc = 'Rejected';
 			break;
+		case "finished":
+			$desc = 'Finished';
+			break;
 		default:
 			$desc = 'Waiting For Approval';
 			break;
