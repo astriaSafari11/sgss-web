@@ -25,8 +25,9 @@
     <div class="card">
       <div class="card-header">
         <div class="card-tools">
-          <a href="<?= site_url ('master_data/add_uom'); ?>" class="btn btn-sm btn-outline-primary position-relative"
-            style="font-weight: 600; border-radius: 50px; white-space:nowrap">
+          <a class="btn btn-sm btn-outline-primary position-relative"
+            style="font-weight: 600; border-radius: 50px; white-space:nowrap" data-bs-toggle="modal"
+            data-bs-target="#modal-add">
             <i class="fa-solid fa-circle-plus"></i>
             Add New UoM
           </a>
@@ -34,14 +35,13 @@
       </div>
       <div class="card-body">
         <div class="dt-container">
-
-        <?php $this->load->view ('_partials/search_bar.php'); ?>
-
+          <form method="post" id="searchData">
+            <?php $this->load->view ('_partials/search_bar.php'); ?>
+          </form>
           <table id="uom_table" class="table table-striped table-bordered" width="100%">
             <thead style="text-align: center;white-space:nowrap;">
               <tr>
                 <th style="color: #fff;background-color: #001F82;text-align: center; width: 80px">No.</th>
-                <th style="color: #fff;background-color: #001F82;text-align: center;">ID</th>
                 <th style="color: #fff;background-color: #001F82;text-align: center;">UoM Code</th>
                 <th style="color: #fff;background-color: #001F82;text-align: center;">UoM Name</th>
                 <th style="color: #fff;background-color: #001F82;text-align: center; width: 120px;">Action</th>
@@ -60,12 +60,57 @@
   </div>
 </div>
 <!--end::Row-->
+<div id="popup">
+  <!--end::Row-->
+  <form id="form-add" method="post" autocomplete="off" enctype="multipart/form-data">
+    <div class="modal fade" id="modal-add" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+      <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="exampleModalLabel" class="text-primary" style="color: #001F82;font-weight:600;">
+              Add New UOM</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+          </div>
+          <div class="modal-body">
+            <div class="row">
+              <!--begin::Col-->
 
+              <!--end::Col-->
+              <!--begin::Col-->
+              <div class="col-6">
+                <div class="form-floating mb-3">
+                  <input type="text" class="form-control" id="floatingInput" name="uom_code" required>
+                  <label for="floatingInput" class="fw-bold text-primary">UoM Code</label>
+                  <div class="invalid-feedback">This field is required.</div>
+                </div>
+              </div>
+              <div class="col-6">
+                <div class="form-floating mb-3">
+                  <input type="text" class="form-control" id="floatingInput" name="uom_name" required>
+                  <label for="floatingInput" class="fw-bold text-primary">UoM Name</label>
+                  <div class="invalid-feedback">This field is required.</div>
+                </div>
+              </div>
+              <!--end::Col-->
+
+              <!--begin::Col-->
+              <!--end::Col-->
+            </div>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-outline-danger" data-bs-dismiss="modal">Cancel</button>
+            <button type="submit" class="btn btn-outline-primary" id="btnUpload">Add Data</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </form>
+</div>
 <?php $this->load->view ('_partials/footer.php'); ?>
 
 <script>
-$(document).ready(function () {
-    $('#uom_table').DataTable({
+  $(document).ready(function () {
+    var table = $('#uom_table').DataTable({
       scrollX: true,
       "processing": true,
       "serverSide": true,
@@ -76,27 +121,44 @@ $(document).ready(function () {
       },
       "order": [],
       "columnDefs": [
-            {
-                targets: 1,
-                visible: false 
-            },
-            {
-                targets: '_all',
-                createdCell: function (cell) {
-                    $(cell).css('vertical-align', 'middle');
-                }
-            }
-        ],
-        "columns": [
-            { "data": 0 },
-            { "data": 1, "visible": false}, 
-            { "data": 2 }, 
-            { "data": 3 },
-            { "data": 4 }
-        
+        {
+          targets: '_all',
+          createdCell: function (cell) {
+            $(cell).css('vertical-align', 'middle');
+          }
+        }
       ],
       "searching": false,
       "lengthChange": false
+    });
+
+    // Submit form via AJAX
+    $('#searchData').submit(function (e) {
+      e.preventDefault();
+      // table.ajax.reload(); // Reload DataTable            
+      $.ajax({
+        url: '<?= site_url ('master_data/search_material'); ?>',
+        type: 'POST',
+        data: $(this).serialize(),
+        success: function (response) {
+          table.ajax.reload(null, false); // Reload DataTable
+        }
+      });
+    });
+
+    $("body").on("submit", "#form-add", function (e) {
+      e.preventDefault();
+      var data = new FormData(this);
+      $.ajax({
+        type: 'POST',
+        url: "<?php echo site_url ('master_data/save_uom') ?>",
+        data: data,
+        data: $(this).serialize(),
+        success: function (response) {
+          $('#modal-add').modal('hide');
+          table.ajax.reload(null, false); // Reload DataTable
+        }
+      });
     });
   });
 </script>

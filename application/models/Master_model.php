@@ -26,30 +26,6 @@ class Master_model extends CI_Model
 			$table = 'm_master_data_material';
 			$this->db->where ('type', 'goods');
 			$this->db->where ('is_active', 1);
-
-			if (isset ($p['column_search']) && $p['column_search'] != null)
-				{
-				$count = count ($p['column_search']);
-				for ($i = 0; $i < $count; $i++)
-					{
-					$column_search = $p['column_search'][$i];
-					$search = $p['keyword'][$i];
-					$filter = $p['column_filter'][$i];
-
-					if (! empty ($search) && ! empty ($column_search) && ! empty ($filter))
-						{
-						if ($filter == 'like')
-							{
-							$this->db->like ($column_search, $search);
-							}
-						else
-							{
-							$this->db->where ($column_search . " " . $filter, $search);
-							}
-						}
-
-					}
-				}
 			}
 		elseif ($type == "service")
 			{
@@ -77,57 +53,46 @@ class Master_model extends CI_Model
 		elseif ($type == "uom_list")
 			{
 			$table = 'm_uom';
-
-			if (! empty ($_POST['id']))
-				{
-				$this->db->where ('id', $_POST['id']);
-
-				}
-
 			}
 		elseif ($type == "category_list")
 			{
 			$table = 'm_category';
-
-			if (! empty ($_POST['id']))
-				{
-				$this->db->where ('id', $_POST['id']);
-
-				}
-
 			}
 		elseif ($type == "factory_list")
 			{
 			$table = 'm_factory';
-
-			if (! empty ($_POST['id']))
-				{
-				$this->db->where ('id', $_POST['id']);
-
-				}
-
 			}
 		elseif ($type == "purchase_reason")
 			{
 			$table = 'm_purchase_reason';
-
-			if (! empty ($_POST['id']))
-				{
-				$this->db->where ('id', $_POST['id']);
-
-				}
-
 			}
 		elseif ($type == "item_group")
 			{
 			$table = 'm_item_category';
+			}
 
-			if (! empty ($_POST['id']))
+		if (isset ($p['column_search']) && $p['column_search'] != null)
+			{
+			$count = count ($p['column_search']);
+			for ($i = 0; $i < $count; $i++)
 				{
-				$this->db->where ('id', $_POST['id']);
+				$column_search = $p['column_search'][$i];
+				$search = $p['keyword'][$i];
+				$filter = $p['column_filter'][$i];
+
+				if (! empty ($search) && ! empty ($column_search) && ! empty ($filter))
+					{
+					if ($filter == 'like')
+						{
+						$this->db->like ($column_search, $search);
+						}
+					else
+						{
+						$this->db->where ($column_search . " " . $filter, $search);
+						}
+					}
 
 				}
-
 			}
 
 		$this->db->from ($table);
@@ -172,6 +137,10 @@ class Master_model extends CI_Model
 		elseif ($type == "vendor_material_price")
 			{
 			$this->db->from ('vendor_material_price');
+			}
+		elseif ($type == "uom_list")
+			{
+			$this->db->from ('m_uom');
 			}
 
 		return $this->db->count_all_results ();

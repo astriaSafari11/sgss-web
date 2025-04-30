@@ -350,7 +350,7 @@
                 dataType: "json",
                 success: function (data) {
                     var service = $('#type').val();
-                    if (value == 'amount') {
+                    if (service == 'amount') {
                         $('#service_category').val('Bulk Service');
                     } else {
                         $('#service_category').val(data.service_category);

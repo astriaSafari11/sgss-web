@@ -85,46 +85,33 @@ class Usage extends CI_Controller
         $writer->save ('php://output');
         }
 
-    public function inventory_export()
+    public function usage_export()
         {
         ini_set ("max_execution_time", 0);
 
-        $from = date ("W", strtotime ($this->input->post ('from')));
-        $to = date ("W", strtotime ($this->input->post ('to')));
+        $from = date ("Y-m-d", strtotime ($this->input->post ('from')));
+        $to = date ("Y-m-d", strtotime ($this->input->post ('to')));
 
         $reader = IOFactory::createReader ('Xlsx');
-        $spreadsheet = $reader->load ('assets/format/template_export_inventory.xlsx');
+        $spreadsheet = $reader->load ('assets/format/template_export_usage.xlsx');
         $spreadsheet->setActiveSheetIndexByName ('Report');
         $sheet = $spreadsheet->getActiveSheet ();
         $index = 2;
         $week = date ("W");
 
-        $getData = $this->db->query ("select material.id, material.item_code, material.item_name, material.lot_size, material.order_cycle, material.lt_pr_po, material.lt_pr_to_deliv, material.gen_lead_time, 
-        material.standard_safety_stock, view_stock_card.year, view_stock_card.week, view_stock_card.stock_on_hand from view_stock_card
-        INNER JOIN m_master_data_material as material ON material.id = view_stock_card.id
-        WHERE year = '" . date ('Y') . "' and week >= '$from' and week <= '$to'")->result ();
-
-        $i = 8;
-        $max = $i + ($to - $from + 1);
-
-        for ($i = 8; $i <= $max + 1; $i++)
-            {
-            $col = num2alpha ($i);
-            $sheet->setCellValue ("{$col}1", date ('Y') . "-" . $i);
-            }
+        $getData = $this->db->query ("select * from view_average_usage where date >= '$from' and date <= '$to'")->result ();
 
         foreach ((array) $getData as $datas => $list)
             {
             // $sheet->insertNewRowBefore($index + 1, 1);
-            $sheet->setCellValue ("A{$index}", trim ($list->item_code));
-            $sheet->setCellValue ("B{$index}", trim ($list->item_name));
-            $sheet->setCellValue ("C{$index}", trim ($list->lt_pr_po));
-            $sheet->setCellValue ("D{$index}", trim ($list->lt_pr_to_deliv));
-            $sheet->setCellValue ("E{$index}", trim ($list->gen_lead_time));
-            $sheet->setCellValue ("F{$index}", trim ($list->order_cycle));
-            $sheet->setCellValue ("G{$index}", trim ($list->standard_safety_stock));
-            $sheet->setCellValue ("H{$index}", trim ($list->item_name));
-            $sheet->setCellValue ("I{$index}", trim ($list->stock_on_hand));
+            $sheet->setCellValue ("A{$index}", trim ($list->transaction_id));
+            $sheet->setCellValue ("B{$index}", trim ($list->date));
+            $sheet->setCellValue ("C{$index}", trim ($list->item_code));
+            $sheet->setCellValue ("D{$index}", trim ($list->item_name));
+            $sheet->setCellValue ("E{$index}", trim ($list->qty));
+            $sheet->setCellValue ("F{$index}", trim ($list->uom));
+            $sheet->setCellValue ("G{$index}", trim ($list->ytd_used));
+            $sheet->setCellValue ("H{$index}", trim ($list->usage_status));
 
             $styleArray = [
                 'font' => [
@@ -159,7 +146,7 @@ class Usage extends CI_Controller
         $writer = new Xlsx($spreadsheet); // instantiate Xlsx
         header ('Content-type: application/vnd.ms-excel');
         // It will be called file.xls
-        $filename = 'Inventory_Report_' . date ('Ymd');
+        $filename = 'Usage_Report_' . date ('Ymd');
         header ('Content-Disposition: attachment; filename="' . $filename . '.xlsx"');
         // Write file to the browser
         $writer->save ('php://output');

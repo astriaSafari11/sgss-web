@@ -370,7 +370,7 @@
     </div>
 </div>
 
-<form method="post" action="<?= site_url ('usage/export'); ?>" id="export-form">
+<form method="post" action="<?= site_url ('usage/usage_export'); ?>" id="export-form">
     <div class="modal fade" id="modal-export-report" tabindex="-1" aria-labelledby="exampleModalLabel"
         aria-hidden="true">
         <div class="modal-dialog modal-xl">

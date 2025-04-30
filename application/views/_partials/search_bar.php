@@ -61,7 +61,7 @@
             <button class="btn btn-outline-primary btn-sm" type="submit" name="search">
                 <i class="fas fa-search"></i>
             </button>
-            <a href="<?php echo site_url ('master_data/material_list'); ?>" class="btn btn-outline-primary btn-sm">
+            <a href="<?php echo current_url (); ?>" class="btn btn-outline-primary btn-sm">
                 Reset
             </a>
         </div>

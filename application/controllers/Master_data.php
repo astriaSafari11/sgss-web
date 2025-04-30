@@ -75,46 +75,73 @@ class Master_data extends CI_Controller
 
 	public function uom_list()
 		{
+		$data['column_search'] = array(
+			'uom_code',
+			'uom_name',
+		);
+		$this->session->unset_userdata ('search_material');
 		$this->session->set_flashdata ('page_title', 'MASTER DATA UoM');
-		$this->load->view ('master-data/uom-list.php');
+		$this->load->view ('master-data/uom-list.php', $data);
 		}
 
 	public function category_list()
 		{
+		$data['column_search'] = array(
+			'category_name',
+		);
+		$this->session->unset_userdata ('search_material');
 		$this->session->set_flashdata ('page_title', 'MASTER DATA CATEGORY');
-		$this->load->view ('master-data/category-list.php');
+		$this->load->view ('master-data/category-list.php', $data);
 		}
 
 	public function factory_list()
 		{
+		$data['column_search'] = array(
+			'factory_name',
+		);
+		$this->session->unset_userdata ('search_material');
 		$this->session->set_flashdata ('page_title', 'MASTER DATA FACTORY');
-		$this->load->view ('master-data/factory-list.php');
+		$this->load->view ('master-data/factory-list.php', $data);
 		}
 
 	public function purchase_reason()
 		{
+		$data['column_search'] = array(
+			'purchase_reason',
+			'type',
+		);
+		$this->session->unset_userdata ('search_material');
 		$this->session->set_flashdata ('page_title', 'MASTER DATA PURCHASE REASON');
-		$this->load->view ('master-data/purchase-reason.php');
+		$this->load->view ('master-data/purchase-reason.php', $data);
 		}
 
 	public function item_group()
 		{
+		$data['column_search'] = array(
+			'item_category_name',
+		);
+		$this->session->unset_userdata ('search_material');
 		$this->session->set_flashdata ('page_title', 'MASTER DATA ITEM GROUP');
-		$this->load->view ('master-data/item-group.php');
+		$this->load->view ('master-data/item-group.php', $data);
 		}
 
 	function get_item_group()
 		{
-		$search = $this->session->userdata ('search');
+		$search = $this->session->userdata ('search_material');
 		$list = $this->master_model->get_datatables ($search, 'item_group');
 		$data = array();
 		$no = $_POST['start'];
 		foreach ($list as $field)
 			{
 			$edit = '
-			<a href="#" class="btn btn-outline-primary">
-				<i class="fa-solid fa-circle-info"></i>						
-			</a>';
+			<a href="#" class="btn btn-sm btn-outline-primary">
+				<i class="fa-solid fa-pen"></i> Edit						
+			</a>
+			
+			<a href="#" class="btn btn-sm btn-outline-primary">
+				<i class="fa-solid fa-trash"></i> Delete
+			</a>
+			';
 
 			$row = array();
 
@@ -138,7 +165,7 @@ class Master_data extends CI_Controller
 
 	function get_purchase_reason()
 		{
-		$search = $this->session->userdata ('search');
+		$search = $this->session->userdata ('search_material');
 		$list = $this->master_model->get_datatables ($search, 'purchase_reason');
 		$data = array();
 		$no = $_POST['start'];
@@ -174,7 +201,7 @@ class Master_data extends CI_Controller
 
 	function get_factory_list()
 		{
-		$search = $this->session->userdata ('search');
+		$search = $this->session->userdata ('search_material');
 		$list = $this->master_model->get_datatables ($search, 'factory_list');
 		$data = array();
 		$no = $_POST['start'];
@@ -207,16 +234,77 @@ class Master_data extends CI_Controller
 
 	function get_category_list()
 		{
-		$search = $this->session->userdata ('search');
+		$search = $this->session->userdata ('search_material');
 		$list = $this->master_model->get_datatables ($search, 'category_list');
 		$data = array();
 		$no = $_POST['start'];
 		foreach ($list as $field)
 			{
 			$edit = '
-			<a href="#" class="btn btn-outline-primary">
-				<i class="fa-solid fa-circle-info"></i>						
-			</a>';
+				<a href="#" class="btn btn-sm btn-outline-primary" data-bs-toggle="modal"
+            data-bs-target="#modal-edit-' . $field->category_name . '">
+					<i class="fa-solid fa-pen"></i> Edit						
+				</a>
+				
+				<a href="#" class="btn btn-sm  btn-outline-danger" data-bs-toggle="modal"
+            data-bs-target="#modal-delete-' . $field->category_name . '">
+					<i class="fa-solid fa-trash"></i> Delete
+				</a>
+
+				<form id="form-edit" action="' . site_url ('master_data/update_category') . '"method="post" autocomplete="off" enctype="multipart/form-data">
+					<div class="modal fade" id="modal-edit-' . $field->category_name . '" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+					<div class="modal-dialog modal-lg">
+						<div class="modal-content">
+						<div class="modal-header">
+							<h5 class="modal-title" id="exampleModalLabel" class="text-primary" style="color: #001F82;font-weight:600;">
+							Edit UOM</h5>
+							<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+						</div>
+						<div class="modal-body">
+							<div class="row">
+							<!--begin::Col-->
+
+							<!--end::Col-->
+							<!--begin::Col-->
+							<input type="hidden" name="id" value="' . $field->category_name . '">
+							<div class="col-6">
+								<div class="form-floating mb-3">
+								<input type="text" class="form-control" id="floatingInput" name="category_name" required value="' . $field->category_name . '">
+								<label for="floatingInput" class="fw-bold text-primary">Category Name</label>
+								<div class="invalid-feedback">This field is required.</div>
+								</div>
+							</div>
+							<!--begin::Col-->
+							<!--end::Col-->
+							</div>
+						</div>
+						<div class="modal-footer">
+							<button type="button" class="btn btn-outline-danger" data-bs-dismiss="modal">Cancel</button>
+							<button type="submit" class="btn btn-outline-primary" name="submit" id="btnUpload">Edit Data</button>
+						</div>
+						</div>
+					</div>
+					</div>
+				</form>			
+				
+					<div class="modal fade" id="modal-delete-' . $field->category_name . '" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+						<div class="modal-dialog">
+							<div class="modal-content">
+								<div class="modal-header">
+									<h5 class="modal-title" id="exampleModalLabel" class="text-primary" style="color: #001F82;font-weight:600;">Delete Material</h5>
+									<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+								</div>
+								<div class="modal-body" style="text-align: left;">
+									<p>You are going to delete ' . $field->category_name . '. Are you sure?</p>
+								</div>
+								<div class="modal-footer">
+									<button type="button" class="btn btn-outline-primary" data-bs-dismiss="modal">No, Cancel Delete.</button>
+									<a href="' . site_url ('master_data/delete_category?id=' . _encrypt ($field->category_name)) . '" type="button" class="btn btn-outline-danger">Yes, Delete Data.</a>
+								</div>
+							</div>
+						</div>
+					</div>			
+				';
 
 			$row = array();
 
@@ -240,21 +328,90 @@ class Master_data extends CI_Controller
 
 	function get_uom_list()
 		{
-		$search = $this->session->userdata ('search');
+		$search = $this->session->userdata ('search_material');
 		$list = $this->master_model->get_datatables ($search, 'uom_list');
 		$data = array();
 		$no = $_POST['start'];
 		foreach ($list as $field)
 			{
 			$edit = '
-				<a href="#" class="btn btn-outline-primary">
-					<i class="fa-solid fa-circle-info"></i>						
-				</a>';
+				<a href="#" class="btn btn-sm btn-outline-primary" data-bs-toggle="modal"
+            data-bs-target="#modal-edit-' . $field->uom_code . '">
+					<i class="fa-solid fa-pen"></i> Edit						
+				</a>
+				
+				<a href="#" class="btn btn-sm  btn-outline-danger" data-bs-toggle="modal"
+            data-bs-target="#modal-delete-' . $field->uom_code . '">
+					<i class="fa-solid fa-trash"></i> Delete
+				</a>
+
+				<form id="form-edit" action="' . site_url ('master_data/update_uom') . '"method="post" autocomplete="off" enctype="multipart/form-data">
+					<div class="modal fade" id="modal-edit-' . $field->uom_code . '" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+					<div class="modal-dialog modal-lg">
+						<div class="modal-content">
+						<div class="modal-header">
+							<h5 class="modal-title" id="exampleModalLabel" class="text-primary" style="color: #001F82;font-weight:600;">
+							Edit UOM</h5>
+							<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+						</div>
+						<div class="modal-body">
+							<div class="row">
+							<!--begin::Col-->
+
+							<!--end::Col-->
+							<!--begin::Col-->
+							<input type="hidden" name="id" value="' . $field->uom_code . '">
+							<div class="col-6">
+								<div class="form-floating mb-3">
+								<input type="text" class="form-control" id="floatingInput" name="uom_code" required value="' . $field->uom_code . '">
+								<label for="floatingInput" class="fw-bold text-primary">UoM Code</label>
+								<div class="invalid-feedback">This field is required.</div>
+								</div>
+							</div>
+							<div class="col-6">
+								<div class="form-floating mb-3">
+								<input type="text" class="form-control" id="floatingInput" name="uom_name" required value="' . $field->uom_name . '">
+								<label for="floatingInput" class="fw-bold text-primary">UoM Name</label>
+								<div class="invalid-feedback">This field is required.</div>
+								</div>
+							</div>
+							<!--end::Col-->
+
+							<!--begin::Col-->
+							<!--end::Col-->
+							</div>
+						</div>
+						<div class="modal-footer">
+							<button type="button" class="btn btn-outline-danger" data-bs-dismiss="modal">Cancel</button>
+							<button type="submit" class="btn btn-outline-primary" name="submit" id="btnUpload">Edit Data</button>
+						</div>
+						</div>
+					</div>
+					</div>
+				</form>			
+				
+					<div class="modal fade" id="modal-delete-' . $field->uom_code . '" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+						<div class="modal-dialog">
+							<div class="modal-content">
+								<div class="modal-header">
+									<h5 class="modal-title" id="exampleModalLabel" class="text-primary" style="color: #001F82;font-weight:600;">Delete Material</h5>
+									<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+								</div>
+								<div class="modal-body" style="text-align: left;">
+									<p>You are going to delete ' . $field->uom_code . ' - ' . $field->uom_name . '. Are you sure?</p>
+								</div>
+								<div class="modal-footer">
+									<button type="button" class="btn btn-outline-primary" data-bs-dismiss="modal">No, Cancel Delete.</button>
+									<a href="' . site_url ('master_data/delete_uom?id=' . _encrypt ($field->uom_code)) . '" type="button" class="btn btn-outline-danger">Yes, Delete Data.</a>
+								</div>
+							</div>
+						</div>
+					</div>			
+				';
 
 			$row = array();
 
 			$row[] = ++$no;
-			$row[] = $field->id;
 			$row[] = $field->uom_code;
 			$row[] = $field->uom_name;
 			$row[] = $edit;
@@ -505,60 +662,230 @@ class Master_data extends CI_Controller
 
 	public function save_uom()
 		{
-		if (isset ($_POST['submit']))
-			{
-			$uom_code = $this->input->post ('uom_code');
-			$exist = $this->db->get_where ("m_master_data_uom", array(
-				"uom_code" => $this->input->post ('uom_code'),
-			))->row ();
+		$uom_code = $this->input->post ('uom_code');
+		$exist = $this->db->get_where ("m_uom", array(
+			"uom_code" => $this->input->post ('uom_code'),
+		))->row ();
 
-			if ($exist)
+		if ($exist)
+			{
+			$err = array(
+				'show' => true,
+				'type' => 'error',
+				'msg' => 'Add new UoM failed. UoM with code ' . $uom_code . ' is already exist.'
+			);
+			$this->session->set_flashdata ('toast', $err);
+			echo 0;
+			}
+		else
+			{
+			$inserted = _add (
+				"m_uom",
+				array(
+					"uom_code" => $this->input->post ('uom_code'),
+					"uom_name" => $this->input->post ('uom_name'),
+				)
+			);
+
+			if ($inserted)
+				{
+				$err = array(
+					'show' => true,
+					'type' => 'success',
+					'msg' => 'Successfully added new UoM.'
+				);
+				$this->session->set_flashdata ('toast', $err);
+				echo 1;
+				}
+			else
 				{
 				$err = array(
 					'show' => true,
 					'type' => 'error',
-					'msg' => 'Add new UoM failed. UoM with code ' . $uom_code . ' is already exist.'
+					'msg' => 'Add new UoM failed.'
 				);
 				$this->session->set_flashdata ('toast', $err);
-				$this->load->view ('master-data/uom/add-form.php');
+				echo 1;
+				}
+			}
+
+		echo 1;
+		}
+
+	public function update_uom()
+		{
+		if (isset ($_POST['submit']))
+			{
+
+			$id = $this->input->post ('id');
+			$exist = $this->db->get_where ('m_uom', array("uom_code" => $id))->row ();
+			$inserted = _update (
+				"m_uom",
+				array(
+					"uom_code" => $this->input->post ('uom_code'),
+					"uom_name" => $this->input->post ('uom_name'),
+				),
+				array("uom_code" => $exist->uom_code)
+			);
+
+			if ($inserted)
+				{
+				$err = array(
+					'show' => true,
+					'type' => 'success',
+					'msg' => 'Successfully update uom data.'
+				);
+				$this->session->set_flashdata ('toast', $err);
 				}
 			else
 				{
-				$inserted = _add (
-					"m_master_data_uom",
-					array(
-						"uom_code" => $this->input->post ('uom_code'),
-						"uom_name" => $this->input->post ('uom_name'),
-					)
+				$err = array(
+					'show' => true,
+					'type' => 'error',
+					'msg' => 'Update data failed.'
 				);
-				if ($inserted)
-					{
-					$err = array(
-						'show' => true,
-						'type' => 'success',
-						'msg' => 'Successfully added new UoM.'
-					);
-					$this->session->set_flashdata ('toast', $err);
-					redirect ('master_data/uom_list');
-					}
-				else
-					{
-					$err = array(
-						'show' => true,
-						'type' => 'error',
-						'msg' => 'Add new UoM failed.'
-					);
-					$this->session->set_flashdata ('toast', $err);
-					redirect ('master_data/uom_list');
-					}
-				redirect ('master_data/uom_list');
-				exit ();
+				$this->session->set_flashdata ('toast', $err);
 				}
-			redirect ('master_data/uom_list');
-			exit ();
+			redirect ('master_data/uom_list/');
 			}
 		}
+	public function delete_uom()
+		{
+		$id = _decrypt ($this->input->get ('id'));
+		$deleted = _hard_delete ("m_uom", array("uom_code" => $id));
 
+		if ($deleted)
+			{
+			$err = array(
+				'show' => true,
+				'type' => 'error',
+				'msg' => 'Successfully delete uom data.'
+			);
+			$this->session->set_flashdata ('toast', $err);
+			}
+		else
+			{
+			$err = array(
+				'show' => true,
+				'type' => 'error',
+				'msg' => 'Delete uom failed.'
+			);
+			$this->session->set_flashdata ('toast', $err);
+			}
+		redirect ('master_data/uom_list');
+		}
+
+	public function save_category()
+		{
+		$exist = $this->db->get_where ("m_category", array(
+			"category_name" => $this->input->post ('m_category'),
+		))->row ();
+
+		if ($exist)
+			{
+			$err = array(
+				'show' => true,
+				'type' => 'error',
+				'msg' => 'Add new category failed.'
+			);
+			$this->session->set_flashdata ('toast', $err);
+			echo 0;
+			}
+		else
+			{
+			$inserted = _add (
+				"m_category",
+				array(
+					"category_name" => $this->input->post ('category_name'),
+				)
+			);
+
+			if ($inserted)
+				{
+				$err = array(
+					'show' => true,
+					'type' => 'success',
+					'msg' => 'Successfully added new category.'
+				);
+				$this->session->set_flashdata ('toast', $err);
+				echo 1;
+				}
+			else
+				{
+				$err = array(
+					'show' => true,
+					'type' => 'error',
+					'msg' => 'Add new category failed.'
+				);
+				$this->session->set_flashdata ('toast', $err);
+				echo 1;
+				}
+			}
+
+		echo 1;
+		}
+
+	public function update_category()
+		{
+		if (isset ($_POST['submit']))
+			{
+
+			$id = $this->input->post ('id');
+			$exist = $this->db->get_where ('m_category', array("category_name" => $id))->row ();
+			$inserted = _update (
+				"m_category",
+				array(
+					"category_name" => $this->input->post ('category_name'),
+				),
+				array("category_name" => $exist->category_name)
+			);
+
+			if ($inserted)
+				{
+				$err = array(
+					'show' => true,
+					'type' => 'success',
+					'msg' => 'Successfully update uom data.'
+				);
+				$this->session->set_flashdata ('toast', $err);
+				}
+			else
+				{
+				$err = array(
+					'show' => true,
+					'type' => 'error',
+					'msg' => 'Update data failed.'
+				);
+				$this->session->set_flashdata ('toast', $err);
+				}
+			redirect ('master_data/category_list/');
+			}
+		}
+	public function delete_category()
+		{
+		$id = _decrypt ($this->input->get ('id'));
+		$deleted = _hard_delete ("m_category", array("category_name" => $id));
+
+		if ($deleted)
+			{
+			$err = array(
+				'show' => true,
+				'type' => 'error',
+				'msg' => 'Successfully delete category data.'
+			);
+			$this->session->set_flashdata ('toast', $err);
+			}
+		else
+			{
+			$err = array(
+				'show' => true,
+				'type' => 'error',
+				'msg' => 'Delete category failed.'
+			);
+			$this->session->set_flashdata ('toast', $err);
+			}
+		redirect ('master_data/category_list');
+		}
 	public function add_category()
 		{
 		$this->session->set_flashdata ('page_title', 'FORM ADD NEW CATEGORY');
@@ -570,191 +897,405 @@ class Master_data extends CI_Controller
 		$this->session->set_flashdata ('page_title', 'FORM ADD NEW PURCHASE REASON');
 		$this->load->view ('master-data/purchase-reason/add-form.php');
 		}
+	public function save_purchase_reason()
+		{
+		$exist = $this->db->get_where ("m_purchase_reason", array(
+			"purchase_reason" => $this->input->post ('purchase_reason'),
+			"type" => $this->input->post ('type'),
+		))->row ();
+
+		if ($exist)
+			{
+			$err = array(
+				'show' => true,
+				'type' => 'error',
+				'msg' => 'Add new purchase reason failed.'
+			);
+			$this->session->set_flashdata ('toast', $err);
+			echo 0;
+			}
+		else
+			{
+			$inserted = _add (
+				"m_purchase_reason",
+				array(
+					"purchase_reason" => $this->input->post ('purchase_reason'),
+					"type" => $this->input->post ('type'),
+					"is_approval" => $this->input->post ('approval'),
+					"WL_approval" => $this->input->post ('wl_approval'),
+				)
+			);
+
+			if ($inserted)
+				{
+				$err = array(
+					'show' => true,
+					'type' => 'success',
+					'msg' => 'Successfully added new purchase reason.'
+				);
+				$this->session->set_flashdata ('toast', $err);
+				echo 1;
+				}
+			else
+				{
+				$err = array(
+					'show' => true,
+					'type' => 'error',
+					'msg' => 'Add new purchase reason failed.'
+				);
+				$this->session->set_flashdata ('toast', $err);
+				echo 1;
+				}
+			}
+
+		echo 1;
+		}
+
+	public function update_purchase_reason()
+		{
+		if (isset ($_POST['submit']))
+			{
+
+			$id = $this->input->post ('id');
+			$exist = $this->db->get_where ('m_category', array("category_name" => $id))->row ();
+			$inserted = _update (
+				"m_category",
+				array(
+					"category_name" => $this->input->post ('category_name'),
+				),
+				array("category_name" => $exist->category_name)
+			);
+
+			if ($inserted)
+				{
+				$err = array(
+					'show' => true,
+					'type' => 'success',
+					'msg' => 'Successfully update uom data.'
+				);
+				$this->session->set_flashdata ('toast', $err);
+				}
+			else
+				{
+				$err = array(
+					'show' => true,
+					'type' => 'error',
+					'msg' => 'Update data failed.'
+				);
+				$this->session->set_flashdata ('toast', $err);
+				}
+			redirect ('master_data/category_list/');
+			}
+		}
+	public function delete_purchase_reason()
+		{
+		$id = _decrypt ($this->input->get ('id'));
+		$deleted = _hard_delete ("m_category", array("category_name" => $id));
+
+		if ($deleted)
+			{
+			$err = array(
+				'show' => true,
+				'type' => 'error',
+				'msg' => 'Successfully delete category data.'
+			);
+			$this->session->set_flashdata ('toast', $err);
+			}
+		else
+			{
+			$err = array(
+				'show' => true,
+				'type' => 'error',
+				'msg' => 'Delete category failed.'
+			);
+			$this->session->set_flashdata ('toast', $err);
+			}
+		redirect ('master_data/category_list');
+		}
+
 
 	public function add_item_group()
 		{
 		$this->session->set_flashdata ('page_title', 'FORM ADD NEW ITEM GROUP');
 		$this->load->view ('master-data/item-group/add-form.php');
 		}
-
 	public function save_item_group()
 		{
-		if (isset ($_POST['submit']))
-			{
-			$item_group = $this->input->post ('item_group');
-			$exist = $this->db->get_where ("m_master_data_item_group", array(
-				"item_group" => $this->input->post ('item_group'),
-			))->row ();
+		$exist = $this->db->get_where ("m_item_category", array(
+			"item_category_name" => $this->input->post ('item_category_name'),
+		))->row ();
 
-			if ($exist)
+		if ($exist)
+			{
+			$err = array(
+				'show' => true,
+				'type' => 'error',
+				'msg' => 'Add new category failed.'
+			);
+			$this->session->set_flashdata ('toast', $err);
+			echo 0;
+			}
+		else
+			{
+			$inserted = _add (
+				"m_item_category",
+				array(
+					"item_category_name" => $this->input->post ('item_category_name'),
+				)
+			);
+
+			if ($inserted)
+				{
+				$err = array(
+					'show' => true,
+					'type' => 'success',
+					'msg' => 'Successfully added new category.'
+				);
+				$this->session->set_flashdata ('toast', $err);
+				echo 1;
+				}
+			else
 				{
 				$err = array(
 					'show' => true,
 					'type' => 'error',
-					'msg' => 'Add new item group failed. Item group with code ' . $item_group . ' is already exist.'
+					'msg' => 'Add new category failed.'
 				);
 				$this->session->set_flashdata ('toast', $err);
-				redirect ('master_data/item_group');
-				exit ();
+				echo 1;
 				}
-			else
-				{
-				$inserted = _add (
-					"m_master_data_item_group",
-					array(
-						"item_group" => $this->input->post ('item_group'),
-						"item_category_name" => $this->input->post ('item_category_name'),
-					)
-				);
-				if ($inserted)
-					{
-					$err = array(
-						'show' => true,
-						'type' => 'success',
-						'msg' => 'Successfully added new item group.'
-					);
-					$this->session->set_flashdata ('toast', $err);
-					redirect ('master_data/item_group');
-					exit ();
-					}
-				else
-					{
-					$err = array(
-						'show' => true,
-						'type' => 'error',
-						'msg' => 'Add new item group failed.'
-					);
-					$this->session->set_flashdata ('toast', $err);
-					redirect ('master_data/item_group');
-					exit ();
-					}
-				redirect ('master_data/item_group');
-				exit ();
-				}
-			redirect ('master_data/item_group');
-			exit ();
 			}
+
+		echo 1;
 		}
 
-	public function save_purchase_reason()
+	public function save_factory()
 		{
-		if (isset ($_POST['submit']))
-			{
-			$purchase_reason = $this->input->post ('purchase_reason');
-			$exist = $this->db->get_where ("m_master_data_purchase_reason", array(
-				"purchase_reason" => $this->input->post ('purchase_reason'),
-			))->row ();
+		$exist = $this->db->get_where ("m_factory", array(
+			"factory_name" => $this->input->post ('factory_name'),
+		))->row ();
 
-			if ($exist)
+		if ($exist)
+			{
+			$err = array(
+				'show' => true,
+				'type' => 'error',
+				'msg' => 'Add new factory failed.'
+			);
+			$this->session->set_flashdata ('toast', $err);
+			echo 0;
+			}
+		else
+			{
+			$inserted = _add (
+				"m_factory",
+				array(
+					"factory_name" => $this->input->post ('factory_name'),
+				)
+			);
+
+			if ($inserted)
+				{
+				$err = array(
+					'show' => true,
+					'type' => 'success',
+					'msg' => 'Successfully added new factory.'
+				);
+				$this->session->set_flashdata ('toast', $err);
+				echo 1;
+				}
+			else
 				{
 				$err = array(
 					'show' => true,
 					'type' => 'error',
-					'msg' => 'Add new purchase reason failed. Purchase reason with code ' . $purchase_reason . ' is already exist.'
+					'msg' => 'Add new factory failed.'
 				);
 				$this->session->set_flashdata ('toast', $err);
-				redirect ('master_data/purchase_reason');
-				exit ();
+				echo 1;
 				}
-			else
-				{
-				$inserted = _add (
-					"m_master_data_purchase_reason",
-					array(
-						"purchase_reason" => $this->input->post ('purchase_reason'),
-						"type" => $this->input->post ('type'),
-						"is_approval" => $this->input->post ('is_approval'),
-						"WL_Approval" => $this->input->post ('WL_Approval'),
-					)
-				);
-				if ($inserted)
-					{
-					$err = array(
-						'show' => true,
-						'type' => 'success',
-						'msg' => 'Successfully added new purchase reason.'
-					);
-					$this->session->set_flashdata ('toast', $err);
-					redirect ('master_data/purchase_reason');
-					exit ();
-					}
-				else
-					{
-					$err = array(
-						'show' => true,
-						'type' => 'error',
-						'msg' => 'Add new purchase reason failed.'
-					);
-					$this->session->set_flashdata ('toast', $err);
-					redirect ('master_data/purchase_reason');
-					exit ();
-					}
-				redirect ('master_data/purchase_reason');
-				exit ();
-				}
-			redirect ('master_data/purchase_reason');
-			exit ();
 			}
-		}
 
-	public function save_category()
-		{
-		if (isset ($_POST['submit']))
-			{
-			$category_code = $this->input->post ('category_code');
-			$exist = $this->db->get_where ("m_master_data_category", array(
-				"category_code" => $this->input->post ('category_code'),
-			))->row ();
-
-			if ($exist)
-				{
-				$err = array(
-					'show' => true,
-					'type' => 'error',
-					'msg' => 'Add new category failed. Category with code ' . $category_code . ' is already exist.'
-				);
-				$this->session->set_flashdata ('toast', $err);
-				redirect ('master_data/category_list');
-				exit ();
-				}
-			else
-				{
-				$inserted = _add (
-					"m_master_data_category",
-					array(
-						"category_code" => $this->input->post ('category_code'),
-						"category_name" => $this->input->post ('category_name'),
-					)
-				);
-				if ($inserted)
-					{
-					$err = array(
-						'show' => true,
-						'type' => 'success',
-						'msg' => 'Successfully added new category.'
-					);
-					$this->session->set_flashdata ('toast', $err);
-					redirect ('master_data/category_list');
-					exit ();
-					}
-				else
-					{
-					$err = array(
-						'show' => true,
-						'type' => 'error',
-						'msg' => 'Add new category failed.'
-					);
-					$this->session->set_flashdata ('toast', $err);
-					redirect ('master_data/category_list');
-					exit ();
-					}
-				redirect ('master_data/category_list');
-				exit ();
-				}
-			redirect ('master_data/category_list');
-			exit ();
-			}
+		echo 1;
 		}
+	// public function save_item_group()
+	// 	{
+	// 	if (isset ($_POST['submit']))
+	// 		{
+	// 		$item_group = $this->input->post ('item_group');
+	// 		$exist = $this->db->get_where ("m_master_data_item_group", array(
+	// 			"item_group" => $this->input->post ('item_group'),
+	// 		))->row ();
+
+	// 		if ($exist)
+	// 			{
+	// 			$err = array(
+	// 				'show' => true,
+	// 				'type' => 'error',
+	// 				'msg' => 'Add new item group failed. Item group with code ' . $item_group . ' is already exist.'
+	// 			);
+	// 			$this->session->set_flashdata ('toast', $err);
+	// 			redirect ('master_data/item_group');
+	// 			exit ();
+	// 			}
+	// 		else
+	// 			{
+	// 			$inserted = _add (
+	// 				"m_master_data_item_group",
+	// 				array(
+	// 					"item_group" => $this->input->post ('item_group'),
+	// 					"item_category_name" => $this->input->post ('item_category_name'),
+	// 				)
+	// 			);
+	// 			if ($inserted)
+	// 				{
+	// 				$err = array(
+	// 					'show' => true,
+	// 					'type' => 'success',
+	// 					'msg' => 'Successfully added new item group.'
+	// 				);
+	// 				$this->session->set_flashdata ('toast', $err);
+	// 				redirect ('master_data/item_group');
+	// 				exit ();
+	// 				}
+	// 			else
+	// 				{
+	// 				$err = array(
+	// 					'show' => true,
+	// 					'type' => 'error',
+	// 					'msg' => 'Add new item group failed.'
+	// 				);
+	// 				$this->session->set_flashdata ('toast', $err);
+	// 				redirect ('master_data/item_group');
+	// 				exit ();
+	// 				}
+	// 			redirect ('master_data/item_group');
+	// 			exit ();
+	// 			}
+	// 		redirect ('master_data/item_group');
+	// 		exit ();
+	// 		}
+	// 	}
+
+	// public function save_purchase_reason()
+	// 	{
+	// 	if (isset ($_POST['submit']))
+	// 		{
+	// 		$purchase_reason = $this->input->post ('purchase_reason');
+	// 		$exist = $this->db->get_where ("m_master_data_purchase_reason", array(
+	// 			"purchase_reason" => $this->input->post ('purchase_reason'),
+	// 		))->row ();
+
+	// 		if ($exist)
+	// 			{
+	// 			$err = array(
+	// 				'show' => true,
+	// 				'type' => 'error',
+	// 				'msg' => 'Add new purchase reason failed. Purchase reason with code ' . $purchase_reason . ' is already exist.'
+	// 			);
+	// 			$this->session->set_flashdata ('toast', $err);
+	// 			redirect ('master_data/purchase_reason');
+	// 			exit ();
+	// 			}
+	// 		else
+	// 			{
+	// 			$inserted = _add (
+	// 				"m_master_data_purchase_reason",
+	// 				array(
+	// 					"purchase_reason" => $this->input->post ('purchase_reason'),
+	// 					"type" => $this->input->post ('type'),
+	// 					"is_approval" => $this->input->post ('is_approval'),
+	// 					"WL_Approval" => $this->input->post ('WL_Approval'),
+	// 				)
+	// 			);
+	// 			if ($inserted)
+	// 				{
+	// 				$err = array(
+	// 					'show' => true,
+	// 					'type' => 'success',
+	// 					'msg' => 'Successfully added new purchase reason.'
+	// 				);
+	// 				$this->session->set_flashdata ('toast', $err);
+	// 				redirect ('master_data/purchase_reason');
+	// 				exit ();
+	// 				}
+	// 			else
+	// 				{
+	// 				$err = array(
+	// 					'show' => true,
+	// 					'type' => 'error',
+	// 					'msg' => 'Add new purchase reason failed.'
+	// 				);
+	// 				$this->session->set_flashdata ('toast', $err);
+	// 				redirect ('master_data/purchase_reason');
+	// 				exit ();
+	// 				}
+	// 			redirect ('master_data/purchase_reason');
+	// 			exit ();
+	// 			}
+	// 		redirect ('master_data/purchase_reason');
+	// 		exit ();
+	// 		}
+	// 	}
+
+	// public function save_category()
+	// 	{
+	// 	if (isset ($_POST['submit']))
+	// 		{
+	// 		$category_code = $this->input->post ('category_code');
+	// 		$exist = $this->db->get_where ("m_master_data_category", array(
+	// 			"category_code" => $this->input->post ('category_code'),
+	// 		))->row ();
+
+	// 		if ($exist)
+	// 			{
+	// 			$err = array(
+	// 				'show' => true,
+	// 				'type' => 'error',
+	// 				'msg' => 'Add new category failed. Category with code ' . $category_code . ' is already exist.'
+	// 			);
+	// 			$this->session->set_flashdata ('toast', $err);
+	// 			redirect ('master_data/category_list');
+	// 			exit ();
+	// 			}
+	// 		else
+	// 			{
+	// 			$inserted = _add (
+	// 				"m_master_data_category",
+	// 				array(
+	// 					"category_code" => $this->input->post ('category_code'),
+	// 					"category_name" => $this->input->post ('category_name'),
+	// 				)
+	// 			);
+	// 			if ($inserted)
+	// 				{
+	// 				$err = array(
+	// 					'show' => true,
+	// 					'type' => 'success',
+	// 					'msg' => 'Successfully added new category.'
+	// 				);
+	// 				$this->session->set_flashdata ('toast', $err);
+	// 				redirect ('master_data/category_list');
+	// 				exit ();
+	// 				}
+	// 			else
+	// 				{
+	// 				$err = array(
+	// 					'show' => true,
+	// 					'type' => 'error',
+	// 					'msg' => 'Add new category failed.'
+	// 				);
+	// 				$this->session->set_flashdata ('toast', $err);
+	// 				redirect ('master_data/category_list');
+	// 				exit ();
+	// 				}
+	// 			redirect ('master_data/category_list');
+	// 			exit ();
+	// 			}
+	// 		redirect ('master_data/category_list');
+	// 		exit ();
+	// 		}
+	// 	}
 
 	public function save_vendor()
 		{
@@ -3029,6 +3570,7 @@ class Master_data extends CI_Controller
 						"service_recurring" => $this->input->post ('service_recurring'),
 						"service_due_date" => $this->input->post ('service_due_date'),
 						"service_urgent_if" => $this->input->post ('service_urgent_if'),
+						"service_category" => $this->input->post ('service_category'),
 					)
 				);
 				if ($inserted)
@@ -3107,6 +3649,7 @@ class Master_data extends CI_Controller
 						"service_recurring" => $this->input->post ('service_recurring'),
 						"service_due_date" => $this->input->post ('service_due_date'),
 						"service_urgent_if" => $this->input->post ('service_urgent_if'),
+						"service_category" => $this->input->post ('service_category'),
 					),
 					array("id" => $id)
 				);
