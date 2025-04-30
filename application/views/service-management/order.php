@@ -237,23 +237,17 @@
                                         </select>
                                     </td>
                                     <td style="vertical-align: middle;text-align: center;">
-                                        <div id="type_of_service_qty">
-                                            <select class="form-select-sm" id="item" name="item" style="width: 100%;">
-                                                <?php foreach ($item as $row)
-                                                { ?>
-                                                    <option value="<?php echo $row->id; ?>">
-                                                        <?php echo $row->item_name; ?>
-                                                    </option>
-                                                <?php } ?>
-                                            </select>
-                                        </div>
-                                        <div id="type_of_service_amount">
-                                            <input type="text" class="form-control-sm" id="service_type"
-                                                placeholder="Service Type" name="service_type" value="Bulk Service"
-                                                disabled>
-                                        </div>
+                                        <select class="form-select-sm" id="item" name="item" style="width: 100%;">
+                                            <?php foreach ($item as $row)
+                                            { ?>
+                                                <option value="<?php echo $row->id; ?>">
+                                                    <?php echo $row->item_name; ?>
+                                                </option>
+                                            <?php } ?>
+                                        </select>
                                     </td>
-                                    <td><input type="text" class="form-control-sm" id="service_category"
+                                    <td>
+                                        <input type="text" class="form-control-sm" id="service_category"
                                             placeholder="Service Category" name="service_category" disabled>
                                     </td>
                                     <td>
@@ -328,15 +322,9 @@
             console.log(value);
 
             if (value == 'amount') {
-                $('#type_of_service_qty').hide();
-                $('#type_of_service_amount').show();
+                $('#service_category').val('Bulk Service');
                 $('#qty').val(1);
                 $('#uom').val('once off');
-            }
-
-            if (value == 'qty') {
-                $('#type_of_service_qty').show();
-                $('#type_of_service_amount').hide();
             }
         });
 
@@ -361,7 +349,12 @@
                 },
                 dataType: "json",
                 success: function (data) {
-                    $('#service_category').val(data.service_category);
+                    var service = $('#type').val();
+                    if (value == 'amount') {
+                        $('#service_category').val('Bulk Service');
+                    } else {
+                        $('#service_category').val(data.service_category);
+                    }
                 }
             })
         });

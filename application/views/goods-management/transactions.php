@@ -111,15 +111,16 @@
                 <i class="fa-solid fa-add"></i>
                 Add Usage
             </a>
-            <a href="#" class="btn btn-sm btn-outline-primary"
-                style="font-weight: 600; border-radius: 50px; width: 150px;margin-right:10px;" id="btnExport">
-                <i class="fa-solid fa-file-export"></i>
-                Export
-            </a>
-            <a class="btn btn-sm btn-outline-primary" style="font-weight: 600; border-radius: 50px;width: 150px;"
-                data-bs-toggle="modal" data-bs-target="#modal-import">
+            <a class="btn btn-sm btn-outline-primary"
+                style="font-weight: 600; border-radius: 50px;width: 150px;margin-right:10px;" data-bs-toggle="modal"
+                data-bs-target="#modal-import">
                 <i class="fa-solid fa-file-import"></i>
                 Import
+            </a>
+            <a class="btn btn-sm btn-outline-primary" data-bs-toggle="modal" data-bs-target="#modal-export-report"
+                style="font-weight: 600; border-radius: 50px; margin-right:10px;" id="btnExport">
+                <i class="fa-solid fa-file-export"></i>
+                Export Transactions Report
             </a>
         </div>
     </div>
@@ -369,6 +370,102 @@
     </div>
 </div>
 
+<form method="post" action="<?= site_url ('usage/export'); ?>" id="export-form">
+    <div class="modal fade" id="modal-export-report" tabindex="-1" aria-labelledby="exampleModalLabel"
+        aria-hidden="true">
+        <div class="modal-dialog modal-xl">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel" class="text-primary"
+                        style="color: #001F82;font-weight:600;">
+                        Export Transactions Report</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col-12">
+                            <div class="row">
+                                <!--begin::Col-->
+                                <div class="col-6">
+                                    <div class="form-floating mb-3">
+                                        <input placeholder="dd-mm-yyyy" type="text" class="form-control"
+                                            id="floatingInputDate" name="from">
+                                        <label for="floatingInput" class="fw-bold text-primary">From</label>
+                                    </div>
+                                </div>
+                                <!--end::Col-->
+                                <!--begin::Col-->
+                                <div class="col-6">
+                                    <div class="form-floating mb-3">
+                                        <input placeholder="dd-mm-yyyy" type="text" class="form-control"
+                                            id="floatingInputDate2" name="to">
+                                        <label for="floatingInput" class="fw-bold text-primary">To</label>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-outline-danger" data-bs-dismiss="modal">Cancel</button>
+                    <button type="submit" name="submit" class="btn btn-outline-primary">Export Data</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</form>
+
+<div id="popup">
+    <!--end::Row-->
+    <form id="form-upload-user" method="post" autocomplete="off" enctype="multipart/form-data">
+        <div class="modal fade" id="modal-import" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+            <div class="modal-dialog modal-xl">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="exampleModalLabel" class="text-primary"
+                            style="color: #001F82;font-weight:600;">
+                            Import Usage Transactions</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <label for="exampleDataList" class="form-label">Please download import template
+                            first.</label></br>
+                        <a href="<?= site_url ('usage/generate_template') ?>" type="button"
+                            class="btn btn-outline-primary">Download
+                            Template</a>
+                        <hr>
+
+                        <p class="text-danger"><small>Maximum size of each file = 3000000 bytes (3 mb). Allowed File
+                                types which can
+                                be uploaded = .xlsx</small></p>
+                        <input type="file" class="custom-file-input" id="file" name="file"
+                            data-toggle="custom-file-input"
+                            accept=".csv, application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel">
+                        <div class="" style="margin-top: 10px;">
+                            <div class="user-loader text-center" style="display: none;">
+                                <i class="fa fa-spinner fa-spin"></i> <small>Please wait system is processing your
+                                    data...</small>
+                            </div>
+                            <div class="alert alert-success alert-dismissable" role="alert" id="success-result"
+                                style="display: none;">
+                                <div class="success-text"></div>
+                            </div>
+                            <div class="alert alert-danger alert-dismissable" role="alert" id="failed-result"
+                                style="display: none;">
+                                <div class="failed-text"></div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-outline-danger" data-bs-dismiss="modal">Cancel</button>
+                        <button type="submit" class="btn btn-outline-primary" id="btnUpload">Import Data</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </form>
+</div>
+
 
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
 <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
@@ -376,8 +473,69 @@
     var URL_AJAX = '<?php echo base_url (); ?>index.php/ajax';
     var addUsageData = [];
     var item_list = <?php echo json_encode ($item_list); ?>;
+    flatpickr("#floatingInputDate", {
+        dateFormat: "d-m-Y",
+        defaultDate: null,
+        allowInput: true,
+        onOpen: function (selectedDates, dateStr, instance) {
+            if (instance._input.value === "dd-mm-yyyy") {
+                instance._input.value = "dd-mm-yyyy";
+            }
+        },
+        onChange: function (selectedDates, dateStr, instance) {
+            if (instance._input.value === " ") {
+                instance._input.value = "dd-mm-yyyy";
+            }
+        }
+    });
+
+    flatpickr("#floatingInputDate2", {
+        dateFormat: "d-m-Y",
+        defaultDate: null,
+        allowInput: true,
+        onOpen: function (selectedDates, dateStr, instance) {
+            if (instance._input.value === "dd-mm-yyyy") {
+                instance._input.value = "dd-mm-yyyy";
+            }
+        },
+        onChange: function (selectedDates, dateStr, instance) {
+            if (instance._input.value === " ") {
+                instance._input.value = "dd-mm-yyyy";
+            }
+        }
+    });
 
     $(document).ready(function () {
+        $("body").on("submit", "#form-upload-user", function (e) {
+            e.preventDefault();
+            var data = new FormData(this);
+            $.ajax({
+                type: 'POST',
+                url: "<?php echo site_url ('usage/import_usage') ?>",
+                data: data,
+                dataType: 'json',
+                contentType: false,
+                cache: false,
+                processData: false,
+                beforeSend: function () {
+                    $("#btnUpload").prop('disabled', true);
+                    $(".user-loader").show();
+                    $("#success-result").hide();
+                    $("#failed-result").hide();
+                },
+                success: function (result) {
+                    $("#btnUpload").prop('disabled', false);
+                    if ($.isEmptyObject(result.error_message)) {
+                        $("#success-result").show();
+                        $(".success-text").html(result.success_message);
+                    } else {
+                        $("#failed-result").show();
+                        $(".failed-text").html(result.error_message);
+                    }
+                    $(".user-loader").hide();
+                }
+            });
+        });
         $(document).on("click", ".add-row", function () {
             // var newRow = $(".search-row:first").clone();
             // newRow.find("input").val(""); // Kosongkan input
@@ -692,7 +850,7 @@
 
         function checkSidebarState() {
             const currentState = !sidebar.classList.contains('collapsed') && sidebar.offsetWidth >= 100;
-            
+
             if (currentState !== isSidebarOpen) {
                 isSidebarOpen = currentState;
                 handleSidebarStateChange();
