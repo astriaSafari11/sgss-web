@@ -31,6 +31,23 @@
       color: #003366;
       margin-left: 0.5rem;
     }
+
+    .btn-primary {
+        background-color: #001F82 !important;
+        border-color: #001F82 !important;
+        color: #fff !important;
+    }
+
+        .btn-primary:hover {
+        background-color: #fff !important;
+        color: #001F82 !important;
+        border-color: #001F82 !important;
+    }
+
+        .btn-primary:hover i {
+        color: #001F82 !important;
+    }
+
 </style>
 
 <div class="main-content">
@@ -492,11 +509,11 @@
 
 <div class="row d-flex align-items-stretch mt-3">
   <!-- Baris Tahun, Vendor, Target -->
-    <div class="row text-center fw-semibold">
+    <div class="row text-center fw-semibold justify-content-center">
     <!-- Year -->
     <div class="col-3">
         <div class="form-box position-relative">
-        <label for="year" class="bg-transparent text-primary">Year</label>
+        <label for="year" class="text-primary">Year</label>
         <input type="text" class="form-control text-center pe-5 rounded-pill bg-white" id="year" value="2025" readonly style="border-color: #001F82 !important;">
         <button type="button" class="btn btn-primary btn-sm rounded-circle position-absolute top-50 end-0 translate-middle-y me-2"
                 onclick="enableEdit('year')">
@@ -508,7 +525,7 @@
     <!-- Vendor -->
     <div class="col-3">
         <div class="form-box position-relative">
-        <label for="vendor" class="bg-transparent text-primary">Vendor</label>
+        <label for="vendor" class="text-primary">Vendor</label>
         <input type="text" class="form-control text-center pe-5 rounded-pill bg-white" id="vendor" value="Vendor 4" readonly style="border-color: #001F82 !important;">
         <button type="button" class="btn btn-primary btn-sm rounded-circle position-absolute top-50 end-0 translate-middle-y me-2"
                 onclick="enableEdit('vendor')">
@@ -520,7 +537,7 @@
     <!-- Target -->
     <div class="col-3">
         <div class="form-box position-relative">
-        <label for="target" class="bg-transparent text-primary">Target</label>
+        <label for="target" class="text-primary">Target</label>
         <input type="text" class="form-control text-center pe-5 rounded-pill bg-white" id="target" value="Rp2.000,00" readonly style="border-color: #001F82 !important;">
         <button type="button" class="btn btn-primary btn-sm rounded-circle position-absolute top-50 end-0 translate-middle-y me-2"
                 onclick="enableEdit('target')">
@@ -532,157 +549,133 @@
 
 
   <!-- Grid Informasi -->
-  <div class="row text-center g-2">
-  <!-- Kolom Kiri -->
-  <div class="col-md-6 d-flex flex-column">
-    <span class="btn mb-2 fw-bold w-100 d-block text-center unclickable"
-          style="border-radius: 50px;
-                 font-weight: 600;
-                 color: #FFFFFF;
-                 background-color:#001F82;">
-      Item Code
-    </span>
-    <span class="btn mb-2 w-100 d-block text-center unclickable"
-          style="border-radius: 50px;
-                 font-weight: 600;
-                 color: #001F82;
-                 background-color: #FFFFFF;
-                 border: 1px solid #001F82;">
-      MSK01
-    </span>
+    <div class="row text-center g-2">
 
-    <span class="btn mb-2 fw-bold w-100 d-block text-center unclickable"
-          style="border-radius: 50px;
-                 font-weight: 600;
-                 color: #FFFFFF;
-                 background-color:#001F82;">
-      Item
-    </span>
-    <span class="btn mb-2 w-100 d-block text-center unclickable"
-          style="border-radius: 50px;
-                 font-weight: 600;
-                 color: #001F82;
-                 background-color: #FFFFFF;
-                 border: 1px solid #001F82;">
-      Masker
-    </span>
+    <!-- Group 1: Item Code -->
+    <div class="col-3">
+        <span class="btn mb-2 fs-5 fw-bold w-100 text-center unclickable d-flex align-items-center justify-content-center"
+            style="border-radius: 50px; font-weight: 600; color: #FFFFFF; background-color:#001F82; min-height: 56px;">
+        Item Code
+        </span>
+    </div>
+    <div class="col-3">
+        <span class="btn mb-2 fs-5 w-100 text-center d-flex align-items-center justify-content-center"
+            style="border-radius: 50px; font-weight: 600; color: #001F82; background-color:#FFFFFF; border: 1px solid #001F82; min-height: 56px;">
+        MSK01
+        </span>
+    </div>
 
-    <span class="btn mb-2 fw-bold w-100 d-block text-center unclickable"
-          style="border-radius: 50px;
-                 font-weight: 600;
-                 color: #FFFFFF;
-                 background-color:#001F82;">
-      UoM
-    </span>
-    <span class="btn mb-2 w-100 d-block text-center unclickable"
-          style="border-radius: 50px;
-                 font-weight: 600;
-                 color: #001F82;
-                 background-color: #FFFFFF;
-                 border: 1px solid #001F82;">
-      Pcs
-    </span>
-
-    <span class="btn mb-2 fw-bold w-100 d-block text-center unclickable"
-          style="border-radius: 50px;
-                 font-weight: 600;
-                 color: #FFFFFF;
-                 background-color:#001F82;">
-      Avg Purchase Price
-    </span>
-    <span class="btn mb-2 w-100 d-block text-center unclickable"
-          style="border-radius: 50px;
-                 font-weight: 600;
-                 color: #001F82;
-                 background-color: #FFFFFF;
-                 border: 1px solid #001F82;">
-      Rp9.000
-    </span>
-  </div>
-
-  <!-- Kolom Kanan -->
-  <div class="col-md-6 d-flex flex-column">
-        <span class="btn mb-2 fw-bold w-100 d-block text-center unclickable"
-            style="border-radius: 50px;
-                    font-weight: 600;
-                    color: #FFFFFF;
-                    background-color:#001F82;">
+    <!-- Group 2: FY Volume -->
+    <div class="col-3">
+        <span class="btn mb-2 fs-5 fw-bold w-100 text-center unclickable d-flex align-items-center justify-content-center"
+            style="border-radius: 50px; font-weight: 600; color: #FFFFFF; background-color:#001F82; min-height: 56px;">
         FY Volume
         </span>
-        <span class="btn mb-2 w-100 d-block text-center unclickable"
-                style="border-radius: 50px;
-                        font-weight: 600;
-                        color: #001F82;
-                        background-color: #FFFFFF;
-                        border: 1px solid #001F82;">
-            100
-            <button type="button" class="btn btn-primary btn-sm rounded-circle p-2"
-                    style="margin-left: 5px; vertical-align: middle;"
-                    data-bs-toggle="modal" data-bs-target="#modal-edit-qty">
-                <i class="fa-solid fa-pen text-white"></i>
-            </button>
-            </span>
+    </div>
+    <div class="col-3 d-flex fs-5 align-items-center justify-content-center">
+        <span class="btn mb-2 fs-5 w-100 d-flex justify-content-center align-items-center"
+            style="border-radius: 50px; font-weight: 600; color: #001F82; background-color:#FFFFFF; border: 1px solid #001F82; min-height: 56px;">
+        100
+        <button type="button" class="btn btn-primary btn-sm rounded-circle ms-2"
+                data-bs-toggle="modal" data-bs-target="#modal-edit-qty">
+            <i class="fa-solid fa-pen text-white"></i>
+        </button>
+        </span>
+    </div>
 
+    <!-- Group 3: Item -->
+    <div class="col-3">
+        <span class="btn mb-2 fs-5 fw-bold w-100 text-center unclickable d-flex align-items-center justify-content-center"
+            style="border-radius: 50px; font-weight: 600; color: #FFFFFF; background-color:#001F82; min-height: 56px;">
+        Item
+        </span>
+    </div>
+    <div class="col-3">
+        <span class="btn mb-2 fs-5 w-100 text-center d-flex align-items-center justify-content-center"
+            style="border-radius: 50px; font-weight: 600; color: #001F82; background-color:#FFFFFF; border: 1px solid #001F82; min-height: 56px;">
+        Masker
+        </span>
+    </div>
 
-        <span class="btn mb-2 fw-bold w-100 d-block text-center unclickable"
-            style="border-radius: 50px;
-                    font-weight: 600;
-                    color: #FFFFFF;
-                    background-color:#001F82;">
+    <!-- Group 4: FY Spend -->
+    <div class="col-3">
+        <span class="btn mb-2 fs-5 fw-bold w-100 text-center unclickable d-flex align-items-center justify-content-center"
+            style="border-radius: 50px; font-weight: 600; color: #FFFFFF; background-color:#001F82; min-height: 56px;">
         FY Spend
         </span>
-        <span class="btn mb-2 w-100 d-block text-center unclickable"
-            style="border-radius: 50px;
-                    font-weight: 600;
-                    color: #001F82;
-                    background-color: #FFFFFF;
-                    border: 1px solid #001F82;">
+    </div>
+    <div class="col-3 fs-5 d-flex align-items-center justify-content-center">
+        <span class="btn mb-2 fs-5 w-100 d-flex justify-content-center align-items-center"
+            style="border-radius: 50px; font-weight: 600; color: #001F82; background-color:#FFFFFF; border: 1px solid #001F82; min-height: 56px;">
         Rp900.000,00
-        <button type="button" class="btn btn-primary btn-sm rounded-circle p-2"
-                style="margin-left: 5px; vertical-align: middle;"
+        <button type="button" class="btn btn-primary btn-sm rounded-circle ms-2"
                 data-bs-toggle="modal" data-bs-target="#modal-edit-spend">
             <i class="fa-solid fa-pen text-white"></i>
         </button>
         </span>
+    </div>
 
-        <span class="btn mb-2 fw-bold w-100 d-block text-center unclickable"
-            style="border-radius: 50px;
-                    font-weight: 600;
-                    color: #FFFFFF;
-                    background-color:#001F82;">
+    <!-- Group 5: UoM -->
+    <div class="col-3">
+        <span class="btn mb-2 fs-5 fw-bold w-100 text-center unclickable d-flex align-items-center justify-content-center"
+            style="border-radius: 50px; font-weight: 600; color: #FFFFFF; background-color:#001F82; min-height: 56px;">
+        UoM
+        </span>
+    </div>
+    <div class="col-3">
+        <span class="btn mb-2 fs-5 w-100 text-center d-flex align-items-center justify-content-center"
+            style="border-radius: 50px; font-weight: 600; color: #001F82; background-color:#FFFFFF; border: 1px solid #001F82; min-height: 56px;">
+        Pcs
+        </span>
+    </div>
+
+    <!-- Group 6: FY Budget -->
+    <div class="col-3">
+        <span class="btn mb-2 fs-5 fw-bold w-100 text-center unclickable d-flex align-items-center justify-content-center"
+            style="border-radius: 50px; font-weight: 600; color: #FFFFFF; background-color:#001F82; min-height: 56px;">
         FY Budget
         </span>
-        <span class="btn mb-2 w-100 d-block text-center unclickable"
-            style="border-radius: 50px;
-                    font-weight: 600;
-                    color: #001F82;
-                    background-color: #FFFFFF;
-                    border: 1px solid #001F82;">
+    </div>
+    <div class="col-3">
+        <span class="btn mb-2 fs-5 w-100 text-center d-flex align-items-center justify-content-center"
+            style="border-radius: 50px; font-weight: 600; color: #001F82; background-color:#FFFFFF; border: 1px solid #001F82; min-height: 56px;">
         Rp900.000,00
         </span>
+    </div>
 
-        <span class="btn mb-2 fw-bold w-100 d-block text-center unclickable"
-            style="border-radius: 50px;
-                    font-weight: 600;
-                    color: #FFFFFF;
-                    background-color:#001F82;">
+    <!-- Group 7: Avg Purchase Price -->
+    <div class="col-3">
+        <span class="btn mb-2 fs-5 fw-bold w-100 text-center unclickable d-flex align-items-center justify-content-center"
+            style="border-radius: 50px; font-weight: 600; color: #FFFFFF; background-color:#001F82; min-height: 56px;">
+        Average of Recent Purchase Price
+        </span>
+    </div>
+    <div class="col-3">
+        <span class="btn mb-2 fs-5 w-100 text-center d-flex align-items-center justify-content-center"
+            style="border-radius: 50px; font-weight: 600; color: #001F82; background-color:#FFFFFF; border: 1px solid #001F82; min-height: 56px;">
+        Rp9.000
+        </span>
+    </div>
+
+    <!-- Group 8: Savings -->
+    <div class="col-3">
+        <span class="btn mb-2 fs-5 fw-bold w-100 text-center unclickable d-flex align-items-center justify-content-center"
+            style="border-radius: 50px; font-weight: 600; color: #FFFFFF; background-color:#001F82; min-height: 56px;">
         Savings
         </span>
-        <span class="btn mb-2 w-100 d-block text-center unclickable"
-            style="border-radius: 50px;
-                    font-weight: 600;
-                    color: #001F82;
-                    background-color: #FFFFFF;
-                    border: 1px solid #001F82;">
+    </div>
+    <div class="col-3">
+        <span class="btn mb-2 fs-5 w-100 text-center d-flex align-items-center justify-content-center"
+            style="border-radius: 50px; font-weight: 600; color: #001F82; background-color:#FFFFFF; border: 1px solid #001F82; min-height: 56px;">
         Rp0,-
         </span>
     </div>
-    </div>
 
+    </div>
 
   <!-- Status Box -->
     <div id="statusAlert" onclick="toggleStatus()"
-        class="alert alert-danger text-center fw-bold mt-4 border border-danger rounded-pill fs-5 text-danger"
+        class="alert alert-danger text-center fw-bold mt-4 border border-danger rounded-pill fs-3 text-danger"
         role="alert" style="cursor: pointer;">
     Need More Savings!
     </div>
@@ -690,168 +683,163 @@
 
 
 <div class="row d-flex align-items-stretch mt-3">
-    <h4 class="fw-bold text-primary mb-1">Savings Forecasts</h4>
+    <h4 class="fw-bold text-primary">Savings Forecasts</h4>
 
-    <div class="row mb-3">
-
-    <div class="col-md-6 d-flex gap-2">
+    <div class="row">
+    <!-- Kolom Kiri -->
+    <div class="col-md-6 d-flex align-items-center gap-2">
         <input type="text" class="form-control" placeholder="Input item code">
-        <button class="btn btn-outline-primary px-4">
+        <button class="btn btn-outline-primary px-4 d-flex align-items-center">
         <i class="bi bi-search me-1"></i> Search
         </button>
     </div>
 
-    <div class="col-md-6 d-flex gap-2">
-        <input type="text" class="form-control" placeholder="Input item code">
-        <button class="btn btn-outline-primary">
+    <!-- Kolom Kanan -->
+    <div class="col-md-6 d-flex align-items-center gap-2">
+        <input type="text" class="form-control w-50" placeholder="Input item code">
+        <button class="btn btn-outline-primary w-100 d-flex align-items-center justify-content-center">
         <i class="bi bi-person-check me-1"></i> Choose Vendor to Forecast
         </button>
     </div>
     </div>
 
+
     <!-- Table -->
-    <div class="table-responsive">
-    <table class="table table-sm text-center align-middle">
-    <thead>
-        <tr class="text-white fw-bold">
-            <th class="align-middle bg-primary text-white" rowspan="2">2025 FY Spend</th>
-            <th class="bg-info text-primary" colspan="3">Actualized</th>
-            <th class="bg-primary text-white" colspan="9">Forecast</th>
-            <th class="align-middle bg-primary text-white" rowspan="2">TOTAL</th>
-        </tr>
-        <tr class="text-white">
-            <th class="bg-info">Jan</th>
-            <th class="bg-info">Feb</th>
-            <th class="bg-info">Mar</th>
+    <div class="table-responsive mt-3">
+        <table class="table table-sm text-center align-middle" style="border: 1px solid #ccc;">
+            <thead>
+                <tr class="text-white fw-bold">
+                    <th class="align-middle bg-primary text-white" rowspan="2" style="border: 1px solid #ccc;">2025 FY Spend</th>
+                    <th class="bg-info bg-opacity-50 text-primary" colspan="3" style="border: 1px solid #ccc;">Actualized</th>
+                    <th class="bg-primary text-white" colspan="9" style="border: 1px solid #ccc;">Forecast</th>
+                    <th class="align-middle bg-primary text-white" rowspan="2" style="border: 1px solid #ccc;">TOTAL</th>
+                </tr>
+                <tr class="text-white">
+                    <th class="bg-info bg-opacity-50" style="border: 1px solid #ccc;">Jan</th>
+                    <th class="bg-info bg-opacity-50" style="border: 1px solid #ccc;">Feb</th>
+                    <th class="bg-info bg-opacity-50" style="border: 1px solid #ccc;">Mar</th>
 
-            <!-- Forecast months with replaced buttons -->
-            <th class="bg-warning text-dark">
-            Apr
-            <button type="button" class="btn btn-primary btn-sm rounded-circle p-2"
-                    style="margin-left: 4px;" data-bs-toggle="modal" data-bs-target="#modal-edit-apr">
-                <i class="fa-solid fa-pen text-white"></i>
-            </button>
-            </th>
-            <th class="bg-warning text-dark">
-            May
-            <button type="button" class="btn btn-primary btn-sm rounded-circle p-2"
-                    style="margin-left: 4px;" data-bs-toggle="modal" data-bs-target="#modal-edit-may">
-                <i class="fa-solid fa-pen text-white"></i>
-            </button>
-            </th>
-            <th class="bg-warning text-dark">
-            Jun
-            <button type="button" class="btn btn-primary btn-sm rounded-circle p-2"
-                    style="margin-left: 4px;" data-bs-toggle="modal" data-bs-target="#modal-edit-jun">
-                <i class="fa-solid fa-pen text-white"></i>
-            </button>
-            </th>
-            <th class="bg-warning text-dark">
-            Jul
-            <button type="button" class="btn btn-primary btn-sm rounded-circle p-2"
-                    style="margin-left: 4px;" data-bs-toggle="modal" data-bs-target="#modal-edit-jul">
-                <i class="fa-solid fa-pen text-white"></i>
-            </button>
-            </th>
-            <th class="bg-warning text-dark">
-            Aug
-            <button type="button" class="btn btn-primary btn-sm rounded-circle p-2"
-                    style="margin-left: 4px;" data-bs-toggle="modal" data-bs-target="#modal-edit-aug">
-                <i class="fa-solid fa-pen text-white"></i>
-            </button>
-            </th>
-            <th class="bg-warning text-dark">
-            Sep
-            <button type="button" class="btn btn-primary btn-sm rounded-circle p-2"
-                    style="margin-left: 4px;" data-bs-toggle="modal" data-bs-target="#modal-edit-sep">
-                <i class="fa-solid fa-pen text-white"></i>
-            </button>
-            </th>
-            <th class="bg-warning text-dark">
-            Oct
-            <button type="button" class="btn btn-primary btn-sm rounded-circle p-2"
-                    style="margin-left: 4px;" data-bs-toggle="modal" data-bs-target="#modal-edit-oct">
-                <i class="fa-solid fa-pen text-white"></i>
-            </button>
-            </th>
-            <th class="bg-warning text-dark">
-            Nov
-            <button type="button" class="btn btn-primary btn-sm rounded-circle p-2"
-                    style="margin-left: 4px;" data-bs-toggle="modal" data-bs-target="#modal-edit-nov">
-                <i class="fa-solid fa-pen text-white"></i>
-            </button>
-            </th>
-            <th class="bg-warning text-dark">
-            Dec
-            <button type="button" class="btn btn-primary btn-sm rounded-circle p-2"
-                    style="margin-left: 4px;" data-bs-toggle="modal" data-bs-target="#modal-edit-dec">
-                <i class="fa-solid fa-pen text-white"></i>
-            </button>
-            </th>
+                    <th class="bg-warning bg-opacity-50 text-dark" style="border: 1px solid #ccc;">
+                        Apr
+                        <button type="button" class="btn btn-primary btn-sm rounded-circle "
+                                style="margin-left: 4px;" data-bs-toggle="modal" data-bs-target="#modal-edit-apr">
+                            <i class="fa-solid fa-pen text-white"></i>
+                        </button>
+                    </th>
+                    <th class="bg-warning bg-opacity-50 text-dark" style="border: 1px solid #ccc;">
+                        May
+                        <button type="button" class="btn btn-primary btn-sm rounded-circle "
+                                style="margin-left: 4px;" data-bs-toggle="modal" data-bs-target="#modal-edit-may">
+                            <i class="fa-solid fa-pen text-white"></i>
+                        </button>
+                    </th>
+                    <th class="bg-warning bg-opacity-50 text-dark" style="border: 1px solid #ccc;">
+                        Jun
+                        <button type="button" class="btn btn-primary btn-sm rounded-circle "
+                                style="margin-left: 4px;" data-bs-toggle="modal" data-bs-target="#modal-edit-jun">
+                            <i class="fa-solid fa-pen text-white"></i>
+                        </button>
+                    </th>
+                    <th class="bg-warning bg-opacity-50 text-dark" style="border: 1px solid #ccc;">
+                        Jul
+                        <button type="button" class="btn btn-primary btn-sm rounded-circle "
+                                style="margin-left: 4px;" data-bs-toggle="modal" data-bs-target="#modal-edit-jul">
+                            <i class="fa-solid fa-pen text-white"></i>
+                        </button>
+                    </th>
+                    <th class="bg-warning bg-opacity-50 text-dark" style="border: 1px solid #ccc;">
+                        Aug
+                        <button type="button" class="btn btn-primary btn-sm rounded-circle "
+                                style="margin-left: 4px;" data-bs-toggle="modal" data-bs-target="#modal-edit-aug">
+                            <i class="fa-solid fa-pen text-white"></i>
+                        </button>
+                    </th>
+                    <th class="bg-warning bg-opacity-50 text-dark" style="border: 1px solid #ccc;">
+                        Sep
+                        <button type="button" class="btn btn-primary btn-sm rounded-circle "
+                                style="margin-left: 4px;" data-bs-toggle="modal" data-bs-target="#modal-edit-sep">
+                            <i class="fa-solid fa-pen text-white"></i>
+                        </button>
+                    </th>
+                    <th class="bg-warning bg-opacity-50 text-dark" style="border: 1px solid #ccc;">
+                        Oct
+                        <button type="button" class="btn btn-primary btn-sm rounded-circle "
+                                style="margin-left: 4px;" data-bs-toggle="modal" data-bs-target="#modal-edit-oct">
+                            <i class="fa-solid fa-pen text-white"></i>
+                        </button>
+                    </th>
+                    <th class="bg-warning bg-opacity-50 text-dark" style="border: 1px solid #ccc;">
+                        Nov
+                        <button type="button" class="btn btn-primary btn-sm rounded-circle "
+                                style="margin-left: 4px;" data-bs-toggle="modal" data-bs-target="#modal-edit-nov">
+                            <i class="fa-solid fa-pen text-white"></i>
+                        </button>
+                    </th>
+                    <th class="bg-warning bg-opacity-50 text-dark" style="border: 1px solid #ccc;">
+                        Dec
+                        <button type="button" class="btn btn-primary btn-sm rounded-circle "
+                                style="margin-left: 4px;" data-bs-toggle="modal" data-bs-target="#modal-edit-dec">
+                            <i class="fa-solid fa-pen text-white"></i>
+                        </button>
+                    </th>
+                </tr>
+            </thead>
 
-            <th class="bg-dark"> </th>
-        </tr>
-        </thead>
+            <tbody>
+            <!-- Volume -->
+            <tr>
+                <th>Volume</th>
+                <td style="border: 1px solid #ccc;">8</td>
+                <td style="border: 1px solid #ccc;">7</td>
+                <td style="border: 1px solid #ccc;">8.5</td>
+                <td style="border: 1px solid #ccc;">8.5</td>
+                <td style="border: 1px solid #ccc;">8.5</td>
+                <td style="border: 1px solid #ccc;">8.5</td>
+                <td style="border: 1px solid #ccc;">8.5</td>
+                <td style="border: 1px solid #ccc;">8.5</td>
+                <td style="border: 1px solid #ccc;">8.5</td>
+                <td style="border: 1px solid #ccc;">8.5</td>
+                <td style="border: 1px solid #ccc;">8.5</td>
+                <td style="border: 1px solid #ccc;"></td>
+            </tr>
 
-        <tbody>
-        <!-- Volume -->
-        <tr>
-            <th>Volume</th>
-            <td>8</td>
-            <td>7</td>
-            <td>8.5</td>
-            <td>8.5</td>
-            <td>8.5</td>
-            <td>8.5</td>
-            <td>8.5</td>
-            <td>8.5</td>
-            <td>8.5</td>
-            <td>8.5</td>
-            <td>8.5</td>
-            <td>8.5</td>
-        </tr>
+            <!-- Spend -->
+            <tr>
+                <th>Spend</th>
+                <td style="border: 1px solid #ccc;">100,000</td>
+                <td style="border: 1px solid #ccc;">95,000</td>
+                <td style="border: 1px solid #ccc;">110,500</td>
+                <td style="border: 1px solid #ccc;">110,500</td>
+                <td style="border: 1px solid #ccc;">110,500</td>
+                <td style="border: 1px solid #ccc;">110,500</td>
+                <td style="border: 1px solid #ccc;">110,500</td>
+                <td style="border: 1px solid #ccc;">110,500</td>
+                <td style="border: 1px solid #ccc;">110,500</td>
+                <td style="border: 1px solid #ccc;">110,500</td>
+                <td style="border: 1px solid #ccc;">110,500</td>
+                <td style="border: 1px solid #ccc;"></td>
+            </tr>
 
-        <!-- Spend -->
-        <tr>
-            <th>Spend</th>
-            <td>100,000</td>
-            <td>95,000</td>
-            <td>110,500</td>
-            <td>110,500</td>
-            <td>110,500</td>
-            <td>110,500</td>
-            <td>110,500</td>
-            <td>110,500</td>
-            <td>110,500</td>
-            <td>110,500</td>
-            <td>110,500</td>
-            <td>110,500</td>
-            <td></td>
-        </tr>
-
-        <!-- Avg Unit Price -->
-        <tr>
-            <th>Avg Unit Price</th>
-            <td>12,500</td>
-            <td>13,571</td>
-            <td>13,000</td>
-            <td>13,000</td>
-            <td>13,000</td>
-            <td>13,000</td>
-            <td>13,000</td>
-            <td>13,000</td>
-            <td>13,000</td>
-            <td>13,000</td>
-            <td>13,000</td>
-            <td>13,000</td>
-            <td></td>
-        </tr>
-        </tbody>
-    </table>
+            <!-- Avg Unit Price -->
+            <tr>
+                <th>Avg Unit Price</th>
+                <td style="border: 1px solid #ccc;">12,500</td>
+                <td style="border: 1px solid #ccc;">13,571</td>
+                <td style="border: 1px solid #ccc;">13,000</td>
+                <td style="border: 1px solid #ccc;">13,000</td>
+                <td style="border: 1px solid #ccc;">13,000</td>
+                <td style="border: 1px solid #ccc;">13,000</td>
+                <td style="border: 1px solid #ccc;">13,000</td>
+                <td style="border: 1px solid #ccc;">13,000</td>
+                <td style="border: 1px solid #ccc;">13,000</td>
+                <td style="border: 1px solid #ccc;">13,000</td>
+                <td style="border: 1px solid #ccc;">13,000</td>
+                <td style="border: 1px solid #ccc;"></td>
+            </tr>
+            </tbody>
+        </table>
     </div>
-</div>
-</body>
-</div>
+
 
 
 <script>
