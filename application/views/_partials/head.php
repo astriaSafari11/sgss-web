@@ -471,11 +471,17 @@
                   </a>
               </li> -->
 
+              <li class="nav-item sidebar">
+                <a href="<?= site_url('user_management');?>" class="nav-link sidebar">
+                <i class="bi bi-person-gear text-primary" style="font-size: 1.7rem;"></i>
+                  <p class="ms-2 mt-1">User Management</p>
+                </a>
+              </li>
 
               <li class="nav-item sidebar">
                 <a href="<?= site_url('auth/logout');?>" class="nav-link sidebar">
                 <i class="bi bi-box-arrow-left text-primary" style="font-size: 1.5rem;"></i>
-                <p class="ms-2 mt-1">Log Out</p>  
+                <p style="margin-left: 0.75rem;">Log Out</p>  
               </a>
               </li>
               
