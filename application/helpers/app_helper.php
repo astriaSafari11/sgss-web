@@ -521,4 +521,41 @@ function approval_status($status = "")
 
 	return $desc;
 	}
+
+function generateRecurringDates($startDate, $endDate, $recurrence = 'daily')
+	{
+	$dates = [];
+	$start = new DateTime($startDate);
+	$end = new DateTime($endDate);
+
+	// Define interval based on recurrence type
+	switch ($recurrence)
+		{
+		case 'daily':
+			$interval = new DateInterval('P1D');
+			break;
+		case 'weekly':
+			$interval = new DateInterval('P1W');
+			break;
+		case 'biweekly':
+			$interval = new DateInterval('P2W');
+			break;
+		case 'monthly':
+			$interval = new DateInterval('P1M');
+			break;
+		case 'yearly':
+			$interval = new DateInterval('P1Y');
+			break;
+		default:
+			throw new Exception("Invalid recurrence type");
+		}
+
+	while ($start <= $end)
+		{
+		$dates[] = $start->format ('Y-m-d');
+		$start->add ($interval);
+		}
+
+	return $dates;
+	}
 ?>

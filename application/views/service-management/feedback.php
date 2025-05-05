@@ -28,7 +28,8 @@
 
 <div class="row mb-2 justify-between">
   <div class="col-sm-6">
-    <a class="btn btn-sm btn-primary position-relative" style="font-weight: 600; border-radius: 50px;">
+    <a href="<?= site_url ('service_management'); ?>" class="btn btn-sm btn-outline-primary position-relative"
+      style="font-weight: 600; border-radius: 50px;">
       Order List
       <?php if ($req_count > 0)
       { ?>
@@ -38,8 +39,7 @@
         </span>
       <?php } ?>
     </a>
-    <a href="<?= site_url ('service_management/feedback'); ?>" class="btn btn-sm btn-outline-primary position-relative"
-      style="font-weight: 600; border-radius: 50px;">
+    <a class="btn btn-sm btn-primary position-relative" style="font-weight: 600; border-radius: 50px;">
       Feedback List
       <?php if ($feedback_count > 0)
       { ?>
@@ -90,10 +90,14 @@
           <thead>
             <tr>
               <th style="color: #fff;background-color: #001F82;text-align: center;">Due Date</th>
+              <th style="color: #fff;background-color: #001F82;text-align: center;">Until Due Date</th>
               <th style="color: #fff;background-color: #001F82;text-align: center;">Item Code</th>
               <th style="color: #fff;background-color: #001F82;text-align: center;">Item</th>
+              <th style="color: #fff;background-color: #001F82;text-align: center;">Qty</th>
+              <th style="color: #fff;background-color: #001F82;text-align: center;">UoM</th>
               <th style="color: #fff;background-color: #001F82;text-align: center;">Status</th>
-              <th style="color: #fff;background-color: #001F82;text-align: center; width: 30%;">Action</th>
+              <th style="color: #fff;background-color: #001F82;text-align: center;">Download</th>
+              <th style="color: #fff;background-color: #001F82;text-align: center; width: 10%;">Action</th>
 
               <!-- <th style="color: #fff;text-align: center;width: 400px;">
                                 <button class="btn btn-sm btn-primary" style="font-weight: 600; width: 100%;">
@@ -103,44 +107,66 @@
             </tr>
           </thead>
           <tbody>
-            <?php foreach ($req_list as $k => $v)
+            <?php foreach ($feedback_list as $k => $v)
             { ?>
               <tr>
                 <td style="vertical-align: middle;text-align: center;"><?php echo mDate ($v->due_date); ?></td>
+                <td style="vertical-align: middle;text-align: center;"><?php echo $v->service_urgent_if; ?> days</td>
                 <td style="vertical-align: middle;text-align: center;"><?php echo $v->item_code; ?></td>
                 <td style="vertical-align: middle;text-align: center;"><?php echo $v->item_name; ?></td>
+                <td style="vertical-align: middle;text-align: center;"><?php echo $v->qty; ?></td>
+                <td style="vertical-align: middle;text-align: center;"><?php echo $v->uom; ?></td>
                 <td style="vertical-align: middle;text-align: center;">
-                  <?php
-                  $currDate = date ('Y-m-d');
-                  $dueDate = date ('Y-m-d', strtotime ($v->due_date));
-
-                  $datediff = date_diff (date_create ($currDate), date_create ($dueDate));
-
-                  if ($datediff->format ('%R%a') < $v->service_urgent_if)
-                    {
-                    echo '<button class="btn btn-sm btn-danger" style="font-weight: 600; border-radius: 50px; width: 100%;">Urgent</button>';
-                    }
-                  else
-                    {
-                    echo '<button class="btn btn-sm btn-warning" style="font-weight: 600; border-radius: 50px; width: 100%;">Medium</button>';
-                    }
-                  ?>
+                  <?php if ($v->order_status == 'approved')
+                  { ?>
+                    <button class="btn btn-sm btn-default" style="font-weight: 600; border-radius: 50px; width: 100%;">
+                      Waiting for Feedback
+                    </button>
+                  <?php } ?>
+                  <?php if ($v->order_status == 'finished')
+                  { ?>
+                    <button class="btn btn-sm btn-success" style="font-weight: 600; border-radius: 50px; width: 100%;">
+                      Finished
+                    </button>
+                  <?php } ?>
+                  <?php if ($v->order_status == 'ignored')
+                  { ?>
+                    <button class="btn btn-sm btn-danger" style="font-weight: 600; border-radius: 50px; width: 100%;">
+                      Ignored
+                    </button>
+                  <?php } ?>
                 </td>
+                <td style="vertical-align: middle; text-align: center;">
+                  <?php if ($v->order_status != 'ignored')
+                  { ?>
+                    <a href="<?= site_url ('service_management/export_pdf/' . $v->order_id); ?>"
+                      class="btn btn-sm btn-outline-primary download-btn btn-custom-download" style="border-radius: 50px;"
+                      data-file="Validation_Report_<?php echo $v->order_id; ?>.pdf">
+                      <?php if ($v->is_download == 0)
+                      { ?>
+                        <i class="fas fa-file-pdf text-primary file-icon"></i>
+                      <?php } ?>
+                      <?php if ($v->is_download == 1)
+                      { ?>
+                        <i class="fas fa-file-circle-check text-success"></i>
+                      <?php } ?>
+                    </a>
+                  <?php } ?>
+                </td>
+
                 <td style="vertical-align: middle;text-align: center;">
-                  <a href="<?= site_url ('service_management/create_order/' . _encrypt ($v->id)); ?>"
-                    class="btn btn-sm btn-outline-primary" style="font-weight: 600; border-radius: 50px; width: 150px;">
-                    ORDER NOW
-                  </a>
-                  <button type="button" class="btn btn-sm btn-outline-danger"
-                    style="font-weight: 600; border-radius: 50px; width: 150px;" data-bs-toggle="modal"
-                    data-bs-target="#modal-ignore-value-<?php echo $v->id; ?>">
-                    IGNORE
-                  </button>
+                  <?php if ($v->order_status != 'ignored')
+                  { ?>
+                    <a href="<?= site_url ('service_management/order_detail/' . _encrypt ($v->order_id)); ?>"
+                      class="btn btn-sm btn-outline-primary" style="font-weight: 600; border-radius: 50px; width: 250px;">
+                      <?php echo $v->order_status == 'approved' ? 'Feedback' : 'Detail'; ?>
+                    </a>
+                  <?php } ?>
                 </td>
               </tr>
-              <div class="modal fade" id="modal-ignore-value-<?php echo $v->id; ?>" tabindex="-1"
-                aria-labelledby="exampleModalLabel" aria-hidden="true">
-                <form action="<?php echo site_url ('service_management/ignore_request'); ?>" method="post">
+              <form action="<?php echo site_url ('master_data/order_reject'); ?>" method="post">
+                <div class="modal fade" id="modal-ignore-value-<?php echo $v->id; ?>" tabindex="-1"
+                  aria-labelledby="exampleModalLabel" aria-hidden="true">
                   <input type="hidden" name="order_id" value="<?php echo _encrypt ($v->id); ?>">
                   <div class="modal-dialog modal-lg">
                     <div class="modal-content">
@@ -173,8 +199,8 @@
                       </div>
                     </div>
                   </div>
-                  </for>
-              </div>
+                </div>
+              </form>
             <?php } ?>
         </table>
       </div>

@@ -577,6 +577,7 @@ class Goods_management extends CI_Controller
 		redirect ('goods_management/order_detail/' . _encrypt ($order_id));
 		}
 
+
 	public function order_detail()
 		{
 		$id = _decrypt ($this->uri->segment (3));

@@ -87,6 +87,10 @@
 </style>
 <form action="<?php echo site_url ('service_management/submit_order'); ?>" method="post" class="needs-validation"
     novalidate>
+    <?php if (! empty ($order))
+    { ?>
+        <input type="hidden" name="order_id" value="<?php echo $order->id; ?>">
+    <?php } ?>
     <div class="card">
         <div class="card-body">
             <div class="row">
@@ -200,7 +204,7 @@
 
                     <h5 class="mb-2 text-primary fw-bold">Service Item</h5>
                     <div class="table-responsive">
-                        <table class="table table-bordered" style="width:100%;">
+                        <table class="table table-bordered" id="myTable" style="width:100%;">
                             <thead>
                                 <tr>
                                     <th style="color: #fff;background-color: #001F82;text-align: center;">Vendor</th>
@@ -221,58 +225,69 @@
                                     <th style="color: #fff;background-color: #001F82;text-align: center;">Tax / VAT
                                     </th>
                                     <th style="color: #fff;background-color: #001F82;text-align: center;">Total</th>
-                                    </th>
+                                    <th style="color: #fff;background-color: #001F82;text-align: center;"></th>
                                 </tr>
                             </thead>
                             <tbody>
-                                <tr>
+                                <tr class="data-row">
                                     <td>
-                                        <select class="form-select-sm" id="vendor" name="vendor" style="width: 100%;">
+                                        <select class="form-select-sm search-vendor" id="vendor" name="vendor[]"
+                                            style="width: 100%;">
                                             <?php foreach ($vendor as $row)
-                                            { ?>
-                                                <option value="<?php echo $row->vendor_code; ?>">
+                                            {
+                                            ?>
+                                                <option value="<?php echo $row->vendor_code; ?>" <?php echo isset ($detail) && $detail->vendor_code == $row->vendor_code ? 'selected' : ''; ?>>
                                                     <?php echo $row->vendor_name; ?>
                                                 </option>
                                             <?php } ?>
                                         </select>
                                     </td>
                                     <td style="vertical-align: middle;text-align: center;">
-                                        <select class="form-select-sm" id="item" name="item" style="width: 100%;">
+                                        <select class="search-item" id="item" name="item[]" style="width: 100%;">
                                             <?php foreach ($item as $row)
-                                            { ?>
-                                                <option value="<?php echo $row->id; ?>">
+                                            {
+                                            $selected = isset ($detail) && $detail->item_id == $row->id ? 'selected' : '';
+                                            ?>
+                                                <option value="<?php echo $row->id; ?>" <?php echo ! empty ($detail) && $detail->item_id == $row->id ? 'selected' : ''; ?>>
                                                     <?php echo $row->item_name; ?>
                                                 </option>
                                             <?php } ?>
                                         </select>
                                     </td>
                                     <td>
-                                        <input type="text" class="form-control-sm" id="service_category"
-                                            placeholder="Service Category" name="service_category" disabled>
+                                        <input type="text" class="form-control-sm service_category_input"
+                                            id="service_category" placeholder="Service Category"
+                                            name="service_category[]" readonly>
                                     </td>
                                     <td>
-                                        <input type="number" class="form-control-sm" id="unit_price"
-                                            placeholder="Unit Price" name="unit_price" required>
+                                        <input type="text" class="form-control-sm unitPrice unit_price_input"
+                                            id="unit_price" placeholder="Unit Price" name="unit_price[]" required>
                                     </td>
                                     <td>
-                                        <input type="number" class="form-control-sm" id="qty" placeholder="Qty"
-                                            name="qty" required>
+                                        <input type="number" class="form-control-sm qty_input" id="qty"
+                                            placeholder="Qty" name="qty[]" required>
                                     </td>
                                     <td>
-                                        <select class="form-select-sm" id="uom" name="uom" style="width: 100%;">
+                                        <select class="form-select-sm uom_input" id="uom" name="uom[]"
+                                            style="width: 100%;">
                                             <option value="person">Person</option>
                                             <option value="pallet">Pallet</option>
                                             <option value="once off">Once Off</option>
                                         </select>
                                     </td>
-                                    <td><input type="number" class="form-control-sm" id="sub_total"
-                                            placeholder="Sub Total" name="sub_total" readonly></td>
+                                    <td><input type="text" class="form-control-sm sub_total_input" id="sub_total"
+                                            placeholder="Sub Total" name="sub_total[]" readonly></td>
                                     <td>
-                                        <input type="number" class="form-control-sm" id="tax" placeholder="Tax / VAT"
-                                            name="tax" required>
+                                        <input type="number" class="form-control-sm tax_input" id="tax"
+                                            placeholder="Tax / VAT" name="tax[]" required>
                                     </td>
-                                    <td><input type="number" class="form-control-sm" id="total" placeholder="Total"
-                                            name="total" disabled></td>
+                                    <td><input type="text" class="form-control-sm total_input" id="total"
+                                            placeholder="Total" name="total[]" readonly></td>
+                                    <td>
+                                        <button class="btn btn-outline-primary btn-sm add-row" type="button">
+                                            <i class="fas fa-plus"></i>
+                                        </button>
+                                    </td>
                                 </tr>
                             </tbody>
                         </table>
@@ -312,22 +327,183 @@
         dateFormat: "d/m/Y",
         allowInput: true
     });
+    $(document).on("click", ".add-row", function () {
+        // Clone the first row
+        var newRow = $('.data-row:first').clone();
+        // Clear input values
+        newRow.find('input').val('');
+        newRow.find(".add-row").removeClass("add-row btn-outline-primary").addClass("remove-row btn-outline-danger").html('<i class="fas fa-minus"></i>');
+        // Append cloned row to table
+        $('#myTable tbody').append(newRow);
+    });
+
+    $(document).on("click", ".remove-row", function () {
+        // Prevent removing the last row
+        if ($('#myTable .data-row').length > 1) {
+            $(this).closest('tr').remove();
+        }
+    });
 
     $(document).ready(function () {
         $('#type_of_service_qty').show();
         $('#type_of_service_amount').hide();
 
-        $('#type').on('change', function () {
-            var value = $(this).val();
-            console.log(value);
+        $(".unitPrice").on('keyup', function () {
+            var val = this.value;
+            val = val.replace(/[^0-9\.]/g, '');
 
-            if (value == 'amount') {
-                $('#service_category').val('Bulk Service');
-                $('#qty').val(1);
-                $('#uom').val('once off');
+            if (val != "") {
+                valArr = val.split('.');
+                valArr[0] = (parseInt(valArr[0], 10)).toLocaleString();
+                val = valArr.join('.');
+            }
+
+            this.value = val;
+        });
+
+        $(".totalPrice").on('change', function () {
+            var val = this.value;
+            val = val.replace(/[^0-9\.]/g, '');
+
+            if (val != "") {
+                valArr = val.split('.');
+                valArr[0] = (parseInt(valArr[0], 10)).toLocaleString();
+                val = valArr.join('.');
+            }
+
+            this.value = val;
+        });
+
+        // AJAX call on name input blur
+        $('#myTable').on('change', '.search-item', function () {
+            var input = $(this);
+            var row = input.closest('tr');
+            var name = input.val().trim();
+            var type = $('#type').val();
+
+            console.log(name);
+            if (type !== '') {
+                if (type == 'amount') {
+                    row.find('.service_category_input').val('Bulk Service');
+                    row.find('.qty_input').val(1);
+                    row.find('.uom_input').val('once off');
+                } else {
+                    row.find('.qty_input').val('');
+                    row.find('.uom_input').val('');
+                    $.ajax({
+                        url: URL_AJAX + "/get_service_type",
+                        method: "POST",
+                        data: {
+                            id: name
+                        },
+                        dataType: "json",
+                        success: function (data) {
+                            var service = $('#type').val();
+                            if (service == 'amount') {
+                                row.find('.service_category_input').val('Bulk Service');
+                            } else {
+                                row.find('.service_category_input').val(data.service_category);
+                            }
+                        }
+                    });
+                }
             }
         });
 
+        // AJAX call on name input blur
+        $('#myTable').on('keyup', '.unit_price_input', function () {
+            var val = this.value;
+            val = val.replace(/[^0-9\.]/g, '');
+
+            if (val != "") {
+                valArr = val.split('.');
+                valArr[0] = (parseInt(valArr[0], 10)).toLocaleString();
+                val = valArr.join('.');
+            }
+
+            this.value = val;
+        });
+
+        $('#myTable').on('change', '.unit_price_input', function () {
+            var input = $(this);
+            var row = input.closest('tr');
+
+            var unit_price = input.val().replace(/[^0-9\.]/g, '');
+            var qty = row.find('.qty_input').val();
+            var tax = row.find('.tax_input').val();
+            var calc = calculateTotal(unit_price, qty, tax);
+
+            row.find('.total_input').val(Number(calc.total).toLocaleString());
+            row.find('.sub_total_input').val(Number(calc.sub_total).toLocaleString());
+        });
+
+        $('#myTable').on('change', '.qty_input', function () {
+            var input = $(this);
+            var row = input.closest('tr');
+
+            var unit_price = row.find('.unit_price_input').val().replace(/[^0-9\.]/g, '');
+            var qty = input.val();
+            var tax = row.find('.tax_input').val();
+
+            var calc = calculateTotal(unit_price, qty, tax);
+            row.find('.total_input').val(Number(calc.total).toLocaleString());
+            row.find('.sub_total_input').val(Number(calc.sub_total).toLocaleString());
+        });
+
+        $('#myTable').on('change', '.tax_input', function () {
+            var input = $(this);
+            var row = input.closest('tr');
+
+            var unit_price = row.find('.unit_price_input').val().replace(/[^0-9\.]/g, '');
+            var qty = row.find('.qty_input').val();
+            var tax = input.val();
+
+            var calc = calculateTotal(unit_price, qty, tax);
+
+            row.find('.total_input').val(Number(calc.total).toLocaleString());
+            row.find('.sub_total_input').val(Number(calc.sub_total).toLocaleString());
+        });
+
+        // $('#myTable tbody').on('blur', 'input, select', function () {
+        //     let qtyTotal = 0; // Initialize counter
+        //     let subTotal = 0; // Initialize counter
+        //     let totalValues = 0; // Initialize counter
+
+        //     // Loop through each row
+        //     table.rows().every(function () {
+        //         // Get all input fields in this row
+        //         let qtyVal = $(this).find('.qty_input').val();
+        //         let subtotalVal = $(this).find('.sub_total_input').val();
+        //         let totalVal = $(this).find('.total_input').val();
+
+        //         // Count non-empty values
+        //         qtyTotal += qtyTotal * qtyVal;
+        //         subTotal += subTotal * subtotalVal;
+        //         totalValues += totalValues * totalVal;
+        //     });
+
+        //     console.log(qtyTotal, subTotal, totalValues);
+        // });
+
+        <?php if (isset ($detail))
+        { ?>
+            $.ajax({
+                url: URL_AJAX + "/get_service_type",
+                method: "POST",
+                data: {
+                    id: <?php echo $detail->item_id; ?>
+                },
+                dataType: "json",
+                success: function (data) {
+                    var service = $('#type').val();
+                    if (service == 'amount') {
+                        $('#service_category').val('Bulk Service');
+                    } else {
+                        $('#service_category').val(data.service_category);
+                    }
+                }
+            });
+        <?php } ?>
         $('#unit_price').on('change', function () {
             calculateTotal();
         });
@@ -360,15 +536,14 @@
         });
     });
 
-    function calculateTotal() {
-        var unit_price = $('#unit_price').val();
-        var qty = $('#qty').val();
+    function calculateTotal(unit_price, qty, tax) {
         var sub_total = unit_price * qty;
-        $('#sub_total').val(sub_total);
-
-        var tax = $('#tax').val();
         var total = Number(sub_total) + Number((sub_total * tax / 100));
-        $('#total').val(total);
+
+        return {
+            sub_total: sub_total,
+            total: total
+        }
     }
 
 </script>

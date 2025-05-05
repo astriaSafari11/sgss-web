@@ -62,7 +62,7 @@
                   <option value="variable">Variable</option>
                   <option value="fixed">Fixed</option>
                 </select>
-                <label for="uom" class="fw-bold text-primary">Service Type</label>
+                <label for="uom" class="fw-bold text-primary">Service Category</label>
                 <div class="invalid-feedback">This field is required.</div>
               </div>
             </div>
