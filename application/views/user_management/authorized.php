@@ -31,7 +31,7 @@
         <option value="requestor">Requestor</option>
         <option value="approver">Approver</option>
       </select>
-      <button class="btn btn-outline-primary">+ Add New Role</button>
+      <button class="btn btn-outline-primary" data-bs-toggle="modal" data-bs-target="#addRoleModal">+ Add New Role</button>
     </div>
   </div>
 
@@ -81,6 +81,34 @@
 
 </div>
 
+<!-- Modal -->
+<div class="modal fade" id="addRoleModal" tabindex="-1" aria-labelledby="addRoleModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+    
+      <div class="modal-header">
+        <h5 class="modal-title" id="addRoleModalLabel">Add New Role</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      
+      <div class="modal-body">
+        <form id="formAddRole">
+          <div class="form-floating mb-3">
+            <input type="text" class="form-control" id="roleName" placeholder="Role Name">
+            <label class="text-primary fw-bold" for="roleName">Role Name</label>
+          </div>
+        </form>
+      </div>
+      
+      <div class="modal-footer">
+        <button type="submit" form="formAddRole" class="btn btn-outline-primary">Save</button>
+        <button type="button" class="btn btn-outline-danger" data-bs-dismiss="modal">Cancel</button>
+      </div>
+      
+    </div>
+  </div>
+</div>
+
 <script>
 const roleSelect = document.getElementById("roleSelect");
 const menuButtons = document.getElementById("menuButtons");
@@ -96,29 +124,23 @@ const accessByPage = {
   user: ["Add User", "Edit Role", "Delete User", "Reset Password"]
 };
 
-// Tampilkan menu buttons saat role dipilih
 roleSelect.addEventListener("change", () => {
   menuButtons.style.display = "flex";
   accessContainer.style.display = "none";
 });
 
-// Gabungkan semua event klik button di sini
 document.querySelectorAll(".menu-button").forEach(button => {
   button.addEventListener("click", function () {
     const page = this.getAttribute("data-page");
     const accessItems = accessByPage[page] || [];
 
-    // Toggle tombol aktif
     document.querySelectorAll(".menu-button").forEach(btn => btn.classList.remove("active"));
     this.classList.add("active");
 
-    // Set judul akses
     accessTitle.textContent = `Access List for ${capitalize(page)} Page`;
 
-    // Kosongkan daftar akses
     accessList.innerHTML = "";
 
-    // Tambahkan checkbox akses
     accessItems.forEach(label => {
       const col = document.createElement("div");
       col.innerHTML = `
@@ -130,7 +152,6 @@ document.querySelectorAll(".menu-button").forEach(button => {
       accessList.appendChild(col);
     });
 
-    // Tampilkan access container
     accessContainer.style.display = "block";
   });
 });
