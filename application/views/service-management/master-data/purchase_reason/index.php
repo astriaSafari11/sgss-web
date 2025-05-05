@@ -79,24 +79,7 @@
                     </div>
                     <div class="modal-body">
                         <div class="row">
-                            <!--begin::Col-->
-
-                            <!--end::Col-->
-                            <!--begin::Col-->
-                            <div class="col-6">
-                                <div class="form-floating mb-3">
-                                    <select class="form-select" aria-label="Default select example" id="type"
-                                        style="height: 56px;" data-placeholder="Choose Type" name="type" required>
-                                        <option></option>
-                                        <option value="service">Service</option>
-                                        <option value="goods">Goods</option>
-                                    </select>
-                                    <label for="floatingInput" class="fw-bold text-primary">Type</label>
-                                    <div class="invalid-feedback">This field is required.</div>
-                                </div>
-                            </div>
-
-                            <div class="col-6">
+                            <div class="col-12">
                                 <div class="form-floating mb-3">
                                     <input type="text" class="form-control" id="floatingInput" name="purchase_reason"
                                         required>
@@ -104,39 +87,6 @@
                                     <div class="invalid-feedback">This field is required.</div>
                                 </div>
                             </div>
-
-                            <div class="col-6">
-                                <div class="form-floating mb-3">
-                                    <select class="form-select" aria-label="Default select example" id="approval"
-                                        style="height: 56px;" data-placeholder="Choose Approval" name="approval"
-                                        required>
-                                        <option></option>
-                                        <option value="1">Yes</option>
-                                        <option value="0">No</option>
-                                    </select>
-                                    <label for="floatingInput" class="fw-bold text-primary">Approval</label>
-                                    <div class="invalid-feedback">This field is required.</div>
-                                </div>
-                            </div>
-
-                            <div class="col-6">
-                                <div class="form-floating mb-3">
-                                    <select class="form-select" aria-label="Default select example" id="wl_approval"
-                                        style="height: 56px;" data-placeholder="Choose WL Approval" name="wl_approval"
-                                        required>
-                                        <option></option>
-                                        <option value="WL1">WL 1</option>
-                                        <option value="WL2">WL 2</option>
-                                        <option value="WL3">WL 3</option>
-                                    </select>
-                                    <label for="floatingInput" class="fw-bold text-primary">WL Approval</label>
-                                    <div class="invalid-feedback">This field is required.</div>
-                                </div>
-                            </div>
-                            <!--end::Col-->
-
-                            <!--begin::Col-->
-                            <!--end::Col-->
                         </div>
                     </div>
                     <div class="modal-footer">
@@ -180,7 +130,7 @@
             e.preventDefault();
             // table.ajax.reload(); // Reload DataTable            
             $.ajax({
-                url: '<?= site_url ('master_data/search_material'); ?>',
+                url: '<?= site_url ('service_master/search_material'); ?>',
                 type: 'POST',
                 data: $(this).serialize(),
                 success: function (response) {
@@ -194,7 +144,7 @@
             var data = new FormData(this);
             $.ajax({
                 type: 'POST',
-                url: "<?php echo site_url ('master_data/save_purchase_reason') ?>",
+                url: "<?php echo site_url ('service_master/save_purchase_reason') ?>",
                 data: data,
                 data: $(this).serialize(),
                 success: function (response) {

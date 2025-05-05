@@ -44,11 +44,13 @@ class Service_management extends CI_Controller
 		$fSearch = ! empty ($search) ? $search . " AND order_status = 0 AND type = 'service'" : "WHERE order_status = 0 AND planned.type = 'service'";
 
 		$query = $this->db->query ("
-		select planned.* from t_stock_planned_request as planned
+			select planned.* from t_stock_planned_request as planned
 			INNER JOIN m_master_data_material as material ON planned.item_id = material.id
-			where planned.type = 'service'")->result ();
-		$count = $this->db->get_where ('t_order', array("status" => "draft", "type" => 'service'))->num_rows ();
-		$feedback = $this->db->get_where ('t_order', array("is_approved" => 1, "is_feedback" => 0, "type" => 'service'))->num_rows ();
+			where planned.type = 'service' and order_status = 0
+			ORDER BY due_date DESC
+			")->result ();
+		$count = $this->db->get_where ('t_stock_planned_request', array("order_status" => 0, "type" => 'service'))->num_rows ();
+		$feedback = $this->db->get_where ('t_order', array("is_approved" => 1, "is_feedback" => 0, "type" => 'service', "status" => 'approved'))->num_rows ();
 
 		$data['req_list'] = $query;
 		$data['req_count'] = $count;
@@ -69,16 +71,17 @@ class Service_management extends CI_Controller
 	public function feedback()
 		{
 		$query = $this->db->query (
-			"select t_order.*, t_order.status as order_status, detail.* FROM t_order
+			"select t_order.*, t_order.status as order_status, detail.*, m_master_data_vendor.vendor_name FROM t_order
 			INNER JOIN t_order_detail as detail ON t_order.id = detail.order_id
-			WHERE t_order.type = 'service'
-			ORDER by t_order.time_update  DESC"
+			LEFT JOIN m_master_data_vendor ON detail.vendor_code = m_master_data_vendor.vendor_code
+			WHERE t_order.type = 'service' and t_order.status != 'draft'
+			ORDER by t_order.time_add  DESC"
 		)->result ();
 
 		// $query =  $this->db->get_where('t_stock_planned_request',array("order_status" => NULL))->result();
 
-		$count = $this->db->get_where ('t_order', array("status" => "draft", "type" => 'service'))->num_rows ();
-		$feedback = $this->db->get_where ('t_order', array("is_approved" => 1, "is_feedback" => 0, "type" => 'service'))->num_rows ();
+		$count = $this->db->get_where ('t_stock_planned_request', array("order_status" => 0, "type" => 'service'))->num_rows ();
+		$feedback = $this->db->get_where ('t_order', array("is_approved" => 1, "is_feedback" => 0, "type" => 'service', "status" => 'approved'))->num_rows ();
 
 		$data['feedback_list'] = $query;
 		$data['req_count'] = $count;
@@ -99,7 +102,7 @@ class Service_management extends CI_Controller
 		$data['order_detail'] = $this->db->query ("
 		select t_order_detail.*, m_master_data_vendor.vendor_name from t_order_detail 
 		LEFT JOIN m_master_data_vendor ON m_master_data_vendor.vendor_code = t_order_detail.vendor_code
-		where t_order_detail.order_id = '$id'
+		where t_order_detail.order_id = '$id' 
 		")->result ();
 
 		$data['order_approval'] = $this->db->query ("SELECT t_order_approval_track.*, m_employee.nama FROM t_order_approval_track
@@ -122,9 +125,9 @@ class Service_management extends CI_Controller
 		{
 
 		$data['item'] = $this->db->get_where ('m_master_data_material', array('type' => 'service'))->result ();
-		$data['vendor'] = $this->db->get_where ('m_master_data_vendor', array('is_active' => 1))->result ();
+		$data['vendor'] = $this->db->get_where ('m_master_data_vendor', array('is_active' => 1, 'type' => 'service'))->result ();
 		$data['user'] = $this->db->get ('m_employee')->result ();
-		$data['purchase_reason'] = $this->db->get ("m_purchase_reason")->result ();
+		$data['purchase_reason'] = $this->db->get_where ('m_purchase_reason', array('type' => 'service'))->result ();
 		$data['area'] = $this->db->get_where ("m_employee_area", array(
 			"nip" => $this->session->userdata ('user_nip'),
 		))->row ();
@@ -183,9 +186,9 @@ class Service_management extends CI_Controller
 			$data['detail'] = $this->db->get_where ('t_order_detail', array('order_id' => $exist->id))->row ();
 			}
 		$data['item'] = $this->db->get_where ('m_master_data_material', array('type' => 'service'))->result ();
-		$data['vendor'] = $this->db->get_where ('m_master_data_vendor', array('is_active' => 1))->result ();
+		$data['vendor'] = $this->db->get_where ('m_master_data_vendor', array('is_active' => 1, 'type' => 'service'))->result ();
 		$data['user'] = $this->db->get ('m_employee')->result ();
-		$data['purchase_reason'] = $this->db->get ("m_purchase_reason")->result ();
+		$data['purchase_reason'] = $this->db->get_where ('m_purchase_reason', array('type' => 'service'))->result ();
 		$data['area'] = $this->db->get_where ("m_employee_area", array(
 			"nip" => $this->session->userdata ('user_nip'),
 		))->row ();
@@ -198,50 +201,135 @@ class Service_management extends CI_Controller
 		{
 		if (isset ($_POST['submit']))
 			{
-			$request_id = 'REQ' . date ("dmY") . rand (10000, 99999);
-			$data = array(
-				"date" => date ("Y-m-d"),
-				"period_start" => date ("Y-m-d", strtotime ($this->input->post ('period_start'))),
-				"period_end" => date ("Y-m-d", strtotime ($this->input->post ('period_end'))),
-				"shift" => $this->input->post ('shift'),
-				"request_id" => $request_id,
-				"requestor" => $this->session->userdata ('user_name'),
-				"requestor_nip" => $this->session->userdata ('user_nip'),
-				"requested_for" => $this->input->post ('requested_for'),
-				"area" => $this->input->post ('area'),
-				"remarks" => $this->input->post ('remarks'),
-				"order_category" => 'order',
-				"status" => 'approved',
-				"purchase_reason" => $this->input->post ('usage_reason'),
-				"is_approved" => 1,
-				"is_approval_required" => 0,
-				"is_feedback" => 0,
-				"is_download" => 0,
-				"type" => 'service'
-			);
+			$id = $this->input->post ('order_id');
 
-			_add ('t_order', $data);
+			if (! empty ($id))
+				{
 
-			$order = $this->db->get_where ('t_order', array('request_id' => $request_id))->row ();
-			$item = $this->db->get_where ('m_master_data_material', array('id' => $this->input->post ('item')))->row ();
+				$order = $this->db->get_where ('t_order', array('id' => $id))->row ();
+				$data = array(
+					"date" => date ("Y-m-d"),
+					"period_start" => date ("Y-m-d", strtotime ($this->input->post ('period_start'))),
+					"period_end" => date ("Y-m-d", strtotime ($this->input->post ('period_end'))),
+					"shift" => $this->input->post ('shift'),
+					"request_id" => $order->request_id,
+					"requestor" => $this->session->userdata ('user_name'),
+					"requestor_nip" => $this->session->userdata ('user_nip'),
+					"requested_for" => $this->input->post ('requested_for'),
+					"area" => $this->input->post ('area'),
+					"remarks" => $this->input->post ('remarks'),
+					"order_category" => 'order',
+					"status" => 'approved',
+					"purchase_reason" => $this->input->post ('usage_reason'),
+					"is_approved" => 1,
+					"is_approval_required" => 0,
+					"is_feedback" => 0,
+					"is_download" => 0,
+					"type" => 'service'
+				);
 
-			$detail = array(
-				"order_id" => $order->id,
-				"item_id" => $this->input->post ('item'),
-				"item_code" => $item->item_code,
-				"item_name" => $item->item_name,
-				"service_type" => $item->service_category,
-				"qty" => $this->input->post ('qty'),
-				"uom" => $this->input->post ('uom'),
-				"uom_price" => $this->input->post ('unit_price'),
-				"sub_total" => $this->input->post ('sub_total'),
-				"tax" => $this->input->post ('tax'),
-				"total_price" => $this->input->post ('total'),
-				"vendor_code" => $this->input->post ('vendor'),
-			);
+				_update ("t_order", $data, array('id' => $id));
 
-			_add ('t_order_detail', $detail);
+				$item = $this->input->post ('item');
+				$qty = $this->input->post ('qty');
+				$uom = $this->input->post ('uom');
+				$uom_price = $this->input->post ('unit_price');
+				$sub_total = $this->input->post ('sub_total');
+				$tax = $this->input->post ('tax');
+				$total_price = $this->input->post ('total');
+				$vendor_code = $this->input->post ('vendor');
 
+				for ($i = 0; $i < count ($item); $i++)
+					{
+					$getItem = $this->db->get_where ('m_master_data_material', array('id' => $item[$i]))->row ();
+					$check = $this->db->get_where ('t_order_detail', array('order_id' => $order->id, 'item_id' => $item[$i]))->row ();
+
+					$detail = array(
+						"order_id" => $order->id,
+						"item_id" => $getItem->id,
+						"item_code" => $getItem->item_code,
+						"item_name" => $getItem->item_name,
+						"service_type" => $getItem->service_category,
+						"qty" => $qty[$i],
+						"uom" => $uom[$i],
+						"uom_price" => str_replace (',', '', $uom_price[$i]),
+						"sub_total" => str_replace (',', '', $sub_total[$i]),
+						"tax" => $tax[$i],
+						"total_price" => str_replace (',', '', $total_price[$i]),
+						"vendor_code" => $vendor_code[$i],
+					);
+
+					if (! $check)
+						{
+						_add ('t_order_detail', $detail);
+						}
+					else
+						{
+						_update ("t_order_detail", $detail, array('id' => $check->id));
+						}
+					}
+
+				_update ("t_stock_planned_request", array('order_status' => 1), array('id' => $order->planned_id));
+				}
+			else
+				{
+				$request_id = 'REQ' . date ("dmY") . rand (10000, 99999);
+				$data = array(
+					"date" => date ("Y-m-d"),
+					"period_start" => date ("Y-m-d", strtotime ($this->input->post ('period_start'))),
+					"period_end" => date ("Y-m-d", strtotime ($this->input->post ('period_end'))),
+					"shift" => $this->input->post ('shift'),
+					"request_id" => $request_id,
+					"requestor" => $this->session->userdata ('user_name'),
+					"requestor_nip" => $this->session->userdata ('user_nip'),
+					"requested_for" => $this->input->post ('requested_for'),
+					"area" => $this->input->post ('area'),
+					"remarks" => $this->input->post ('remarks'),
+					"order_category" => 'order',
+					"status" => 'approved',
+					"purchase_reason" => $this->input->post ('usage_reason'),
+					"is_approved" => 1,
+					"is_approval_required" => 0,
+					"is_feedback" => 0,
+					"is_download" => 0,
+					"type" => 'service'
+				);
+
+				_add ('t_order', $data);
+
+				$order = $this->db->get_where ('t_order', array('request_id' => $request_id))->row ();
+
+				$item = $this->input->post ('item');
+				$qty = $this->input->post ('qty');
+				$uom = $this->input->post ('uom');
+				$uom_price = $this->input->post ('unit_price');
+				$sub_total = $this->input->post ('sub_total');
+				$tax = $this->input->post ('tax');
+				$total_price = $this->input->post ('total');
+				$vendor_code = $this->input->post ('vendor');
+
+				for ($i = 0; $i < count ($item); $i++)
+					{
+					$getItem = $this->db->get_where ('m_master_data_material', array('id' => $item[$i]))->row ();
+					$detail = array(
+						"order_id" => $order->id,
+						"item_id" => $getItem->id,
+						"item_code" => $getItem->item_code,
+						"item_name" => $getItem->item_name,
+						"service_type" => $getItem->service_category,
+						"qty" => $qty[$i],
+						"uom" => $uom[$i],
+						"uom_price" => str_replace (',', '', $uom_price[$i]),
+						"sub_total" => str_replace (',', '', $sub_total[$i]),
+						"tax" => $tax[$i],
+						"total_price" => str_replace (',', '', $total_price[$i]),
+						"vendor_code" => $vendor_code[$i],
+					);
+
+					_add ('t_order_detail', $detail);
+
+					}
+				}
 			$err = array(
 				'show' => true,
 				'type' => 'success',
@@ -341,24 +429,49 @@ class Service_management extends CI_Controller
 
 		foreach ($get_service as $item)
 			{
-			$dates = generateRecurringDates ('2025-05-01', '2025-05-15', $item->service_recurring);
+			// First date of current month
+			$firstDay = date ('Y-m-01'); // e.g., 2025-05-01
+
+			// Last date of current month
+			$lastDay = date ('Y-m-t');   // e.g., 2025-05-31
+
+
+			$dates = generateRecurringDates ($firstDay, $lastDay, $item->service_recurring);
 
 			foreach ($dates as $date)
 				{
-				$format = 'Y-m-' . $item->service_due_date;
+
+				if ($item->service_recurring != "daily")
+					{
+					$format = 'Y-m-' . $item->service_due_date;
+					}
+				else
+					{
+					$format = $date;
+					}
+
 				$thisMonth = (new DateTime("this month"))->format ($format);
 
-				_add ("t_stock_planned_request", array(
+				$exist = $this->db->get_where ("t_stock_planned_request", array(
 					"item_id" => $item->id,
-					"item_code" => $item->item_code,
-					"item_name" => $item->item_name,
-					"qty" => 0,
-					"uom" => '',
-					"due_date" => $thisMonth,
-					"until_due_date" => $date,
-					"type" => 'service',
-					"order_status" => 0,
-				));
+					"due_date" => $date,
+				))->row ();
+
+				if (! $exist)
+					{
+					_add ("t_stock_planned_request", array(
+						"item_id" => $item->id,
+						"item_code" => $item->item_code,
+						"item_name" => $item->item_name,
+						"qty" => 0,
+						"uom" => '',
+						"due_date" => $thisMonth,
+						"until_due_date" => $date,
+						"type" => 'service',
+						"order_status" => 0,
+					));
+
+					}
 				}
 			}
 		}

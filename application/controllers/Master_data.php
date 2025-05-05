@@ -2632,7 +2632,7 @@ class Master_data extends CI_Controller
 			$index++;
 			}
 
-		$spreadsheet->setActiveSheetIndexByName ('Master Material');
+		$spreadsheet->setActiveSheetIndexByName ('Master Item');
 		$sheet = $spreadsheet->getActiveSheet ();
 		$index = 3;
 		$getMaterial = $this->db->query ("SELECT * FROM m_master_data_material WHERE is_active = 1")->result ();
@@ -2684,7 +2684,7 @@ class Master_data extends CI_Controller
 			$index++;
 			}
 
-		$spreadsheet->setActiveSheetIndexByName ('Master Vendor x Material');
+		$spreadsheet->setActiveSheetIndexByName ('Master Vendor x Item');
 		$sheet = $spreadsheet->getActiveSheet ();
 		$index = 2;
 		$getVendorMaterial = $this->db->query ("SELECT m_vendor_material.*, m_master_data_vendor.vendor_name, m_master_data_material.item_name FROM m_vendor_material 
@@ -2900,7 +2900,7 @@ class Master_data extends CI_Controller
 			$index++;
 			}
 
-		$spreadsheet->setActiveSheetIndexByName ('Master Material');
+		$spreadsheet->setActiveSheetIndexByName ('Master Item');
 		$sheet = $spreadsheet->getActiveSheet ();
 		$index = 3;
 		$getMaterial = $this->db->query ("SELECT * FROM m_master_data_material WHERE is_active = 1")->result ();
@@ -3334,8 +3334,8 @@ class Master_data extends CI_Controller
 				}
 
 			//check vendor material
-			$sheetData = $spreadsheet->getSheetbyName ('Master Vendor x Material');
-			$cellRow = $spreadsheet->getSheetbyName ('Master Vendor x Material')->getHighestRow ();
+			$sheetData = $spreadsheet->getSheetbyName ('Master Vendor x Item');
+			$cellRow = $spreadsheet->getSheetbyName ('Master Vendor x Item')->getHighestRow ();
 			for ($i = 2; $i <= $cellRow; $i++)
 				{
 				$vendor_code = $sheetData->getCell ('A' . $i)->getValue ();

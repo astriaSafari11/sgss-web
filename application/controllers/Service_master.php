@@ -296,9 +296,9 @@ class Service_master extends CI_Controller
 				"m_purchase_reason",
 				array(
 					"purchase_reason" => $this->input->post ('purchase_reason'),
-					"type" => $this->input->post ('type'),
-					"is_approval" => $this->input->post ('approval'),
-					"WL_approval" => $this->input->post ('wl_approval'),
+					"type" => 'service',
+					"is_approval" => 0,
+					"WL_approval" => '',
 				)
 			);
 

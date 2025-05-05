@@ -176,6 +176,35 @@ class Ajax extends CI_Controller
 
 		die ($html);
 		}
+
+	function get_vendor_list()
+		{
+
+		$type = $this->input->post ('type');
+		$item = $this->input->post ('item');
+		$m = $this->db->get_where (
+			"view_master_vendor_service",
+			array(
+				"item_id" => $item
+			)
+		)->result ();
+
+		if (count ($m) == 0)
+			{
+			$html = '<option value="">No Vendor Found</option>';
+			}
+		else
+			{
+			$html = '<option value="">- Select Vendor -</option>';
+			foreach ((array) $m as $k => $v)
+				{
+				$html .= "<option value='" . $v->vendor_code . "'>" . $v->vendor_name . "</option>";
+				}
+			}
+
+		die ($html);
+		}
+
 	function add_material_to_vendor()
 		{
 		$vendor_code = $this->input->post ('vendor_code');

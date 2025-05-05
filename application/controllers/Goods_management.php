@@ -39,7 +39,7 @@ class Goods_management extends CI_Controller
 				INNER JOIN t_order ON t_order.id = t_order_detail.order_id
 				INNER JOIN m_master_data_material ON t_order_detail.item_code = m_master_data_material.item_code
 				WHERE t_order_approval_track.approve_by = '" . $curr_user->nip . "' and approve_status = 'pending'
-				AND t_order.status = 'waiting_approval'
+				AND t_order.status = 'waiting_approval' and t_order.type = 'goods'
 				AND request_id IS NOT NULL
 			";
 
@@ -134,13 +134,14 @@ class Goods_management extends CI_Controller
 			INNER JOIN t_order_detail as detail ON t_order.id = detail.order_id
 			INNER JOIN m_master_data_material as material on detail.item_id = material.id
 			INNER JOIN m_master_data_vendor as vendor on detail.vendor_code = vendor.vendor_code
+			WHERE t_order.type = 'goods'
 			ORDER by t_order.time_update DESC"
 		)->result ();
 
 		// $query =  $this->db->get_where('t_stock_planned_request',array("order_status" => NULL))->result();
 
 		$count = $this->db->get_where ('t_stock_planned_request', array("order_status" => 0, "type" => 'goods', "status !=" => "ignored"))->num_rows ();
-		$feedback = $this->db->get_where ('t_order', array("is_approved" => 1, "is_feedback" => 0))->num_rows ();
+		$feedback = $this->db->get_where ('t_order', array("is_approved" => 1, "is_feedback" => 0, "type" => "goods"))->num_rows ();
 
 		$data['feedback_list'] = $query;
 		$data['req_count'] = $count;
@@ -160,7 +161,9 @@ class Goods_management extends CI_Controller
 		")->result ();
 
 
-		$data['purchase_reason'] = $this->db->get ("m_purchase_reason")->result ();
+		$data['purchase_reason'] = $this->db->get_where ("m_purchase_reason", array(
+			"type" => 'goods',
+		))->result ();
 		$data['user_list'] = $this->db->get ("m_employee")->result ();
 		$data['area'] = $this->db->get_where ("m_employee_area", array(
 			"nip" => $this->session->userdata ('user_nip'),
@@ -180,7 +183,8 @@ class Goods_management extends CI_Controller
 				"planned_id" => $id,
 				"approval_category" => 'normal',
 				"is_approval_required" => 0,
-				"week" => $detail->week
+				"week" => $detail->week,
+				"type" => 'goods'
 			));
 			}
 
@@ -509,7 +513,12 @@ class Goods_management extends CI_Controller
 			"order_id" => $order_id
 		))->row ();
 
-		if ($purchase_reason == "Routine Buy")
+		$purchase_reason = $this->db->get_where ("m_purchase_reason", array(
+			"purchase_reason" => $purchase_reason,
+			"type" => 'goods'
+		))->row ();
+
+		if ($purchase_reason->is_approval == 0)
 			{
 			if ($order->approval_category != 'normal')
 				{
@@ -549,7 +558,7 @@ class Goods_management extends CI_Controller
 			"remarks" => $this->input->post ('remarks'),
 			"order_category" => 'order',
 			"status" => $status,
-			"purchase_reason" => $purchase_reason,
+			"purchase_reason" => $purchase_reason->purchase_reason,
 			"is_approval_required" => $is_approval_required,
 			"attachment_file" => $attachment,
 			"approved_by" => $approved_by,
@@ -904,7 +913,7 @@ class Goods_management extends CI_Controller
 		$data = array();
 		$data['item_group_list'] = $this->db->query ("select * from m_item_category")->result ();
 		$data['uom_list'] = $this->db->query ("select * from m_uom")->result ();
-		$data['item_list'] = $this->db->query ("select * from m_master_data_material")->result ();
+		$data['item_list'] = $this->db->query ("select * from m_master_data_material WHERE is_active = 1")->result ();
 		// $data['area_list'] = $this->db->query ("select * from m_area")->result ();
 		// $data['transactions_list'] = $this->db->query ("select * from m_area")->result ();
 		$week = date ("W");
@@ -1741,7 +1750,13 @@ class Goods_management extends CI_Controller
 						$planned_id = $check->id;
 						$is_approved = 0;
 						$is_feedback = 0;
-						if ($purchase_reason == "Routine Buy")
+
+						$purchase_reason = $this->db->get_where ("m_purchase_reason", array(
+							"purchase_reason" => $purchase_reason,
+							"type" => 'goods'
+						))->row ();
+
+						if ($purchase_reason->is_approval == 0)
 							{
 							$is_approval_required = 0;
 
@@ -1767,7 +1782,7 @@ class Goods_management extends CI_Controller
 							"area" => $area,
 							"remarks" => $remarks,
 							"status" => $order_status,
-							"purchase_reason" => $purchase_reason,
+							"purchase_reason" => $purchase_reason->purchase_reason,
 							"is_approval_required" => $is_approval_required,
 							"approved_by" => "auto_approved",
 							"is_approved" => $is_approved,
@@ -1817,7 +1832,7 @@ class Goods_management extends CI_Controller
 							"requestor" => $requestor,
 							"requested_for" => $requested_for,
 							"area" => $area,
-							"purchase_reason" => $purchase_reason,
+							"purchase_reason" => $purchase_reason->purchase_reason,
 							"remarks" => $remarks
 						];
 						}

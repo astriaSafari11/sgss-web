@@ -141,8 +141,8 @@
 
                         <div class="col-4 mb-3">
                             <div class="form-floating">
-                                <select class="form-select" id="purchase-reason"
-                                    data-placeholder="Choose Purchase Reason" name="purchase_reason" required>
+                                <select class="form-select" id="usage_reason" data-placeholder="Choose Purchase Reason"
+                                    name="usage_reason" required>
                                     <option></option>
                                     <?php foreach ($purchase_reason as $row)
                                     { ?>
@@ -207,10 +207,10 @@
                         <table class="table table-bordered" id="myTable" style="width:100%;">
                             <thead>
                                 <tr>
-                                    <th style="color: #fff;background-color: #001F82;text-align: center;">Vendor</th>
                                     <th style="color: #fff;background-color: #001F82;text-align: center;">Type of
                                         Service
                                     </th>
+                                    <th style="color: #fff;background-color: #001F82;text-align: center;">Vendor</th>
                                     <th style="color: #fff;background-color: #001F82;text-align: center;">Service
                                         Category
                                     </th>
@@ -225,25 +225,20 @@
                                     <th style="color: #fff;background-color: #001F82;text-align: center;">Tax / VAT
                                     </th>
                                     <th style="color: #fff;background-color: #001F82;text-align: center;">Total</th>
-                                    <th style="color: #fff;background-color: #001F82;text-align: center;"></th>
+                                    <?php if (empty ($detail->item_id))
+                                    { ?>
+                                        <th style="color: #fff;background-color: #001F82;text-align: center;"></th>
+                                    <?php } ?>
                                 </tr>
                             </thead>
                             <tbody>
                                 <tr class="data-row">
-                                    <td>
-                                        <select class="form-select-sm search-vendor" id="vendor" name="vendor[]"
-                                            style="width: 100%;">
-                                            <?php foreach ($vendor as $row)
-                                            {
-                                            ?>
-                                                <option value="<?php echo $row->vendor_code; ?>" <?php echo isset ($detail) && $detail->vendor_code == $row->vendor_code ? 'selected' : ''; ?>>
-                                                    <?php echo $row->vendor_name; ?>
-                                                </option>
-                                            <?php } ?>
-                                        </select>
-                                    </td>
-                                    <td style="vertical-align: middle;text-align: center;">
-                                        <select class="search-item" id="item" name="item[]" style="width: 100%;">
+                                    <td width="10%" style="vertical-align: middle;text-align: center;">
+                                        <select class="form-control form-select-sm search-item" id="item" name="item[]"
+                                            style="width: 100%;" required>
+                                            <option value="">- Select Service -</option>
+                                            <?php echo $row->item_name; ?>
+                                            </option>
                                             <?php foreach ($item as $row)
                                             {
                                             $selected = isset ($detail) && $detail->item_id == $row->id ? 'selected' : '';
@@ -253,41 +248,52 @@
                                                 </option>
                                             <?php } ?>
                                         </select>
+                                        <input type="hidden" name="item[]" class="item_hidden_input"
+                                            value="<?php echo ! empty ($detail) ? $detail->item_id : ''; ?>">
+                                    </td>
+                                    <td width="10%">
+                                        <select class="form-control form-select-sm vendor_input" id="vendor"
+                                            name="vendor[]" style="width: 100%;" required>
+                                        </select>
                                     </td>
                                     <td>
-                                        <input type="text" class="form-control-sm service_category_input"
+                                        <input type="text" class="form-control form-control-sm service_category_input"
                                             id="service_category" placeholder="Service Category"
                                             name="service_category[]" readonly>
                                     </td>
                                     <td>
-                                        <input type="text" class="form-control-sm unitPrice unit_price_input"
+                                        <input type="text"
+                                            class="form-control form-control-sm unitPrice unit_price_input"
                                             id="unit_price" placeholder="Unit Price" name="unit_price[]" required>
                                     </td>
                                     <td>
-                                        <input type="number" class="form-control-sm qty_input" id="qty"
+                                        <input type="number" class="form-control form-control-sm qty_input" id="qty"
                                             placeholder="Qty" name="qty[]" required>
                                     </td>
                                     <td>
-                                        <select class="form-select-sm uom_input" id="uom" name="uom[]"
-                                            style="width: 100%;">
+                                        <select class="form-control form-select-sm uom_input" id="uom" name="uom[]"
+                                            style="width: 100%;" required>
                                             <option value="person">Person</option>
                                             <option value="pallet">Pallet</option>
                                             <option value="once off">Once Off</option>
                                         </select>
                                     </td>
-                                    <td><input type="text" class="form-control-sm sub_total_input" id="sub_total"
-                                            placeholder="Sub Total" name="sub_total[]" readonly></td>
-                                    <td>
-                                        <input type="number" class="form-control-sm tax_input" id="tax"
+                                    <td><input type="text" class="form-control form-control-sm sub_total_input"
+                                            id="sub_total" placeholder="Sub Total" name="sub_total[]" readonly></td>
+                                    <td width="5%">
+                                        <input type="number" class="form-control form-control-sm tax_input" id="tax"
                                             placeholder="Tax / VAT" name="tax[]" required>
                                     </td>
-                                    <td><input type="text" class="form-control-sm total_input" id="total"
+                                    <td><input type="text" class="form-control form-control-sm total_input" id="total"
                                             placeholder="Total" name="total[]" readonly></td>
-                                    <td>
-                                        <button class="btn btn-outline-primary btn-sm add-row" type="button">
-                                            <i class="fas fa-plus"></i>
-                                        </button>
-                                    </td>
+                                    <?php if (empty ($detail->item_id))
+                                    { ?>
+                                        <td>
+                                            <button class="btn btn-outline-primary btn-sm add-row" type="button">
+                                                <i class="fas fa-plus"></i>
+                                            </button>
+                                        </td>
+                                    <?php } ?>
                                 </tr>
                             </tbody>
                         </table>
@@ -347,7 +353,6 @@
     $(document).ready(function () {
         $('#type_of_service_qty').show();
         $('#type_of_service_amount').hide();
-
         $(".unitPrice").on('keyup', function () {
             var val = this.value;
             val = val.replace(/[^0-9\.]/g, '');
@@ -374,6 +379,31 @@
             this.value = val;
         });
 
+        $('#myTable tbody tr').each(function () {
+            var input = $(this);
+            var row = input.closest('tr');
+            var name = input.val().trim();
+            var type = $('#type').val();
+
+            <?php if (! empty ($detail))
+            { ?>
+                row.find('.search-item').prop('disabled', true);
+            <?php } ?>
+
+            $.ajax({
+                url: URL_AJAX + "/get_vendor_list",
+                method: "POST",
+                data: {
+                    type: 'service',
+                    item: <?php echo ! empty ($detail->item_id) ? $detail->item_id : '""'; ?>
+                },
+                dataType: "html",
+                success: function (data) {
+                    row.find('.vendor_input').html(data);
+                }
+            });
+        });
+
         // AJAX call on name input blur
         $('#myTable').on('change', '.search-item', function () {
             var input = $(this);
@@ -381,7 +411,19 @@
             var name = input.val().trim();
             var type = $('#type').val();
 
-            console.log(name);
+            $.ajax({
+                url: URL_AJAX + "/get_vendor_list",
+                method: "POST",
+                data: {
+                    type: 'service',
+                    item: name
+                },
+                dataType: "html",
+                success: function (data) {
+                    row.find('.vendor_input').html(data);
+                }
+            });
+
             if (type !== '') {
                 if (type == 'amount') {
                     row.find('.service_category_input').val('Bulk Service');
@@ -464,27 +506,6 @@
             row.find('.sub_total_input').val(Number(calc.sub_total).toLocaleString());
         });
 
-        // $('#myTable tbody').on('blur', 'input, select', function () {
-        //     let qtyTotal = 0; // Initialize counter
-        //     let subTotal = 0; // Initialize counter
-        //     let totalValues = 0; // Initialize counter
-
-        //     // Loop through each row
-        //     table.rows().every(function () {
-        //         // Get all input fields in this row
-        //         let qtyVal = $(this).find('.qty_input').val();
-        //         let subtotalVal = $(this).find('.sub_total_input').val();
-        //         let totalVal = $(this).find('.total_input').val();
-
-        //         // Count non-empty values
-        //         qtyTotal += qtyTotal * qtyVal;
-        //         subTotal += subTotal * subtotalVal;
-        //         totalValues += totalValues * totalVal;
-        //     });
-
-        //     console.log(qtyTotal, subTotal, totalValues);
-        // });
-
         <?php if (isset ($detail))
         { ?>
             $.ajax({
@@ -545,5 +566,27 @@
             total: total
         }
     }
+    // Example starter JavaScript for disabling form submissions if there are invalid fields
+    (() => {
+        'use strict';
 
+        // Fetch all the forms we want to apply custom Bootstrap validation styles to
+        const forms = document.querySelectorAll('.needs-validation');
+
+        // Loop over them and prevent submission
+        Array.from(forms).forEach((form) => {
+            form.addEventListener(
+                'submit',
+                (event) => {
+                    if (!form.checkValidity()) {
+                        event.preventDefault();
+                        event.stopPropagation();
+                    }
+
+                    form.classList.add('was-validated');
+                },
+                false,
+            );
+        });
+    })();
 </script>

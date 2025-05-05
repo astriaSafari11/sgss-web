@@ -89,10 +89,9 @@
         <table id="example" class="table table-sm" style="width:100%" cellspacing="0">
           <thead>
             <tr>
-              <th style="color: #fff;background-color: #001F82;text-align: center;">Due Date</th>
-              <th style="color: #fff;background-color: #001F82;text-align: center;">Until Due Date</th>
-              <th style="color: #fff;background-color: #001F82;text-align: center;">Item Code</th>
-              <th style="color: #fff;background-color: #001F82;text-align: center;">Item</th>
+              <th style="color: #fff;background-color: #001F82;text-align: center;">Action Date</th>
+              <th style="color: #fff;background-color: #001F82;text-align: center;">Service Name</th>
+              <th style="color: #fff;background-color: #001F82;text-align: center;">Vendor Name</th>
               <th style="color: #fff;background-color: #001F82;text-align: center;">Qty</th>
               <th style="color: #fff;background-color: #001F82;text-align: center;">UoM</th>
               <th style="color: #fff;background-color: #001F82;text-align: center;">Status</th>
@@ -111,9 +110,8 @@
             { ?>
               <tr>
                 <td style="vertical-align: middle;text-align: center;"><?php echo mDate ($v->due_date); ?></td>
-                <td style="vertical-align: middle;text-align: center;"><?php echo $v->service_urgent_if; ?> days</td>
-                <td style="vertical-align: middle;text-align: center;"><?php echo $v->item_code; ?></td>
                 <td style="vertical-align: middle;text-align: center;"><?php echo $v->item_name; ?></td>
+                <td style="vertical-align: middle;text-align: center;"><?php echo $v->vendor_name; ?></td>
                 <td style="vertical-align: middle;text-align: center;"><?php echo $v->qty; ?></td>
                 <td style="vertical-align: middle;text-align: center;"><?php echo $v->uom; ?></td>
                 <td style="vertical-align: middle;text-align: center;">
