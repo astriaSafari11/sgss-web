@@ -440,15 +440,7 @@ class Service_management extends CI_Controller
 
 			foreach ($dates as $date)
 				{
-
-				if ($item->service_recurring != "daily")
-					{
-					$format = 'Y-m-' . $item->service_due_date;
-					}
-				else
-					{
-					$format = $date;
-					}
+				$format = $date;
 
 				$thisMonth = (new DateTime("this month"))->format ($format);
 
