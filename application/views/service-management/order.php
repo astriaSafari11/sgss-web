@@ -169,7 +169,7 @@
                             <div class="form-floating">
                                 <input type="text" class="form-control" id="requestor" placeholder="Requestor"
                                     name="requestor" value="<?php echo $this->session->userdata ('user_name'); ?>"
-                                    required>
+                                    readonly>
                                 <label for="requestor" class="fw-bold text-primary"
                                     style="font-size: 14px;">Requestor</label>
                             </div>
@@ -196,7 +196,7 @@
                         <div class="col-4 mb-3">
                             <div class="form-floating">
                                 <input type="text" class="form-control" id="area" placeholder="Area" name="area"
-                                    value="<?php echo $area->area_code; ?>" required>
+                                    value="<?php echo $area->area_code; ?>" readonly>
                                 <label for="area" class="fw-bold text-primary" style="font-size: 14px;">Area</label>
                             </div>
                         </div>
@@ -248,7 +248,7 @@
                                                 </option>
                                             <?php } ?>
                                         </select>
-                                        <input type="hidden" name="item[]" class="item_hidden_input"
+                                        <input type="hidden" name="item_hidden[]" class="item_hidden_input"
                                             value="<?php echo ! empty ($detail) ? $detail->item_id : ''; ?>">
                                     </td>
                                     <td width="10%">

@@ -202,7 +202,6 @@ class Service_management extends CI_Controller
 		if (isset ($_POST['submit']))
 			{
 			$id = $this->input->post ('order_id');
-
 			if (! empty ($id))
 				{
 
@@ -230,7 +229,7 @@ class Service_management extends CI_Controller
 
 				_update ("t_order", $data, array('id' => $id));
 
-				$item = $this->input->post ('item');
+				$item = $this->input->post ('item_hidden');
 				$qty = $this->input->post ('qty');
 				$uom = $this->input->post ('uom');
 				$uom_price = $this->input->post ('unit_price');
@@ -457,7 +456,7 @@ class Service_management extends CI_Controller
 						"item_name" => $item->item_name,
 						"qty" => 0,
 						"uom" => '',
-						"due_date" => $thisMonth,
+						"due_date" => $format,
 						"until_due_date" => $date,
 						"type" => 'service',
 						"order_status" => 0,
