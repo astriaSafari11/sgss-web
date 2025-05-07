@@ -169,7 +169,7 @@
             <div class="col-3">
               <div class="form-floating mb-3">
                 <input type="number" class="form-control" id="floatingInput" name="order_cycle" required>
-                <label for="floatingInput" class="fw-bold text-primary">Order Cycle <span
+                <label for="floatingInput" class="fw-bold text-primary">Order Cycle (days) <span
                     class="required-asterisk">*</span></label>
               </div>
             </div>
