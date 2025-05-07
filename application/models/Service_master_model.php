@@ -24,6 +24,18 @@ class Service_master_model extends CI_Model
 			$table = 'm_purchase_reason';
 			$this->db->where ('type', 'service');
 			}
+		elseif ($type == "category")
+			{
+			$table = 'm_category';
+			// $this->db->where ('category_name');
+			$this->db->where ('is_active', 1);
+			}
+		elseif ($type == "uom")
+			{
+			$table = 'm_uom';
+			// $this->db->where ('uom_name');
+			$this->db->where ('is_active', 1);
+			}
 		elseif ($type == "vendor")
 			{
 			$column_search = array('vendor_code', 'vendor_name', 'rating');

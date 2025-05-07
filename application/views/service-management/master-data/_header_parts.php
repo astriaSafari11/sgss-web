@@ -9,6 +9,14 @@
         <i class="fa-solid fa-box-archive" style="margin-right:5px; margin-left: 5px;"></i>
         Usage Reason
       </a></li>
+    <li><a class="dropdown-item" href="<?= site_url ('service_master/category'); ?>">
+        <i class="fa-solid fa-box-archive" style="margin-right:5px; margin-left: 5px;"></i>
+        Category
+      </a></li>
+    <li><a class="dropdown-item" href="<?= site_url ('service_master/uom'); ?>">
+        <i class="fa-solid fa-box-archive" style="margin-right:5px; margin-left: 5px;"></i>
+        UoM
+      </a></li>
     <li>
       <hr class="dropdown-divider" />
     </li>

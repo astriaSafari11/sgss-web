@@ -90,9 +90,9 @@ $query_builder = TRUE;
 
 $db['default'] = array(
 	'dsn'	=> '',
-	'hostname' => '13.67.63.151',
-	'username' => 'Zee',
-	'password' => 'Zee01',
+	'hostname' => '20.212.251.212',
+	'username' => 'zee',
+	'password' => 'zee-1928374655',
 	// 'hostname' => 'LAPTOP-2B53R143',
 	// 'username' => 'hr_safari',
 	// 'password' => 'Safari123',	
