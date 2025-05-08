@@ -207,24 +207,24 @@
                         <table class="table table-bordered" id="myTable" style="width:100%;">
                             <thead>
                                 <tr>
-                                    <th style="color: #fff;background-color: #001F82;text-align: center;">Type of
+                                    <th class="align-middle" style="color: #fff;background-color: #001F82;text-align: center;">Type of
                                         Service
                                     </th>
-                                    <th style="color: #fff;background-color: #001F82;text-align: center;">Vendor</th>
-                                    <th style="color: #fff;background-color: #001F82;text-align: center;">Service
+                                    <th class="align-middle" style="color: #fff;background-color: #001F82;text-align: center;">Vendor</th>
+                                    <th class="align-middle" style="color: #fff;background-color: #001F82;text-align: center;">Service
                                         Category
                                     </th>
-                                    <th style="color: #fff;background-color: #001F82;text-align: center;">Unit Price
+                                    <th class="align-middle" style="color: #fff;background-color: #001F82;text-align: center;">Unit Price
                                     </th>
-                                    <th style="color: #fff;background-color: #001F82;text-align: center;">Qty
+                                    <th class="align-middle" style="color: #fff;background-color: #001F82;text-align: center;">Qty
                                     </th>
-                                    <th style="color: #fff;background-color: #001F82;text-align: center;">UoM
+                                    <th class="align-middle" style="color: #fff;background-color: #001F82;text-align: center;">UoM
                                     </th>
-                                    <th style="color: #fff;background-color: #001F82;text-align: center;">Subtotal
+                                    <th class="align-middle" style="color: #fff;background-color: #001F82;text-align: center;">Subtotal
                                     </th>
-                                    <th style="color: #fff;background-color: #001F82;text-align: center;">Tax / VAT
+                                    <th class="align-middle" style="color: #fff;background-color: #001F82;text-align: center;">Tax / VAT
                                     </th>
-                                    <th style="color: #fff;background-color: #001F82;text-align: center;">Total</th>
+                                    <th class="align-middle" style="color: #fff;background-color: #001F82;text-align: center;">Total</th>
                                     <?php if (empty ($detail->item_id))
                                     { ?>
                                         <th style="color: #fff;background-color: #001F82;text-align: center;"></th>
@@ -262,9 +262,15 @@
                                             name="service_category[]" readonly>
                                     </td>
                                     <td>
-                                        <input type="text"
-                                            class="form-control form-control-sm unitPrice unit_price_input"
-                                            id="unit_price" placeholder="Unit Price" name="unit_price[]" required>
+                                        <div class="input-group input-group-sm">
+                                            <span class="input-group-text">Rp</span>
+                                            <input type="text"
+                                                class="form-control unitPrice unit_price_input"
+                                                id="unit_price"
+                                                placeholder="Unit Price"
+                                                name="unit_price[]"
+                                                required>
+                                        </div>
                                     </td>
                                     <td>
                                         <input type="number" class="form-control form-control-sm qty_input" id="qty"
@@ -278,14 +284,33 @@
                                             <option value="once off">Once Off</option>
                                         </select>
                                     </td>
-                                    <td><input type="text" class="form-control form-control-sm sub_total_input"
-                                            id="sub_total" placeholder="Sub Total" name="sub_total[]" readonly></td>
+                                    <td>
+                                        <div class="input-group input-group-sm">
+                                            <span class="input-group-text">Rp</span>
+                                            <input type="text"
+                                                class="form-control sub_total_input"
+                                                id="sub_total"
+                                                placeholder="Sub Total"
+                                                name="sub_total[]"
+                                                readonly>
+                                        </div>
+                                    </td>
                                     <td width="5%">
                                         <input type="number" class="form-control form-control-sm tax_input" id="tax"
                                             placeholder="Tax / VAT" name="tax[]" required>
                                     </td>
-                                    <td><input type="text" class="form-control form-control-sm total_input" id="total"
-                                            placeholder="Total" name="total[]" readonly></td>
+                                    <td>
+                                        <div class="input-group input-group-sm">
+                                            <span class="input-group-text">Rp</span>
+                                            <input type="text"
+                                                class="form-control total_input"
+                                                id="total"
+                                                placeholder="Total"
+                                                name="total[]"
+                                                readonly>
+                                        </div>
+                                    </td>
+
                                     <?php if (empty ($detail->item_id))
                                     { ?>
                                         <td>

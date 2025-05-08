@@ -125,7 +125,7 @@
                 <h3 class="card-title" style="font-weight: 600;color: #FFF;">Item Information</h3>
             </div>
             <div class="card-body">
-                <table class="table table-bordered" style="width:100%">
+                <table class="table table-sm" style="width:100%">
                     <thead>
                         <tr>
                             <th style="color: #001F82;background-color:#DAEAFF;text-align: center;">Vendor</th>
@@ -144,24 +144,24 @@
                         <?php foreach ($order_detail as $row)
                         { ?>
                             <tr>
-                                <td style="vertical-align: middle;text-align: center;"><?php echo $row->vendor_name; ?></td>
-                                <td style="vertical-align: middle;text-align: center;"><?php echo $row->item_name; ?></td>
-                                <td style="vertical-align: middle;text-align: center;"><?php echo $row->service_type; ?>
+                                <td class="align-middle" style="vertical-align: middle;text-align: center;"><?php echo $row->vendor_name; ?></td>
+                                <td class="align-middle" style="vertical-align: middle;text-align: center;"><?php echo $row->item_name; ?></td>
+                                <td class="align-middle" style="vertical-align: middle;text-align: center;"><?php echo $row->service_type; ?>
                                 </td>
-                                <td style="vertical-align: middle;text-align: center;">
+                                <td class="align-middle" style="vertical-align: middle;text-align: center;">
                                     <?php echo myNum ($row->uom_price); ?>
                                 </td>
-                                <td style="vertical-align: middle;text-align: center;"><?php echo $row->uom; ?>
+                                <td class="align-middle" style="vertical-align: middle;text-align: center;"><?php echo $row->uom; ?>
                                 </td>
-                                <td style="vertical-align: middle;text-align: right;"><?php echo myNum ($row->qty); ?>
+                                <td class="align-middle" style="vertical-align: middle;text-align: right;"><?php echo myNum ($row->qty); ?>
                                 </td>
-                                <td style="vertical-align: middle;text-align: center;">
+                                <td class="align-middle" style="vertical-align: middle;text-align: center;">
                                     <?php echo myNum ($row->sub_total); ?>
                                 </td>
-                                <td style="vertical-align: middle;text-align: right;">
+                                <td class="align-middle" style="vertical-align: middle;text-align: right;">
                                     <?php echo myNum ($row->tax); ?> %
                                 </td>
-                                <td style="vertical-align: middle;text-align: center;">
+                                <td class="align-middle" style="vertical-align: middle;text-align: center;">
                                     <?php echo myNum ($row->total_price); ?>
                                 </td>
                             </tr>
