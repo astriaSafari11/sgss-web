@@ -40,10 +40,11 @@
                     <table id="uom_table" class="table table-striped table-bordered" width="100%">
                         <thead style="text-align: center;white-space:nowrap;">
                             <tr>
-                                <th style="color: #fff;background-color: #001F82;text-align: center; width: 80px">No.</th>
-                                <th style="color: #fff;background-color: #001F82;text-align: center;">ID</th>
+                                <th style="color: #fff;background-color: #001F82;text-align: center; width: 80px">No.
+                                </th>
                                 <th style="color: #fff;background-color: #001F82;text-align: center;">UOM Name</th>
-                                <th style="color: #fff;background-color: #001F82;text-align: center; width: 120px;">Action</th>
+                                <th style="color: #fff;background-color: #001F82;text-align: center; width: 120px;">
+                                    Action</th>
                             </tr>
                         </thead>
                         <tbody style="text-align: center;white-space:nowrap;vertical-align:center;"></tbody>
@@ -69,7 +70,7 @@
                         <div class="row">
                             <div class="col-12">
                                 <div class="form-floating mb-3">
-                                    <input type="text" class="form-control" id="floatingInput" name="uom_name" required>
+                                    <input type="text" class="form-control" id="floatingInput" name="uom_code" required>
                                     <label for="floatingInput" class="fw-bold text-primary">UOM Name</label>
                                     <div class="invalid-feedback">This field is required.</div>
                                 </div>
@@ -96,7 +97,7 @@
             "serverSide": true,
             "ordering": false,
             "ajax": {
-                "url": "<?= site_url('service_master/get_uom'); ?>",
+                "url": "<?= site_url ('service_master/get_uom'); ?>",
                 "type": "POST"
             },
             "order": [],
@@ -113,7 +114,7 @@
         $('#searchData').submit(function (e) {
             e.preventDefault();
             $.ajax({
-                url: '<?= site_url('service_master/search_material'); ?>',
+                url: '<?= site_url ('service_master/search_material'); ?>',
                 type: 'POST',
                 data: $(this).serialize(),
                 success: function () {
@@ -127,7 +128,7 @@
             var data = new FormData(this);
             $.ajax({
                 type: 'POST',
-                url: "<?= site_url('service_master/save_uom'); ?>",
+                url: "<?= site_url ('service_master/save_uom'); ?>",
                 data: data,
                 contentType: false,
                 processData: false,

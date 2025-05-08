@@ -44,7 +44,7 @@
                             <tr>
                                 <th style="color: #fff;background-color: #001F82;text-align: center; width: 80px">No.
                                 </th>
-                                <th style="color: #fff;background-color: #001F82;text-align: center;">ID</th>
+                                <!-- <th style="color: #fff;background-color: #001F82;text-align: center;">ID</th> -->
                                 <th style="color: #fff;background-color: #001F82;text-align: center;">Category Name
                                 </th>
                                 <th style="color: #fff;background-color: #001F82;text-align: center; width: 120px;">
@@ -80,7 +80,7 @@
                         <div class="row">
                             <div class="col-12">
                                 <div class="form-floating mb-3">
-                                    <input type="text" class="form-control" id="floatingInput" name="category"
+                                    <input type="text" class="form-control" id="floatingInput" name="category_name"
                                         required>
                                     <label for="floatingInput" class="fw-bold text-primary">Category</label>
                                     <div class="invalid-feedback">This field is required.</div>

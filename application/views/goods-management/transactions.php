@@ -457,8 +457,11 @@
                         </div>
                     </div>
                     <div class="modal-footer">
-                        <button type="button" class="btn btn-outline-danger" data-bs-dismiss="modal">Cancel</button>
+                        <button type="button" class="btn btn-outline-danger" id="btnCancel"
+                            data-bs-dismiss="modal">Cancel</button>
                         <button type="submit" class="btn btn-outline-primary" id="btnUpload">Import Data</button>
+                        <button type="button" class="btn btn-outline-primary" id="btnDone"
+                            data-bs-dismiss="modal">Close</button>
                     </div>
                 </div>
             </div>
@@ -506,6 +509,7 @@
     });
 
     $(document).ready(function () {
+        $("#btnDone").hide();
         $("body").on("submit", "#form-upload-user", function (e) {
             e.preventDefault();
             var data = new FormData(this);
@@ -525,6 +529,10 @@
                 },
                 success: function (result) {
                     $("#btnUpload").prop('disabled', false);
+                    $("#btnUpload").hide();
+                    $("#btnCancel").hide();
+                    $("#btnDone").show();
+                    $("#file").val();
                     if ($.isEmptyObject(result.error_message)) {
                         $("#success-result").show();
                         $(".success-text").html(result.success_message);

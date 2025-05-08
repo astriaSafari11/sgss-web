@@ -581,7 +581,7 @@ class Master_data extends CI_Controller
 			$row = array();
 			$row[] = ++$no;
 			$row[] = $field->factory;
-			$row[] = $field->item_code . "-" . sprintf ("%02d", $field->item_number);
+			$row[] = $field->item_code;
 			$row[] = $field->item_name;
 			$row[] = $field->item_group;
 			$row[] = $field->size;

@@ -42,9 +42,8 @@ class Service_management extends CI_Controller
 			}
 
 		$fSearch = ! empty ($search) ? $search . " AND order_status = 0 AND type = 'service'" : "WHERE order_status = 0 AND planned.type = 'service'";
-
 		$query = $this->db->query ("
-			select planned.* from t_stock_planned_request as planned
+			select planned.*, material.item_name from t_stock_planned_request as planned
 			INNER JOIN m_master_data_material as material ON planned.item_id = material.id
 			where planned.type = 'service' and order_status = 0
 			ORDER BY due_date DESC
@@ -75,11 +74,10 @@ class Service_management extends CI_Controller
 			INNER JOIN t_order_detail as detail ON t_order.id = detail.order_id
 			LEFT JOIN m_master_data_vendor ON detail.vendor_code = m_master_data_vendor.vendor_code
 			WHERE t_order.type = 'service' and t_order.status != 'draft'
-			ORDER by t_order.time_add  DESC"
+			ORDER by t_order.is_feedback  ASC"
 		)->result ();
 
 		// $query =  $this->db->get_where('t_stock_planned_request',array("order_status" => NULL))->result();
-
 		$count = $this->db->get_where ('t_stock_planned_request', array("order_status" => 0, "type" => 'service'))->num_rows ();
 		$feedback = $this->db->get_where ('t_order', array("is_approved" => 1, "is_feedback" => 0, "type" => 'service', "status" => 'approved'))->num_rows ();
 
@@ -125,6 +123,7 @@ class Service_management extends CI_Controller
 		{
 
 		$data['item'] = $this->db->get_where ('m_master_data_material', array('type' => 'service'))->result ();
+		$data['uom'] = $this->db->get_where ('m_uom', array('type' => 'service'))->result ();
 		$data['vendor'] = $this->db->get_where ('m_master_data_vendor', array('is_active' => 1, 'type' => 'service'))->result ();
 		$data['user'] = $this->db->get ('m_employee')->result ();
 		$data['purchase_reason'] = $this->db->get_where ('m_purchase_reason', array('type' => 'service'))->result ();
@@ -186,6 +185,7 @@ class Service_management extends CI_Controller
 			$data['detail'] = $this->db->get_where ('t_order_detail', array('order_id' => $exist->id))->row ();
 			}
 		$data['item'] = $this->db->get_where ('m_master_data_material', array('type' => 'service'))->result ();
+		$data['uom'] = $this->db->get_where ('m_uom', array('type' => 'service'))->result ();
 		$data['vendor'] = $this->db->get_where ('m_master_data_vendor', array('is_active' => 1, 'type' => 'service'))->result ();
 		$data['user'] = $this->db->get ('m_employee')->result ();
 		$data['purchase_reason'] = $this->db->get_where ('m_purchase_reason', array('type' => 'service'))->result ();
@@ -344,6 +344,7 @@ class Service_management extends CI_Controller
 		{
 		if (isset ($_POST['submit']))
 			{
+			$planned_id = $this->input->post ('order_id');
 			$request_id = 'REQ' . date ("dmY") . rand (10000, 99999);
 			$data = array(
 				"date" => date ("Y-m-d"),
@@ -363,7 +364,8 @@ class Service_management extends CI_Controller
 				"is_approval_required" => 0,
 				"is_feedback" => 0,
 				"is_download" => 0,
-				"type" => 'service'
+				"type" => 'service',
+				'planned_id' => $planned_id
 			);
 
 			_add ('t_order', $data);
@@ -388,11 +390,18 @@ class Service_management extends CI_Controller
 
 			_add ('t_order_detail', $detail);
 
+
 			$err = array(
 				'show' => true,
 				'type' => 'success',
 				'msg' => 'Successfully Ignored Service Order Request'
 			);
+
+			_update ("t_stock_planned_request", array(
+				"order_status" => 1,
+				"status" => 'ignored'
+			), array("id" => $planned_id));
+
 			$this->session->set_flashdata ('toast', $err);
 
 			redirect ('service_management');
@@ -411,7 +420,7 @@ class Service_management extends CI_Controller
 			"is_feedback" => $is_feedback,
 			"status" => 'finished',
 			"po_gr_number" => $po_gr,
-			"po_gr_amount" => $po_gr_amount,
+			"po_gr_amount" => str_replace (',', '', $po_gr_amount),
 			"feedback_date" => date ("Y-m-d"),
 			"feedback_by" => $this->session->userdata ('user_name')
 		), array("id" => $id));
@@ -448,6 +457,8 @@ class Service_management extends CI_Controller
 					"due_date" => $date,
 				))->row ();
 
+				$week = date ('W', strtotime ($format));
+
 				if (! $exist)
 					{
 					_add ("t_stock_planned_request", array(
@@ -455,6 +466,7 @@ class Service_management extends CI_Controller
 						"item_code" => $item->item_code,
 						"item_name" => $item->item_name,
 						"qty" => 0,
+						"week" => $week,
 						"uom" => '',
 						"due_date" => $format,
 						"until_due_date" => $date,
@@ -503,7 +515,7 @@ class Service_management extends CI_Controller
 		select t_order_detail.*, m_master_data_vendor.vendor_name from t_order_detail 
 		LEFT JOIN m_master_data_vendor ON m_master_data_vendor.vendor_code = t_order_detail.vendor_code
 		where t_order_detail.order_id = '$id'
-		")->row ();
+		")->result ();
 
 		ini_set ('max_execution_time', '300');
 		ini_set ("pcre.backtrack_limit", "5000000");
@@ -588,7 +600,7 @@ class Service_management extends CI_Controller
 					<tr>
 						<td style="text-align: left;font-size:12px;width:200px;">Requested For</td>
 						<td style="text-align: center;font-size:12px;width:50px;">:</td>
-						<td style="text-align: left;font-size:12px;">' . $order->requested_for_name . '</td>
+						<td style="text-align: left;font-size:12px;">' . $order->requested_for . '</td>
 						<td style="text-align: left;font-size:12px;width:200px;">Area</td>
 						<td style="text-align: center;font-size:12px;width:50px;">:</td>
 						<td style="text-align: left;font-size:12px;">' . $order->area . '</td>
@@ -626,17 +638,26 @@ class Service_management extends CI_Controller
                             <th style="color: #001F82;background-color:#DAEAFF;text-align: center;">Tax / VAT</th>
                             <th style="color: #001F82;background-color:#DAEAFF;text-align: center;">Total</th>
                         </tr>
+				';
+		foreach ($data as $d)
+			{
+
+			$html .= '						
 					<tr>
-						<td style="text-align: center;font-size:12px;border: 1px solid #bac2bc;">' . $data->vendor_name . '</td>
-						<td style="text-align: center;font-size:12px;border: 1px solid #bac2bc;">' . $data->item_name . '</td>
-						<td style="text-align: center;font-size:12px;border: 1px solid #bac2bc;">' . $data->service_type . '</td>
-						<td style="text-align: right;font-size:12px;border: 1px solid #bac2bc;">' . myNum ($data->uom_price) . '</td>
-						<td style="text-align: center;font-size:12px;border: 1px solid #bac2bc;">' . $data->qty . '</td>
-						<td style="text-align: center;font-size:12px;border: 1px solid #bac2bc;">' . $data->uom . '</td>
-						<td style="text-align: right;font-size:12px;border: 1px solid #bac2bc;">' . myNum ($data->sub_total) . '</td>
-						<td style="text-align: right;font-size:12px;border: 1px solid #bac2bc;">' . myNum ($data->tax) . '</td>
-						<td style="text-align: right;font-size:12px;border: 1px solid #bac2bc;">' . myNum ($data->total) . '</td>
+						<td style="text-align: center;font-size:12px;border: 1px solid #bac2bc;">' . $d->vendor_name . '</td>
+						<td style="text-align: center;font-size:12px;border: 1px solid #bac2bc;">' . $d->item_name . '</td>
+						<td style="text-align: center;font-size:12px;border: 1px solid #bac2bc;">' . $d->service_type . '</td>
+						<td style="text-align: right;font-size:12px;border: 1px solid #bac2bc;">' . myNum ($d->uom_price) . '</td>
+						<td style="text-align: center;font-size:12px;border: 1px solid #bac2bc;">' . $d->qty . '</td>
+						<td style="text-align: center;font-size:12px;border: 1px solid #bac2bc;">' . $d->uom . '</td>
+						<td style="text-align: right;font-size:12px;border: 1px solid #bac2bc;">' . myNum ($d->sub_total) . '</td>
+						<td style="text-align: right;font-size:12px;border: 1px solid #bac2bc;">' . myNum ($d->tax) . ' %</td>
+						<td style="text-align: right;font-size:12px;border: 1px solid #bac2bc;">' . myNum ($d->total_price) . '</td>
 					</tr>
+				';
+
+			}
+		$html .= '					
 				</table>	
 				
 		';

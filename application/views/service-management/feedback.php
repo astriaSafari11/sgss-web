@@ -117,7 +117,7 @@
                 <td style="vertical-align: middle;text-align: center;">
                   <?php if ($v->order_status == 'approved')
                   { ?>
-                    <button class="btn btn-sm btn-success" style="font-weight: 600; border-radius: 50px; width: 100%;">
+                    <button class="btn btn-sm btn-warning" style="font-weight: 600; border-radius: 50px; width: 100%;">
                       Waiting for Feedback
                     </button>
                   <?php } ?>

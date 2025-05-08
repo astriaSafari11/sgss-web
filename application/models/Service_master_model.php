@@ -28,13 +28,14 @@ class Service_master_model extends CI_Model
 			{
 			$table = 'm_category';
 			// $this->db->where ('category_name');
-			$this->db->where ('is_active', 1);
+			// $this->db->where ('is_active', 1);
+			$this->db->where ('type', 'service');
 			}
 		elseif ($type == "uom")
 			{
 			$table = 'm_uom';
 			// $this->db->where ('uom_name');
-			$this->db->where ('is_active', 1);
+			$this->db->where ('type', 'service');
 			}
 		elseif ($type == "vendor")
 			{
@@ -75,7 +76,15 @@ class Service_master_model extends CI_Model
 
 				}
 			}
-
+		$i = 0;
+		if (isset ($_POST['order']))
+			{
+			$this->db->order_by ($column_order_vendor[$_POST['order']['0']['column']], $_POST['order']['0']['dir']);
+			}
+		else if (isset ($order))
+			{
+			$this->db->order_by (key ($order), $order[key ($order)]);
+			}
 		$this->db->from ($table);
 		}
 
@@ -104,16 +113,22 @@ class Service_master_model extends CI_Model
 		elseif ($type == "material")
 			{
 			$this->db->from ('m_master_data_material');
+			$this->db->where ('type', 'service');
 			}
 		elseif ($type == "vendor_material_price")
 			{
 			$this->db->from ('vendor_material_price');
 			}
-		elseif ($type == "uom_list")
+		elseif ($type == "uom")
 			{
 			$this->db->from ('m_uom');
+			$this->db->where ('type', 'service');
 			}
-		$this->db->where ('type', 'service');
+		elseif ($type == "category")
+			{
+			$this->db->from ('m_category');
+			$this->db->where ('type', 'service');
+			}
 		return $this->db->count_all_results ();
 		}
 	}

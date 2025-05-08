@@ -97,14 +97,14 @@ class Goods_management extends CI_Controller
 					}
 				}
 
-			$fSearch = ! empty ($search) ? $search . " AND planned.order_status = 0 AND planned.type = 'goods'" : "WHERE planned.order_status = 0 AND planned.type = 'goods' AND planned.status != 'ignored'";
-
+			$week = date ("W");
+			$fSearch = ! empty ($search) ? $search . " AND planned.order_status = 0 AND planned.type = 'goods' AND week = '$week'" : "WHERE planned.order_status = 0 AND planned.type = 'goods' AND planned.status != 'ignored' AND week = '$week'";
 			$query = $this->db->query ("select planned.*, material.item_group, material.size, material.uom, vendor.vendor_name from t_stock_planned_request as planned
 			INNER JOIN m_master_data_material as material ON planned.item_id = material.id
-			LEFT JOIN m_master_data_vendor as vendor ON planned.vendor_code = vendor.vendor_code
+			LEFT JOIN m_master_data_vendor as vendor ON planned.vendor_code = vendor.vendor_code 
 			$fSearch")->result ();
 
-			$count = $this->db->get_where ('t_stock_planned_request', array("order_status" => 0, "type" => 'goods', "status !=" => "ignored"))->num_rows ();
+			$count = $this->db->get_where ('t_stock_planned_request', array("order_status" => 0, "type" => 'goods', "status !=" => "ignored", "week" => $week))->num_rows ();
 			$feedback = $this->db->get_where ('t_order', array("is_approved" => 1, "is_feedback" => 0))->num_rows ();
 
 			$data['req_list'] = $query;
@@ -139,8 +139,8 @@ class Goods_management extends CI_Controller
 		)->result ();
 
 		// $query =  $this->db->get_where('t_stock_planned_request',array("order_status" => NULL))->result();
-
-		$count = $this->db->get_where ('t_stock_planned_request', array("order_status" => 0, "type" => 'goods', "status !=" => "ignored"))->num_rows ();
+		$week = date ("W");
+		$count = $this->db->get_where ('t_stock_planned_request', array("order_status" => 0, "type" => 'goods', "status !=" => "ignored", "week" => $week))->num_rows ();
 		$feedback = $this->db->get_where ('t_order', array("is_approved" => 1, "is_feedback" => 0, "type" => "goods"))->num_rows ();
 
 		$data['feedback_list'] = $query;

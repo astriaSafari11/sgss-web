@@ -53,6 +53,21 @@ class Ajax extends CI_Controller
 
 		die ($html);
 		}
+	function get_vendor_service_category()
+		{
+		$id = $this->input->post ('id');
+
+		$m = $this->db->get_where ("m_category", array("type" => 'service'))->result ();
+
+		$html = "<option value=''> - Select Category - </option>";
+		foreach ((array) $m as $k => $v)
+			{
+			$s = $v->category_name == $id ? 'selected="selected"' : '';
+			$html .= "<option value='" . $v->category_name . "' $s >" . $v->category_name . "</option>";
+			}
+
+		die ($html);
+		}
 	function get_factory()
 		{
 		$id = $this->input->post ('id');

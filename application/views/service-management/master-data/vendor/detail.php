@@ -116,7 +116,7 @@
                             </div>
                             <!--end::Col-->
                             <!--begin::Col-->
-                            <div class="col-4">
+                            <!-- <div class="col-4">
                                 <div class="form-floating mb-3">
                                     <input type="number" min="0" class="form-control" id="floatingInput"
                                         name="est_lead_time" value="<?php echo $vendor->est_lead_time; ?>" disabled>
@@ -124,7 +124,7 @@
                                         Deliver</label>
                                     <div class="invalid-feedback">This field is required.</div>
                                 </div>
-                            </div>
+                            </div> -->
                             <div class="col-4">
                                 <div class="form-floating mb-3">
                                     <select class="form-select" aria-label="Select Channel" id="vendor_channel"
@@ -177,7 +177,7 @@
                             </div>
                             <!--begin::Col-->
                             <!--begin::Col-->
-                            <div class="col-4">
+                            <!-- <div class="col-4">
                                 <div class="form-floating mb-3">
                                     <select class="form-select" aria-label="Default select example"
                                         style="height: 56px;" name="rating" id="rating" disabled>
@@ -195,7 +195,7 @@
                                     </select>
                                     <label for="floatingInput" for="rating" class="fw-bold text-primary">Rating</label>
                                 </div>
-                            </div>
+                            </div> -->
                             <!--begin::Col-->
                             <!--end::Col-->
                         </div>

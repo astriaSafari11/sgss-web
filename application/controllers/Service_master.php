@@ -81,22 +81,22 @@ class Service_master extends CI_Controller
 
 	public function category()
 		{
-			$data['column_search'] = array(
-				'category_name',
-			);
-			$this->session->unset_userdata('search_material');
-			$this->session->set_flashdata('page_title', 'MASTER DATA CATEGORY');
-			$this->load->view('service-management/master-data/category/index.php', $data);
+		$data['column_search'] = array(
+			'category_name',
+		);
+		$this->session->unset_userdata ('search_material');
+		$this->session->set_flashdata ('page_title', 'MASTER DATA CATEGORY');
+		$this->load->view ('service-management/master-data/category/index.php', $data);
 		}
 
 	public function uom()
 		{
-			$data['column_search'] = array(
-				'uom_name',
-			);
-			$this->session->unset_userdata('search_material');
-			$this->session->set_flashdata('page_title', 'MASTER DATA UOM');
-			$this->load->view('service-management/master-data/uom/index.php', $data);
+		$data['column_search'] = array(
+			'uom_name',
+		);
+		$this->session->unset_userdata ('search_material');
+		$this->session->set_flashdata ('page_title', 'MASTER DATA UOM');
+		$this->load->view ('service-management/master-data/uom/index.php', $data);
 		}
 
 	function get_purchase_reason()
@@ -125,8 +125,8 @@ class Service_master extends CI_Controller
 
 		$output = array(
 			"draw" => $_POST['draw'],
-			"recordsTotal" => $this->master_model->count_all ($search, 'purchase_reason'),
-			"recordsFiltered" => $this->master_model->count_filtered ($search, 'purchase_reason'),
+			"recordsTotal" => $this->service_master_model->count_all ($search, 'purchase_reason'),
+			"recordsFiltered" => $this->service_master_model->count_filtered ($search, 'purchase_reason'),
 			"data" => $data,
 		);
 		//output dalam format JSON
@@ -135,68 +135,120 @@ class Service_master extends CI_Controller
 
 	public function get_uom()
 		{
-			$search = $this->session->userdata('search_material');
-			$list = $this->service_master_model->get_datatables($search, 'uom');
-			$data = array();
-			$no = $_POST['start'];
-		
-			foreach ($list as $field) {
-				$edit = '
+		$search = $this->session->userdata ('search_material');
+		$list = $this->service_master_model->get_datatables ($search, 'uom');
+		$data = array();
+		$no = $_POST['start'];
+
+		foreach ($list as $field)
+			{
+			$edit = '
 				<a href="#" class="btn btn-outline-primary">
 					<i class="fa-solid fa-circle-info"></i>						
 				</a>';
-		
-				$row = array();
-				$row[] = ++$no;
-				$row[] = $field->id;
-				$row[] = $field->uom_code;
-				$row[] = $field->uom_name;
-				$row[] = $edit;
-		
-				$data[] = $row;
+
+			$row = array();
+			$row[] = ++$no;
+			$row[] = $field->uom_name;
+			$row[] = $edit;
+
+			$data[] = $row;
 			}
-		
-			$output = array(
-				"draw" => $_POST['draw'],
-				"recordsTotal" => $this->master_model->count_all($search, 'uom'),
-				"recordsFiltered" => $this->master_model->count_filtered($search, 'uom'),
-				"data" => $data,
-			);
-		
-			echo json_encode($output);
+
+		$output = array(
+			"draw" => $_POST['draw'],
+			"recordsTotal" => $this->service_master_model->count_all ($search, 'uom'),
+			"recordsFiltered" => $this->service_master_model->count_filtered ($search, 'uom'),
+			"data" => $data,
+		);
+
+		echo json_encode ($output);
 		}
-		
-		public function get_category()
+	public function save_uom()
 		{
-			$search = $this->session->userdata('search_material');
-			$list = $this->service_master_model->get_datatables($search, 'category');
-			$data = array();
-			$no = $_POST['start'];
-		
-			foreach ($list as $field) {
-				$edit = '
+		$uom_code = $this->input->post ('uom_code');
+		$exist = $this->db->get_where ("m_uom", array(
+			"uom_code" => $this->input->post ('uom_code'),
+			"type" => 'service',
+		))->row ();
+
+		if ($exist)
+			{
+			$err = array(
+				'show' => true,
+				'type' => 'error',
+				'msg' => 'Add new UoM failed. UoM with code ' . $uom_code . ' is already exist.'
+			);
+			$this->session->set_flashdata ('toast', $err);
+			echo 0;
+			}
+		else
+			{
+			$inserted = _add (
+				"m_uom",
+				array(
+					"uom_code" => $this->input->post ('uom_code'),
+					"uom_name" => $this->input->post ('uom_code'),
+					"type" => 'service',
+				)
+			);
+
+			if ($inserted)
+				{
+				$err = array(
+					'show' => true,
+					'type' => 'success',
+					'msg' => 'Successfully added new UoM.'
+				);
+				$this->session->set_flashdata ('toast', $err);
+				echo 1;
+				}
+			else
+				{
+				$err = array(
+					'show' => true,
+					'type' => 'error',
+					'msg' => 'Add new UoM failed.'
+				);
+				$this->session->set_flashdata ('toast', $err);
+				echo 1;
+				}
+			}
+
+		echo 1;
+		}
+	public function get_category()
+		{
+		$search = $this->session->userdata ('search_material');
+		$list = $this->service_master_model->get_datatables ($search, 'category');
+		$data = array();
+		$no = $_POST['start'];
+
+		foreach ($list as $field)
+			{
+			$edit = '
 				<a href="#" class="btn btn-outline-primary">
 					<i class="fa-solid fa-circle-info"></i>						
 				</a>';
-		
-				$row = array();
-				$row[] = ++$no;
-				$row[] = $field->id;
-				$row[] = $field->category_name;
-				$row[] = $edit;
-		
-				$data[] = $row;
+
+			$row = array();
+			$row[] = ++$no;
+			// $row[] = $field->id;
+			$row[] = $field->category_name;
+			$row[] = $edit;
+
+			$data[] = $row;
 			}
-		
-			$output = array(
-				"draw" => $_POST['draw'],
-				"recordsTotal" => $this->master_model->count_all($search, 'category'),
-				"recordsFiltered" => $this->master_model->count_filtered($search, 'category'),
-				"data" => $data,
-			);
-		
-			echo json_encode($output);
-		}	
+
+		$output = array(
+			"draw" => $_POST['draw'],
+			"recordsTotal" => $this->service_master_model->count_all ($search, 'category'),
+			"recordsFiltered" => $this->service_master_model->count_filtered ($search, 'category'),
+			"data" => $data,
+		);
+
+		echo json_encode ($output);
+		}
 
 	function get_master_vendor()
 		{
@@ -333,8 +385,6 @@ class Service_master extends CI_Controller
 			$row[] = $field->category;
 			$row[] = ! empty ($field->total_spend_ytd) ? $field->total_spend_ytd : '-';
 			$row[] = ! empty ($field->last_year_spend) ? $field->last_year_spend : '-';
-			$row[] = $field->est_lead_time;
-			$row[] = $field->rating;
 			$row[] = $edit;
 			$data[] = $row;
 			}
@@ -475,116 +525,134 @@ class Service_master extends CI_Controller
 		}
 
 	public function add_category()
-	{
-		$this->session->set_flashdata('page_title', 'FORM ADD NEW CATEGORY');
-		$this->load->view('master-data/category/add-form.php');
-	}
+		{
+		$this->session->set_flashdata ('page_title', 'FORM ADD NEW CATEGORY');
+		$this->load->view ('master-data/category/add-form.php');
+		}
 
 	public function save_category()
-	{
-		$exist = $this->db->get_where("m_category", array(
-			"category_name" => $this->input->post('category_name'),
-		))->row();
+		{
+		$exist = $this->db->get_where ("m_category", array(
+			"category_name" => $this->input->post ('category_name'),
+			"type" => "service"
+		))->row ();
 
-		if ($exist) {
+		if ($exist)
+			{
 			$err = array(
 				'show' => true,
 				'type' => 'error',
 				'msg' => 'Add new category failed. Category already exists.'
 			);
-			$this->session->set_flashdata('toast', $err);
+			$this->session->set_flashdata ('toast', $err);
 			echo 0;
-		} else {
-			$inserted = _add(
+			}
+		else
+			{
+			$inserted = _add (
 				"m_category",
 				array(
-					"category_name" => $this->input->post('category_name'),
+					"category_name" => $this->input->post ('category_name'),
+					"type" => "service"
 				)
 			);
 
-			if ($inserted) {
+			if ($inserted)
+				{
 				$err = array(
 					'show' => true,
 					'type' => 'success',
 					'msg' => 'Successfully added new category.'
 				);
-				$this->session->set_flashdata('toast', $err);
+				$this->session->set_flashdata ('toast', $err);
 				echo 1;
-			} else {
+				}
+			else
+				{
 				$err = array(
 					'show' => true,
 					'type' => 'error',
 					'msg' => 'Add new category failed.'
 				);
-				$this->session->set_flashdata('toast', $err);
+				$this->session->set_flashdata ('toast', $err);
 				echo 0;
+				}
 			}
 		}
-	}
 
 	public function update_category()
-	{
-		if (isset($_POST['submit'])) {
-			$id = $this->input->post('id');
-			$exist = $this->db->get_where('m_category', array("id" => $id))->row();
+		{
+		if (isset ($_POST['submit']))
+			{
+			$id = $this->input->post ('id');
+			$exist = $this->db->get_where ('m_category', array("id" => $id))->row ();
 
-			if ($exist) {
-				$updated = _update(
+			if ($exist)
+				{
+				$updated = _update (
 					"m_category",
 					array(
-						"category_name" => $this->input->post('category_name'),
+						"category_name" => $this->input->post ('category_name'),
 					),
 					array("id" => $id)
 				);
 
-				if ($updated) {
+				if ($updated)
+					{
 					$err = array(
 						'show' => true,
 						'type' => 'success',
 						'msg' => 'Successfully updated category.'
 					);
-				} else {
+					}
+				else
+					{
 					$err = array(
 						'show' => true,
 						'type' => 'error',
 						'msg' => 'Update category failed.'
 					);
+					}
 				}
-			} else {
+			else
+				{
 				$err = array(
 					'show' => true,
 					'type' => 'error',
 					'msg' => 'Category not found.'
 				);
-			}
+				}
 
-			$this->session->set_flashdata('toast', $err);
-			redirect('master_data/category_list/');
+			$this->session->set_flashdata ('toast', $err);
+			redirect ('master_data/category_list/');
+			}
 		}
-	}
 
 	public function delete_category()
-	{
-		$id = _decrypt($this->input->get('id'));
-		$deleted = _hard_delete("m_category", array("id" => $id));
+		{
+		$id = _decrypt ($this->input->get ('id'));
+		$deleted = _hard_delete ("m_category", array("id" => $id));
 
-		if ($deleted) {
+		if ($deleted)
+			{
 			$err = array(
 				'show' => true,
 				'type' => 'success',
 				'msg' => 'Successfully deleted category.'
 			);
-		} else {
+			}
+		else
+			{
 			$err = array(
 				'show' => true,
 				'type' => 'error',
 				'msg' => 'Delete category failed.'
 			);
-		}
+			}
 
-		$this->session->set_flashdata('toast', $err);
-		redirect('master_data/category_list');
-	}
+		$this->session->set_flashdata ('toast', $err);
+		redirect ('master_data/category_list');
+		}
 
 	public function save_vendor()
 		{
@@ -714,7 +782,7 @@ class Service_master extends CI_Controller
 		// debugCode($data);
 
 		$this->session->set_flashdata ('page_title', 'FORM EDIT VENDOR');
-		load_view ('master-data/vendor/edit-form', $data);
+		load_view ('service-management/master-data/vendor/edit-form', $data);
 		}
 
 	public function update_vendor()

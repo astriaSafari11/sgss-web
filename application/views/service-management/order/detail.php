@@ -81,7 +81,7 @@
                                 <div class="col-6">
                                     <div class="form-floating mb-3">
                                         <input type="text" class="form-control" id="floatingInput"
-                                            value="<?php echo $order->po_gr_amount; ?>" disabled>
+                                            value="<?php echo myNum ($order->po_gr_amount); ?>" disabled>
                                         <label for="floatingInput">PO GR Amount</label>
                                     </div>
                                 </div>
@@ -144,16 +144,23 @@
                         <?php foreach ($order_detail as $row)
                         { ?>
                             <tr>
-                                <td class="align-middle" style="vertical-align: middle;text-align: center;"><?php echo $row->vendor_name; ?></td>
-                                <td class="align-middle" style="vertical-align: middle;text-align: center;"><?php echo $row->item_name; ?></td>
-                                <td class="align-middle" style="vertical-align: middle;text-align: center;"><?php echo $row->service_type; ?>
+                                <td class="align-middle" style="vertical-align: middle;text-align: center;">
+                                    <?php echo $row->vendor_name; ?>
+                                </td>
+                                <td class="align-middle" style="vertical-align: middle;text-align: center;">
+                                    <?php echo $row->item_name; ?>
+                                </td>
+                                <td class="align-middle" style="vertical-align: middle;text-align: center;">
+                                    <?php echo $row->service_type; ?>
                                 </td>
                                 <td class="align-middle" style="vertical-align: middle;text-align: center;">
                                     <?php echo myNum ($row->uom_price); ?>
                                 </td>
-                                <td class="align-middle" style="vertical-align: middle;text-align: center;"><?php echo $row->uom; ?>
+                                <td class="align-middle" style="vertical-align: middle;text-align: center;">
+                                    <?php echo $row->uom; ?>
                                 </td>
-                                <td class="align-middle" style="vertical-align: middle;text-align: right;"><?php echo myNum ($row->qty); ?>
+                                <td class="align-middle" style="vertical-align: middle;text-align: right;">
+                                    <?php echo myNum ($row->qty); ?>
                                 </td>
                                 <td class="align-middle" style="vertical-align: middle;text-align: center;">
                                     <?php echo myNum ($row->sub_total); ?>
@@ -199,8 +206,8 @@
                                     <!--begin::Col-->
                                     <div class="col-6">
                                         <div class="form-floating mb-3">
-                                            <input type="text" class="form-control" id="floatingInput" name="po_gr_amount"
-                                                value="">
+                                            <input type="text" class="form-control grAmount" id="floatingInput"
+                                                name="po_gr_amount" value="">
                                             <label for="floatingInput">PO GR AMOUNT</label>
                                         </div>
                                     </div>
@@ -230,6 +237,19 @@
 
         Highcharts.setOptions({
             colors: ['#C0CDD9', '#8EAACF', '#DAEAFF', '#7E99B1', '#64E572', '#D8DFE7', '#7E9AB2']
+        });
+
+        $(".grAmount").on('keyup', function () {
+            var val = this.value;
+            val = val.replace(/[^0-9\.]/g, '');
+
+            if (val != "") {
+                valArr = val.split('.');
+                valArr[0] = (parseInt(valArr[0], 10)).toLocaleString();
+                val = valArr.join('.');
+            }
+
+            this.value = val;
         });
 
         Highcharts.chart('container', {

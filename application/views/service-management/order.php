@@ -207,24 +207,34 @@
                         <table class="table table-bordered" id="myTable" style="width:100%;">
                             <thead>
                                 <tr>
-                                    <th class="align-middle" style="color: #fff;background-color: #001F82;text-align: center;">Type of
+                                    <th class="align-middle"
+                                        style="color: #fff;background-color: #001F82;text-align: center;">Type of
                                         Service
                                     </th>
-                                    <th class="align-middle" style="color: #fff;background-color: #001F82;text-align: center;">Vendor</th>
-                                    <th class="align-middle" style="color: #fff;background-color: #001F82;text-align: center;">Service
+                                    <th class="align-middle"
+                                        style="color: #fff;background-color: #001F82;text-align: center;">Vendor</th>
+                                    <th class="align-middle"
+                                        style="color: #fff;background-color: #001F82;text-align: center;">Service
                                         Category
                                     </th>
-                                    <th class="align-middle" style="color: #fff;background-color: #001F82;text-align: center;">Unit Price (Rp)
+                                    <th class="align-middle"
+                                        style="color: #fff;background-color: #001F82;text-align: center;">Unit Price
+                                        (Rp)
                                     </th>
-                                    <th class="align-middle" style="color: #fff;background-color: #001F82;text-align: center;">Qty
+                                    <th class="align-middle"
+                                        style="color: #fff;background-color: #001F82;text-align: center;">Qty
                                     </th>
-                                    <th class="align-middle" style="color: #fff;background-color: #001F82;text-align: center;">UoM
+                                    <th class="align-middle"
+                                        style="color: #fff;background-color: #001F82;text-align: center;">UoM
                                     </th>
-                                    <th class="align-middle" style="color: #fff;background-color: #001F82;text-align: center;">Subtotal (Rp)
+                                    <th class="align-middle"
+                                        style="color: #fff;background-color: #001F82;text-align: center;">Subtotal (Rp)
                                     </th>
-                                    <th class="align-middle" style="color: #fff;background-color: #001F82;text-align: center;">Tax / VAT
+                                    <th class="align-middle"
+                                        style="color: #fff;background-color: #001F82;text-align: center;">Tax / VAT
                                     </th>
-                                    <th class="align-middle" style="color: #fff;background-color: #001F82;text-align: center;">Total</th>
+                                    <th class="align-middle"
+                                        style="color: #fff;background-color: #001F82;text-align: center;">Total</th>
                                     <?php if (empty ($detail->item_id))
                                     { ?>
                                         <th style="color: #fff;background-color: #001F82;text-align: center;"></th>
@@ -264,50 +274,44 @@
                                     <td>
                                         <div class="input-group input-group-sm">
                                             <span class="input-group-text">Rp</span>
-                                            <input type="text"
-                                                class="form-control unitPrice unit_price_input"
-                                                id="unit_price"
-                                                placeholder="Unit Price"
-                                                name="unit_price[]"
-                                                required>
+                                            <input type="text" class="form-control unitPrice unit_price_input"
+                                                id="unit_price" placeholder="Unit Price" name="unit_price[]" required>
                                         </div>
                                     </td>
-                                    <td>
+                                    <td width="10%">
                                         <input type="number" class="form-control form-control-sm qty_input" id="qty"
                                             placeholder="Qty" name="qty[]" required>
                                     </td>
-                                    <td>
+                                    <td width="10%">
                                         <select class="form-control form-select-sm uom_input" id="uom" name="uom[]"
                                             style="width: 100%;" required>
-                                            <option value="person">Person</option>
-                                            <option value="pallet">Pallet</option>
-                                            <option value="once off">Once Off</option>
+                                            <option value="">- UoM -</option>
+                                            <?php foreach ($uom as $row)
+                                            {
+                                            $selected = isset ($detail) && $detail->item_id == $row->id ? 'selected' : '';
+                                            ?>
+                                                <option value="<?php echo $row->uom_name; ?>">
+                                                    <?php echo $row->uom_name; ?>
+                                                </option>
+                                            <?php } ?>
                                         </select>
                                     </td>
                                     <td>
                                         <div class="input-group input-group-sm">
                                             <span class="input-group-text">Rp</span>
-                                            <input type="text"
-                                                class="form-control sub_total_input"
-                                                id="sub_total"
-                                                placeholder="Sub Total"
-                                                name="sub_total[]"
-                                                readonly>
+                                            <input type="text" class="form-control sub_total_input" id="sub_total"
+                                                placeholder="Sub Total" name="sub_total[]" readonly>
                                         </div>
                                     </td>
-                                    <td width="5%">
+                                    <td width="10%">
                                         <input type="number" class="form-control form-control-sm tax_input" id="tax"
                                             placeholder="Tax / VAT" name="tax[]" required>
                                     </td>
                                     <td>
                                         <div class="input-group input-group-sm">
                                             <span class="input-group-text">Rp</span>
-                                            <input type="text"
-                                                class="form-control total_input"
-                                                id="total"
-                                                placeholder="Total"
-                                                name="total[]"
-                                                readonly>
+                                            <input type="text" class="form-control total_input" id="total"
+                                                placeholder="Total" name="total[]" readonly>
                                         </div>
                                     </td>
 

@@ -56,8 +56,6 @@
                                 </th>
                                 <th style="color: #fff;background-color: #001F82;text-align: center;">Last Year's Spend
                                 </th>
-                                <th style="color: #fff;background-color: #001F82;text-align: center;">Lead Time</th>
-                                <th style="color: #fff;background-color: #001F82;text-align: center;">Rating</th>
                                 <th style="color: #fff;background-color: #001F82;text-align: center;">Action</th>
                             </tr>
                         </thead>
