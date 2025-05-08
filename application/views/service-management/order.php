@@ -214,13 +214,13 @@
                                     <th class="align-middle" style="color: #fff;background-color: #001F82;text-align: center;">Service
                                         Category
                                     </th>
-                                    <th class="align-middle" style="color: #fff;background-color: #001F82;text-align: center;">Unit Price
+                                    <th class="align-middle" style="color: #fff;background-color: #001F82;text-align: center;">Unit Price (Rp)
                                     </th>
                                     <th class="align-middle" style="color: #fff;background-color: #001F82;text-align: center;">Qty
                                     </th>
                                     <th class="align-middle" style="color: #fff;background-color: #001F82;text-align: center;">UoM
                                     </th>
-                                    <th class="align-middle" style="color: #fff;background-color: #001F82;text-align: center;">Subtotal
+                                    <th class="align-middle" style="color: #fff;background-color: #001F82;text-align: center;">Subtotal (Rp)
                                     </th>
                                     <th class="align-middle" style="color: #fff;background-color: #001F82;text-align: center;">Tax / VAT
                                     </th>
