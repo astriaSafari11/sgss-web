@@ -35,3 +35,8 @@ user_guide_src/cilexer/pycilexer.egg-info/*
 
 
 application/config/env.php
+/assets/export/pdf
+/assets/upload
+application/config/config.php
+application/config/database.php
+application/config/env.php
